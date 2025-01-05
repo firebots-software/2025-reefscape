@@ -112,7 +112,6 @@ public class OtherXBoxController extends CommandXboxController {
     return this.getRawAxis(OI.AxisID.LeftX.value);
   }
 
-  @Override
   public double getRightX() {
     return this.getRawAxis(OI.AxisID.RightX.value);
   }
