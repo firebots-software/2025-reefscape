@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -184,6 +186,16 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
      */
     public ChassisSpeeds getCurrentRobotChassisSpeeds() {
         return swerveInformation.kinematics.toChassisSpeeds(getState().ModuleStates);
+    }
+
+    /**
+     * Returns a command that applies the specified control request to this swerve drivetrain.
+     *
+     * @param request Function returning the request to apply
+     * @return Command to run
+     */
+    public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
+        return run(() -> this.setControl(requestSupplier.get()));
     }
 
     /**
