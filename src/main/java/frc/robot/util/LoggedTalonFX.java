@@ -51,13 +51,15 @@ public class LoggedTalonFX extends TalonFX{
         this.supplyvoltage=name + "/voltage/supply(V)";
     }
 
-    public static void peroidic(){
+    // For some reason Robot.java doesn't recognize the static method here
+    // when there is another method with the same name
+    public static void periodic_static (){
         for(LoggedTalonFX l: motors){
             l.periodic();
         }
     }
     
-    public void periodic(){
+    public void periodic (){
         // TODO: LABEL WHAT UNITS THESE ARE IN
         DogLog.log(temperature,this.getDeviceTemp().getValue().magnitude());
         DogLog.log(closedLoopError,this.getClosedLoopError().getValue());
