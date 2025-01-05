@@ -66,18 +66,24 @@ public final class Constants {
     // When not Pro-licensed, FusedCANcoder/SyncCANcoder automatically fall back to RemoteCANcoder
     private static final SteerFeedbackType STEER_FEEDBACK_TYPE = SteerFeedbackType.FusedCANcoder;
 
-    //TODO: Current Limits Initial Config (moved from SwerveSubsystem last year to Constants this year)
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
+    // This is where we apply Current Limits for swerve
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
-    private static final TalonFXConfiguration DRIVE_INITIAL_CONFIGS = new TalonFXConfiguration();
+    private static final TalonFXConfiguration DRIVE_INITIAL_CONFIGS = new TalonFXConfiguration()
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimitEnable(true)
+                .withStatorCurrentLimit(Constants.Swerve.DRIVE_STATOR_CURRENT_LIMIT_AMPS)
+                .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(Constants.Swerve.DRIVE_SUPPLY_CURRENT_LIMIT_AMPS)
+        );
     private static final TalonFXConfiguration STEER_INITIAL_CONFIGS = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
-                // Swerve azimuth does not require much torque output, so we can set a relatively low
-                // stator current limit to help avoid brownouts without impacting performance.
-                .withStatorCurrentLimit(Amps.of(60))
-                .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(Constants.Swerve.TURNING_SUPPLY_CURRENT_LIMIT_AMPS)
+                .withSupplyCurrentLimitEnable(true)
         );
+    
     private static final CANcoderConfiguration ENCODER_INITIAL_CONFIGS = new CANcoderConfiguration();
     // Configs for the Pigeon 2; leave this null to skip applying Pigeon 2 configs
     //TODO: investigate Pigeon2Configuration and how it's relevant
