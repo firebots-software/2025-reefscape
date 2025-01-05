@@ -29,6 +29,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    DogLog.setOptions(new DogLogOptions()
+        .withNtPublish(true)
+        .withCaptureDs(true)
+        .withLogExtras(true));
   }
 
   /**
@@ -46,6 +50,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     m_robotContainer.doTelemetry();
     CommandScheduler.getInstance().run();
+    LoggedTalonFX.periodic_static();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
