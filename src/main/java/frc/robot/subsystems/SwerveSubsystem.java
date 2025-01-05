@@ -37,7 +37,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     double OdometryUpdateFrequency,
     Matrix<N3, N1> odometryStandardDeviation,
     Matrix<N3, N1> visionStandardDeviation,
-    SwerveModuleConstants<?, ?, ?> modules
+    SwerveModuleConstants<?, ?, ?>... modules
     ) {
         super(TalonFX::new, TalonFX::new, CANcoder::new,
             drivetrainConstants, OdometryUpdateFrequency,
