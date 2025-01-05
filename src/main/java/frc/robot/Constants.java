@@ -217,5 +217,10 @@ public final class Constants {
             BACK_RIGHT_X_POS, BACK_RIGHT_Y_POS, INVERT_RIGHT_SIDE, STEER_MOTOR_REVERSED, false
         );
 
+    // These constants are necessary for new Telemetry with swerve
+    // TODO: CHANGE FOR NEW ROBOT
+    private double MAX_SPEED_MPS = SPEED_AT_12V_METERS_PER_SECOND; // kSpeedAt12Volts desired top speed
+    private double MAX_ANGULAR_RATE_RPS = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+
   }
 }
