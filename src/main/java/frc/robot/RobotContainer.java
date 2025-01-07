@@ -30,12 +30,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.util.OtherXBoxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -50,6 +48,9 @@ public class RobotContainer {
     // Alliance color
     private Supplier<Boolean> redside = () -> redAlliance;
     private static boolean redAlliance;
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+  private final OtherXBoxController m_driverController =
+      new OtherXBoxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
 
     private final SwerveSubsystem driveTrain = new SwerveSubsystem(
         Constants.Swerve.DrivetrainConstants,
