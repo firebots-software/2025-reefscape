@@ -99,12 +99,12 @@ public static class OI {
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs DRIVE_GAINS =
         new Slot0Configs()
-            .withKP(0.18014)
-            .withKI(0)
-            .withKD(0)
-            .withKS(-0.023265)
-            .withKV(0.12681)
-            .withKA(0.058864);
+            .withKP(0.3);
+            // .withKI(0)
+            // .withKD(0)
+            // .withKS(-0.023265)
+            // .withKV(0.12681)
+            // .withKA(0.058864);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -148,7 +148,7 @@ public static class OI {
     // TODO: CHANGE FOR NEW ROBOT
     // CAN bus that the devices are located on;
     // All swerve devices must share the same CAN bus
-    public static final CANBus CANBUS_NAME = new CANBus("Patrice the Pineapple");
+    public static final CANBus CANBUS_NAME = new CANBus("");
 
     // TODO: VERIFY FOR NEW ROBOT 
     // The stator current at which the wheels start to slip;
@@ -179,7 +179,7 @@ public static class OI {
 
     
     public static final SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants()
-            .withCANBusName(CANBUS_NAME.getName())
+            //.withCANBusName(CANBUS_NAME.getName())
             .withPigeon2Id(kPigeonId)
             .withPigeon2Configs(PIGEON2_CONFIGS);
 
@@ -212,7 +212,7 @@ public static class OI {
     private static final int FRONT_LEFT_STEER_MOTOR_ID = 3;
     private static final int FRONT_LEFT_DRIVE_MOTOR_ID = 4;
     private static final int FRONT_LEFT_ENCODER_ID = 21;
-    private static final Angle FRONT_LEFT_ENCODER_OFFSET_ROT = Rotations.of(-0.46337890625);
+    private static final Angle FRONT_LEFT_ENCODER_OFFSET_ROT = Rotations.of(0.3876953125);
 
     // TODO: CHANGE FOR NEW ROBOT
     private static final Distance FRONT_LEFT_X_POS = Inches.of(11.26);
@@ -223,7 +223,7 @@ public static class OI {
     private static final int FRONT_RIGHT_STEER_MOTOR_ID = 5;
     private static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 6;
     private static final int FRONT_RIGHT_ENCODER_ID = 22;
-    private static final Angle FRONT_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(-0.437744140625);
+    private static final Angle FRONT_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(0.159912109375);
 
     // TODO: CHANGE FOR NEW ROBOT
     private static final Distance FRONT_RIGHT_X_POS = Inches.of(11.26);
@@ -234,7 +234,7 @@ public static class OI {
     private static final int BACK_LEFT_STEER_MOTOR_ID = 1;
     private static final int BACK_LEFT_DRIVE_MOTOR_ID = 2;
     private static final int BACK_LEFT_ENCODER_ID = 20;
-    private static final Angle BACK_LEFT_ENCODER_OFFSET_ROT = Rotations.of(-0.1796875);
+    private static final Angle BACK_LEFT_ENCODER_OFFSET_ROT = Rotations.of(0.213134765625);
 
     // TODO: CHANGE FOR NEW ROBOT
     private static final Distance BACK_LEFT_X_POS = Inches.of(-11.26);
@@ -245,7 +245,7 @@ public static class OI {
     private static final int BACK_RIGHT_STEER_MOTOR_ID = 7;
     private static final int BACK_RIGHT_DRIVE_MOTOR_ID = 8;
     private static final int BACK_RIGHT_ENCODER_ID = 23;
-    private static final Angle BACK_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(-0.345703125);
+    private static final Angle BACK_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(-0.3818359375);
 
     // TODO: CHANGE FOR NEW ROBOT
     private static final Distance BACK_RIGHT_X_POS = Inches.of(-11.26);
