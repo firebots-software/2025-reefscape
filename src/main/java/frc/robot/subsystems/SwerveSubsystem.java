@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -185,7 +186,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
      * @return Robot's current Chassis Speeds
      */
     public ChassisSpeeds getCurrentRobotChassisSpeeds() {
-        return swerveInformation.kinematics.toChassisSpeeds(getState().ModuleStates);
+        return getKinematics().toChassisSpeeds(getState().ModuleStates);
     }
 
     /**
@@ -235,8 +236,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 m_hasAppliedOperatorPerspective = true;
             });
         }
-        DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
-        DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
-        DogLog.log("chassis/rotation_speed_radps", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+        SmartDashboard.putNumber("chassisspeedX", getCurrentRobotChassisSpeeds().vxMetersPerSecond);
+        SmartDashboard.putNumber("chassisspeedY", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
+        SmartDashboard.putNumber("chassisspeedOMEGA", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+        // DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
+        // DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
+        // DogLog.log("chassis/rotation_speed_radps", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
     }
 }
