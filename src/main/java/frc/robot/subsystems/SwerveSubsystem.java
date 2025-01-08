@@ -32,15 +32,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.util.LoggedTalonFXSmartDashboard;
 
-public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements Subsystem {
+public class SwerveSubsystem extends SwerveDrivetrain<LoggedTalonFXSmartDashboard, LoggedTalonFXSmartDashboard, CANcoder> implements Subsystem {
     public SwerveSubsystem(SwerveDrivetrainConstants drivetrainConstants,
     double OdometryUpdateFrequency,
     Matrix<N3, N1> odometryStandardDeviation,
     Matrix<N3, N1> visionStandardDeviation,
     SwerveModuleConstants<?, ?, ?>... modules
     ) {
-        super(TalonFX::new, TalonFX::new, CANcoder::new,
+        super(LoggedTalonFXSmartDashboard::new, LoggedTalonFXSmartDashboard::new, CANcoder::new,
             drivetrainConstants, OdometryUpdateFrequency,
              odometryStandardDeviation, visionStandardDeviation, modules);
         if (Utils.isSimulation()) {
