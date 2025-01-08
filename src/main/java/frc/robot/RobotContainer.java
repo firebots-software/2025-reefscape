@@ -46,8 +46,18 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    /* Path follower */
-    private final SendableChooser<Command> autoChooser;
+    /* Modular Auto Selection */
+    private final SendableChooser<String> startPosChooser;
+    private final SendableChooser<String> reef1Chooser;
+    private final SendableChooser<String> reef2Chooser;
+    private final SendableChooser<String> reef3Chooser;
+    private final SendableChooser<String> endPosChooser;
+
+    private String m_startPosSelected;
+    private String m_reef1Selected;
+    private String m_reef2Selected;
+    private String m_reef3Selected;
+    private String m_endPosSelected;
 
     public RobotContainer() {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
