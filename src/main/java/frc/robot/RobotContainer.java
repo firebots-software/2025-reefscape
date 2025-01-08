@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Optional;
+
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -34,6 +36,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.util.ReefLocation;
+
 public class RobotContainer {
     private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
     private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
@@ -63,6 +70,34 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureBindings();
+    }
+
+    private static SendableChooser<Optional<ReefLocation>>
+      pickup1choice = new SendableChooser<Optional<ReefLocation>>(),
+      pickup2choice = new SendableChooser<Optional<ReefLocation>>(),
+      pickup3choice = new SendableChooser<Optional<ReefLocation>>();
+    SendableChooser<String> startchoice = new SendableChooser<String>();
+
+    private void setupChooser() {
+        pickup1choice.setDefaultOption("SECOND SHOT: DO NOTHING", Optional.empty());
+        pickup1choice.addOption("AMPSIDE", Optional.of(NoteLocation.AMPSIDE));
+        pickup1choice.addOption("MIDDLE", Optional.of(NoteLocation.MIDDLE));
+        pickup1choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
+        pickup2choice.setDefaultOption("THIRD SHOT: DO NOTHING", Optional.empty());
+        pickup2choice.addOption("AMPSIDE NOTE", Optional.of(NoteLocation.AMPSIDE));
+        pickup2choice.addOption("MIDDLE NOTE", Optional.of(NoteLocation.MIDDLE));
+        pickup2choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
+        pickup3choice.setDefaultOption("FOURTH SHOT: DO NOTHING", Optional.empty());
+        pickup3choice.addOption("AMPSIDE", Optional.of(NoteLocation.AMPSIDE));
+        pickup3choice.addOption("MIDDLE", Optional.of(NoteLocation.MIDDLE));
+        pickup3choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
+        startchoice.setDefaultOption("STARTING POSITION: MIDDLE START", "Mid");
+        startchoice.addOption("AMPSIDE START", "Amp");
+        startchoice.addOption("STAGESIDE START", "Stage");
+        SmartDashboard.putData(pickup1choice);
+        SmartDashboard.putData(pickup2choice);
+        SmartDashboard.putData(pickup3choice);
+        SmartDashboard.putData(startchoice);
     }
 
     private void configureBindings() {
