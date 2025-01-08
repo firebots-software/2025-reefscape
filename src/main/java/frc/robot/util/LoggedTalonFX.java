@@ -27,28 +27,28 @@ public class LoggedTalonFX extends TalonFX{
     public LoggedTalonFX(int deviceId, String canbus) {
         super(deviceId, canbus);
         init();
-        name = "motor "+deviceId;
+        name = "motor " + deviceId;
     }
 
     public LoggedTalonFX(int deviceId) {
         super(deviceId);
         init();
-        name = "motor "+deviceId;
+        name = "motor " + deviceId;
     }
 
     public void init(){
         motors.add(this);
-        this.temperature=name + "/temperature(degC)";
+        this.temperature = name + "/temperature(degC)";
         this.closedLoopError = name + "/closedLoopError";
         this.closedLoopReference = name + "/closedLoopReference";
-        this.position=name + "/position(rotations)";
-        this.velocity=name + "/velocity(rps)";
-        this.acceleration=name + "/acceleration(rps2)";
-        this.supplycurrent=name + "/current/supply(A)";
-        this.statorcurrent=name + "/current/stator(A)";
-        this.torquecurrent=name + "/current/torque(A)";
-        this.motorvoltage=name + "/voltage/motor(V)";
-        this.supplyvoltage=name + "/voltage/supply(V)";
+        this.position = name + "/position(rotations)";
+        this.velocity = name + "/velocity(rps)";
+        this.acceleration = name + "/acceleration(rps2)";
+        this.supplycurrent = name + "/current/supply(A)";
+        this.statorcurrent = name + "/current/stator(A)";
+        this.torquecurrent = name + "/current/torque(A)";
+        this.motorvoltage = name + "/voltage/motor(V)";
+        this.supplyvoltage = name + "/voltage/supply(V)";
     }
 
     // For some reason Robot.java doesn't recognize the static method here
