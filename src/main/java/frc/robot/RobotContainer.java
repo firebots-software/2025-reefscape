@@ -16,6 +16,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,12 +48,14 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Modular Auto Selection */
+    private final SendableChooser<String> allianceChooser;
     private final SendableChooser<String> startPosChooser;
     private final SendableChooser<String> reef1Chooser;
     private final SendableChooser<String> reef2Chooser;
     private final SendableChooser<String> reef3Chooser;
     private final SendableChooser<String> endPosChooser;
 
+    private String m_allianceSelected;
     private String m_startPosSelected;
     private String m_reef1Selected;
     private String m_reef2Selected;
@@ -60,8 +63,12 @@ public class RobotContainer {
     private String m_endPosSelected;
 
     public RobotContainer() {
-        autoChooser = AutoBuilder.buildAutoChooser("Tests");
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        // autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        // SmartDashboard.putData("Auto Mode", autoChooser);
+
+        startPosChooser.setDefaultOption("Position 1", );
+        startPosChooser.addOption("My Auto", kCustomAuto);
+        SmartDashboard.putData("Auto Start Position", startPosChooser);
 
         configureBindings();
     }

@@ -294,7 +294,7 @@ public static class OI {
 
     public static class Landmarks {
       //angles are the proper rotation to be at at that point
-      public static final Pose2d B_AB_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d B_AB_REEF_AREA = new Pose2d(0,0,new Rotation2d());
       public static final Pose2d B_CD_REEF_AREA = new Pose2d(,,new Rotation2d());
       public static final Pose2d B_EF_REEF_AREA = new Pose2d(,,new Rotation2d());
       public static final Pose2d B_GH_REEF_AREA = new Pose2d(,,new Rotation2d());
