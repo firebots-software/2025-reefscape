@@ -81,6 +81,54 @@ public static class OI {
 }
 
   public static class Swerve {
+    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.PROTO; 
+
+    public static enum SwerveLevel {
+      L2(6.75, 21.428571428571427),
+      L3(6.12, 21.428571428571427);
+      
+      public final double DRIVE_GEAR_RATIO, STEER_GEAR_RATIO;
+
+      SwerveLevel(
+        double drive,
+        double steer
+      ) {
+        DRIVE_GEAR_RATIO = drive;
+        STEER_GEAR_RATIO = steer;
+      }
+    }
+
+    public static enum SwerveType {
+      SERRANO(
+        Rotations.of(-0.466552734375), // front left
+        Rotations.of(-0.436767578125), // front right
+        Rotations.of(-0.165283203125), // back left
+        Rotations.of(-0.336181640625), // back right
+        SwerveLevel.L3), // what level the swerve drive is
+      PROTO(
+        Rotations.of(0.3876953125), // front left
+        Rotations.of(0.159912109375), // front right
+        Rotations.of(0.213134765625), // back left
+        Rotations.of(-0.3818359375), // back right
+        SwerveLevel.L2); // what level the swerve drive is
+      
+      public final Angle FRONT_LEFT_ENCODER_OFFSET, FRONT_RIGHT_ENCODER_OFFSET, BACK_LEFT_ENCODER_OFFSET, BACK_RIGHT_ENCODER_OFFSET;
+      SwerveLevel SWERVE_LEVEL;
+
+      SwerveType(
+        Angle fl,
+        Angle fr,
+        Angle bl,
+        Angle br,
+        SwerveLevel swerveLevel
+      ) {
+        FRONT_LEFT_ENCODER_OFFSET = fl;
+        FRONT_RIGHT_ENCODER_OFFSET = fr; 
+        BACK_LEFT_ENCODER_OFFSET = bl;
+        BACK_RIGHT_ENCODER_OFFSET = br;
+        SWERVE_LEVEL = swerveLevel;
+      }
+    }
     public static class Simulation {
       // These are only used for simulation
       private static final MomentOfInertia STEER_INERTIA = KilogramSquareMeters.of(0.01);
@@ -167,8 +215,8 @@ public static class OI {
 
     private static final double COUPLE_RATIO = 3.5714285714285716;
 
-    private static final double DRIVE_GEAR_RATIO = 6.75; // TODO: VERIFY FOR NEW ROBOT
-    private static final double STEER_GEAR_RATIO = 21.428571428571427; // TODO: VERIFY FOR NEW ROBOT
+    private static final double DRIVE_GEAR_RATIO = WHICH_SWERVE_ROBOT.SWERVE_LEVEL.DRIVE_GEAR_RATIO; // TODO: VERIFY FOR NEW ROBOT
+    private static final double STEER_GEAR_RATIO = WHICH_SWERVE_ROBOT.SWERVE_LEVEL.STEER_GEAR_RATIO; // TODO: VERIFY FOR NEW ROBOT
     private static final Distance WHEEL_RADIUS_INCHES = Inches.of(2); // TODO: VERIFY FOR NEW ROBOT
 
     private static final boolean STEER_MOTOR_REVERSED = true; // TODO: CHANGE FOR NEW ROBOT
@@ -212,7 +260,7 @@ public static class OI {
     private static final int FRONT_LEFT_STEER_MOTOR_ID = 3;
     private static final int FRONT_LEFT_DRIVE_MOTOR_ID = 4;
     private static final int FRONT_LEFT_ENCODER_ID = 21;
-    private static final Angle FRONT_LEFT_ENCODER_OFFSET_ROT = Rotations.of(0.3876953125);
+    private static final Angle FRONT_LEFT_ENCODER_OFFSET_ROT = WHICH_SWERVE_ROBOT.FRONT_LEFT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
     private static final Distance FRONT_LEFT_X_POS = Inches.of(11.26);
@@ -223,7 +271,7 @@ public static class OI {
     private static final int FRONT_RIGHT_STEER_MOTOR_ID = 5;
     private static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 6;
     private static final int FRONT_RIGHT_ENCODER_ID = 22;
-    private static final Angle FRONT_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(0.159912109375);
+    private static final Angle FRONT_RIGHT_ENCODER_OFFSET_ROT = WHICH_SWERVE_ROBOT.FRONT_RIGHT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
     private static final Distance FRONT_RIGHT_X_POS = Inches.of(11.26);
@@ -234,7 +282,7 @@ public static class OI {
     private static final int BACK_LEFT_STEER_MOTOR_ID = 1;
     private static final int BACK_LEFT_DRIVE_MOTOR_ID = 2;
     private static final int BACK_LEFT_ENCODER_ID = 20;
-    private static final Angle BACK_LEFT_ENCODER_OFFSET_ROT = Rotations.of(0.213134765625);
+    private static final Angle BACK_LEFT_ENCODER_OFFSET_ROT = WHICH_SWERVE_ROBOT.BACK_LEFT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
     private static final Distance BACK_LEFT_X_POS = Inches.of(-11.26);
@@ -245,7 +293,7 @@ public static class OI {
     private static final int BACK_RIGHT_STEER_MOTOR_ID = 7;
     private static final int BACK_RIGHT_DRIVE_MOTOR_ID = 8;
     private static final int BACK_RIGHT_ENCODER_ID = 23;
-    private static final Angle BACK_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(-0.3818359375);
+    private static final Angle BACK_RIGHT_ENCODER_OFFSET_ROT = WHICH_SWERVE_ROBOT.BACK_RIGHT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
     private static final Distance BACK_RIGHT_X_POS = Inches.of(-11.26);
