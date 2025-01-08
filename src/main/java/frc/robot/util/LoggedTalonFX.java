@@ -12,13 +12,13 @@ public class LoggedTalonFX extends TalonFX{
     private String name;
     private String temperature,closedLoopError,closedLoopReference,position,velocity,acceleration,supplycurrent,statorcurrent,torquecurrent,motorvoltage,supplyvoltage;
 
-    public LoggedTalonFX(String deviceName,int deviceId, String canbus) {
+    public LoggedTalonFX(String deviceName, int deviceId, String canbus) {
         super(deviceId, canbus);
         init();
         name = deviceName;
     }
 
-        public LoggedTalonFX(String deviceName,int deviceId) {
+    public LoggedTalonFX(String deviceName, int deviceId) {
         super(deviceId);
         init();
         name = deviceName;
