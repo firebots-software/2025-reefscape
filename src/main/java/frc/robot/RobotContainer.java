@@ -20,6 +20,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -70,12 +71,14 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Modular Auto Selection */
+    private final SendableChooser<String> allianceChooser;
     private final SendableChooser<String> startPosChooser;
     private final SendableChooser<String> reef1Chooser;
     private final SendableChooser<String> reef2Chooser;
     private final SendableChooser<String> reef3Chooser;
     private final SendableChooser<String> endPosChooser;
 
+    private String m_allianceSelected;
     private String m_startPosSelected;
     private String m_reef1Selected;
     private String m_reef2Selected;
@@ -83,6 +86,13 @@ public class RobotContainer {
     private String m_endPosSelected;
 
     public RobotContainer() {
+        // autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        // SmartDashboard.putData("Auto Mode", autoChooser);
+
+        startPosChooser.setDefaultOption("Position 1", );
+        startPosChooser.addOption("My Auto", kCustomAuto);
+        SmartDashboard.putData("Auto Start Position", startPosChooser);
+
         configureBindings();
     }
 
