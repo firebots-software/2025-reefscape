@@ -3,6 +3,7 @@
   "waypoints": [
     {
       "anchor": {
+<<<<<<< HEAD:src/main/deploy/pathplanner/paths/test 2.path
         "x": 6.1376699942129616,
         "y": 4.06599537037037
       },
@@ -10,12 +11,22 @@
       "nextControl": {
         "x": 6.359068287037035,
         "y": 5.236576244212962
+=======
+        "x": 1.9225407191685266,
+        "y": 4.201793561662946
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.1919137137276765,
+        "y": 4.189908708844866
+>>>>>>> 0efec080e93ddeacfed3a59bc3b30b83999bcecf:src/main/deploy/pathplanner/paths/New Path.path
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
+<<<<<<< HEAD:src/main/deploy/pathplanner/paths/test 2.path
         "x": 4.312094907407406,
         "y": 6.121878255208332
       },
@@ -26,18 +37,39 @@
       "nextControl": {
         "x": 3.328246305624023,
         "y": 6.498672552713871
+=======
+        "x": 3.7559705461774553,
+        "y": 5.868019321986607
+      },
+      "prevControl": {
+        "x": 3.507183619655272,
+        "y": 5.8434212490611666
+      },
+      "nextControl": {
+        "x": 4.045389665876113,
+        "y": 5.896634783063616
+>>>>>>> 0efec080e93ddeacfed3a59bc3b30b83999bcecf:src/main/deploy/pathplanner/paths/New Path.path
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
+<<<<<<< HEAD:src/main/deploy/pathplanner/paths/test 2.path
         "x": 1.6415143952546285,
         "y": 7.122188585069445
       },
       "prevControl": {
         "x": 2.44540798611111,
         "y": 6.472609953703703
+=======
+        "x": 5.483099801199777,
+        "y": 5.521216256277901
+      },
+      "prevControl": {
+        "x": 5.161212948850445,
+        "y": 5.523876478198142
+>>>>>>> 0efec080e93ddeacfed3a59bc3b30b83999bcecf:src/main/deploy/pathplanner/paths/New Path.path
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,13 +90,21 @@
   },
   "goalEndState": {
     "velocity": 0,
+<<<<<<< HEAD:src/main/deploy/pathplanner/paths/test 2.path
     "rotation": 129.31679288636053
+=======
+    "rotation": -122.41870955608765
+>>>>>>> 0efec080e93ddeacfed3a59bc3b30b83999bcecf:src/main/deploy/pathplanner/paths/New Path.path
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
+<<<<<<< HEAD:src/main/deploy/pathplanner/paths/test 2.path
     "rotation": -178.95553632667875
+=======
+    "rotation": 0.0
+>>>>>>> 0efec080e93ddeacfed3a59bc3b30b83999bcecf:src/main/deploy/pathplanner/paths/New Path.path
   },
   "useDefaultConstraints": true
 }
