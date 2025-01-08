@@ -239,6 +239,16 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         SmartDashboard.putNumber("chassisspeedX", getCurrentRobotChassisSpeeds().vxMetersPerSecond);
         SmartDashboard.putNumber("chassisspeedY", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
         SmartDashboard.putNumber("chassisspeedOMEGA", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+        
+
+        SmartDashboard.putNumber("fl_speed", getState().ModuleStates[0].speedMetersPerSecond);
+        SmartDashboard.putNumber("fl_angle", getState().ModuleStates[0].angle.getDegrees());
+        SmartDashboard.putNumber("fr_speed", getState().ModuleStates[1].speedMetersPerSecond);
+        SmartDashboard.putNumber("fr_angle", getState().ModuleStates[1].angle.getDegrees());
+        SmartDashboard.putNumber("bl_speed", getState().ModuleStates[2].speedMetersPerSecond);
+        SmartDashboard.putNumber("bl_angle", getState().ModuleStates[2].angle.getDegrees());
+        SmartDashboard.putNumber("br_speed", getState().ModuleStates[3].speedMetersPerSecond);
+        SmartDashboard.putNumber("br_angle", getState().ModuleStates[3].angle.getDegrees());
         // DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
         // DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
         // DogLog.log("chassis/rotation_speed_radps", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);

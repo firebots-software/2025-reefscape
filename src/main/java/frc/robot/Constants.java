@@ -94,17 +94,17 @@ public static class OI {
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs STEER_GAINS =
-        new Slot0Configs().withKP(50).withKI(0).withKD(0.2).withKS(0).withKV(1.5).withKA(0);
+        new Slot0Configs().withKP(10).withKI(0).withKD(0.2).withKS(0).withKV(1.5).withKA(0);
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs DRIVE_GAINS =
         new Slot0Configs()
-            .withKP(0.3);
-            // .withKI(0)
-            // .withKD(0)
-            // .withKS(-0.023265)
-            // .withKV(0.12681)
-            // .withKA(0.058864);
+            .withKP(0.18)
+            .withKI(0)
+            .withKD(0)
+            .withKS(-0.023265)
+            .withKV(0.12681)
+            .withKA(0.058864);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -128,16 +128,16 @@ public static class OI {
     private static final TalonFXConfiguration DRIVE_INITIAL_CONFIGS = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
+                .withStatorCurrentLimit(Amps.of(90.0))
                 .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(Constants.Swerve.DRIVE_STATOR_CURRENT_LIMIT_AMPS)
+                .withSupplyCurrentLimit(Amps.of(40.0))
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(Constants.Swerve.DRIVE_SUPPLY_CURRENT_LIMIT_AMPS)
         );
     private static final TalonFXConfiguration STEER_INITIAL_CONFIGS = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
-                .withSupplyCurrentLimit(Constants.Swerve.TURNING_SUPPLY_CURRENT_LIMIT_AMPS)
                 .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(Amps.of(30))
         );
     
     private static final CANcoderConfiguration ENCODER_INITIAL_CONFIGS = new CANcoderConfiguration();
@@ -153,23 +153,23 @@ public static class OI {
     // TODO: VERIFY FOR NEW ROBOT 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
-    private static final double SLIP_CURRENT_AMPS = 100.0;
+    private static final Current SLIP_CURRENT_AMPS = Amps.of(100.0);
 
-    public static final double DRIVE_STATOR_CURRENT_LIMIT_AMPS = 90.0;
-    public static final double STEER_STATOR_CURRENT_LIMIT_AMPS = 40.0;
+    public static final Current DRIVE_STATOR_CURRENT_LIMIT_AMPS = Amps.of(90.0);
+    public static final Current STEER_STATOR_CURRENT_LIMIT_AMPS = Amps.of(40.0);
 
-    public static final double DRIVE_SUPPLY_CURRENT_LIMIT_AMPS = 40.0;
-    public static final double TURNING_SUPPLY_CURRENT_LIMIT_AMPS = 30.0;
+    public static final Current DRIVE_SUPPLY_CURRENT_LIMIT_AMPS = Amps.of(40.0);
+    public static final Current TURNING_SUPPLY_CURRENT_LIMIT_AMPS = Amps.of(30.0);
 
     // Theoretical free speed (m/s) at 12v applied output;
     // This needs to be tuned to your individual robot
-    public static final double SPEED_AT_12V_METERS_PER_SECOND = 4.73; // TODO: VERIFY FOR NEW ROBOT
+    public static final LinearVelocity SPEED_AT_12V_METERS_PER_SECOND = MetersPerSecond.of(4.73); // TODO: VERIFY FOR NEW ROBOT
 
     private static final double COUPLE_RATIO = 3.5714285714285716;
 
-    private static final double DRIVE_GEAR_RATIO = 6.12; // TODO: VERIFY FOR NEW ROBOT
+    private static final double DRIVE_GEAR_RATIO = 6.75; // TODO: VERIFY FOR NEW ROBOT
     private static final double STEER_GEAR_RATIO = 21.428571428571427; // TODO: VERIFY FOR NEW ROBOT
-    private static final double WHEEL_RADIUS_INCHES = 2; // TODO: VERIFY FOR NEW ROBOT
+    private static final Distance WHEEL_RADIUS_INCHES = Inches.of(2); // TODO: VERIFY FOR NEW ROBOT
 
     private static final boolean STEER_MOTOR_REVERSED = true; // TODO: CHANGE FOR NEW ROBOT
     private static final boolean INVERT_LEFT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
@@ -275,7 +275,7 @@ public static class OI {
 
     // These constants are necessary for new Telemetry with swerve
     // TODO: CHANGE FOR NEW ROBOT
-    private double MAX_SPEED_MPS = SPEED_AT_12V_METERS_PER_SECOND; // kSpeedAt12Volts desired top speed
+    private double MAX_SPEED_MPS = SPEED_AT_12V_METERS_PER_SECOND.magnitude(); // kSpeedAt12Volts desired top speed
     private double MAX_ANGULAR_RATE_RPS = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     // TODO: CHANGE FOR NEW ROBOT
@@ -283,7 +283,7 @@ public static class OI {
     public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND =5.944;// before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s, 
     public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
 
-    public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 1.0;
+    public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.5;
     public static final double TELE_DRIVE_SLOW_MODE_SPEED_PERCENT = 0.3;
     public static final double TELE_DRIVE_PERCENT_SPEED_RANGE =
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
