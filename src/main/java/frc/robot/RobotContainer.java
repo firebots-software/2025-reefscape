@@ -89,6 +89,10 @@ public class RobotContainer {
         // autoChooser = AutoBuilder.buildAutoChooser("Tests");
         // SmartDashboard.putData("Auto Mode", autoChooser);
 
+        // TODO: Create 6 SendableChooser objects: Alliance, Start Position, Reef 1-3, End Position.
+        // TODO: Figure out which options to add to the choosers, and how to convert those string choices to the Pose2d's in Constants.
+        // TODO: Use commands > AutoCommands > ModularAuto.java command to run the auto using the selected options and Pose2d list
+
         startPosChooser.setDefaultOption("Position 1", );
         startPosChooser.addOption("My Auto", kCustomAuto);
         SmartDashboard.putData("Auto Start Position", startPosChooser);
