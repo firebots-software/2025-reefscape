@@ -22,25 +22,15 @@ public class OtherXBoxController extends CommandXboxController {
     public static final int JOYSTICK_A_PORT = 0;
 
     public enum XBoxButtonID {
-      /** A. */
       A(1),
-      /** B. */
       B(2),
-      /** X. */
       X(3),
-      /** Y. */
       Y(4),
-      /** Left bumper. */
       LeftBumper(5),
-      /** Right bumper. */
       RightBumper(6),
-      /** Left stick. */
       LeftStick(9),
-      /** Right stick. */
       RightStick(10),
-      /** Back. */
       Back(7),
-      /** Start. */
       Start(8);
       public final int value;
 
@@ -50,20 +40,13 @@ public class OtherXBoxController extends CommandXboxController {
     }
 
     public enum AxisID {
-      /** Left X. */
       LeftX(0),
-      /** Right X. */
       RightX(4),
-      /** Left Y. */
       LeftY(1),
-      /** Right Y. */
       RightY(5),
-      /** Left trigger. */
       LeftTrigger(2),
-      /** Right trigger. */
       RightTrigger(3);
 
-      /** Axis value. */
       public final int value;
 
       AxisID(int value) {
