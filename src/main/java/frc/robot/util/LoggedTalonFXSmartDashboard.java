@@ -7,7 +7,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class LoggedTalonFXSmartDashboard extends TalonFX{
+public class LoggedTalonFXSmartDashboard extends TalonFX {
 
     private static ArrayList<LoggedTalonFXSmartDashboard> motors = new ArrayList<>();
     private String name;

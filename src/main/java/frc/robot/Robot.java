@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.LoggedTalonFX;
+import frc.robot.util.LoggedTalonFXSmartDashboard;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -50,7 +51,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     m_robotContainer.doTelemetry();
     CommandScheduler.getInstance().run();
-    LoggedTalonFX.periodic_static();
+    LoggedTalonFXSmartDashboard.periodic_static();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
