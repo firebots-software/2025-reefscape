@@ -10,6 +10,8 @@ import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.*;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -241,7 +243,36 @@ public static class OI {
     public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
 
     public static class Landmarks {
-      public static final Pose2d 
+      //angles are the proper rotation to be at at that point
+      public static final Pose2d B_AB_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d B_CD_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d B_EF_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d B_GH_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d B_IJ_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d B_KL_REEF_AREA = new Pose2d(,,new Rotation2d());
+
+      public static final Pose2d R_AB_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d R_CD_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d R_EF_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d R_GH_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d R_IJ_REEF_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d R_KL_REEF_AREA = new Pose2d(,,new Rotation2d());
+
+
+      public static final Pose2d B_CD_CORAL_STATION = new Pose2d(1.25, 1, new Rotation2d(-125));
+      public static final Pose2d B_KL_CORAL_STATION = new Pose2d(1.25, 7,new Rotation2d(125));
+
+      public static final Pose2d R_CD_CORAL_STATION = new Pose2d(,,new Rotation2d());
+      public static final Pose2d R_KL_CORAL_STATION = new Pose2d(,,new Rotation2d());
+
+
+      public static final Pose2d B_CD_STARTING_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d B_AB_STARTING_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d B_KL_STARTING_AREA = new Pose2d(,,new Rotation2d());
+
+      public static final Pose2d R_CD_STARTING_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d R_AB_STARTING_AREA = new Pose2d(,,new Rotation2d());
+      public static final Pose2d R_KL_STARTING_AREA = new Pose2d(,,new Rotation2d());
     }
   }
 }
