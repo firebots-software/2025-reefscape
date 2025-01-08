@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import java.util.function.BooleanSupplier;
 
 // TODO: SEE IF THIS IS STILL NECESSARY (WE USED THIS DUE TO BOOLEAN EVENT LOOP SLOWDOWN)
@@ -16,6 +15,7 @@ public class OtherXBoxController extends CommandXboxController {
   // final Trigger POV;
   double threshold;
   int port;
+
   public static class OI {
     public static final double LEFT_JOYSTICK_DEADBAND = 0.07;
     public static final double RIGHT_JOYSTICK_DEADBAND = 0.07;
@@ -124,14 +124,12 @@ public class OtherXBoxController extends CommandXboxController {
 
   @Override
   public Trigger leftTrigger() {
-    return new Trigger(
-        () -> this.getRawAxis(OI.AxisID.LeftTrigger.value) > this.threshold);
+    return new Trigger(() -> this.getRawAxis(OI.AxisID.LeftTrigger.value) > this.threshold);
   }
 
   @Override
   public Trigger rightTrigger() {
-    return new Trigger(
-        () -> this.getRawAxis(OI.AxisID.RightTrigger.value) > this.threshold);
+    return new Trigger(() -> this.getRawAxis(OI.AxisID.RightTrigger.value) > this.threshold);
   }
 
   @Override
