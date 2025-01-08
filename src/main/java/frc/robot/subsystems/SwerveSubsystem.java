@@ -18,7 +18,6 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -118,8 +117,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
-    private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
-
+    
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
@@ -129,7 +127,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             // Log state with SignalLogger class
             state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
         ),
-        new SysIdRoutine.Mechanism(
+        new SysIdRoutine.Mechanism( 
             output -> setControl(m_translationCharacterization.withVolts(output)),
             null,
             this
@@ -151,54 +149,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             this
         )
     );
-
-    /*
-     * SysId routine for characterizing rotation.
-     * This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
-     * See the documentation of SwerveRequest.SysIdSwerveRotation for info on importing the log to SysId.
-     */
-    private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            /* This is in radians per second², but SysId only supports "volts per second" */
-            Volts.of(Math.PI / 6).per(Second),
-            /* This is in radians per second, but SysId only supports "volts" */
-            Volts.of(Math.PI),
-            null, // Use default timeout (10 s)
-            // Log state with SignalLogger class
-            state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            output -> {
-                /* output is actually radians per second, but SysId only supports "volts" */
-                setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
-                /* also log the requested output for SysId */
-                SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
-            },
-            null,
-            this
-        )
-    );
-
+  
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
     
-    /**
-     * @return Robot's current Chassis Speeds
-     */
-    public ChassisSpeeds getCurrentRobotChassisSpeeds() {
-        return getKinematics().toChassisSpeeds(getState().ModuleStates);
-    }
-
-    /**
-     * Returns a command that applies the specified control request to this swerve drivetrain.
-     *
-     * @param request Function returning the request to apply
-     * @return Command to run
-     */
-    public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-        return run(() -> this.setControl(requestSupplier.get()));
-    }
-
     /**
      * Runs the SysId Quasistatic test in the given direction for the routine
      * specified by {@link #m_sysIdRoutineToApply}.
@@ -222,6 +176,24 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
+    
+    /**
+     * @return Robot's current Chassis Speeds
+     */
+    public ChassisSpeeds getCurrentRobotChassisSpeeds() {
+        return getKinematics().toChassisSpeeds(getState().ModuleStates);
+    }
+
+    /**
+     * Returns a command that applies the specified control request to this swerve drivetrain.
+     *
+     * @param request Function returning the request to apply
+     * @return Command to run
+     */
+    public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
+        return run(() -> this.setControl(requestSupplier.get()));
+    }
+
 
     @Override
     public void periodic() {
