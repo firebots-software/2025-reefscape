@@ -1,13 +1,9 @@
 package frc.robot.util;
 
-import java.util.ArrayList;
-
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import dev.doglog.DogLog;
+import java.util.ArrayList;
 
 public class LoggedTalonFX extends TalonFX {
 
@@ -63,14 +59,14 @@ public class LoggedTalonFX extends TalonFX {
     this.motorvoltage = name + "/voltage/motor(V)";
     this.supplyvoltage = name + "/voltage/supply(V)";
 
-    //Applying current limits
+    // Applying current limits
     CurrentLimitsConfigs clc =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
             .withStatorCurrentLimit(80)
             .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(40); 
-      // WITH A HIGH POWER MECHANISM, MAKE SURE TO INCREASE THE CURRENT LIMITS
+            .withSupplyCurrentLimit(40);
+    // WITH A HIGH POWER MECHANISM, MAKE SURE TO INCREASE THE CURRENT LIMITS
     this.getConfigurator().apply(clc);
   }
 
@@ -80,8 +76,8 @@ public class LoggedTalonFX extends TalonFX {
             .withStatorCurrentLimitEnable(true)
             .withStatorCurrentLimit(statorCurrentLimit)
             .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(supplyCurrentLimit); 
-    
+            .withSupplyCurrentLimit(supplyCurrentLimit);
+
     this.getConfigurator().apply(clc);
   }
 
