@@ -10,21 +10,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants;
+import frc.robot.util.LoggedTalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+// import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -34,44 +38,58 @@ public class ElevatorSubsystem extends SubsystemBase {
   private LoggedTalonFX motor1;
   private LoggedTalonFX motor2;
 
+  private MotionMagicConfigs mmc;
 
   public ElevatorSubsystem() {
     // Initialize motors
-    motor1 = new LoggedTalonFX(0, 0);
-    motor2 = new LoggedTalonFX(0, 0);
+    motor1 = new LoggedTalonFX(Constants.elevatorConstants.MOTOR1_PORT);
+    motor2 = new LoggedTalonFX(Constants.elevatorConstants.MOTOR2_PORT);
 
     // Set up motor followers and deal with inverted motors
-    Follower invertedFollower = new Follower(0, false);
+    Follower invertedFollower = new Follower(Constants.elevatorConstants.MOTOR1_PORT, false);
     motor2.setControl(invertedFollower);
 
-    TalonFXConfigurator m1Config = motor1.getConfigurator();
-    TalonFXConfigurator m2Config = motor2.getConfigurator();
 
-    // motion profiling
+    Slot0Configs s0c =
+        new Slot0Configs().withKP(Constants.elevatorConstants.S0C_KP).withKI(Constants.elevatorConstants.S0C_KI).withKD(Constants.elevatorConstants.S0C_KD);
     CurrentLimitsConfigs clc =
     new CurrentLimitsConfigs()
         .withStatorCurrentLimitEnable(true)
-        .withStatorCurrentLimit(0);
-    MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
-    Slot0Configs s0c = new Slot0Configs().withKP(0).withKI(0).withKD(0);
-    eleff =
-        new eleFeedforward(0, 0,0);
+        .withSupplyCurrentLimitEnable(true)
+        .withStatorCurrentLimit(Constants.elevatorConstants.STATOR_CURRENT_LIMIT)
+        .withSupplyCurrentLimit(Constants.elevatorConstants.SUPPYLY_CURRENT_LIMIT);
 
+   TalonFXConfigurator m1Config = motor1.getConfigurator();
+   TalonFXConfigurator m2Config = motor2.getConfigurator();
+    
+   m1Config.apply(clc);
+   m2Config.apply(clc);
+  
+
+    // Apply Slot0Configs to motor1(master)
+    TalonFXConfigurator motor1Configurator = motor1.getConfigurator();
+    motor1Configurator.apply(s0c);
+
+    // Apply MotionMagic to motor1(master)
+    mmc = new MotionMagicConfigs();
+    mmc.MotionMagicCruiseVelocity = Constants.elevatorConstants.MOTIONMAGIC_KV;
+    mmc.MotionMagicAcceleration = Constants.elevatorConstants.MOTIONMAGIC_KA;
+    motor1Configurator.apply(mmc);
+
+
+    /*
     m1Config.apply(moc);
     m2Config.apply(moc);
 
-    // TODO: Why do we apply Current Limit Configs to each motor, but then only do s0c on the
-    // master?
-    // Apply Current Limit to all motors
+
     m1Config.apply(clc);
     m2Config.apply(clc);
 
-    // Assign master motor and apply Slot0Configs to master
-    master = motor1;
-    TalonFXConfigurator masterConfigurator = master.getConfigurator();
+    // Apply Slot0Configs to master
+    TalonFXConfigurator masterConfigurator = motor1.getConfigurator();
     masterConfigurator.apply(s0c);
 
-    // Apply MotionMagicConfigs to master motor
+    // Apply MotionMagicConfigs to motor1
     mmc = new MotionMagicConfigs();
     mmc.MotionMagicCruiseVelocity =
         Constants.Arm.MOTIONMAGIC_KV * Constants.Arm.INTEGRATED_ARM_CONVERSION_FACTOR;
@@ -89,41 +107,41 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void elevate(double speed) {
-    master.set(ControlMode.PercentOutput, speed);
+    motor1.set(ControlMode.PercentOutput, speed);
   }
 
   public double getSpeed(){
-    return master.getSelectedSensorVelocity();
+    return motor1.getSelectedSensorVelocity();
   } 
   public boolean getStopped(){
     return getSpeed() == 0;
   }
   public void holdPosition() {
-    master.set(ControlMode.Position, holdPosValue);
+    motor1.set(ControlMode.Position, holdPosValue);
   }
 
   public void holdPosition(double pos) {
-    master.set(ControlMode.Position, pos);
+    motor1.set(ControlMode.Position, pos);
   }
 
   public double getPIDError() {
-    return master.getClosedLoopError();
+    return motor1.getClosedLoopError();
   }
 
   public void setHoldPos() {
-    holdPosValue = master.getSelectedSensorPosition();
+    holdPosValue = motor1.getSelectedSensorPosition();
   }
 
   public void resetEncoderPos() {
-    master.setSelectedSensorPosition(0);
+    motor1.setSelectedSensorPosition(0);
   }
 
   public boolean isAtSetpoint() {
-    return master.isMotionProfileFinished();
+    return motor1.isMotionProfileFinished();
   }
 
   public boolean getBottomLimits() {
-    if(master.getMotorOutputCurrent() > Constant.currentlimit){
+    if(motor1.getMotorOutputCurrent() > Constant.currentlimit){
       return true;
     }else{
       return false;
@@ -131,32 +149,33 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public double getEncoderPos() {
-    return master.getSelectedSensorPosition();
+    return motor1.getSelectedSensorPosition();
   }
   // setting levels for certain positions in the field; must use constants for converting motors to rotational angle
   public void setLevelOfElavat(int level) {
   if (level == 1){
-     master.set(ControlMode.MotionMagic, ElevatorConstants.level1);
+     motor1.set(ControlMode.MotionMagic, ElevatorConstants.level1);
       holdPosValue = ElevatorConstants.level1;
       holdPosition();
       SmartDashboard.putString("elevator error", "level: " + level + ", Error: " + getPIDError());
   } else if (level == 2) {
-      master.set(ControlMode.MotionMagic, ElevatorConstants.level2);
+      motor1.set(ControlMode.MotionMagic, ElevatorConstants.level2);
       holdPosValue = ElevatorConstants.level2;
       holdPosition();
       SmartDashboard.putString("elevator error", "level: " + level + ", Error: " + getPIDError());
     } else if (level == 3) {
-      master.set(ControlMode.MotionMagic, ElevatorConstants.level4);
+      motor1.set(ControlMode.MotionMagic, ElevatorConstants.level4);
       holdPosValue = ElevatorConstants.level4;
       holdPosition();
       SmartDashboard.putString("elevator error", "level: " + level + ", Error: " + getPIDError());
     }
     else if (level == 4) {
-      master.set(ControlMode.MotionMagic, ElevatorConstants.level4);
+      motor1.set(ControlMode.MotionMagic, ElevatorConstants.level4);
       holdPosValue = ElevatorConstants.level4;
       holdPosition();
       SmartDashboard.putString("elevator error", "level: " + level + ", Error: " + getPIDError());
   }
+  */
   }
 
   /**
@@ -169,15 +188,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     return false;
   }
 
+  /*
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if (getBottomLimits()){
       resetEncoderPos();
       holdPosValue = 0;
-      master.set(ControlMode.PercentOutput, 0);
+      motor1.set(ControlMode.PercentOutput, 0);
     }
   }
+  */
 
   @Override
   public void simulationPeriodic() {

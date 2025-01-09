@@ -17,10 +17,10 @@ public class ElevatorLevel2 extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ElevatorLevel2(ElevatorSubsystem subsystem) {
+  public ElevatorLevel2(ElevatorSubsystem elevatorSubsystem) {
     this.elevatorSubsystem = elevatorSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(elevatorSubsystem);
   }
 
   // Called when the command is initially scheduled.

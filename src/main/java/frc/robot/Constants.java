@@ -1,6 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
@@ -11,6 +12,8 @@ import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 
 import edu.wpi.first.units.measure.*;
+import java.security.PublicKey;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -239,5 +242,44 @@ public static class OI {
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
     public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420;
     public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
+  }
+  public static class elevatorConstants {
+    public static final int MOTOR1_PORT = 0; // TODO: change port
+    public static final int MOTOR2_PORT = 0; // TODO: change port
+    
+    public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
+    public static final double SUPPYLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
+    public static final int S0C_KP = 0;
+    public static final int S0C_KI = 0;
+    public static final int S0C_KD = 0;
+    public static final int MOTIONMAGIC_KV = 0;
+    public static final int MOTIONMAGIC_KA = 0;
+  }
+  
+  public static final class MotorConstants {
+    public final int PORT;
+    public final boolean REVERSED;
+    public final double GEAR_RATIO;
+    public final double STATOR_CURRENT_LIMIT_AMPS;
+    public final double SPEED_RPS;
+    public final double AMP_SPEED_RPS;
+    public final double SPEED_VOLTAGE;
+
+    private MotorConstants(
+        int port,
+        boolean reversed,
+        double gearRatio,
+        double statorCurrent,
+        double speed,
+        double ampSpeed,
+        double voltage) {
+      PORT = port;
+      REVERSED = reversed;
+      GEAR_RATIO = gearRatio;
+      STATOR_CURRENT_LIMIT_AMPS = statorCurrent;
+      SPEED_RPS = speed;
+      AMP_SPEED_RPS = ampSpeed;
+      SPEED_VOLTAGE = voltage;
+    }
   }
 }
