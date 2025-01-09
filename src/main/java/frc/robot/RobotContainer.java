@@ -8,16 +8,18 @@ import static edu.wpi.first.units.Units.*;
 
 import java.util.Optional;
 
-import java.util.Optional;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -48,19 +50,19 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Modular Auto Selection */
-    private final SendableChooser<String> allianceChooser;
+    // private final SendableChooser<String> allianceChooser;
     private final SendableChooser<String> startPosChooser;
-    private final SendableChooser<String> reef1Chooser;
-    private final SendableChooser<String> reef2Chooser;
-    private final SendableChooser<String> reef3Chooser;
-    private final SendableChooser<String> endPosChooser;
+    // private final SendableChooser<String> reef1Chooser;
+    // private final SendableChooser<String> reef2Chooser;
+    // private final SendableChooser<String> reef3Chooser;
+    // private final SendableChooser<String> endPosChooser;
 
-    private String m_allianceSelected;
-    private String m_startPosSelected;
-    private String m_reef1Selected;
-    private String m_reef2Selected;
-    private String m_reef3Selected;
-    private String m_endPosSelected;
+    // private String m_allianceSelected;
+    // private String m_startPosSelected;
+    // private String m_reef1Selected;
+    // private String m_reef2Selected;
+    // private String m_reef3Selected;
+    // private String m_endPosSelected;
 
     public RobotContainer() {
         // autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -69,40 +71,13 @@ public class RobotContainer {
         // TODO: Create 6 SendableChooser objects: Alliance, Start Position, Reef 1-3, End Position.
         // TODO: Figure out which options to add to the choosers, and how to convert those string choices to the Pose2d's in Constants.
         // TODO: Use commands > AutoCommands > ModularAuto.java command to run the auto using the selected options and Pose2d list
+        // UPDATE: No longer focusing on Modular Auton idea. We will try getting a reliable, consistent, simple Auton first.
 
-        startPosChooser.setDefaultOption("Position 1", );
-        startPosChooser.addOption("My Auto", kCustomAuto);
+        startPosChooser.setDefaultOption("Left (CD)", "left");
+        startPosChooser.addOption("Right (LK)", "right");
         SmartDashboard.putData("Auto Start Position", startPosChooser);
 
         configureBindings();
-    }
-
-    private static SendableChooser<Optional<ReefLocation>>
-      pickup1choice = new SendableChooser<Optional<ReefLocation>>(),
-      pickup2choice = new SendableChooser<Optional<ReefLocation>>(),
-      pickup3choice = new SendableChooser<Optional<ReefLocation>>();
-    SendableChooser<String> startchoice = new SendableChooser<String>();
-
-    private void setupChooser() {
-        pickup1choice.setDefaultOption("SECOND SHOT: DO NOTHING", Optional.empty());
-        pickup1choice.addOption("AMPSIDE", Optional.of(NoteLocation.AMPSIDE));
-        pickup1choice.addOption("MIDDLE", Optional.of(NoteLocation.MIDDLE));
-        pickup1choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
-        pickup2choice.setDefaultOption("THIRD SHOT: DO NOTHING", Optional.empty());
-        pickup2choice.addOption("AMPSIDE NOTE", Optional.of(NoteLocation.AMPSIDE));
-        pickup2choice.addOption("MIDDLE NOTE", Optional.of(NoteLocation.MIDDLE));
-        pickup2choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
-        pickup3choice.setDefaultOption("FOURTH SHOT: DO NOTHING", Optional.empty());
-        pickup3choice.addOption("AMPSIDE", Optional.of(NoteLocation.AMPSIDE));
-        pickup3choice.addOption("MIDDLE", Optional.of(NoteLocation.MIDDLE));
-        pickup3choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
-        startchoice.setDefaultOption("STARTING POSITION: MIDDLE START", "Mid");
-        startchoice.addOption("AMPSIDE START", "Amp");
-        startchoice.addOption("STAGESIDE START", "Stage");
-        SmartDashboard.putData(pickup1choice);
-        SmartDashboard.putData(pickup2choice);
-        SmartDashboard.putData(pickup3choice);
-        SmartDashboard.putData(startchoice);
     }
 
     private void configureBindings() {
@@ -143,7 +118,11 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        /* Run the path selected from the auto chooser */
-        return autoChooser.getSelected();
+        /* Run the auto selected from the SmartDashboard chooser */
+
+        String curAlliance = DriverStation.getAlliance().get().toString().toLowerCase();
+        String chosenSide = startPosChooser.getSelected();
+        
+        return new PathPlannerAuto(curAlliance + " " + chosenSide);
     }
 }
