@@ -90,24 +90,20 @@ public class LoggedTalonFX extends TalonFX {
   }
 
   public void periodic() {
-    // TODO: LABEL WHAT UNITS THESE ARE IN
     DogLog.log(temperature, this.getDeviceTemp().getValue().magnitude());
     DogLog.log(closedLoopError, this.getClosedLoopError().getValue());
     DogLog.log(closedLoopReference, this.getClosedLoopReference().getValue());
 
-    // TODO: LABEL WHAT UNITS THESE ARE IN
     DogLog.log(position, this.getPosition().getValue().magnitude());
     DogLog.log(velocity, this.getVelocity().getValue().magnitude());
     DogLog.log(acceleration, this.getAcceleration().getValue().magnitude());
 
     // Current
-    // TODO: LABEL WHAT UNITS THESE ARE IN
     DogLog.log(supplycurrent, this.getSupplyCurrent().getValue().magnitude());
     DogLog.log(statorcurrent, this.getStatorCurrent().getValue().magnitude());
     DogLog.log(torquecurrent, this.getTorqueCurrent().getValue().magnitude());
 
     // Voltage
-    // TODO: LABEL WHAT UNITS THESE ARE IN
     DogLog.log(motorvoltage, this.getMotorVoltage().getValue().magnitude());
     DogLog.log(supplyvoltage, this.getSupplyVoltage().getValue().magnitude());
   }
