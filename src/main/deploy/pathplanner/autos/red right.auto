@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right to reef"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 10.0
+            "pathName": "red right to reef "
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "reef to coral station 1b"
+            "pathName": "red right to HP"
           }
         }
       ]

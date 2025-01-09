@@ -11,15 +11,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 10.0
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "reef to coral station 1b"
+            "pathName": "right to HP"
           }
         }
       ]
