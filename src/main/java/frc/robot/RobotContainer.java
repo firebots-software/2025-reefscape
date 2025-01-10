@@ -96,10 +96,18 @@ public class RobotContainer {
          * Joystick X = dyanmic reverse
          */
 
-        joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+
+        joystick.x().onTrue(
+            driveTrain.runOnce(() ->
+                driveTrain.resetPose(
+                    new Pose2d(new Translation2d(0.48, 4),Rotation2d.fromDegrees(0)))));
+        
+        joystick.y().whileTrue(MoveToTarget.withAbsolute(driveTrain, new Rotation2d(Degrees.of(90)), new Rotation2d(Degrees.of(0)), new Pose2d(new Translation2d(1, 4), new Rotation2d())));
     }
 
     public static void setAlliance() {
