@@ -30,11 +30,20 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.util.OtherXBoxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
+/**
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * subsystems, commands, and trigger mappings) should be declared here.
+ */
 public class RobotContainer {
     private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
     private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
@@ -53,7 +62,8 @@ public class RobotContainer {
         Constants.Swerve.BackLeft,
         Constants.Swerve.BackRight
     );
-
+      // The robot's subsystems and commands are defined here...
+    private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
     private final Telemetry logger = new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
     private final CommandXboxController joystick = new CommandXboxController(0);
 
@@ -62,9 +72,11 @@ public class RobotContainer {
         logger.telemeterize(driveTrain.getState());
     }
 
-    public RobotContainer() {
-        configureBindings();
-    }
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public RobotContainer() {
+    // Configure the trigger bindings
+    configureBindings();
+  }
 
     private void configureBindings() {
         // Joystick suppliers,
