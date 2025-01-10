@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left to reef"
+            "pathName": "blue left to reef"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left to HP"
+            "pathName": "blue left to HP"
           }
         }
       ]
