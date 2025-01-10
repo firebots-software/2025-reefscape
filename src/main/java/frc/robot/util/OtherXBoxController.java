@@ -213,7 +213,6 @@ public class OtherXBoxController extends CommandXboxController {
 
           @Override
           public boolean getAsBoolean() {
-            // TODO Auto-generated method stub
             return getPOV(pov) == angle;
             // throw new UnsupportedOperationException("Unimplemented method 'getAsBoolean'");
           }
