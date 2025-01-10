@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import dev.doglog.DogLog;
 import java.util.ArrayList;
@@ -57,6 +58,27 @@ public class LoggedTalonFX extends TalonFX {
     this.torquecurrent = name + "/current/torque(A)";
     this.motorvoltage = name + "/voltage/motor(V)";
     this.supplyvoltage = name + "/voltage/supply(V)";
+
+    // Applying current limits
+    CurrentLimitsConfigs clc =
+        new CurrentLimitsConfigs()
+            .withStatorCurrentLimitEnable(true)
+            .withStatorCurrentLimit(80)
+            .withSupplyCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(40);
+    // WITH A HIGH POWER MECHANISM, MAKE SURE TO INCREASE THE CURRENT LIMITS
+    this.getConfigurator().apply(clc);
+  }
+
+  public void updateCurrentLimits(double statorCurrentLimit, double supplyCurrentLimit) {
+    CurrentLimitsConfigs clc =
+        new CurrentLimitsConfigs()
+            .withStatorCurrentLimitEnable(true)
+            .withStatorCurrentLimit(statorCurrentLimit)
+            .withSupplyCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(supplyCurrentLimit);
+
+    this.getConfigurator().apply(clc);
   }
 
   // For some reason Robot.java doesn't recognize the static method here
