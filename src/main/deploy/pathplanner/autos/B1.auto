@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "first B1"
+            "pathName": null
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "second B1"
+            "pathName": null
           }
         }
       ]
