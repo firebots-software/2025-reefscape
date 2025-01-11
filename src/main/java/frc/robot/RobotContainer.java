@@ -17,7 +17,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -31,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.MoveToTarget;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 public class RobotContainer {
@@ -107,7 +110,7 @@ public class RobotContainer {
                 driveTrain.resetPose(
                     new Pose2d(new Translation2d(0.48, 4),Rotation2d.fromDegrees(0)))));
         
-        joystick.y().whileTrue(MoveToTarget.withAbsolute(driveTrain, new Rotation2d(Degrees.of(90)), new Rotation2d(Degrees.of(0)), new Pose2d(new Translation2d(1, 4), new Rotation2d())));
+        joystick.y().whileTrue(MoveToTarget.withAbsolute(driveTrain, new Rotation2d(Degrees.of(90)), new Rotation2d(Degrees.of(0)), new Pose2d(new Translation2d(2, 4), new Rotation2d())));
     }
 
     public static void setAlliance() {
