@@ -11,6 +11,7 @@ import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -98,35 +99,103 @@ public static class OI {
       }
     }
 
+    public static enum SwerveDrivePIDValues {
+        SERRANO (0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
+        PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619);
+
+
+        public final double KP, KI, KD, KS, KV, KA;
+
+        SwerveDrivePIDValues (
+            double KP, double KI, double KD, double KS, double KV, double KA
+        ) {
+            this.KP=KP;
+            this.KI=KI;
+            this.KD=KD;
+            this.KS=KS;
+            this.KV=KV;
+            this.KA=KA;
+        }
+    }
+
+    public static enum SwerveSteerPIDValues {
+        SERRANO (50, 0d, 0d, 0d, 0d, 0d),
+        PROTO(50, 0d, 0d, 0d, 0d, 0d);
+
+
+        public final double KP, KI, KD, KS, KV, KA;
+
+        SwerveSteerPIDValues (
+            double KP, double KI, double KD, double KS, double KV, double KA
+        ) {
+            this.KP=KP;
+            this.KI=KI;
+            this.KD=KD;
+            this.KS=KS;
+            this.KV=KV;
+            this.KA=KA;
+        }
+    }
+
+    public static enum RobotDimensions {
+        SERRANO(Inches.of(22.52), Inches.of(22.834)),
+        PROTO(Inches.of(22.52), Inches.of(22.834));
+
+        public final Distance length, width;
+
+        RobotDimensions (Distance length, Distance width) {
+            this.length=length;
+            this.width=width;
+        }
+    }
+    
+
     public static enum SwerveType {
       SERRANO(
         Rotations.of(-0.466552734375), // front left
         Rotations.of(-0.436767578125), // front right
         Rotations.of(-0.165283203125), // back left
         Rotations.of(-0.336181640625), // back right
-        SwerveLevel.L3), // what level the swerve drive is
+        SwerveLevel.L3, // what level the swerve drive is
+        SwerveDrivePIDValues.SERRANO,
+        SwerveSteerPIDValues.SERRANO,
+        RobotDimensions.SERRANO
+        ),
       PROTO(
         Rotations.of(0.3876953125), // front left
         Rotations.of(0.159912109375), // front right
         Rotations.of(0.213134765625), // back left
         Rotations.of(-0.3818359375), // back right
-        SwerveLevel.L2); // what level the swerve drive is
+        SwerveLevel.L2, // what level the swerve drive is
+        SwerveDrivePIDValues.PROTO,
+        SwerveSteerPIDValues.PROTO,
+        RobotDimensions.PROTO
+        );
       
       public final Angle FRONT_LEFT_ENCODER_OFFSET, FRONT_RIGHT_ENCODER_OFFSET, BACK_LEFT_ENCODER_OFFSET, BACK_RIGHT_ENCODER_OFFSET;
       SwerveLevel SWERVE_LEVEL;
+      SwerveDrivePIDValues SWERVE_DRIVE_PID_VALUES;
+      SwerveSteerPIDValues SWERVE_STEER_PID_VALUES;
+      RobotDimensions ROBOT_DIMENSIONS;
 
       SwerveType(
         Angle fl,
         Angle fr,
         Angle bl,
         Angle br,
-        SwerveLevel swerveLevel
+        SwerveLevel swerveLevel,
+        SwerveDrivePIDValues swerveDrivePIDValues,
+        SwerveSteerPIDValues swerveSteerPIDValues,
+        RobotDimensions robotDimensions
       ) {
         FRONT_LEFT_ENCODER_OFFSET = fl;
         FRONT_RIGHT_ENCODER_OFFSET = fr; 
         BACK_LEFT_ENCODER_OFFSET = bl;
         BACK_RIGHT_ENCODER_OFFSET = br;
         SWERVE_LEVEL = swerveLevel;
+        SWERVE_DRIVE_PID_VALUES = swerveDrivePIDValues;
+        SWERVE_STEER_PID_VALUES = swerveSteerPIDValues;
+        ROBOT_DIMENSIONS = robotDimensions;
       }
     }
     public static class Simulation {
@@ -142,17 +211,17 @@ public static class OI {
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs STEER_GAINS =
-        new Slot0Configs().withKP(25).withKI(0).withKD(0).withKS(0).withKV(0).withKA(0);
+        new Slot0Configs().withKP(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KP).withKI(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KI).withKD(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KD).withKS(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KS).withKV(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KV).withKA(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KA);
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs DRIVE_GAINS =
         new Slot0Configs()
-            .withKP(0.18)
-            .withKI(0)
-            .withKD(0)
-            .withKS(-0.023265)
-            .withKV(0.12681)
-            .withKA(0.058864);
+            .withKP(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KP)
+            .withKI(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KI)
+            .withKD(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KD)
+            .withKS(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KS)
+            .withKV(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KV)
+            .withKA(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KA);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -263,8 +332,8 @@ public static class OI {
     private static final Angle FRONT_LEFT_ENCODER_OFFSET_ROT = WHICH_SWERVE_ROBOT.FRONT_LEFT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance FRONT_LEFT_X_POS = Inches.of(11.26);
-    private static final Distance FRONT_LEFT_Y_POS = Inches.of(11.417);
+    private static final Distance FRONT_LEFT_X_POS = WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(2);
+    private static final Distance FRONT_LEFT_Y_POS = WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(2);
 
     // Front Right
     // TODO: CHANGE FOR NEW ROBOT
@@ -274,8 +343,9 @@ public static class OI {
     private static final Angle FRONT_RIGHT_ENCODER_OFFSET_ROT = WHICH_SWERVE_ROBOT.FRONT_RIGHT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance FRONT_RIGHT_X_POS = Inches.of(11.26);
-    private static final Distance FRONT_RIGHT_Y_POS = Inches.of(-11.417);
+    private static final Distance FRONT_RIGHT_X_POS = WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(2);
+    private static final Distance FRONT_RIGHT_Y_POS = WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(-2);
+
 
     // Back Left
     // TODO: CHANGE FOR NEW ROBOT
@@ -285,8 +355,9 @@ public static class OI {
     private static final Angle BACK_LEFT_ENCODER_OFFSET_ROT = WHICH_SWERVE_ROBOT.BACK_LEFT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance BACK_LEFT_X_POS = Inches.of(-11.26);
-    private static final Distance BACK_LEFT_Y_POS = Inches.of(11.417);
+    private static final Distance BACK_LEFT_X_POS = WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(-2);
+    private static final Distance BACK_LEFT_Y_POS = WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(2);
+
 
     // Back Right
     // TODO: CHANGE FOR NEW ROBOT
@@ -296,8 +367,8 @@ public static class OI {
     private static final Angle BACK_RIGHT_ENCODER_OFFSET_ROT = WHICH_SWERVE_ROBOT.BACK_RIGHT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance BACK_RIGHT_X_POS = Inches.of(-11.26);
-    private static final Distance BACK_RIGHT_Y_POS = Inches.of(-11.417);
+    private static final Distance BACK_RIGHT_X_POS = WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(-2);
+    private static final Distance BACK_RIGHT_Y_POS = WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(-2);
 
     // Set the constants per module (constants defined above)
     public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft =
