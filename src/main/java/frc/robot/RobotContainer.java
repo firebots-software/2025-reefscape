@@ -88,28 +88,6 @@ public class RobotContainer {
         configureBindings();
     }
 
-    private void setupChooser() {
-        // pickup1choice.setDefaultOption("SECOND SHOT: DO NOTHING", Optional.empty());
-        // pickup1choice.addOption("AMPSIDE", Optional.of(NoteLocation.AMPSIDE));
-        // pickup1choice.addOption("MIDDLE", Optional.of(NoteLocation.MIDDLE));
-        // pickup1choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
-        // pickup2choice.setDefaultOption("THIRD SHOT: DO NOTHING", Optional.empty());
-        // pickup2choice.addOption("AMPSIDE NOTE", Optional.of(NoteLocation.AMPSIDE));
-        // pickup2choice.addOption("MIDDLE NOTE", Optional.of(NoteLocation.MIDDLE));
-        // pickup2choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
-        // pickup3choice.setDefaultOption("FOURTH SHOT: DO NOTHING", Optional.empty());
-        // pickup3choice.addOption("AMPSIDE", Optional.of(NoteLocation.AMPSIDE));
-        // pickup3choice.addOption("MIDDLE", Optional.of(NoteLocation.MIDDLE));
-        // pickup3choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
-        // startchoice.setDefaultOption("STARTING POSITION: MIDDLE START", "Mid");
-        // startchoice.addOption("AMPSIDE START", "Amp");
-        // startchoice.addOption("STAGESIDE START", "Stage");
-        // SmartDashboard.putData(pickup1choice);
-        // SmartDashboard.putData(pickup2choice);
-        // SmartDashboard.putData(pickup3choice);
-        // SmartDashboard.putData(startchoice);
-    }
-
     private void configureBindings() {
         // Joystick suppliers,
         Trigger leftShoulderTrigger = joystick.leftBumper();
