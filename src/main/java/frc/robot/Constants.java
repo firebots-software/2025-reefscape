@@ -276,5 +276,9 @@ public static class OI {
       public static final Pose2d R_KL_STARTING_AREA = new Pose2d(,,new Rotation2d());
       */
     }
+
+    public static class Odometry {
+        public static final float ODOMETRY_UPDATE_CONSTANT = 250;
+    }
   }
 }

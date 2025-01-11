@@ -52,7 +52,7 @@ public class RobotContainer {
 
     private final SwerveSubsystem driveTrain = new SwerveSubsystem(
         Constants.Swerve.DrivetrainConstants,
-        250.0, // TODO: CHANGE ODOMETRY UPDATE FREQUENCY TO CONSTANT,
+        Constants.Swerve.Odometry.ODOMETRY_UPDATE_CONSTANT,
         odometryMatrix,
         visionMatrix,
         Constants.Swerve.FrontLeft,
