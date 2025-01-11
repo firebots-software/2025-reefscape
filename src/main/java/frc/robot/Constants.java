@@ -243,7 +243,7 @@ public static class OI {
     public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420;
     public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
   }
-  public static class elevatorConstants {
+  public static class ElevatorConstants {
     public static final int MOTOR1_PORT = 0; // TODO: change port
     public static final int MOTOR2_PORT = 0; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port 

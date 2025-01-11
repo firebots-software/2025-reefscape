@@ -114,12 +114,10 @@ public class RobotContainer {
         joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
         joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-         new Trigger(m_ElevatorSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_ElevatorSubsystem));
+        
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    joystick.b().whileTrue(m_ElevatorSubsystem.exampleMethodCommand());
     }
 
     public static void setAlliance() {
@@ -131,7 +129,6 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
-        SmartDashboard.putNumber("arjun IQ", 2.0);
-        return Autos.exampleAuto(m_ElevatorSubsystem);
+        return new Command() {};
     }
 }

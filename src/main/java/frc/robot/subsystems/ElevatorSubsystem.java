@@ -42,22 +42,22 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem() {
     // Initialize motors
-    motor1 = new LoggedTalonFX(Constants.elevatorConstants.MOTOR1_PORT);
-    motor2 = new LoggedTalonFX(Constants.elevatorConstants.MOTOR2_PORT);
+    motor1 = new LoggedTalonFX(Constants.ElevatorConstants.MOTOR1_PORT);
+    motor2 = new LoggedTalonFX(Constants.ElevatorConstants.MOTOR2_PORT);
 
     // Set up motor followers and deal with inverted motors
-    Follower invertedFollower = new Follower(Constants.elevatorConstants.MOTOR1_PORT, false);
+    Follower invertedFollower = new Follower(Constants.ElevatorConstants.MOTOR1_PORT, false);
     motor2.setControl(invertedFollower);
 
 
     Slot0Configs s0c =
-        new Slot0Configs().withKP(Constants.elevatorConstants.S0C_KP).withKI(Constants.elevatorConstants.S0C_KI).withKD(Constants.elevatorConstants.S0C_KD);
+        new Slot0Configs().withKP(Constants.ElevatorConstants.S0C_KP).withKI(Constants.ElevatorConstants.S0C_KI).withKD(Constants.ElevatorConstants.S0C_KD);
     CurrentLimitsConfigs clc =
     new CurrentLimitsConfigs()
         .withStatorCurrentLimitEnable(true)
         .withSupplyCurrentLimitEnable(true)
-        .withStatorCurrentLimit(Constants.elevatorConstants.STATOR_CURRENT_LIMIT)
-        .withSupplyCurrentLimit(Constants.elevatorConstants.SUPPYLY_CURRENT_LIMIT);
+        .withStatorCurrentLimit(Constants.ElevatorConstants.STATOR_CURRENT_LIMIT)
+        .withSupplyCurrentLimit(Constants.ElevatorConstants.SUPPYLY_CURRENT_LIMIT);
 
    TalonFXConfigurator m1Config = motor1.getConfigurator();
    TalonFXConfigurator m2Config = motor2.getConfigurator();
@@ -72,8 +72,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Apply MotionMagic to motor1(master)
     mmc = new MotionMagicConfigs();
-    mmc.MotionMagicCruiseVelocity = Constants.elevatorConstants.MOTIONMAGIC_KV;
-    mmc.MotionMagicAcceleration = Constants.elevatorConstants.MOTIONMAGIC_KA;
+    mmc.MotionMagicCruiseVelocity = Constants.ElevatorConstants.MOTIONMAGIC_KV;
+    mmc.MotionMagicAcceleration = Constants.ElevatorConstants.MOTIONMAGIC_KA;
     motor1Configurator.apply(mmc);
 
 
