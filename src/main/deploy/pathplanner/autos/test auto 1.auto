@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "test 1"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "test 2"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "test 3"
+            "pathName": null
           }
         }
       ]

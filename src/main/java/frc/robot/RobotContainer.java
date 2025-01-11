@@ -105,6 +105,7 @@ public class RobotContainer {
       pickup2choice = new SendableChooser<Optional<ReefLocation>>(),
       pickup3choice = new SendableChooser<Optional<ReefLocation>>();
     SendableChooser<String> startchoice = new SendableChooser<String>();
+<<<<<<< HEAD
 
     private void setupChooser() {
         // pickup1choice.setDefaultOption("SECOND SHOT: DO NOTHING", Optional.empty());
@@ -128,6 +129,9 @@ public class RobotContainer {
         // SmartDashboard.putData(startchoice);
     }
 
+=======
+    
+>>>>>>> 77dc56afb946bfe32fcf01a245cf1876ad9a5f91
     private void configureBindings() {
         // Joystick suppliers,
         Trigger leftShoulderTrigger = joystick.leftBumper();
