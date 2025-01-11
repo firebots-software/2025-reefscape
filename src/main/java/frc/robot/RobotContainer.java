@@ -78,12 +78,12 @@ public class RobotContainer {
     private final SendableChooser<String> reef3Chooser;
     private final SendableChooser<String> endPosChooser;
 
-    private String m_allianceSelected;
-    private String m_startPosSelected;
-    private String m_reef1Selected;
-    private String m_reef2Selected;
-    private String m_reef3Selected;
-    private String m_endPosSelected;
+    // private String m_allianceSelected;
+    // private String m_startPosSelected;
+    // private String m_reef1Selected;
+    // private String m_reef2Selected;
+    // private String m_reef3Selected;
+    // private String m_endPosSelected;
 
     public RobotContainer() {
         // autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -93,8 +93,8 @@ public class RobotContainer {
         // TODO: Figure out which options to add to the choosers, and how to convert those string choices to the Pose2d's in Constants.
         // TODO: Use commands > AutoCommands > ModularAuto.java command to run the auto using the selected options and Pose2d list
 
-        startPosChooser.setDefaultOption("Position 1", );
-        startPosChooser.addOption("My Auto", kCustomAuto);
+        startPosChooser.setDefaultOption("Left (CD)", "left");
+        startPosChooser.addOption("Right (LK)", "right");
         SmartDashboard.putData("Auto Start Position", startPosChooser);
 
         configureBindings();
@@ -107,25 +107,25 @@ public class RobotContainer {
     SendableChooser<String> startchoice = new SendableChooser<String>();
 
     private void setupChooser() {
-        pickup1choice.setDefaultOption("SECOND SHOT: DO NOTHING", Optional.empty());
-        pickup1choice.addOption("AMPSIDE", Optional.of(NoteLocation.AMPSIDE));
-        pickup1choice.addOption("MIDDLE", Optional.of(NoteLocation.MIDDLE));
-        pickup1choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
-        pickup2choice.setDefaultOption("THIRD SHOT: DO NOTHING", Optional.empty());
-        pickup2choice.addOption("AMPSIDE NOTE", Optional.of(NoteLocation.AMPSIDE));
-        pickup2choice.addOption("MIDDLE NOTE", Optional.of(NoteLocation.MIDDLE));
-        pickup2choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
-        pickup3choice.setDefaultOption("FOURTH SHOT: DO NOTHING", Optional.empty());
-        pickup3choice.addOption("AMPSIDE", Optional.of(NoteLocation.AMPSIDE));
-        pickup3choice.addOption("MIDDLE", Optional.of(NoteLocation.MIDDLE));
-        pickup3choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
-        startchoice.setDefaultOption("STARTING POSITION: MIDDLE START", "Mid");
-        startchoice.addOption("AMPSIDE START", "Amp");
-        startchoice.addOption("STAGESIDE START", "Stage");
-        SmartDashboard.putData(pickup1choice);
-        SmartDashboard.putData(pickup2choice);
-        SmartDashboard.putData(pickup3choice);
-        SmartDashboard.putData(startchoice);
+        // pickup1choice.setDefaultOption("SECOND SHOT: DO NOTHING", Optional.empty());
+        // pickup1choice.addOption("AMPSIDE", Optional.of(NoteLocation.AMPSIDE));
+        // pickup1choice.addOption("MIDDLE", Optional.of(NoteLocation.MIDDLE));
+        // pickup1choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
+        // pickup2choice.setDefaultOption("THIRD SHOT: DO NOTHING", Optional.empty());
+        // pickup2choice.addOption("AMPSIDE NOTE", Optional.of(NoteLocation.AMPSIDE));
+        // pickup2choice.addOption("MIDDLE NOTE", Optional.of(NoteLocation.MIDDLE));
+        // pickup2choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
+        // pickup3choice.setDefaultOption("FOURTH SHOT: DO NOTHING", Optional.empty());
+        // pickup3choice.addOption("AMPSIDE", Optional.of(NoteLocation.AMPSIDE));
+        // pickup3choice.addOption("MIDDLE", Optional.of(NoteLocation.MIDDLE));
+        // pickup3choice.addOption("STAGESIDE NOTE", Optional.of(NoteLocation.STAGESIDE));
+        // startchoice.setDefaultOption("STARTING POSITION: MIDDLE START", "Mid");
+        // startchoice.addOption("AMPSIDE START", "Amp");
+        // startchoice.addOption("STAGESIDE START", "Stage");
+        // SmartDashboard.putData(pickup1choice);
+        // SmartDashboard.putData(pickup2choice);
+        // SmartDashboard.putData(pickup3choice);
+        // SmartDashboard.putData(startchoice);
     }
 
     private void configureBindings() {
