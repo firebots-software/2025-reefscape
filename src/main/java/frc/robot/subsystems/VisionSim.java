@@ -121,7 +121,7 @@ public class VisionSim extends SubsystemBase {
 
         } else {
             // Pose present. Start running Heuristic
-            var estStdDevs = kSingleTagStdDevs;
+            var estStdDevs = curStdDevs;
             int numTags = 0;
             double avgDist = 0;
 
@@ -139,13 +139,12 @@ public class VisionSim extends SubsystemBase {
             }
 
             if (numTags == 0) {
-                // No tags visible. Default to single-tag std devs
-                curStdDevs = kSingleTagStdDevs;
+                
             } else {
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
-                if (numTags > 1) estStdDevs = kMultiTagStdDevs;
+                if (numTags > 1) estStdDevs = curStdDevs;
                 // Increase std devs based on (average) distance
                 if (numTags == 1 && avgDist > 4)
                     estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
