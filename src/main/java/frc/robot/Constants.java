@@ -9,6 +9,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.units.measure.*;
 /**
@@ -40,6 +41,11 @@ public static class OI {
       private static final Voltage DRIVE_FRICTION_VOLTAGE = Volts.of(0.2);
     }
 
+    public static class PPConstants {
+      public static final PathConstraints PATH_PLANNER_CONSTRAINTS =
+          new PathConstraints(
+              4.0, 3.0, 2 * Math.PI, 4 * Math.PI); // TODO: Increase the auton velocity
+    }
     // TODO: Tune the Steer and Drive gains using SysID
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
