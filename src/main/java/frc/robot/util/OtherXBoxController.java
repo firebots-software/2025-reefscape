@@ -213,7 +213,7 @@ public class OtherXBoxController extends CommandXboxController {
 
           @Override
           public boolean getAsBoolean() {
-            return getPOV(pov) == angle;
+            return (getPOV(pov) == angle);
             // throw new UnsupportedOperationException("Unimplemented method 'getAsBoolean'");
           }
         });
