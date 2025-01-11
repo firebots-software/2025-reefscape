@@ -4,8 +4,8 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class ElevatorLevel4 extends Command {
@@ -30,8 +30,7 @@ public class ElevatorLevel4 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorSubsystem.setLevelOfElavat(4);
-    
+    // elevatorSubsystem.setLevelOfElavat(4);
   }
 
   // Called once the command ends or is interrupted.

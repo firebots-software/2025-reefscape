@@ -107,5 +107,4 @@ public class LoggedTalonFX extends TalonFX {
     DogLog.log(motorvoltage, this.getMotorVoltage().getValue().magnitude());
     DogLog.log(supplyvoltage, this.getSupplyVoltage().getValue().magnitude());
   }
-
 }
