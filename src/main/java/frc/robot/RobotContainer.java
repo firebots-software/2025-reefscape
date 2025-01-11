@@ -15,6 +15,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -37,7 +38,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
-
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.util.ReefLocation;
@@ -71,19 +71,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Modular Auto Selection */
-    private final SendableChooser<String> allianceChooser;
-    private final SendableChooser<String> startPosChooser;
-    private final SendableChooser<String> reef1Chooser;
-    private final SendableChooser<String> reef2Chooser;
-    private final SendableChooser<String> reef3Chooser;
-    private final SendableChooser<String> endPosChooser;
-
-    private String m_allianceSelected;
-    private String m_startPosSelected;
-    private String m_reef1Selected;
-    private String m_reef2Selected;
-    private String m_reef3Selected;
-    private String m_endPosSelected;
+    private final SendableChooser<String> startPosChooser = new SendableChooser<String>();
 
     public RobotContainer() {
         // autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -93,19 +81,13 @@ public class RobotContainer {
         // TODO: Figure out which options to add to the choosers, and how to convert those string choices to the Pose2d's in Constants.
         // TODO: Use commands > AutoCommands > ModularAuto.java command to run the auto using the selected options and Pose2d list
 
-        startPosChooser.setDefaultOption("Position 1", );
-        startPosChooser.addOption("My Auto", kCustomAuto);
+        startPosChooser.setDefaultOption("Left", "Left");
+        startPosChooser.addOption("Right", "Right");
         SmartDashboard.putData("Auto Start Position", startPosChooser);
 
         configureBindings();
     }
 
-    private static SendableChooser<Optional<ReefLocation>>
-      pickup1choice = new SendableChooser<Optional<ReefLocation>>(),
-      pickup2choice = new SendableChooser<Optional<ReefLocation>>(),
-      pickup3choice = new SendableChooser<Optional<ReefLocation>>();
-    SendableChooser<String> startchoice = new SendableChooser<String>();
-    
     private void configureBindings() {
         // Joystick suppliers,
         Trigger leftShoulderTrigger = joystick.leftBumper();
@@ -153,7 +135,6 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
-        SmartDashboard.putNumber("arjun IQ", 2.0);
-        return new WaitCommand(10);
+        return new PathPlannerAuto(startPosChooser.getSelected(), DriverStation.getAlliance().get() == Alliance.Red);
     }
 }

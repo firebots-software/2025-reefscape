@@ -10,7 +10,7 @@ public class ModularAuto extends SequentialCommandGroup {
     public ModularAuto() {
 
     }
-
+    /*
     @Override
     public void initialize() {
 
@@ -30,6 +30,7 @@ public class ModularAuto extends SequentialCommandGroup {
     public boolean isFinished() {
         return false;
     }
+    */
 
 
 }

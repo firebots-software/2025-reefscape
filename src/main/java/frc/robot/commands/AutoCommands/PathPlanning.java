@@ -9,6 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class PathPlanning {
+        /*
     // Load the path we want to pathfind to and follow
 PathPlannerPath path = PathPlannerPath.fromPathFile("reef");
 
@@ -21,5 +22,6 @@ PathConstraints constraints = new PathConstraints(
 Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
         path,
         constraints);
+        */
     
 }
