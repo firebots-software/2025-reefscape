@@ -4,8 +4,8 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class ElevatorLevel2 extends Command {
@@ -17,8 +17,8 @@ public class ElevatorLevel2 extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ElevatorLevel2(ElevatorSubsystem elevatorSubsystem) {
-    this.elevatorSubsystem = elevatorSubsystem;
+  public ElevatorLevel2(ElevatorSubsystem subsystem) {
+    this.elevatorSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevatorSubsystem);
   }
@@ -29,7 +29,9 @@ public class ElevatorLevel2 extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    elevatorSubsystem.setLevelOfElavat(2);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
