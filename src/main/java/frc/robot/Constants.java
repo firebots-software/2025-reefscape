@@ -10,8 +10,8 @@ import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 import com.pathplanner.lib.path.PathConstraints;
-
 import edu.wpi.first.units.measure.*;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -25,11 +25,11 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
 
-public static class OI {
+  public static class OI {
     public static final double LEFT_JOYSTICK_DEADBAND = 0.07;
     public static final double RIGHT_JOYSTICK_DEADBAND = 0.07;
     public static final int JOYSTICK_A_PORT = 0;
-}
+  }
 
   public static class Swerve {
     public static class Simulation {
@@ -46,6 +46,7 @@ public static class OI {
           new PathConstraints(
               4.0, 3.0, 2 * Math.PI, 4 * Math.PI); // TODO: Increase the auton velocity
     }
+
     // TODO: Tune the Steer and Drive gains using SysID
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
@@ -64,15 +65,19 @@ public static class OI {
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
-    private static final ClosedLoopOutputType STEER_CLOSED_LOOP_OUTPUT = ClosedLoopOutputType.Voltage;
+    private static final ClosedLoopOutputType STEER_CLOSED_LOOP_OUTPUT =
+        ClosedLoopOutputType.Voltage;
     // The closed-loop output type to use for the drive motors;
     // This affects the PID/FF gains for the drive motors
-    private static final ClosedLoopOutputType DRIVE_CLOSED_LOOP_OUTPUT = ClosedLoopOutputType.Voltage;
+    private static final ClosedLoopOutputType DRIVE_CLOSED_LOOP_OUTPUT =
+        ClosedLoopOutputType.Voltage;
 
     // The type of motor used for the drive motor
-    private static final DriveMotorArrangement DRIVE_MOTOR_TYPE = DriveMotorArrangement.TalonFX_Integrated;
+    private static final DriveMotorArrangement DRIVE_MOTOR_TYPE =
+        DriveMotorArrangement.TalonFX_Integrated;
     // The type of motor used for the drive motor
-    private static final SteerMotorArrangement STEER_MOTOR_TYPE = SteerMotorArrangement.TalonFX_Integrated;
+    private static final SteerMotorArrangement STEER_MOTOR_TYPE =
+        SteerMotorArrangement.TalonFX_Integrated;
 
     // The remote sensor feedback type to use for the steer motors;
     // When not Pro-licensed, FusedCANcoder/SyncCANcoder automatically fall back to RemoteCANcoder
@@ -81,24 +86,25 @@ public static class OI {
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
     // This is where we apply Current Limits for swerve
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
-    private static final TalonFXConfiguration DRIVE_INITIAL_CONFIGS = new TalonFXConfiguration()
-        .withCurrentLimits(
-            new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(Amps.of(90.0))
-                .withStatorCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(Amps.of(40.0))
-                .withSupplyCurrentLimitEnable(true)
-        );
-    private static final TalonFXConfiguration STEER_INITIAL_CONFIGS = new TalonFXConfiguration()
-        .withCurrentLimits(
-            new CurrentLimitsConfigs()
-                .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(Amps.of(30))
-        );
-    
-    private static final CANcoderConfiguration ENCODER_INITIAL_CONFIGS = new CANcoderConfiguration();
+    private static final TalonFXConfiguration DRIVE_INITIAL_CONFIGS =
+        new TalonFXConfiguration()
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withStatorCurrentLimit(Amps.of(90.0))
+                    .withStatorCurrentLimitEnable(true)
+                    .withSupplyCurrentLimit(Amps.of(40.0))
+                    .withSupplyCurrentLimitEnable(true));
+    private static final TalonFXConfiguration STEER_INITIAL_CONFIGS =
+        new TalonFXConfiguration()
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimitEnable(true)
+                    .withSupplyCurrentLimit(Amps.of(30)));
+
+    private static final CANcoderConfiguration ENCODER_INITIAL_CONFIGS =
+        new CANcoderConfiguration();
     // Configs for the Pigeon 2; leave this null to skip applying Pigeon 2 configs
-    //TODO: investigate Pigeon2Configuration and how it's relevant
+    // TODO: investigate Pigeon2Configuration and how it's relevant
     private static final Pigeon2Configuration PIGEON2_CONFIGS = null;
 
     // TODO: CHANGE FOR NEW ROBOT
@@ -106,7 +112,7 @@ public static class OI {
     // All swerve devices must share the same CAN bus
     public static final CANBus CANBUS_NAME = new CANBus("");
 
-    // TODO: VERIFY FOR NEW ROBOT 
+    // TODO: VERIFY FOR NEW ROBOT
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
     private static final Current SLIP_CURRENT_AMPS = Amps.of(100.0);
@@ -119,7 +125,8 @@ public static class OI {
 
     // Theoretical free speed (m/s) at 12v applied output;
     // This needs to be tuned to your individual robot
-    public static final LinearVelocity SPEED_AT_12V_METERS_PER_SECOND = MetersPerSecond.of(4.73); // TODO: VERIFY FOR NEW ROBOT
+    public static final LinearVelocity SPEED_AT_12V_METERS_PER_SECOND =
+        MetersPerSecond.of(4.73); // TODO: VERIFY FOR NEW ROBOT
 
     private static final double COUPLE_RATIO = 3.5714285714285716;
 
@@ -133,35 +140,39 @@ public static class OI {
 
     private static final int kPigeonId = 40; // TODO: CHANGE FOR NEW ROBOT
 
-    
-    public static final SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants()
-            //.withCANBusName(CANBUS_NAME.getName())
+    public static final SwerveDrivetrainConstants DrivetrainConstants =
+        new SwerveDrivetrainConstants()
+            // .withCANBusName(CANBUS_NAME.getName())
             .withPigeon2Id(kPigeonId)
             .withPigeon2Configs(PIGEON2_CONFIGS);
 
-    // Uses SwerveModuleConstantsFactory to organize all the previously mentioned configurations related to the Swerve Drive
-    private static final SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> ConstantCreator =
-        new SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>()
-            .withDriveMotorGearRatio(DRIVE_GEAR_RATIO)
-            .withSteerMotorGearRatio(STEER_GEAR_RATIO)
-            .withCouplingGearRatio(COUPLE_RATIO)
-            .withWheelRadius(WHEEL_RADIUS_INCHES)
-            .withSteerMotorGains(STEER_GAINS)
-            .withDriveMotorGains(DRIVE_GAINS)
-            .withSteerMotorClosedLoopOutput(STEER_CLOSED_LOOP_OUTPUT)
-            .withDriveMotorClosedLoopOutput(DRIVE_CLOSED_LOOP_OUTPUT)
-            .withSlipCurrent(SLIP_CURRENT_AMPS)
-            .withSpeedAt12Volts(SPEED_AT_12V_METERS_PER_SECOND)
-            .withDriveMotorType(DRIVE_MOTOR_TYPE)
-            .withSteerMotorType(STEER_MOTOR_TYPE)
-            .withFeedbackSource(STEER_FEEDBACK_TYPE)
-            .withDriveMotorInitialConfigs(DRIVE_INITIAL_CONFIGS)
-            .withSteerMotorInitialConfigs(STEER_INITIAL_CONFIGS)
-            .withEncoderInitialConfigs(ENCODER_INITIAL_CONFIGS)
-            .withSteerInertia(Simulation.STEER_INERTIA)
-            .withDriveInertia(Simulation.DRIVE_INERTIA)
-            .withSteerFrictionVoltage(Simulation.STEER_FRICTION_VOLTAGE)
-            .withDriveFrictionVoltage(Simulation.DRIVE_FRICTION_VOLTAGE);
+    // Uses SwerveModuleConstantsFactory to organize all the previously mentioned configurations
+    // related to the Swerve Drive
+    private static final SwerveModuleConstantsFactory<
+            TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+        ConstantCreator =
+            new SwerveModuleConstantsFactory<
+                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>()
+                .withDriveMotorGearRatio(DRIVE_GEAR_RATIO)
+                .withSteerMotorGearRatio(STEER_GEAR_RATIO)
+                .withCouplingGearRatio(COUPLE_RATIO)
+                .withWheelRadius(WHEEL_RADIUS_INCHES)
+                .withSteerMotorGains(STEER_GAINS)
+                .withDriveMotorGains(DRIVE_GAINS)
+                .withSteerMotorClosedLoopOutput(STEER_CLOSED_LOOP_OUTPUT)
+                .withDriveMotorClosedLoopOutput(DRIVE_CLOSED_LOOP_OUTPUT)
+                .withSlipCurrent(SLIP_CURRENT_AMPS)
+                .withSpeedAt12Volts(SPEED_AT_12V_METERS_PER_SECOND)
+                .withDriveMotorType(DRIVE_MOTOR_TYPE)
+                .withSteerMotorType(STEER_MOTOR_TYPE)
+                .withFeedbackSource(STEER_FEEDBACK_TYPE)
+                .withDriveMotorInitialConfigs(DRIVE_INITIAL_CONFIGS)
+                .withSteerMotorInitialConfigs(STEER_INITIAL_CONFIGS)
+                .withEncoderInitialConfigs(ENCODER_INITIAL_CONFIGS)
+                .withSteerInertia(Simulation.STEER_INERTIA)
+                .withDriveInertia(Simulation.DRIVE_INERTIA)
+                .withSteerFrictionVoltage(Simulation.STEER_FRICTION_VOLTAGE)
+                .withDriveFrictionVoltage(Simulation.DRIVE_FRICTION_VOLTAGE);
 
     // Front Left
     // TODO: CHANGE FOR NEW ROBOT
@@ -208,35 +219,71 @@ public static class OI {
     private static final Distance BACK_RIGHT_Y_POS = Inches.of(-11.417);
 
     // Set the constants per module (constants defined above)
-    public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft =
-        ConstantCreator.createModuleConstants(
-            FRONT_LEFT_STEER_MOTOR_ID, FRONT_LEFT_DRIVE_MOTOR_ID, FRONT_LEFT_ENCODER_ID, FRONT_LEFT_ENCODER_OFFSET_ROT,
-            FRONT_LEFT_X_POS, FRONT_LEFT_Y_POS, INVERT_LEFT_SIDE, STEER_MOTOR_REVERSED, false
-        );
-    public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontRight =
-        ConstantCreator.createModuleConstants(
-            FRONT_RIGHT_STEER_MOTOR_ID, FRONT_RIGHT_DRIVE_MOTOR_ID, FRONT_RIGHT_ENCODER_ID, FRONT_RIGHT_ENCODER_OFFSET_ROT,
-            FRONT_RIGHT_X_POS, FRONT_RIGHT_Y_POS, INVERT_RIGHT_SIDE, STEER_MOTOR_REVERSED, false
-        );
-    public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> BackLeft =
-        ConstantCreator.createModuleConstants(
-            BACK_LEFT_STEER_MOTOR_ID, BACK_LEFT_DRIVE_MOTOR_ID, BACK_LEFT_ENCODER_ID, BACK_LEFT_ENCODER_OFFSET_ROT,
-            BACK_LEFT_X_POS, BACK_LEFT_Y_POS, INVERT_LEFT_SIDE, STEER_MOTOR_REVERSED, false
-        );
-    public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> BackRight =
-        ConstantCreator.createModuleConstants(
-            BACK_RIGHT_STEER_MOTOR_ID, BACK_RIGHT_DRIVE_MOTOR_ID, BACK_RIGHT_ENCODER_ID, BACK_RIGHT_ENCODER_OFFSET_ROT,
-            BACK_RIGHT_X_POS, BACK_RIGHT_Y_POS, INVERT_RIGHT_SIDE, STEER_MOTOR_REVERSED, false
-        );
+    public static final SwerveModuleConstants<
+            TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+        FrontLeft =
+            ConstantCreator.createModuleConstants(
+                FRONT_LEFT_STEER_MOTOR_ID,
+                FRONT_LEFT_DRIVE_MOTOR_ID,
+                FRONT_LEFT_ENCODER_ID,
+                FRONT_LEFT_ENCODER_OFFSET_ROT,
+                FRONT_LEFT_X_POS,
+                FRONT_LEFT_Y_POS,
+                INVERT_LEFT_SIDE,
+                STEER_MOTOR_REVERSED,
+                false);
+    public static final SwerveModuleConstants<
+            TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+        FrontRight =
+            ConstantCreator.createModuleConstants(
+                FRONT_RIGHT_STEER_MOTOR_ID,
+                FRONT_RIGHT_DRIVE_MOTOR_ID,
+                FRONT_RIGHT_ENCODER_ID,
+                FRONT_RIGHT_ENCODER_OFFSET_ROT,
+                FRONT_RIGHT_X_POS,
+                FRONT_RIGHT_Y_POS,
+                INVERT_RIGHT_SIDE,
+                STEER_MOTOR_REVERSED,
+                false);
+    public static final SwerveModuleConstants<
+            TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+        BackLeft =
+            ConstantCreator.createModuleConstants(
+                BACK_LEFT_STEER_MOTOR_ID,
+                BACK_LEFT_DRIVE_MOTOR_ID,
+                BACK_LEFT_ENCODER_ID,
+                BACK_LEFT_ENCODER_OFFSET_ROT,
+                BACK_LEFT_X_POS,
+                BACK_LEFT_Y_POS,
+                INVERT_LEFT_SIDE,
+                STEER_MOTOR_REVERSED,
+                false);
+    public static final SwerveModuleConstants<
+            TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+        BackRight =
+            ConstantCreator.createModuleConstants(
+                BACK_RIGHT_STEER_MOTOR_ID,
+                BACK_RIGHT_DRIVE_MOTOR_ID,
+                BACK_RIGHT_ENCODER_ID,
+                BACK_RIGHT_ENCODER_OFFSET_ROT,
+                BACK_RIGHT_X_POS,
+                BACK_RIGHT_Y_POS,
+                INVERT_RIGHT_SIDE,
+                STEER_MOTOR_REVERSED,
+                false);
 
     // These constants are necessary for new Telemetry with swerve
     // TODO: CHANGE FOR NEW ROBOT
-    private double MAX_SPEED_MPS = SPEED_AT_12V_METERS_PER_SECOND.magnitude(); // kSpeedAt12Volts desired top speed
-    private double MAX_ANGULAR_RATE_RPS = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MAX_SPEED_MPS =
+        SPEED_AT_12V_METERS_PER_SECOND.magnitude(); // kSpeedAt12Volts desired top speed
+    private double MAX_ANGULAR_RATE_RPS =
+        RotationsPerSecond.of(0.75)
+            .in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     // TODO: CHANGE FOR NEW ROBOT
     // these outline the speed calculations
-    public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND =5.944;// before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s, 
+    public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND =
+        5.944; // before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s,
     public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
 
     public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.75;

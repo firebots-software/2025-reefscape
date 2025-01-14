@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.Constants;
 
 public class MiscUtils {
   /**
@@ -19,9 +18,7 @@ public class MiscUtils {
   }
 
   public static Translation2d reflectAcrossMidline(Translation2d point) {
-    return new Translation2d(
-        point.getX() - (2.0 * (point.getX() - 8.774)),
-        point.getY());
+    return new Translation2d(point.getX() - (2.0 * (point.getX() - 8.774)), point.getY());
   }
 
   public static Pose2d plus(Pose2d a, Transform2d b) {
@@ -36,4 +33,3 @@ public class MiscUtils {
         a.getX() + b.getX(), a.getY() + b.getY(), new Rotation2d(a.getRotation().getRadians()));
   }
 }
-

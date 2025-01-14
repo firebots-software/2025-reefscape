@@ -2,7 +2,6 @@ package frc.robot.util;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
-import dev.doglog.DogLog;
 import java.util.ArrayList;
 
 public class LoggedTalonFX extends TalonFX {
