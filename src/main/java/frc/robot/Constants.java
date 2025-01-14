@@ -101,13 +101,9 @@ public final class Constants {
     public static enum SwerveLevel {
       L2(6.75, 21.428571428571427),
       L3(6.12, 21.428571428571427);
-      
       public final double DRIVE_GEAR_RATIO, STEER_GEAR_RATIO;
 
-      SwerveLevel(
-        double drive,
-        double steer
-      ) {
+      SwerveLevel(double drive, double steer) {
         DRIVE_GEAR_RATIO = drive;
         STEER_GEAR_RATIO = steer;
       }
