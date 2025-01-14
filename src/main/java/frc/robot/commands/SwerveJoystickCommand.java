@@ -148,6 +148,10 @@ public class SwerveJoystickCommand extends Command {
     SmartDashboard.putNumber("ySpeed", ySpeed);
     SmartDashboard.putNumber("turningSpeed", turningSpeed);
 
+    DogLog.log("joystickCommand/xSpeed", xSpeed);
+    DogLog.log("joystickCommand/ySpeed", ySpeed);
+    DogLog.log("joystickCommand/turningSpeed", turningSpeed);
+    
     // 5. Applying the drive request on the swerve drivetrain
     // Uses SwerveRequestFieldCentric (from java.frc.robot.util to apply module optimization)
     SwerveRequest drive =
