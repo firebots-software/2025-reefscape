@@ -20,7 +20,7 @@ public class ElevatorLevel4 extends Command {
   public ElevatorLevel4(ElevatorSubsystem subsystem) {
     this.elevatorSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(elevatorSubsystem);
   }
 
   // Called when the command is initially scheduled.
