@@ -81,8 +81,8 @@ public class RobotContainer {
         // TODO: Figure out which options to add to the choosers, and how to convert those string choices to the Pose2d's in Constants.
         // TODO: Use commands > AutoCommands > ModularAuto.java command to run the auto using the selected options and Pose2d list
 
-        startPosChooser.setDefaultOption("Left (CD)", "Left");
-        startPosChooser.addOption("Right (LK)", "Right");
+        startPosChooser.setDefaultOption("Top (Next to Blue Barge Zone)", "Top");
+        startPosChooser.addOption("Bottom (Next to Red Barge Zone)", "Bottom");
         SmartDashboard.putData("Auto Start Position", startPosChooser);
 
         configureBindings();

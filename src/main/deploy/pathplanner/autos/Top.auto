@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right to reef"
+            "pathName": "top to reef1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "right to HP"
+            "pathName": "top reef1 to HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "blue right hp to reef"
+            "pathName": "top HP to reef2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "blue right reef to hp"
+            "pathName": "top reef2 to HP"
           }
         }
       ]
