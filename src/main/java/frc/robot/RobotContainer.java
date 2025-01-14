@@ -32,7 +32,6 @@ public class RobotContainer {
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
   // Alliance color
-  private Supplier<Boolean> redside = () -> redAlliance;
   private static boolean redAlliance;
 
   private final SwerveSubsystem driveTrain =
@@ -126,7 +125,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    return new PathPlannerAuto(
-        startPosChooser.getSelected(), redAlliance); //flips when red
+    return new PathPlannerAuto(startPosChooser.getSelected(), redAlliance); // flips when red
   }
 }
