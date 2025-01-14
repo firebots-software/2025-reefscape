@@ -32,7 +32,7 @@ public static class OI {
 }
 
   public static class Swerve {
-    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.PROTO; 
+    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.JAMES_HARDEN; 
 
     public static enum SwerveLevel {
       L2(6.75, 21.428571428571427),
@@ -50,8 +50,9 @@ public static class OI {
     }
 
     public static enum SwerveDrivePIDValues {
-        SERRANO (0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
-        PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619);
+        SERRANO(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
+        PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619),
+        JAMES_HARDEN(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864);
 
 
         public final double KP, KI, KD, KS, KV, KA;
@@ -69,8 +70,9 @@ public static class OI {
     }
 
     public static enum SwerveSteerPIDValues {
-        SERRANO (50, 0d, 0d, 0d, 0d, 0d),
-        PROTO(50, 0d, 0d, 0d, 0d, 0d);
+        SERRANO(50d, 0d, 0.2, 0d, 1.5, 0d),
+        PROTO(50d, 0d, 0d, 0d, 0d, 0d),
+        JAMES_HARDEN(50d, 0d, 0d, 0d, 0d, 0d);
 
 
         public final double KP, KI, KD, KS, KV, KA;
@@ -88,8 +90,9 @@ public static class OI {
     }
 
     public static enum RobotDimensions {
-        SERRANO(Inches.of(22.52), Inches.of(22.834)),
-        PROTO(Inches.of(22.52), Inches.of(22.834));
+        SERRANO(Inches.of(22.52), Inches.of(22.834)), // length, width
+        PROTO(Inches.of(22.52), Inches.of(22.834)), // length, width
+        JAMES_HARDEN(Inches.of(26.749), Inches.of(22.74)); // length, width
 
         public final Distance length, width;
 
@@ -109,7 +112,8 @@ public static class OI {
         SwerveLevel.L3, // what level the swerve drive is
         SwerveDrivePIDValues.SERRANO,
         SwerveSteerPIDValues.SERRANO,
-        RobotDimensions.SERRANO
+        RobotDimensions.SERRANO,
+        "Patrice the Pineapple"
         ),
       PROTO(
         Rotations.of(0.3876953125), // front left
@@ -119,14 +123,27 @@ public static class OI {
         SwerveLevel.L2, // what level the swerve drive is
         SwerveDrivePIDValues.PROTO,
         SwerveSteerPIDValues.PROTO,
-        RobotDimensions.PROTO
-        );
+        RobotDimensions.PROTO,
+        "rio"
+        ),
+      JAMES_HARDEN(
+        Rotations.of(-0.158447265625), // front left
+        Rotations.of(-0.310791015625), // front right
+        Rotations.of(-0.48681640625), // back left
+        Rotations.of(0.4248046875), // back right
+        SwerveLevel.L3,
+        SwerveDrivePIDValues.JAMES_HARDEN,
+        SwerveSteerPIDValues.JAMES_HARDEN,
+        RobotDimensions.JAMES_HARDEN,
+        "FireBot"
+    );
       
       public final Angle FRONT_LEFT_ENCODER_OFFSET, FRONT_RIGHT_ENCODER_OFFSET, BACK_LEFT_ENCODER_OFFSET, BACK_RIGHT_ENCODER_OFFSET;
       SwerveLevel SWERVE_LEVEL;
       SwerveDrivePIDValues SWERVE_DRIVE_PID_VALUES;
       SwerveSteerPIDValues SWERVE_STEER_PID_VALUES;
       RobotDimensions ROBOT_DIMENSIONS;
+      String CANBUS_NAME;
 
       SwerveType(
         Angle fl,
@@ -136,7 +153,8 @@ public static class OI {
         SwerveLevel swerveLevel,
         SwerveDrivePIDValues swerveDrivePIDValues,
         SwerveSteerPIDValues swerveSteerPIDValues,
-        RobotDimensions robotDimensions
+        RobotDimensions robotDimensions,
+        String canbus_name
       ) {
         FRONT_LEFT_ENCODER_OFFSET = fl;
         FRONT_RIGHT_ENCODER_OFFSET = fr; 
@@ -146,6 +164,7 @@ public static class OI {
         SWERVE_DRIVE_PID_VALUES = swerveDrivePIDValues;
         SWERVE_STEER_PID_VALUES = swerveSteerPIDValues;
         ROBOT_DIMENSIONS = robotDimensions;
+        CANBUS_NAME = canbus_name;
       }
     }
     public static class Simulation {
@@ -215,7 +234,7 @@ public static class OI {
     // TODO: CHANGE FOR NEW ROBOT
     // CAN bus that the devices are located on;
     // All swerve devices must share the same CAN bus
-    public static final CANBus CANBUS_NAME = new CANBus("");
+    public static final CANBus CANBUS_NAME = new CANBus(WHICH_SWERVE_ROBOT.CANBUS_NAME);
 
     // TODO: VERIFY FOR NEW ROBOT 
     // The stator current at which the wheels start to slip;
@@ -246,7 +265,7 @@ public static class OI {
 
     
     public static final SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants()
-            //.withCANBusName(CANBUS_NAME.getName())
+            .withCANBusName(CANBUS_NAME.getName())
             .withPigeon2Id(kPigeonId)
             .withPigeon2Configs(PIGEON2_CONFIGS);
 
