@@ -78,13 +78,6 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    /*
-     * Joystick Y = quasistatic forward
-     * Joystick A = quasistatic reverse
-     * Joystick B = dynamic forward
-     * Joystick X = dyanmic reverse
-     */
-
     joystick
         .x()
         .onTrue(
