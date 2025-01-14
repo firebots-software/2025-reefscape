@@ -112,7 +112,7 @@ public final class Constants {
     public static enum SwerveDrivePIDValues {
       SERRANO(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
       PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619),
-      JAMES_HARDEN(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864);
+      JAMES_HARDEN(0.034816, 0d, 0d, 0.15396, 0.12145, 0.0029718);
       public final double KP, KI, KD, KS, KV, KA;
 
       SwerveDrivePIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
@@ -299,6 +299,8 @@ public final class Constants {
         new TalonFXConfiguration()
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
+                    .withStatorCurrentLimitEnable(true)
+                    .withStatorCurrentLimit(40)
                     .withSupplyCurrentLimitEnable(true)
                     .withSupplyCurrentLimit(Amps.of(30)));
 
