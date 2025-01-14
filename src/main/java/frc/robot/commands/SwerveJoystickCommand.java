@@ -1,16 +1,14 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import dev.doglog.DogLog;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
-
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
-
-import dev.doglog.DogLog;
 
 public class SwerveJoystickCommand extends Command {
   protected final Supplier<Double> xSpdFunction,
@@ -151,10 +149,10 @@ public class SwerveJoystickCommand extends Command {
     SmartDashboard.putNumber("ySpeed", ySpeed);
     SmartDashboard.putNumber("turningSpeed", turningSpeed);
 
-    // DogLog.log("joystickCommand/xSpeed", xSpeed);
-    // DogLog.log("joystickCommand/ySpeed", ySpeed);
-    // DogLog.log("joystickCommand/turningSpeed", turningSpeed);
-    
+    DogLog.log("joystickCommand/xSpeed", xSpeed);
+    DogLog.log("joystickCommand/ySpeed", ySpeed);
+    DogLog.log("joystickCommand/turningSpeed", turningSpeed);
+
     // 5. Applying the drive request on the swerve drivetrain
     // Uses SwerveRequestFieldCentric (from java.frc.robot.util to apply module optimization)
     SwerveRequest drive =
@@ -177,4 +175,3 @@ public class SwerveJoystickCommand extends Command {
     return false;
   }
 }
-
