@@ -82,9 +82,6 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
-    joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
-    
     joystick
         .x()
         .onTrue(
