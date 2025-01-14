@@ -17,12 +17,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
+
+import com.ctre.phoenix6.SignalLogger;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -85,6 +89,20 @@ public class RobotContainer {
      * Joystick X = dyanmic reverse
      */
 
+    joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
+    joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
+    /*
+        * Joystick Y = quasistatic forward
+        * Joystick A = quasistatic reverse
+        * Joystick B = dynamic forward
+        * Joystick X = dyanmic reverse
+        */
+    
+    // joystick.y().whileTrue(driveTrain.sysIdQuasistatic(Direction.kForward));
+    // joystick.a().whileTrue(driveTrain.sysIdQuasistatic(Direction.kReverse));
+    // joystick.b().whileTrue(driveTrain.sysIdDynamic(Direction.kForward));
+    // joystick.x().whileTrue(driveTrain.sysIdDynamic(Direction.kReverse));
+    
     joystick
         .x()
         .onTrue(
