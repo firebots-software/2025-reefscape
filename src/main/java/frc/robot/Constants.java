@@ -293,7 +293,7 @@ public final class Constants {
     public static final int MOTOR2_PORT = 0; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
-    public static final double SUPPYLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
+    public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
     public static final int S0C_KP = 0;
     public static final int S0C_KI = 0;
     public static final int S0C_KD = 0;

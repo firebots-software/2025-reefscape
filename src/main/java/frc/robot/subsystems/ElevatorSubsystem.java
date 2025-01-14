@@ -25,7 +25,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private LoggedTalonFX motor1;
   private LoggedTalonFX motor2;
   private LoggedTalonFX master;
-  private Double holdPosValue;
+  public Double holdPosValue;
   
   
     public ElevatorSubsystem() {
@@ -44,9 +44,16 @@ public class ElevatorSubsystem extends SubsystemBase {
       CurrentLimitsConfigs clc =
       new CurrentLimitsConfigs()
           .withStatorCurrentLimitEnable(true)
-          .withStatorCurrentLimit(0);
+          .withStatorCurrentLimit(Constants.ElevatorConstants.STATOR_CURRENT_LIMIT)
+          .withSupplyCurrentLimitEnable(true)
+          .withSupplyCurrentLimit(Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+
       MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
-      Slot0Configs s0c = new Slot0Configs().withKP(0).withKI(0).withKD(0);
+      Slot0Configs s0c = 
+          new Slot0Configs()
+                  .withKP(Constants.ElevatorConstants.S0C_KP)
+                  .withKI(Constants.ElevatorConstants.S0C_KI)
+                  .withKD(Constants.ElevatorConstants.S0C_KD);
   
       m1Config.apply(moc);
       m2Config.apply(moc);
@@ -90,7 +97,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       return getSpeed() == 0;
     }
     public void holdPosition() {
-      //convert pos to voltage
+      //TODO: 
       master.setControl(new MotionMagicVoltage(0));
     }
   
@@ -131,27 +138,28 @@ public class ElevatorSubsystem extends SubsystemBase {
     return encoderPos.getValueAsDouble();
   }
   // setting levels for certain positions in the field; must use constants for converting motors to rotational angle
+  //TODO: Change it to use ENUM values
   public void setLevelOfElavat(int level) {
   if (level == 1){
       master.setControl(new MotionMagicVoltage(null));
       holdPosValue = Constants.ElevatorConstants.level1;
-      holdPosition();
+      holdPosition(holdPosValue);
       SmartDashboard.putString("elevator error", "level: " + level + ", Error: " + getPIDError());
   } else if (level == 2) {
       master.setControl(new MotionMagicVoltage(null));
       holdPosValue = Constants.ElevatorConstants.level2;
-      holdPosition();
+      holdPosition(holdPosValue);
       SmartDashboard.putString("elevator error", "level: " + level + ", Error: " + getPIDError());
     } else if (level == 3) {
       master.setControl(new MotionMagicVoltage(null));
       holdPosValue = Constants.ElevatorConstants.level3;
-      holdPosition();
+      holdPosition(holdPosValue);
       SmartDashboard.putString("elevator error", "level: " + level + ", Error: " + getPIDError());
     }
     else if (level == 4) {
       master.setControl(new MotionMagicVoltage(null));
       holdPosValue = Constants.ElevatorConstants.level4;
-      holdPosition();
+      holdPosition(holdPosValue);
       SmartDashboard.putString("elevator error", "level: " + level + ", Error: " + getPIDError());
   }
   }

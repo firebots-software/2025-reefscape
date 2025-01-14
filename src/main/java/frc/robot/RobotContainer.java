@@ -18,6 +18,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.ElevatorLevel1;
+import frc.robot.commands.ElevatorLevel2;
+import frc.robot.commands.ElevatorLevel3;
+import frc.robot.commands.ElevatorLevel4;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -67,6 +71,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
+    
     Supplier<Double>
         frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
         leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
@@ -86,25 +91,15 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
-    joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
-
-    /*
-     * Joystick Y = quasistatic forward
-     * Joystick A = quasistatic reverse
-     * Joystick B = dynamic forward
-     * Joystick X = dyanmic reverse
-     */
-
-    joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+   joystick.povUp().onTrue(new ElevatorLevel1(m_ElevatorSubsystem));
+   joystick.povRight().onTrue(new ElevatorLevel2(m_ElevatorSubsystem));
+   joystick.povDown().onTrue(new ElevatorLevel3(m_ElevatorSubsystem));
+   joystick.povLeft().onTrue(new ElevatorLevel4(m_ElevatorSubsystem));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
   }
-
+  
   public static void setAlliance() {
     redAlliance =
         (DriverStation.getAlliance().isEmpty())
