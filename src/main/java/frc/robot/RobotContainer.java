@@ -34,22 +34,21 @@ public class RobotContainer {
   // Alliance color
   private static boolean redAlliance;
 
-  private final SwerveSubsystem driveTrain =
-      new SwerveSubsystem(
-          Constants.Swerve.DrivetrainConstants,
-          Constants.Swerve.Odometry.ODOMETRY_UPDATE_CONSTANT,
-          odometryMatrix,
-          visionMatrix,
-          Constants.Swerve.FrontLeft,
-          Constants.Swerve.FrontRight,
-          Constants.Swerve.BackLeft,
-          Constants.Swerve.BackRight);
+  private final SwerveSubsystem driveTrain = new SwerveSubsystem(
+      Constants.Swerve.DrivetrainConstants,
+      Constants.Swerve.Odometry.ODOMETRY_UPDATE_CONSTANT,
+      odometryMatrix,
+      visionMatrix,
+      Constants.Swerve.FrontLeft,
+      Constants.Swerve.FrontRight,
+      Constants.Swerve.BackLeft,
+      Constants.Swerve.BackRight);
 
-  private final Telemetry logger =
-      new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
+  private final Telemetry logger = new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
 
-  // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
+  // Starts telemetry operations (essentially logging -> look on SmartDashboard,
+  // AdvantageScope)
   public void doTelemetry() {
     logger.telemeterize(driveTrain.getState());
   }
@@ -63,10 +62,13 @@ public class RobotContainer {
     // autoChooser = AutoBuilder.buildAutoChooser("Tests");
     // SmartDashboard.putData("Auto Mode", autoChooser);
 
-    // TODO: Create 6 SendableChooser objects: Alliance, Start Position, Reef 1-3, End Position.
-    // TODO: Figure out which options to add to the choosers, and how to convert those string
+    // TODO: Create 6 SendableChooser objects: Alliance, Start Position, Reef 1-3,
+    // End Position.
+    // TODO: Figure out which options to add to the choosers, and how to convert
+    // those string
     // choices to the Pose2d's in Constants.
-    // TODO: Use commands > AutoCommands > ModularAuto.java command to run the auto using the
+    // TODO: Use commands > AutoCommands > ModularAuto.java command to run the auto
+    // using the
     // selected options and Pose2d list
 
     startPosChooser.setDefaultOption("Top (Next to Blue Barge Zone)", "Top");
@@ -81,23 +83,19 @@ public class RobotContainer {
   private void configureBindings() {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    Supplier<Double>
-        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
+    Supplier<Double> frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
         leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
         rotationFunction = () -> -joystick.getRightX(),
-        speedFunction =
-            () ->
-                leftShoulderTrigger.getAsBoolean()
-                    ? 0d
-                    : 1d; // slowmode when left shoulder is pressed, otherwise fast
-    SwerveJoystickCommand swerveJoystickCommand =
-        new SwerveJoystickCommand(
-            frontBackFunction,
-            leftRightFunction,
-            rotationFunction,
-            speedFunction, // slowmode when left shoulder is pressed, otherwise fast
-            () -> joystick.leftTrigger().getAsBoolean(),
-            driveTrain);
+        speedFunction = () -> leftShoulderTrigger.getAsBoolean()
+            ? 0d
+            : 1d; // slowmode when left shoulder is pressed, otherwise fast
+    SwerveJoystickCommand swerveJoystickCommand = new SwerveJoystickCommand(
+        frontBackFunction,
+        leftRightFunction,
+        rotationFunction,
+        speedFunction, // slowmode when left shoulder is pressed, otherwise fast
+        () -> joystick.leftTrigger().getAsBoolean(),
+        driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
     joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
@@ -117,10 +115,9 @@ public class RobotContainer {
   }
 
   public static void setAlliance() {
-    redAlliance =
-        (DriverStation.getAlliance().isEmpty())
-            ? false
-            : (DriverStation.getAlliance().get() == Alliance.Red);
+    redAlliance = (DriverStation.getAlliance().isEmpty())
+        ? false
+        : (DriverStation.getAlliance().get() == Alliance.Red);
   }
 
   public Command getAutonomousCommand() {
