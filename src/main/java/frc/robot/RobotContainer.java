@@ -82,26 +82,8 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    /*
-     * Joystick Y = quasistatic forward
-     * Joystick A = quasistatic reverse
-     * Joystick B = dynamic forward
-     * Joystick X = dyanmic reverse
-     */
-
     joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
     joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
-    /*
-        * Joystick Y = quasistatic forward
-        * Joystick A = quasistatic reverse
-        * Joystick B = dynamic forward
-        * Joystick X = dyanmic reverse
-        */
-    
-    // joystick.y().whileTrue(driveTrain.sysIdQuasistatic(Direction.kForward));
-    // joystick.a().whileTrue(driveTrain.sysIdQuasistatic(Direction.kReverse));
-    // joystick.b().whileTrue(driveTrain.sysIdDynamic(Direction.kForward));
-    // joystick.x().whileTrue(driveTrain.sysIdDynamic(Direction.kReverse));
     
     joystick
         .x()
