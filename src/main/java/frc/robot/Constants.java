@@ -175,8 +175,8 @@ public final class Constants {
     private static final Angle FRONT_LEFT_ENCODER_OFFSET_ROT = Rotations.of(0.3876953125);
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance FRONT_LEFT_X_POS = Inches.of(11.26);
-    private static final Distance FRONT_LEFT_Y_POS = Inches.of(11.417);
+    private static final Distance FRONT_LEFT_X_POS = Meters.of(.286);
+    private static final Distance FRONT_LEFT_Y_POS = Meters.of(.290);
 
     // Front Right
     // TODO: CHANGE FOR NEW ROBOT
@@ -186,8 +186,8 @@ public final class Constants {
     private static final Angle FRONT_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(0.159912109375);
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance FRONT_RIGHT_X_POS = Inches.of(11.26);
-    private static final Distance FRONT_RIGHT_Y_POS = Inches.of(-11.417);
+    private static final Distance FRONT_RIGHT_X_POS = Meters.of(.286);
+    private static final Distance FRONT_RIGHT_Y_POS = Meters.of(-.290);
 
     // Back Left
     // TODO: CHANGE FOR NEW ROBOT
@@ -197,8 +197,8 @@ public final class Constants {
     private static final Angle BACK_LEFT_ENCODER_OFFSET_ROT = Rotations.of(0.213134765625);
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance BACK_LEFT_X_POS = Inches.of(-11.26);
-    private static final Distance BACK_LEFT_Y_POS = Inches.of(11.417);
+    private static final Distance BACK_LEFT_X_POS = Meters.of(-.286);
+    private static final Distance BACK_LEFT_Y_POS = Meters.of(.290);
 
     // Back Right
     // TODO: CHANGE FOR NEW ROBOT
@@ -208,8 +208,8 @@ public final class Constants {
     private static final Angle BACK_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(-0.3818359375);
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance BACK_RIGHT_X_POS = Inches.of(-11.26);
-    private static final Distance BACK_RIGHT_Y_POS = Inches.of(-11.417);
+    private static final Distance BACK_RIGHT_X_POS = Meters.of(-.286);
+    private static final Distance BACK_RIGHT_Y_POS = Meters.of(-.290);
 
     // Set the constants per module (constants defined above)
     public static final SwerveModuleConstants<
