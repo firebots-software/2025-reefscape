@@ -2,7 +2,6 @@ package frc.robot.util;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
-import dev.doglog.DogLog;
 import java.util.ArrayList;
 
 public class LoggedTalonFX extends TalonFX {
@@ -90,21 +89,21 @@ public class LoggedTalonFX extends TalonFX {
   }
 
   public void periodic() {
-    DogLog.log(temperature, this.getDeviceTemp().getValue().magnitude());
-    DogLog.log(closedLoopError, this.getClosedLoopError().getValue());
-    DogLog.log(closedLoopReference, this.getClosedLoopReference().getValue());
+    // DogLog.log(temperature, this.getDeviceTemp().getValue().magnitude());
+    // DogLog.log(closedLoopError, this.getClosedLoopError().getValue());
+    // DogLog.log(closedLoopReference, this.getClosedLoopReference().getValue());
 
-    DogLog.log(position, this.getPosition().getValue().magnitude());
-    DogLog.log(velocity, this.getVelocity().getValue().magnitude());
-    DogLog.log(acceleration, this.getAcceleration().getValue().magnitude());
+    // DogLog.log(position, this.getPosition().getValue().magnitude());
+    // DogLog.log(velocity, this.getVelocity().getValue().magnitude());
+    // DogLog.log(acceleration, this.getAcceleration().getValue().magnitude());
 
-    // Current
-    DogLog.log(supplycurrent, this.getSupplyCurrent().getValue().magnitude());
-    DogLog.log(statorcurrent, this.getStatorCurrent().getValue().magnitude());
-    DogLog.log(torquecurrent, this.getTorqueCurrent().getValue().magnitude());
+    // // Current
+    // DogLog.log(supplycurrent, this.getSupplyCurrent().getValue().magnitude());
+    // DogLog.log(statorcurrent, this.getStatorCurrent().getValue().magnitude());
+    // DogLog.log(torquecurrent, this.getTorqueCurrent().getValue().magnitude());
 
-    // Voltage
-    DogLog.log(motorvoltage, this.getMotorVoltage().getValue().magnitude());
-    DogLog.log(supplyvoltage, this.getSupplyVoltage().getValue().magnitude());
+    // // Voltage
+    // DogLog.log(motorvoltage, this.getMotorVoltage().getValue().magnitude());
+    // DogLog.log(supplyvoltage, this.getSupplyVoltage().getValue().magnitude());
   }
 }
