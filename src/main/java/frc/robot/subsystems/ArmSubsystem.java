@@ -32,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
   private boolean initialized = false;
 
   private double targetDegrees;
-  private double armHorizontalOffset;
+  private double armHorizontalOffset = 0.0d;
 
   public ArmSubsystem() {
     // Initialize Current Limit, Slot0Configs, and ArmFeedForward
@@ -57,10 +57,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Apply MotionMagicConfigs to master motor
     mmc = new MotionMagicConfigs();
-    mmc.MotionMagicCruiseVelocity =
-        Constants.Arm.MOTIONMAGIC_KV ;
-    mmc.MotionMagicAcceleration =
-        Constants.Arm.MOTIONMAGIC_KA;
+    mmc.MotionMagicCruiseVelocity = Constants.Arm.MOTIONMAGIC_KV;
+    mmc.MotionMagicAcceleration = Constants.Arm.MOTIONMAGIC_KA;
     masterConfigurator.apply(mmc);
 
     // Initialize absolute encoder
@@ -73,8 +71,7 @@ public class ArmSubsystem extends SubsystemBase {
                 do {
                   Thread.sleep(250);
                 } while (!revEncoder.isConnected());
-                master.setPosition(
-                    (getAbsolutePosition()) );
+                master.setPosition((getAbsolutePosition()));
                 initialized = true;
 
               } catch (InterruptedException e) {
@@ -96,23 +93,23 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void resetPosition() {
     if (revEncoder.isConnected()) {
-      master.setPosition(
-          (getAbsolutePosition()));
+      master.setPosition((getAbsolutePosition()));
     }
   }
 
   private void setPosition(double angleDegrees) {
     angleDegrees = MathUtil.clamp(angleDegrees, 198, 351);
-    if (initialized && enableArm) {
-      master.setControl(
-          new MotionMagicVoltage(calculateIntegratedTargetRots(angleDegrees))
-              .withFeedForward(
-                  armff.calculate((2 * Math.PI * getRawDegrees().magnitude()) / 360d, 0)));
-    }
+    // if (initialized && enableArm) {
+    master.setControl(
+        new MotionMagicVoltage(calculateIntegratedTargetRots(angleDegrees))
+            .withFeedForward(
+                armff.calculate((2 * Math.PI * getRawDegrees().magnitude()) / 360d, 0)));
+    // }
   }
 
   public void setTargetDegrees(double angleDegrees) {
     targetDegrees = angleDegrees;
+    setPosition(targetDegrees);
   }
 
   private double getAbsolutePosition() {
@@ -133,8 +130,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   private Angle getArmPosRotations() {
-    return Rotations.of(
-        getMotorPosRotations().magnitude());
+    return Rotations.of(getMotorPosRotations().magnitude());
   }
 
   public Angle getRawDegrees() {
@@ -142,7 +138,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   private double calculateIntegratedTargetRots(double angleDegrees) {
-    double armRots = angleDegrees / 360d + armHorizontalOffset;
+    double armRots = (angleDegrees - (revEncoder.get() * 360)) / 360d + armHorizontalOffset;
     return armRots;
   }
 
@@ -160,7 +156,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    setPosition(targetDegrees);
+    
     SmartDashboard.putString(
         "ARM Command",
         this.getCurrentCommand() == null ? "none" : this.getCurrentCommand().getName());

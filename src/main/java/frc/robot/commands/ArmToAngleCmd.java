@@ -19,7 +19,7 @@ public class ArmToAngleCmd extends Command {
 
   @Override
   public void initialize() {
-     SmartDashboard.putBoolean("RUNNNININGINNIG", true);
+   // SmartDashboard.putBoolean("RUNNNININGINNIG", true);
   }
 
   @Override
