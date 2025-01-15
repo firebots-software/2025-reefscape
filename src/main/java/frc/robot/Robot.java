@@ -9,7 +9,6 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.util.LoggedTalonFX;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -43,8 +42,8 @@ public class Robot extends TimedRobot {
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
-    m_robotContainer.doTelemetry();
+    // // block in order for anything in the Command-based framework to work.
+    // m_robotContainer.doTelemetry();
     CommandScheduler.getInstance().run();
   }
 
@@ -63,18 +62,18 @@ public class Robot extends TimedRobot {
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
-  public void autonomousInit() {
-    RobotContainer.setAlliance();
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+  // public void autonomousInit() {
+  //   RobotContainer.setAlliance();
+  //   m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
-  }
+  //   // schedule the autonomous command (example)
+  //   if (m_autonomousCommand != null) {
+  //     m_autonomousCommand.schedule();
+  //   }
+  // }
 
   /** This function is called periodically during autonomous. */
-  @Override
+  // @Override
   public void autonomousPeriodic() {}
 
   @Override
@@ -83,7 +82,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    RobotContainer.setAlliance();
+    // RobotContainer.setAlliance();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -96,7 +95,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    RobotContainer.setAlliance();
+    // RobotContainer.setAlliance();
     CommandScheduler.getInstance().cancelAll();
   }
 
