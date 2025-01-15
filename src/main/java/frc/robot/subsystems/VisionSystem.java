@@ -28,6 +28,7 @@ public class VisionSystem extends SubsystemBase {
   private final Telemetry logger = new Telemetry(10);
   Pose3d savedResult = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
   private static PhotonCamera frontCamera = new PhotonCamera("front-camera");
+  private static PhotonCamera secondCamera = new PhotonCamera("second-camera");
   private PhotonCamera camera;
   private PhotonPipelineResult pipeline;
   // load 2025 april tag field layout
