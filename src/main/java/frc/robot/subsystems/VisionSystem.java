@@ -60,6 +60,15 @@ public class VisionSystem extends SubsystemBase {
         return frontSystem;
       }
     }
+       if (name == "second-camera") {
+      if (frontSystem == null) {
+        frontSystem = new VisionSystem("second-camera");
+        return frontSystem;
+
+      } else {
+        return frontSystem;
+      }
+    }
     return frontSystem;
   }
 
