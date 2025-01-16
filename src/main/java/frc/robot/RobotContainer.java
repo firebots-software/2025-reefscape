@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 // import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.ArmToAngleCmd;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.NewArmSubsystem;
 import java.util.function.Supplier;
 
 // import frc.robot.subsystems.SwerveSubsystem;
@@ -55,8 +55,8 @@ public class RobotContainer {
     // Joystick suppliers,
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    leftShoulderTrigger.onTrue(new ArmToAngleCmd(() -> 270.0, ArmSubsystem.getInstance()));
-    leftShoulderTrigger.onFalse(new ArmToAngleCmd(() -> 220.0, ArmSubsystem.getInstance()));
+    leftShoulderTrigger.whileTrue(new ArmToAngleCmd(() -> 270.0, NewArmSubsystem.getInstance()));
+    leftShoulderTrigger.whileFalse(new ArmToAngleCmd(() -> 220.0, NewArmSubsystem.getInstance()));
 
     // joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     // joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));

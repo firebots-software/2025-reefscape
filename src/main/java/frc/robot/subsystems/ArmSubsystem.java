@@ -156,11 +156,14 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+
     SmartDashboard.putString(
         "ARM Command",
         this.getCurrentCommand() == null ? "none" : this.getCurrentCommand().getName());
     SmartDashboard.putNumber("ARM Abs Enc Raw", revEncoder.get());
+    SmartDashboard.putNumber("ARM Arm Degrees", getRawDegrees().magnitude());
+    SmartDashboard.putNumber("ARM Target Degrees", targetDegrees);
+
     SmartDashboard.putNumber("ARM Abs Enc Func", getAbsolutePosition());
     SmartDashboard.putNumber("ARM Integrated Rotations", getMotorPosRotations().magnitude());
     SmartDashboard.putNumber(
@@ -169,7 +172,7 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("ARM Arm Rotations", getArmPosRotations().magnitude());
     SmartDashboard.putNumber("ARM Arm Degrees", getRawDegrees().magnitude());
     SmartDashboard.putNumber("ARM Arm Degrees Corrected", getCorrectedDegrees());
-    SmartDashboard.putNumber("ARM Target Degrees", targetDegrees);
+
     SmartDashboard.putNumber(
         "ARM Target Integrated Rots", calculateIntegratedTargetRots(targetDegrees));
     SmartDashboard.putNumber(
