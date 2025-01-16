@@ -77,7 +77,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Start Position", startPosChooser);
 
     configureBindings();
-    setAlliance();
+    //setAlliance();
   }
 
   private void configureBindings() {
