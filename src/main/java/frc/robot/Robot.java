@@ -4,10 +4,22 @@
 
 package frc.robot;
 
+import org.photonvision.EstimatedRobotPose;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
+import org.photonvision.EstimatedRobotPose;
+import java.util.Optional;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -18,7 +30,22 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-  private final VisionSystem frontCam = VisionSystem.getInstance("front-camera");
+
+  private final VisionSystem frontCam = new VisionSystem("front-camera");
+  private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
+  private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+
+   private final SwerveSubsystem driveTrain = new SwerveSubsystem(
+      Constants.Swerve.DrivetrainConstants,
+      250.0, // TODO: CHANGE ODOMETRY UPDATE FREQUENCY TO CONSTANT,
+      odometryMatrix,
+      visionMatrix,
+      Constants.Swerve.FrontLeft,
+      Constants.Swerve.FrontRight,
+      Constants.Swerve.BackLeft,
+      Constants.Swerve.BackRight
+  );
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -27,6 +54,7 @@ public class Robot extends TimedRobot {
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
     m_robotContainer = new RobotContainer();
   }
 
@@ -45,6 +73,30 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     m_robotContainer.doTelemetry();
     CommandScheduler.getInstance().run();
+    Optional<EstimatedRobotPose> frontRobotPose =
+        frontCam.getMultiTagPose3d(driveTrain.getState().Pose);
+    if (frontCam.hasTarget(frontCam.getPipeline()) && frontRobotPose.isPresent()) {
+
+      double distToAprilTag =
+          frontCam.gTagFieldLayout().getTagPose(frontCam.getPipeline().getBestTarget().getFiducialId())
+              .get()
+              .getTranslation()
+              .getDistance(
+                  new Translation3d(
+                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+
+      double xKalman = 0.01 * Math.pow(1.15, distToAprilTag);
+
+      double yKalman = 0.01 * Math.pow(1.4, distToAprilTag);
+
+      visionMatrix.set(0, 0, xKalman);
+      visionMatrix.set(1, 0, yKalman);
+
+      driveTrain.addVisionMeasurement(
+          frontRobotPose.get().estimatedPose.toPose2d(),
+          Timer.getFPGATimestamp() - 0.02,
+          visionMatrix);
+    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

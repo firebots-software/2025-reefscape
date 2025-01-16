@@ -61,7 +61,9 @@ public class VisionSystem extends SubsystemBase {
     }
     return frontSystem;
   }
-
+  public AprilTagFieldLayout gTagFieldLayout(){
+    return aprilTagFieldLayout;
+  }
   public Transform3d getTransformToTarget() {
     PhotonPipelineResult result = frontCamera.getLatestResult();
     if (!result.hasTargets()) {
@@ -82,6 +84,13 @@ public class VisionSystem extends SubsystemBase {
   public Optional<EstimatedRobotPose> noRefPose3d() {
 
     return photonPoseEstimator.update(pipeline);
+  }
+
+  public PhotonPipelineResult getPipeline() {
+    return pipeline;
+  }
+  public boolean hasTarget(PhotonPipelineResult pipeline) {
+    return pipeline.hasTargets();
   }
 
   // without multitag, prolly not going to use this
