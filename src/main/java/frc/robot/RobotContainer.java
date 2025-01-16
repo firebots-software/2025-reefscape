@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.JamesHardenMovement;
 import frc.robot.commands.MoveToTarget;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -104,35 +105,16 @@ public class RobotContainer {
                     driveTrain.resetPose(
                         new Pose2d(new Translation2d(0.48, 4), Rotation2d.fromDegrees(0)))));
 
-    Pose2d coral1 = new Pose2d(new Translation2d(3.22, 4.25), new Rotation2d());
-    Pose2d coral2 = new Pose2d(new Translation2d(3.22, 3.92), new Rotation2d());
-    Pose2d coral3 = new Pose2d(new Translation2d(3.81, 2.9), new Rotation2d(Math.PI/3.0));
-    Pose2d station = new Pose2d(new Translation2d(0.78, 1.19), new Rotation2d((-2.0*Math.PI)/3.0));
+    // Pose2d coral1 = new Pose2d(new Translation2d(3.22, 4.25), new Rotation2d());
+    // Pose2d coral2 = new Pose2d(new Translation2d(3.22, 3.92), new Rotation2d());
+    // Pose2d coral3 = new Pose2d(new Translation2d(3.81, 2.9), new Rotation2d(Math.PI / 3.0));
+    // Pose2d station =
+    //     new Pose2d(new Translation2d(0.78, 1.19), new Rotation2d((-2.0 * Math.PI) / 3.0));
 
+    JamesHardenMovement test = new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(2, 4), Rotation2d.fromDegrees(0)));
     joystick
         .y()
-        .whileTrue(
-            MoveToTarget.withAbsolute(
-                driveTrain,
-                new Rotation2d(Degrees.of(0)),
-                new Rotation2d(Degrees.of(0)),
-                coral1).andThen(MoveToTarget.withAbsolute(
-                  driveTrain,
-                  new Rotation2d(Degrees.of((-2.0*Math.PI)/3.0)),
-                  new Rotation2d(Degrees.of(0)),
-                  station)).andThen(MoveToTarget.withAbsolute(
-                    driveTrain,
-                    new Rotation2d(Degrees.of(0)),
-                    new Rotation2d(Degrees.of((-2.0*Math.PI)/3.0)),
-                    coral2).andThen(MoveToTarget.withAbsolute(
-                      driveTrain,
-                      new Rotation2d(Degrees.of((-2.0*Math.PI)/3.0)),
-                      new Rotation2d(Degrees.of(0)),
-                      station)).andThen(MoveToTarget.withAbsolute(
-                        driveTrain,
-                        new Rotation2d(Degrees.of(Math.PI/3.0)),
-                        new Rotation2d(Degrees.of((-2.0*Math.PI)/3.0)),
-                        coral3))));
+        .whileTrue(test);
   }
 
   public static void setAlliance() {
