@@ -30,8 +30,8 @@ public class ArmToAngleCmd extends Command {
 
   @Override
   public boolean isFinished() {
-    SmartDashboard.putBoolean("Is arm at target", arm.atTarget(endToleranceDegrees));
-    return arm.atTarget(endToleranceDegrees);
+    // SmartDashboard.putBoolean("Is arm at target", arm.atTarget(endToleranceDegrees));
+    return false;
   }
 
   @Override

@@ -69,22 +69,22 @@ public class NewArmSubsystem extends SubsystemBase {
     revEncoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
 
     // Wait until absolute encoder is connected and set master motor's position
-    new Thread(
-            () -> {
-              try {
-                do {
-                  Thread.sleep(250);
-                } while (!revEncoder.isConnected());
+    // new Thread(
+    //         () -> {
+    //           try {
+    //             do {
+    //               Thread.sleep(250);
+    //             } while (!revEncoder.isConnected());
 
-                armMotor.setPosition(revEncoder.get());
-                initialized = true;
-                SmartDashboard.putBoolean("Motor encoder init", initialized);
+    //             // armMotor.setPosition(revEncoder.get() * 54);
+    //             initialized = true;
+    //             SmartDashboard.putBoolean("Motor encoder init", initialized);
 
-              } catch (InterruptedException e) {
-                e.printStackTrace();
-              }
-            })
-        .run();
+    //           } catch (InterruptedException e) {
+    //             e.printStackTrace();
+    //           }
+    //         })
+    //     .run();
 
     // targetDegrees = getCorrectedDegrees() + 10d;
     // enableArm = false;
@@ -92,16 +92,13 @@ public class NewArmSubsystem extends SubsystemBase {
 
   public void setPosition(double angleDegrees) {
     // angleDegrees = MathUtil.clamp(angleDegrees, 198, 351);
-    targetDegrees = angleDegrees;
-    if (initialized) {
-      armMotor.setControl(new MotionMagicVoltage(getRotationFromAngle(angleDegrees)));
-      // .withFeedForward(
-      //    armFeedForward.calculate(Units.degreesToRadians(getDegrees() - 198), 0)));
-    }
+    armMotor.setControl(new MotionMagicVoltage(1000));
+    // .withFeedForward(
+    //    armFeedForward.calculate(Units.degreesToRadians(getDegrees() - 198), 0)));
   }
 
   private double getDegrees() {
-    return revEncoder.get() * 360d;
+    return revEncoder.get() * 54 * 360d;
   }
 
   private double getRotationFromAngle(double angleDegrees) {
@@ -116,11 +113,15 @@ public class NewArmSubsystem extends SubsystemBase {
     } else return false;
   }
 
+  public void zeroSensor() {
+    armMotor.setPosition(revEncoder.get() * 54);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // setPosition(270);
-    SmartDashboard.putNumber("ARM Abs Enc Raw", revEncoder.get());
+
+    SmartDashboard.putNumber("ARM Abs Enc Raw", revEncoder.get() * 54);
     SmartDashboard.putNumber("ARM Arm Degrees", getDegrees());
     SmartDashboard.putNumber("ARM Target Degrees", targetDegrees);
   }
