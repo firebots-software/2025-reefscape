@@ -117,6 +117,9 @@ public final class Constants {
     public static final Current DRIVE_SUPPLY_CURRENT_LIMIT_AMPS = Amps.of(40.0);
     public static final Current TURNING_SUPPLY_CURRENT_LIMIT_AMPS = Amps.of(30.0);
 
+    public static final Current DUTY_CYCLE_VELOCITY = Current.ofBaseUnits(30.0, Amp);
+    public static final Current ACCELERATION = Current.ofBaseUnits(50.0, Amp);
+
     // Theoretical free speed (m/s) at 12v applied output;
     // This needs to be tuned to your individual robot
     public static final LinearVelocity SPEED_AT_12V_METERS_PER_SECOND =
@@ -304,6 +307,9 @@ public final class Constants {
     public static final double level3 = 0;
     public static final double level4 = 0;
     public static final double currentLimit = 0;
+    public static final double CRUISE_VELOCITY = 10000000; //To-do
+    public static final double ACCELERATION = 0.0;//To-do
+    public static final double SETPOINT_TOLERANCE = 0;//To-do
 
     public static enum ElevatorPositions {
         //TODO: Change the height values based on heights needed to score/intake coral on

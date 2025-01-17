@@ -30,7 +30,7 @@ public class ElevatorLevel2 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorSubsystem.setLevelOfElavat(2);
+    elevatorSubsystem.setLevelOfElevator(2);
   }
 
   // Called once the command ends or is interrupted.
