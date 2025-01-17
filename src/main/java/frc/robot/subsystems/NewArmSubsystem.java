@@ -4,14 +4,19 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,8 +51,12 @@ public class NewArmSubsystem extends SubsystemBase {
             .withStatorCurrentLimit(Constants.Arm.ARM_STATOR_CURRENT_LIMIT_AMPS)
             .withSupplyCurrentLimitEnable(true)
             .withSupplyCurrentLimit(Constants.Arm.ARM_SUPPLY_CURRENT_LIMIT_AMPS);
-    MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
-    Slot0Configs s0c = new Slot0Configs().withKP(Constants.Arm.S0C_KP).withKI(0).withKD(0);
+    MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast);
+    moc.withInverted(InvertedValue.CounterClockwise_Positive);
+    FeedbackConfigs fc = new FeedbackConfigs();
+    ClosedLoopGeneralConfigs clgc = new ClosedLoopGeneralConfigs();
+    Slot0Configs s0c = new Slot0Configs().withKP(Constants.Arm.S0C_KP * 100).withKI(0).withKD(0);
+
     armFeedForward =
         new ArmFeedforward(Constants.Arm.ARMFF_KS, Constants.Arm.ARMFF_KG, Constants.Arm.ARMFF_KV);
 
@@ -55,9 +64,12 @@ public class NewArmSubsystem extends SubsystemBase {
     armMotor = new LoggedTalonFX(Constants.Arm.LT_PORT);
 
     TalonFXConfigurator masterConfigurator = armMotor.getConfigurator();
+
     masterConfigurator.apply(moc);
     masterConfigurator.apply(clc); // Apply current limits to the master motor
     masterConfigurator.apply(s0c); // Apply PID settings to the master motor
+    masterConfigurator.apply(fc);
+    masterConfigurator.apply(clgc);
 
     // Apply MotionMagicConfigs to master motor
     motionMagicConfigs = new MotionMagicConfigs();
@@ -91,14 +103,16 @@ public class NewArmSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double angleDegrees) {
-    // angleDegrees = MathUtil.clamp(angleDegrees, 198, 351);
-    armMotor.setControl(new MotionMagicVoltage(1000));
+
+    //angleDegrees = MathUtil.clamp(angleDegrees, 202, 351);
+    targetDegrees = angleDegrees;
+    armMotor.setControl(new MotionMagicVoltage((0.159344d*angleDegrees)+0.355).withSlot(0));
     // .withFeedForward(
-    //    armFeedForward.calculate(Units.degreesToRadians(getDegrees() - 198), 0)));
+    //     armFeedForward.calculate(Units.degreesToRadians(getDegrees() - 198), 0)));
   }
 
   private double getDegrees() {
-    return revEncoder.get() * 54 * 360d;
+    return revEncoder.get() * 360d;
   }
 
   private double getRotationFromAngle(double angleDegrees) {
@@ -109,20 +123,22 @@ public class NewArmSubsystem extends SubsystemBase {
   public boolean atTarget(double endToleranceDegrees) {
     if (getDegrees() < targetDegrees + endToleranceDegrees
         && getDegrees() > targetDegrees - endToleranceDegrees) {
+      //armMotor.disable();
       return true;
     } else return false;
   }
 
   public void zeroSensor() {
-    armMotor.setPosition(revEncoder.get() * 54);
+    //armMotor.setPosition(revEncoder.get() * 54);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    SmartDashboard.putNumber("ARM Abs Enc Raw", revEncoder.get() * 54);
+    SmartDashboard.putBoolean("ARM at target", atTarget(5));
+    SmartDashboard.putNumber("ARM Abs Enc Raw", revEncoder.get());
     SmartDashboard.putNumber("ARM Arm Degrees", getDegrees());
+    SmartDashboard.putNumber("ARM Abs -> Rel Val", revEncoder.get() * 54);
     SmartDashboard.putNumber("ARM Target Degrees", targetDegrees);
   }
 }

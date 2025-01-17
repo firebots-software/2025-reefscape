@@ -55,8 +55,8 @@ public class RobotContainer {
     // Joystick suppliers,
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    leftShoulderTrigger.whileTrue(new ArmToAngleCmd(() -> 270.0, NewArmSubsystem.getInstance()));
-    // leftShoulderTrigger.whileFalse(new ArmToAngleCmd(() -> 220.0,
+    leftShoulderTrigger.onTrue(new ArmToAngleCmd(() -> 90d, NewArmSubsystem.getInstance()));
+    leftShoulderTrigger.onFalse(new ArmToAngleCmd(() -> 45d, NewArmSubsystem.getInstance()));
     // NewArmSubsystem.getInstance()));
 
     // joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));

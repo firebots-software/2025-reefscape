@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import dev.doglog.DogLog;
 import java.util.ArrayList;
@@ -19,7 +20,10 @@ public class LoggedTalonFX extends TalonFX {
       statorcurrent,
       torquecurrent,
       motorvoltage,
-      supplyvoltage;
+      supplyvoltage,
+      error, 
+      reference,
+      rotorPosition;
 
   public LoggedTalonFX(String deviceName, int deviceId, String canbus) {
     super(deviceId, canbus);
@@ -46,7 +50,9 @@ public class LoggedTalonFX extends TalonFX {
   }
 
   public void init() {
+
     motors.add(this);
+    this.getConfigurator().apply(new TalonFXConfiguration());
     this.temperature = name + "/temperature(degC)";
     this.closedLoopError = name + "/closedLoopError";
     this.closedLoopReference = name + "/closedLoopReference";
@@ -58,6 +64,9 @@ public class LoggedTalonFX extends TalonFX {
     this.torquecurrent = name + "/current/torque(A)";
     this.motorvoltage = name + "/voltage/motor(V)";
     this.supplyvoltage = name + "/voltage/supply(V)";
+    this.error = name + "/closedloop/error";
+    this.reference = name + "/closedloop/reference";
+    this.rotorPosition = name + "/closedloop/rotorPosition";
 
     // Applying current limits
     CurrentLimitsConfigs clc =
@@ -93,6 +102,10 @@ public class LoggedTalonFX extends TalonFX {
     DogLog.log(temperature, this.getDeviceTemp().getValue().magnitude());
     DogLog.log(closedLoopError, this.getClosedLoopError().getValue());
     DogLog.log(closedLoopReference, this.getClosedLoopReference().getValue());
+
+    DogLog.log(error, this.getClosedLoopError().getValue().doubleValue());
+    DogLog.log(reference, this.getClosedLoopReference().getValueAsDouble());
+    DogLog.log(rotorPosition, this.getRotorPosition().getValueAsDouble());
 
     DogLog.log(position, this.getPosition().getValue().magnitude());
     DogLog.log(velocity, this.getVelocity().getValue().magnitude());
