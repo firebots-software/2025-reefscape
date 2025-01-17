@@ -61,14 +61,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     }
     xPidController =
         new ProfiledPIDController(
-            10,
+            6,
             0,
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
     yPidController =
         new ProfiledPIDController(
-            10,
+            6,
             0,
             0,
             new TrapezoidProfile.Constraints(
@@ -76,7 +76,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     driverRotationPidController =
         new ProfiledPIDController(
-            5,
+            2,
             0,
             0,
             new TrapezoidProfile.Constraints(
@@ -233,11 +233,15 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   }
 
   public ChassisSpeeds calculateChassisSpeeds(Pose2d currentPose, Pose2d targetPose) {
+    SmartDashboard.putNumber("x current", currentPose.getX());
+    SmartDashboard.putNumber("x setpoint", targetPose.getX());
     double xFeedback = xPidController.calculate(currentPose.getX(), targetPose.getX());
+    SmartDashboard.putNumber("xFeedback calculated", xFeedback);
     double yFeedback = yPidController.calculate(currentPose.getY(), targetPose.getY());
     double thetaFeedback =
         driverRotationPidController.calculate(
             getState().Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
+
     return ChassisSpeeds.fromFieldRelativeSpeeds(
         xFeedback, yFeedback, thetaFeedback, currentPose.getRotation());
   }

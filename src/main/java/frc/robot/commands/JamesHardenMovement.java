@@ -13,7 +13,7 @@ public class JamesHardenMovement extends Command {
 
   private Supplier<Pose2d> targetPoseSupplier = null;
   private Pose2d targetPose = null;
-
+  private int ct = 0;
   public JamesHardenMovement(SwerveSubsystem swerve, Supplier<Pose2d> targetPoseSupplier) {
     this.swerve = swerve;
     this.targetPoseSupplier = targetPoseSupplier;
@@ -32,6 +32,8 @@ public class JamesHardenMovement extends Command {
       targetPose = targetPoseSupplier.get();
     }
     swerve.resetPIDs();  
+    ct++;
+    SmartDashboard.putNumber("ct", ct);
   }
 
   @Override
@@ -48,7 +50,21 @@ public class JamesHardenMovement extends Command {
   }
 
   @Override
+  public boolean isFinished() {
+      double currRot = swerve.getState().Pose.getRotation().getRadians();
+      currRot = (Math.PI+(currRot%Math.PI))%Math.PI;
+      double targetRot = targetPose.getRotation().getRadians();
+      targetRot = (Math.PI+(targetRot%Math.PI))%Math.PI;
+
+      if ((Math.abs(swerve.getState().Pose.getX()-targetPose.getX()) < 0.01) &&
+          (Math.abs(swerve.getState().Pose.getY()-targetPose.getY()) < 0.01) &&
+          (Math.abs(targetRot-currRot) < 0.04)) {
+            return true;
+          }
+          else return false;
+  }
+  @Override
   public void end(boolean interrupted) {
-    // swerve.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
+    swerve.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 }
