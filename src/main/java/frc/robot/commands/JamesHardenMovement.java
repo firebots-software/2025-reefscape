@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
@@ -36,11 +37,18 @@ public class JamesHardenMovement extends Command {
   @Override
   public void execute() {
     ChassisSpeeds speeds = swerve.calculateChassisSpeeds(swerve.getState().Pose, targetPose);
+    SmartDashboard.putNumber("x mps", speeds.vxMetersPerSecond);
+    SmartDashboard.putNumber("y mps", speeds.vyMetersPerSecond);
+    SmartDashboard.putNumber("theta radians ps", speeds.omegaRadiansPerSecond);
+
+    SmartDashboard.putNumber("desiredHeading", targetPose.getRotation().getDegrees());
+    SmartDashboard.putNumber("desired x", targetPose.getTranslation().getX());
+    SmartDashboard.putNumber("desired y", targetPose.getTranslation().getY());
     swerve.setChassisSpeeds(speeds);
   }
 
   @Override
   public void end(boolean interrupted) {
-    swerve.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
+    // swerve.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 }

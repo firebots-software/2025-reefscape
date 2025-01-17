@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.JamesHardenMovement;
-import frc.robot.commands.MoveToTarget;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
@@ -111,7 +110,7 @@ public class RobotContainer {
     // Pose2d station =
     //     new Pose2d(new Translation2d(0.78, 1.19), new Rotation2d((-2.0 * Math.PI) / 3.0));
 
-    JamesHardenMovement test = new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(2, 4), Rotation2d.fromDegrees(0)));
+    JamesHardenMovement test = new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(2, 5), Rotation2d.fromDegrees(90)));
     joystick
         .y()
         .whileTrue(test);
