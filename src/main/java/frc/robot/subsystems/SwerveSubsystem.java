@@ -156,10 +156,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   }
 
   public void resetPIDs() {
-        xPidController.reset(getState().Pose.getX());
-        yPidController.reset(getState().Pose.getY());
-        driverRotationPidController.reset(getState().Pose.getRotation().getRadians());
-    }
+    xPidController.reset(getState().Pose.getX());
+    yPidController.reset(getState().Pose.getY());
+    driverRotationPidController.reset(getState().Pose.getRotation().getRadians());
+  }
+
   /* Swerve requests to apply during SysId characterization */
   private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization =
       new SwerveRequest.SysIdSwerveTranslation();

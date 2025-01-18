@@ -115,7 +115,8 @@
 
 //   // Factory pattern (two separate constructors that invoke the mirror / non mirror)
 //   public static Command withAbsolute(
-//       SwerveSubsystem swerve, Rotation2d goalEndRot, Rotation2d startDir, Pose2d... absolutePose) {
+//       SwerveSubsystem swerve, Rotation2d goalEndRot, Rotation2d startDir, Pose2d... absolutePose)
+// {
 //     return new MoveToTarget(swerve, absolutePose, () -> false, 0, goalEndRot, startDir);
 //   }
 
@@ -125,7 +126,8 @@
 //       Rotation2d startDir,
 //       double goalEndVelo,
 //       Pose2d... absolutePose) {
-//     return new MoveToTarget(swerve, absolutePose, () -> false, goalEndVelo, goalEndRot, startDir);
+//     return new MoveToTarget(swerve, absolutePose, () -> false, goalEndVelo, goalEndRot,
+// startDir);
 //   }
 
 //   public static Command withMirror(

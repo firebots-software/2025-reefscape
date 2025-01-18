@@ -9,6 +9,9 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -22,6 +25,68 @@ import edu.wpi.first.units.measure.*;
 public final class Constants {
   public static class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
+  }
+
+  public static class Landmarks {
+    // blude side
+    public static final Translation2d[] leftBranchesBlue = {
+      new Translation2d(3.7084, 4.191),
+      new Translation2d(3.95732, 3.4328608),
+      new Translation2d(4.736846, 3.2685736),
+      new Translation2d(5.2689506, 3.861562),
+      new Translation2d(5.0214276, 4.6188884),
+      new Translation2d(4.2418254, 4.783201)
+    };
+
+    // blue side
+    public static final Translation2d[] rightBranchesBlue = {
+      new Translation2d(3.7085778, 3.861562),
+      new Translation2d(4.2412666, 3.267583),
+      new Translation2d(5.0220118, 3.4318702),
+      new Translation2d(5.2700936, 4.1901872),
+      new Translation2d(4.7374048, 4.7841916),
+      new Translation2d(3.9566596, 4.619879)
+    };
+
+    public static final Rotation2d[] reefFacingAngleBlue = {
+      new Rotation2d(Degrees.of(0)),
+      new Rotation2d(Degrees.of(60)),
+      new Rotation2d(Degrees.of(120)),
+      new Rotation2d(Degrees.of(180)),
+      new Rotation2d(Degrees.of(-120)),
+      new Rotation2d(Degrees.of(-60))
+    };
+
+    public static final Translation2d[] leftBranchesRed = {
+      new Translation2d(13.839825, 4.191),
+      new Translation2d(13.590905, 3.4328608),
+      new Translation2d(12.811379, 3.2685736),
+      new Translation2d(12.2792744, 3.861562),
+      new Translation2d(12.5267974, 4.6188884),
+      new Translation2d(13.3063996, 4.783201)
+    };
+
+    // blue side
+    public static final Translation2d[] rightBranchesRed = {
+      new Translation2d(13.8396472, 3.861562),
+      new Translation2d(13.3069584, 3.267583),
+      new Translation2d(12.5262132, 3.4318702),
+      new Translation2d(12.2781314, 4.1901872),
+      new Translation2d(12.8108202, 4.7841916),
+      new Translation2d(13.5915654, 4.619879)
+    };
+
+    public static final Pose2d middleOfRedHumanPlayerStationRight =
+        new Pose2d(new Translation2d(16.701262, 7.402068), new Rotation2d(Degrees.of(90-37.49500797)));
+
+    public static final Rotation2d[] reefFacingAngleRed = {
+      new Rotation2d(Degrees.of(180)),
+      new Rotation2d(Degrees.of(120)),
+      new Rotation2d(Degrees.of(60)),
+      new Rotation2d(Degrees.of(0)),
+      new Rotation2d(Degrees.of(-60)),
+      new Rotation2d(Degrees.of(-120))
+    };
   }
 
   public static class OI {
@@ -123,11 +188,11 @@ public final class Constants {
           FRONT_RIGHT_ENCODER_OFFSET,
           BACK_LEFT_ENCODER_OFFSET,
           BACK_RIGHT_ENCODER_OFFSET;
-      SwerveLevel SWERVE_LEVEL;
-      SwerveDrivePIDValues SWERVE_DRIVE_PID_VALUES;
-      SwerveSteerPIDValues SWERVE_STEER_PID_VALUES;
-      RobotDimensions ROBOT_DIMENSIONS;
-      String CANBUS_NAME;
+      public final SwerveLevel SWERVE_LEVEL;
+      public final SwerveDrivePIDValues SWERVE_DRIVE_PID_VALUES;
+      public final SwerveSteerPIDValues SWERVE_STEER_PID_VALUES;
+      public final RobotDimensions ROBOT_DIMENSIONS;
+      public final String CANBUS_NAME;
 
       SwerveType(
           Angle fl,

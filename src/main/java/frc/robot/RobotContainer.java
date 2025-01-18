@@ -10,7 +10,6 @@ import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -97,12 +96,27 @@ public class RobotContainer {
     // joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     joystick
-        .x()
+        .a()
         .onTrue(
             driveTrain.runOnce(
                 () ->
                     driveTrain.resetPose(
-                        new Pose2d(new Translation2d(0.48, 4), Rotation2d.fromDegrees(0)))));
+                        new Pose2d(
+                            new Translation2d(
+                                Constants.Landmarks.middleOfRedHumanPlayerStationRight.getX()
+                                    - (Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
+                                            .in(Meters)
+                                        * Constants.Landmarks.middleOfRedHumanPlayerStationRight
+                                            .getRotation()
+                                            .getCos()),
+                                Constants.Landmarks.middleOfRedHumanPlayerStationRight.getY()
+                                    - (Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
+                                            .in(Meters)
+                                        * Constants.Landmarks.middleOfRedHumanPlayerStationRight
+                                            .getRotation()
+                                            .getSin())),
+                            Constants.Landmarks.middleOfRedHumanPlayerStationRight
+                                .getRotation()))));
 
     // Pose2d coral1 = new Pose2d(new Translation2d(3.22, 4.25), new Rotation2d());
     // Pose2d coral2 = new Pose2d(new Translation2d(3.22, 3.92), new Rotation2d());
@@ -110,9 +124,10 @@ public class RobotContainer {
     // Pose2d station =
     //     new Pose2d(new Translation2d(0.78, 1.19), new Rotation2d((-2.0 * Math.PI) / 3.0));
 
+    joystick.x().whileTrue(JamesHardenMovement.toClosestLeftBranch(driveTrain, redAlliance));
     joystick
         .y()
-        .whileTrue(new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(0.48, 4), Rotation2d.fromDegrees(0))));
+        .whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redAlliance));
   }
 
   public static void setAlliance() {
