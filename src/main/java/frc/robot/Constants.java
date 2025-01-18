@@ -292,8 +292,8 @@ public final class Constants {
   }
 
   public static class ElevatorConstants {
-    public static final int MOTOR1_PORT = 0; // TODO: change port
-    public static final int MOTOR2_PORT = 0; // TODO: change port
+    public static final int MOTOR1_PORT = 51; // TODO: change port
+    public static final int MOTOR2_PORT = 52; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
@@ -302,15 +302,21 @@ public final class Constants {
     public static final int S0C_KD = 0;
     public static final int MOTIONMAGIC_KV = 0;
     public static final int MOTIONMAGIC_KA = 0;
-    public static final double level1 = 0;
-    public static final double level2 = 0;
-    public static final double level3 = 0;
-    public static final double level4 = 0;
+    public static final double level1 = 5;
+    public static final double level2 = 10;
+    public static final double level3 = 15;
+    public static final double level4 = 20;
     public static final double currentLimit = 0;
-    public static final double CRUISE_VELOCITY = 10000000; //To-do
-    public static final double ACCELERATION = 0.0;//To-do
-    public static final double SETPOINT_TOLERANCE = 0;//To-do
+    public static final double CRUISE_VELOCITY = 10; //To-do
+    public static final double ACCELERATION = 10.0;//To-do
+    public static final double SETPOINT_TOLERANCE = 10.0;//To-do
+    public static final double kElevatorMinimumLength = 1;
+    public static final double kElevatorMinimumLength2 = 1.5;
+    public static final double m_wristPot = 15;
 
+
+    
+    
     public static enum ElevatorPositions {
         //TODO: Change the height values based on heights needed to score/intake coral on
         Intake(0,0.0),
