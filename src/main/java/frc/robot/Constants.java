@@ -427,4 +427,20 @@ public final class Constants {
     public static final double TELE_DRIVE_PERCENT_SPEED_RANGE =
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
   }
+
+  public static class TootsieSlide {
+    public static final int UP_MOTOR_PORT = 0; // TODO
+    public static final int DOWN_MOTOR_PORT = 0; // TODO
+    public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO
+    public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO
+    public static final double S0C_KP = 0.0; // TODO
+    public static final double S0C_KI = 0.0; // TODO
+    public static final double S0C_KD = 0.0; // TODO
+    public static final double CRUISE_VELOCITY = 0.0; // TODO
+    public static final double ACCELERATION = 0.0; // TODO
+
+    public static final int GEAR_RATIO = 0; // TODO
+    public static final double SPEED_RPS = 0.0; // TODO
+
+  }
 }
