@@ -112,7 +112,7 @@ public class RobotContainer {
 
     joystick
         .y()
-        .whileTrue(new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(2, 5), Rotation2d.fromDegrees(90))));
+        .whileTrue(new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(0.48, 4), Rotation2d.fromDegrees(0))));
   }
 
   public static void setAlliance() {
