@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import frc.robot.util.LoggedTalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
@@ -53,6 +55,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     public static double elevator1Length=0;
     public static double elevator2Length=0;
 
+    private final CommandXboxController joystick = new CommandXboxController(1);
+
     public ElevatorSubsystem() {
         motor1 = new LoggedTalonFX(51); // Unique ID for motor1
         motor2 = new LoggedTalonFX(52); // Unique ID for motor2
@@ -88,8 +92,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         master.getConfigurator().apply(mmc);
 
         // Initialize Mechanism2d visualization
-        mech = new Mechanism2d(3, 3);
-        root = mech.getRoot("climber", 2, 250);
+        mech = new Mechanism2d(10, 10);
+        root = mech.getRoot("climber", 2.5, 0);
         m_elevator1 = root.append(new MechanismLigament2d("elevator1", Constants.ElevatorConstants.kElevatorMinimumLength, 90, 6, new Color8Bit(Color.kRed)));
         m_elevator2 = root.append(new MechanismLigament2d("elevator2", Constants.ElevatorConstants.kElevatorMinimumLength2, 90, 6, new Color8Bit(Color.kBlue)));
         m_wrist = m_elevator2.append(
@@ -184,17 +188,18 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevator1Length = master.getPosition().getValueAsDouble();
         elevator2Length = master.getPosition().getValueAsDouble();
 
-        m_elevator1.setLength(elevator1Length);
-        m_elevator2.setLength(elevator2Length);
-        
+        // m_elevator1.setLength(elevator1Length);
+        // m_elevator2.setLength(elevator2Length);
+
         double wristAngle = Constants.ElevatorConstants.m_wristPot;
-        m_wrist.setAngle(Constants.ElevatorConstants.m_wristPot);
+        m_wrist.setAngle(wristAngle);
 
         SmartDashboard.putData("Elevator Mechanism", mech);
 
-        SmartDashboard.putNumber("Elevator 1 Length", elevator1Length);
-        SmartDashboard.putNumber("Elevator 2 Length", elevator1Length);
+        // SmartDashboard.putNumber("Elevator 1 Length", elevator1Length);
+        // SmartDashboard.putNumber("Elevator 2 Length", elevator1Length);
         SmartDashboard.putNumber("Wrist Angle", wristAngle);
+
     }
 
     @Override
@@ -208,24 +213,4 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Simulated Position", newPosition);
         SmartDashboard.putNumber("Simulated Speed", simulatedSpeed);
     }
-
-
-
-    // public void handleKeyPress(String key) {
-    //   switch (key) {
-    //       case "1": // Move Elevator1 to Level 1
-    //           moveElevator2(Constants.ElevatorConstants.level1);
-    //           break;
-    //       case "2": // Move Elevator1 to Level 2
-    //           moveElevator2(Constants.ElevatorConstants.level2);
-    //           break;
-    //       case "3": // Move Elevator2 up
-    //           moveElevator2(Constants.ElevatorConstants.level3);
-    //           break;
-    //       case "4": // Move Elevator2 down
-    //           moveElevator2(Constants.ElevatorConstants.level4);
-    //           break;
-    //   }
-      
-    // }
 }

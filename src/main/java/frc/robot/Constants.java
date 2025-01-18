@@ -310,8 +310,8 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 10; //To-do
     public static final double ACCELERATION = 10.0;//To-do
     public static final double SETPOINT_TOLERANCE = 10.0;//To-do
-    public static final double kElevatorMinimumLength = 1;
-    public static final double kElevatorMinimumLength2 = 1.5;
+    public static final double kElevatorMinimumLength = 1.0;
+    public static final double kElevatorMinimumLength2 = 1.0;
     public static final double m_wristPot = 15;
 
 
