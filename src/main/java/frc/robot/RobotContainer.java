@@ -13,13 +13,17 @@ import edu.wpi.first.math.numbers.N3;
 // import frc.robot.subsystems.SwerveSubsystemlliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 // import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.ArmToAngleCmd;
 import frc.robot.subsystems.NewArmSubsystem;
 import java.util.function.Supplier;
+
+import com.ctre.phoenix6.SignalLogger;
 
 // import frc.robot.subsystems.SwerveSubsystem;
 public class RobotContainer {
@@ -54,10 +58,24 @@ public class RobotContainer {
   private void configureBindings() {
     // Joystick suppliers,
 
-    Trigger leftShoulderTrigger = joystick.leftBumper();
-    leftShoulderTrigger.onTrue(new ArmToAngleCmd(() -> 90d, NewArmSubsystem.getInstance()));
-    leftShoulderTrigger.onFalse(new ArmToAngleCmd(() -> 45d, NewArmSubsystem.getInstance()));
+    // Trigger leftShoulderTrigger = joystick.leftBumper();
+    // leftShoulderTrigger.onTrue(new ArmToAngleCmd(() -> 90d, NewArmSubsystem.getInstance()));
+    // leftShoulderTrigger.onFalse(new ArmToAngleCmd(() -> 45d, NewArmSubsystem.getInstance()));
     // NewArmSubsystem.getInstance()));
+
+    joystick.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+    joystick.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+
+    /*
+    * Joystick Y = quasistatic forward
+    * Joystick A = quasistatic reverse
+    * Joystick B = dynamic forward
+    * Joystick X = dyanmic reverse
+    */
+    joystick.y().whileTrue(NewArmSubsystem.getInstance().sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    joystick.a().whileTrue(NewArmSubsystem.getInstance().sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    joystick.b().whileTrue(NewArmSubsystem.getInstance().sysIdDynamic(SysIdRoutine.Direction.kForward));
+    joystick.x().whileTrue(NewArmSubsystem.getInstance().sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     // joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
