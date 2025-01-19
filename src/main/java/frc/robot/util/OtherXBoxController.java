@@ -213,7 +213,6 @@ public class OtherXBoxController extends CommandXboxController {
           @Override
           public boolean getAsBoolean() {
             return getPOV(pov) == angle;
-            
           }
         });
   }

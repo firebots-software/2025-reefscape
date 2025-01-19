@@ -1,11 +1,9 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 import java.util.function.Supplier;
-
-import dev.doglog.DogLog;
 
 public class ArmToAngleCmd extends Command {
   public ArmToAngleCmd(Supplier<Double> angle, ArmSubsystem arm) {
@@ -17,10 +15,8 @@ public class ArmToAngleCmd extends Command {
   private final ArmSubsystem arm;
   private final Supplier<Double> angle;
 
-
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
@@ -34,7 +30,5 @@ public class ArmToAngleCmd extends Command {
   }
 
   @Override
-  public void end(boolean interrupted) {
-  }
-
+  public void end(boolean interrupted) {}
 }
