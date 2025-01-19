@@ -56,19 +56,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    MatchType type = DriverStation.getMatchType(); 
-    if(type.equals(MatchType.None)){
-      DogLog.setOptions(
+    DogLog.setOptions(
         new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
-    }else {
-      DogLog.setOptions(
-        new DogLogOptions().withCaptureDs(true).withLogExtras(true));
-    }
     DogLog.setPdh(new PowerDistribution());
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    MatchType type = DriverStation.getMatchType(); 
+    if(!type.equals(MatchType.None)){
+      DogLog.setOptions(
+        new DogLogOptions().withCaptureDs(true).withLogExtras(true));
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -84,7 +84,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    
+
+  }
 
   @Override
   public void teleopInit() {
