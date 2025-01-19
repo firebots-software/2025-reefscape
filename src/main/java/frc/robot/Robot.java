@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.MatchType;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -57,17 +55,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     DogLog.setOptions(
-        new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
+        new DogLogOptions().withCaptureDs(true).withLogExtras(true));
     DogLog.setPdh(new PowerDistribution());
   }
 
   @Override
   public void disabledPeriodic() {
-    MatchType type = DriverStation.getMatchType(); 
-    if(!type.equals(MatchType.None)){
-      DogLog.setOptions(
-        new DogLogOptions().withCaptureDs(true).withLogExtras(true));
-    }
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
