@@ -21,7 +21,7 @@ public class LoggedTalonFX extends TalonFX {
       torquecurrent,
       motorvoltage,
       supplyvoltage,
-      error, 
+      error,
       reference,
       rotorPosition;
 

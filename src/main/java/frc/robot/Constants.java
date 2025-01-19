@@ -47,8 +47,8 @@ public final class Constants {
     public static final double ARMFF_KS = 0.16969;
     public static final double ARMFF_KG = 0.34;
     public static final double ARMFF_KV = 2.49;
-    public static final double MOTIONMAGIC_KV = 1; // MotionMagic Cruise Velocity in RPS of the arm
-    public static final double MOTIONMAGIC_KA = 2.2; // MotionMagic Acceleration in RPS^2 of the arm
+    public static final double MOTIONMAGIC_KV = 36; // MotionMagic Cruise Velocity in RPS of the arm
+    public static final double MOTIONMAGIC_KA = 2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
 
     public static final double FEET_TO_METERS_CONVERSION_FACTOR = 0.3048;
     public static final double ABSOLUTE_ARM_CONVERSION_FACTOR = 0.5;

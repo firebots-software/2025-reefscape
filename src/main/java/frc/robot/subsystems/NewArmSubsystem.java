@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -16,13 +17,9 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,22 +43,16 @@ public class NewArmSubsystem extends SubsystemBase {
 
   private final VoltageOut m_voltReq = new VoltageOut(0.0);
 
-private final SysIdRoutine m_sysIdRoutine =
-   new SysIdRoutine(
-      new SysIdRoutine.Config(
-         null,        // Use default ramp rate (1 V/s)
-         Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-         null,        // Use default timeout (10 s)
-                      // Log state with Phoenix SignalLogger class
-         (state) -> SignalLogger.writeString("state", state.toString())
-      ),
-      new SysIdRoutine.Mechanism(
-         (volts) -> armMotor.setControl(m_voltReq.withOutput(volts.in(Volts))),
-         null,
-         this
-      )
-   );
-
+  private final SysIdRoutine m_sysIdRoutine =
+      new SysIdRoutine(
+          new SysIdRoutine.Config(
+              Volts.of(0.5).per(Seconds), // Use default ramp rate (1 V/s)
+              Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+              null, // Use default timeout (10 s)
+              // Log state with Phoenix SignalLogger class
+              (state) -> SignalLogger.writeString("state", state.toString())),
+          new SysIdRoutine.Mechanism(
+              (volts) -> armMotor.setControl(m_voltReq.withOutput(volts.in(Volts))), null, this));
 
   public static NewArmSubsystem getInstance() {
     if (instance == null) {
@@ -78,11 +69,11 @@ private final SysIdRoutine m_sysIdRoutine =
             .withStatorCurrentLimit(Constants.Arm.ARM_STATOR_CURRENT_LIMIT_AMPS)
             .withSupplyCurrentLimitEnable(true)
             .withSupplyCurrentLimit(Constants.Arm.ARM_SUPPLY_CURRENT_LIMIT_AMPS);
-    MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast);
+    MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
     moc.withInverted(InvertedValue.CounterClockwise_Positive);
     FeedbackConfigs fc = new FeedbackConfigs();
     ClosedLoopGeneralConfigs clgc = new ClosedLoopGeneralConfigs();
-    Slot0Configs s0c = new Slot0Configs().withKP(Constants.Arm.S0C_KP * 100).withKI(0).withKD(0);
+    Slot0Configs s0c = new Slot0Configs().withKP(Constants.Arm.S0C_KP*0.75).withKI(0).withKD(0);
 
     armFeedForward =
         new ArmFeedforward(Constants.Arm.ARMFF_KS, Constants.Arm.ARMFF_KG, Constants.Arm.ARMFF_KV);
@@ -131,9 +122,9 @@ private final SysIdRoutine m_sysIdRoutine =
 
   public void setPosition(double angleDegrees) {
 
-    //angleDegrees = MathUtil.clamp(angleDegrees, 202, 351);
+    // angleDegrees = MathUtil.clamp(angleDegrees, 202, 351);
     targetDegrees = angleDegrees;
-    armMotor.setControl(new MotionMagicVoltage((0.159344d*angleDegrees)+0.355).withSlot(0));
+    armMotor.setControl(new MotionMagicVoltage((0.159344d * angleDegrees)).withSlot(0));
     // .withFeedForward(
     //     armFeedForward.calculate(Units.degreesToRadians(getDegrees() - 198), 0)));
   }
@@ -150,17 +141,32 @@ private final SysIdRoutine m_sysIdRoutine =
   public boolean atTarget(double endToleranceDegrees) {
     if (getDegrees() < targetDegrees + endToleranceDegrees
         && getDegrees() > targetDegrees - endToleranceDegrees) {
-      //armMotor.disable();
+      // armMotor.disable();
       return true;
     } else return false;
   }
 
+  public void moveMuyNegative() {
+    armMotor.setControl(new MotionMagicVoltage((0.159344d * (-1000)) + 0.355).withSlot(0));
+  }
+
+  public boolean checkCurrent() {
+    double current = armMotor.getTorqueCurrent().getValue().magnitude();
+
+    if (current < -10) {
+      armMotor.disable();
+      return true;
+    }
+
+    return false;
+  }
+
   public void zeroSensor() {
-    //armMotor.setPosition(revEncoder.get() * 54);
+    armMotor.setPosition(0);
   }
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-   return m_sysIdRoutine.quasistatic(direction);
+    return m_sysIdRoutine.quasistatic(direction);
   }
 
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
