@@ -54,14 +54,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    DogLog.setOptions(
-        new DogLogOptions().withCaptureDs(true).withLogExtras(true));
+    DogLog.setOptions(new DogLogOptions().withCaptureDs(true).withLogExtras(true));
     DogLog.setPdh(new PowerDistribution());
   }
 
   @Override
-  public void disabledPeriodic() {
-  }
+  public void disabledPeriodic() {}
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -77,10 +75,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    
-
-  }
+  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {

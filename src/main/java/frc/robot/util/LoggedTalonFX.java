@@ -9,7 +9,7 @@ public class LoggedTalonFX extends TalonFX {
 
   private static ArrayList<LoggedTalonFX> motors = new ArrayList<>();
   private String name;
-  private boolean refresh; 
+  private boolean refresh;
   private String temperature,
       closedLoopError,
       closedLoopReference,
@@ -59,7 +59,7 @@ public class LoggedTalonFX extends TalonFX {
     this.torquecurrent = name + "/current/torque(A)";
     this.motorvoltage = name + "/voltage/motor(V)";
     this.supplyvoltage = name + "/voltage/supply(V)";
-    this.refresh = false; 
+    this.refresh = false;
 
     // Applying current limits
     CurrentLimitsConfigs clc =
