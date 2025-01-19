@@ -9,6 +9,7 @@ public class LoggedTalonFX extends TalonFX {
 
   private static ArrayList<LoggedTalonFX> motors = new ArrayList<>();
   private String name;
+  private boolean refresh; 
   private String temperature,
       closedLoopError,
       closedLoopReference,
@@ -58,6 +59,7 @@ public class LoggedTalonFX extends TalonFX {
     this.torquecurrent = name + "/current/torque(A)";
     this.motorvoltage = name + "/voltage/motor(V)";
     this.supplyvoltage = name + "/voltage/supply(V)";
+    this.refresh = false; 
 
     // Applying current limits
     CurrentLimitsConfigs clc =
@@ -90,21 +92,21 @@ public class LoggedTalonFX extends TalonFX {
   }
 
   public void periodic() {
-    DogLog.log(temperature, this.getDeviceTemp().getValue().magnitude());
-    DogLog.log(closedLoopError, this.getClosedLoopError().getValue());
-    DogLog.log(closedLoopReference, this.getClosedLoopReference().getValue());
+    DogLog.log(temperature, this.getDeviceTemp(refresh).getValue().magnitude());
+    DogLog.log(closedLoopError, this.getClosedLoopError(refresh).getValue());
+    DogLog.log(closedLoopReference, this.getClosedLoopReference(refresh).getValue());
 
-    DogLog.log(position, this.getPosition().getValue().magnitude());
-    DogLog.log(velocity, this.getVelocity().getValue().magnitude());
-    DogLog.log(acceleration, this.getAcceleration().getValue().magnitude());
+    DogLog.log(position, this.getPosition(refresh).getValue().magnitude());
+    DogLog.log(velocity, this.getVelocity(refresh).getValue().magnitude());
+    DogLog.log(acceleration, this.getAcceleration(refresh).getValue().magnitude());
 
     // Current
-    DogLog.log(supplycurrent, this.getSupplyCurrent().getValue().magnitude());
-    DogLog.log(statorcurrent, this.getStatorCurrent().getValue().magnitude());
-    DogLog.log(torquecurrent, this.getTorqueCurrent().getValue().magnitude());
+    DogLog.log(supplycurrent, this.getSupplyCurrent(refresh).getValue().magnitude());
+    DogLog.log(statorcurrent, this.getStatorCurrent(refresh).getValue().magnitude());
+    DogLog.log(torquecurrent, this.getTorqueCurrent(refresh).getValue().magnitude());
 
     // Voltage
-    DogLog.log(motorvoltage, this.getMotorVoltage().getValue().magnitude());
-    DogLog.log(supplyvoltage, this.getSupplyVoltage().getValue().magnitude());
+    DogLog.log(motorvoltage, this.getMotorVoltage(refresh).getValue().magnitude());
+    DogLog.log(supplyvoltage, this.getSupplyVoltage(refresh).getValue().magnitude());
   }
 }
