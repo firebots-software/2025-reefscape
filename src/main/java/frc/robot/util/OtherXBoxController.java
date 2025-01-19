@@ -207,14 +207,12 @@ public class OtherXBoxController extends CommandXboxController {
   }
 
   public Trigger pov1(int pov, int angle) {
-    // SmartDashboard.putBoolean("", false)
     return new Trigger(
         new BooleanSupplier() {
 
           @Override
           public boolean getAsBoolean() {
             return getPOV(pov) == angle;
-            // throw new UnsupportedOperationException("Unimplemented method 'getAsBoolean'");
           }
         });
   }
