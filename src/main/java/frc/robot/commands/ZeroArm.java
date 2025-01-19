@@ -5,14 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.NewArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ZeroArm extends Command {
   /** Creates a new ZeroArm. */
-  NewArmSubsystem arm;
+  ArmSubsystem arm;
 
-  public ZeroArm(NewArmSubsystem arm) {
+  public ZeroArm(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.arm = arm;
     addRequirements(this.arm);

@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ArmToAngleCmd;
 import frc.robot.commands.SwerveJoystickCommand;
-import frc.robot.subsystems.NewArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
 
@@ -63,8 +63,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    leftShoulderTrigger.onTrue(new ArmToAngleCmd(() -> 90d, NewArmSubsystem.getInstance()));
-    leftShoulderTrigger.onFalse(new ArmToAngleCmd(() -> 45d, NewArmSubsystem.getInstance()));
+
     Supplier<Double>
         frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
         leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
@@ -91,6 +90,10 @@ public class RobotContainer {
                 () ->
                     driveTrain.resetPose(
                         new Pose2d(new Translation2d(0.48, 4), Rotation2d.fromDegrees(0)))));
+
+    Trigger rightBumper = joystick.rightBumper();
+    rightBumper.onTrue(new ArmToAngleCmd(() -> 90d, ArmSubsystem.getInstance()));
+    rightBumper.onFalse(new ArmToAngleCmd(() -> 45d, ArmSubsystem.getInstance()));
   }
 
   public static void setAlliance() {

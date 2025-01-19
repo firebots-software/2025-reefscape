@@ -1,194 +1,151 @@
-// package frc.robot.subsystems;
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
-// import static edu.wpi.first.units.Units.Degrees;
-// import static edu.wpi.first.units.Units.Rotations;
+package frc.robot.subsystems;
 
-// import com.ctre.phoenix6.SignalLogger;
-// import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-// import com.ctre.phoenix6.configs.MotionMagicConfigs;
-// import com.ctre.phoenix6.configs.MotorOutputConfigs;
-// import com.ctre.phoenix6.configs.Slot0Configs;
-// import com.ctre.phoenix6.configs.TalonFXConfigurator;
-// import com.ctre.phoenix6.controls.MotionMagicVoltage;
-// import com.ctre.phoenix6.signals.NeutralModeValue;
-// import edu.wpi.first.math.MathUtil;
-// import edu.wpi.first.math.controller.ArmFeedforward;
-// import edu.wpi.first.units.measure.Angle;
-// import edu.wpi.first.wpilibj.DutyCycleEncoder;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import frc.robot.Constants;
-// import frc.robot.util.LoggedTalonFX;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
 
-// public class ArmSubsystem extends SubsystemBase {
-//   private static ArmSubsystem instance;
+import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
-//   private LoggedTalonFX master; // Only one motor (master) is used now
-//   private DutyCycleEncoder revEncoder;
-//   private boolean enableArm;
-//   private ArmFeedforward armff;
-//   private MotionMagicConfigs mmc;
+import dev.doglog.DogLog;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
+import frc.robot.util.LoggedTalonFX;
 
-//   private boolean initialized = false;
+public class ArmSubsystem extends SubsystemBase {
 
-//   private double targetDegrees;
-//   private double armHorizontalOffset = 0.0d;
+  private static ArmSubsystem instance;
 
-//   public ArmSubsystem() {
-//     // Initialize Current Limit, Slot0Configs, and ArmFeedForward
-//     CurrentLimitsConfigs clc =
-//         new CurrentLimitsConfigs()
-//             .withStatorCurrentLimitEnable(true)
-//             .withStatorCurrentLimit(Constants.Arm.ARM_STATOR_CURRENT_LIMIT_AMPS)
-//             .withSupplyCurrentLimitEnable(true)
-//             .withSupplyCurrentLimit(Constants.Arm.ARM_SUPPLY_CURRENT_LIMIT_AMPS);
-//     MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
-//     Slot0Configs s0c = new Slot0Configs().withKP(Constants.Arm.S0C_KP).withKI(0).withKD(0);
-//     armff =
-//         new ArmFeedforward(Constants.Arm.ARMFF_KS, Constants.Arm.ARMFF_KG,
-// Constants.Arm.ARMFF_KV);
+  private LoggedTalonFX armMotor;
+  private DutyCycleEncoder revEncoder;
+  private ArmFeedforward armFeedForward;
+  private MotionMagicConfigs motionMagicConfigs;
 
-//     // Initialize master motor only
-//     master = new LoggedTalonFX(Constants.Arm.LT_PORT);
+  private double targetDegrees;
 
-//     TalonFXConfigurator masterConfigurator = master.getConfigurator();
-//     masterConfigurator.apply(moc);
-//     masterConfigurator.apply(clc); // Apply current limits to the master motor
-//     masterConfigurator.apply(s0c); // Apply PID settings to the master motor
+  private final VoltageOut m_voltReq = new VoltageOut(0.0);
 
-//     // Apply MotionMagicConfigs to master motor
-//     mmc = new MotionMagicConfigs();
-//     mmc.MotionMagicCruiseVelocity = Constants.Arm.MOTIONMAGIC_KV;
-//     mmc.MotionMagicAcceleration = Constants.Arm.MOTIONMAGIC_KA;
-//     masterConfigurator.apply(mmc);
+  private final SysIdRoutine m_sysIdRoutine =
+      new SysIdRoutine(
+          new SysIdRoutine.Config(
+              Volts.of(0.5).per(Seconds), // Use default ramp rate (1 V/s)
+              Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+              null, // Use default timeout (10 s)
+              // Log state with Phoenix SignalLogger class
+              (state) -> SignalLogger.writeString("state", state.toString())),
+          new SysIdRoutine.Mechanism(
+              (volts) -> armMotor.setControl(m_voltReq.withOutput(volts.in(Volts))), null, this));
 
-//     // Initialize absolute encoder
-//     revEncoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
+  public static ArmSubsystem getInstance() {
+    if (instance == null) {
+      instance = new ArmSubsystem();
+    }
+    return instance;
+  }
 
-//     // Wait until absolute encoder is connected and set master motor's position
-//     new Thread(
-//             () -> {
-//               try {
-//                 do {
-//                   Thread.sleep(250);
-//                 } while (!revEncoder.isConnected());
-//                 master.setPosition((getAbsolutePosition()));
-//                 initialized = true;
+  public ArmSubsystem() {
+    CurrentLimitsConfigs clc =
+        new CurrentLimitsConfigs()
+            .withStatorCurrentLimitEnable(true)
+            .withStatorCurrentLimit(Constants.Arm.ARM_STATOR_CURRENT_LIMIT_AMPS)
+            .withSupplyCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(Constants.Arm.ARM_SUPPLY_CURRENT_LIMIT_AMPS);
+    MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
+    moc.withInverted(InvertedValue.CounterClockwise_Positive);
+    FeedbackConfigs fc = new FeedbackConfigs();
+    ClosedLoopGeneralConfigs clgc = new ClosedLoopGeneralConfigs();
+    Slot0Configs s0c = new Slot0Configs().withKP(Constants.Arm.S0C_KP * 0.75).withKI(0).withKD(0);
 
-//               } catch (InterruptedException e) {
-//                 e.printStackTrace();
-//               }
-//             })
-//         .run();
+    armFeedForward =
+        new ArmFeedforward(Constants.Arm.ARMFF_KS, Constants.Arm.ARMFF_KG, Constants.Arm.ARMFF_KV);
 
-//     targetDegrees = getCorrectedDegrees() + 10d;
-//     enableArm = false;
-//   }
+    // Initialize master motor only
+    armMotor = new LoggedTalonFX(Constants.Arm.LT_PORT);
 
-//   public static ArmSubsystem getInstance() {
-//     if (instance == null) {
-//       instance = new ArmSubsystem();
-//     }
-//     return instance;
-//   }
+    TalonFXConfigurator masterConfigurator = armMotor.getConfigurator();
 
-//   public void resetPosition() {
-//     if (revEncoder.isConnected()) {
-//       master.setPosition((getAbsolutePosition()));
-//     }
-//   }
+    masterConfigurator.apply(moc);
+    masterConfigurator.apply(clc); // Apply current limits to the master motor
+    masterConfigurator.apply(s0c); // Apply PID settings to the master motor
+    masterConfigurator.apply(fc);
+    masterConfigurator.apply(clgc);
 
-//   private void setPosition(double angleDegrees) {
-//     angleDegrees = MathUtil.clamp(angleDegrees, 198, 351);
-//     // if (initialized && enableArm) {
-//     master.setControl(
-//         new MotionMagicVoltage(calculateIntegratedTargetRots(angleDegrees))
-//             .withFeedForward(
-//                 armff.calculate((2 * Math.PI * getRawDegrees().magnitude()) / 360d, 0)));
-//     // }
-//   }
+    // Apply MotionMagicConfigs to master motor
+    motionMagicConfigs = new MotionMagicConfigs();
+    motionMagicConfigs.MotionMagicCruiseVelocity = Constants.Arm.MOTIONMAGIC_KV;
+    motionMagicConfigs.MotionMagicAcceleration = Constants.Arm.MOTIONMAGIC_KA;
+    masterConfigurator.apply(motionMagicConfigs);
 
-//   public void setTargetDegrees(double angleDegrees) {
-//     targetDegrees = angleDegrees;
-//     setPosition(targetDegrees);
-//   }
+    // Initialize absolute encoder
+    revEncoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
 
-//   private double getAbsolutePosition() {
-//     return (revEncoder.get()
-//             - Constants.Arm.ABSOLUTE_ENCODER_HORIZONTAL
-//             + Constants.Arm.ABSOLUTE_HORIZONTAL_OFFSET
-//             + 1d)
-//         % 1;
-//   }
+  }
 
-//   private Angle getMotorPosRotations() {
-//     if (!initialized) {
-//       System.out.println(
-//           "WARNING: Motor Position looked at, but initialization not complete yet. Returning 0");
-//       return Degrees.of(0);
-//     }
-//     return master.getPosition().getValue();
-//   }
+  public void setPosition(double angleDegrees) {
+    targetDegrees = angleDegrees;
+    armMotor.setControl(new MotionMagicVoltage((0.159344d * angleDegrees)).withSlot(0));
+  }
 
-//   private Angle getArmPosRotations() {
-//     return Rotations.of(getMotorPosRotations().magnitude());
-//   }
+  private double getDegrees() {
+    return revEncoder.get() * 360d;
+  }
+  public boolean atTarget(double endToleranceDegrees) {
+    if (getDegrees() < targetDegrees + endToleranceDegrees
+        && getDegrees() > targetDegrees - endToleranceDegrees) {
+      return true;
+    } else return false;
+  }
 
-//   public Angle getRawDegrees() {
-//     return Degrees.of(getArmPosRotations().magnitude() * 360d);
-//   }
+  public void moveMuyNegative() {
+    armMotor.setControl(new MotionMagicVoltage((0.159344d * (-1000)) + 0.355).withSlot(0));
+  }
 
-//   private double calculateIntegratedTargetRots(double angleDegrees) {
-//     double armRots = (angleDegrees - (revEncoder.get() * 360)) / 360d + armHorizontalOffset;
-//     return armRots;
-//   }
+  public boolean checkCurrent() {
+    double current = armMotor.getTorqueCurrent().getValue().magnitude();
 
-//   public double getCorrectedDegrees() {
-//     return getRawDegrees().magnitude();
-//   }
+    if (current < -10) {
+      armMotor.disable();
+      return true;
+    }
 
-//   public void setEnable(boolean toset) {
-//     this.enableArm = toset;
-//   }
+    return false;
+  }
 
-//   @Override
-//   public void periodic() {
+  public void zeroSensor() {
+    armMotor.setPosition(0);
+  }
 
-//     SmartDashboard.putString(
-//         "ARM Command",
-//         this.getCurrentCommand() == null ? "none" : this.getCurrentCommand().getName());
-//     SmartDashboard.putNumber("ARM Abs Enc Raw", revEncoder.get());
-//     SmartDashboard.putNumber("ARM Arm Degrees", getRawDegrees().magnitude());
-//     SmartDashboard.putNumber("ARM Target Degrees", targetDegrees);
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return m_sysIdRoutine.quasistatic(direction);
+  }
 
-//     SmartDashboard.putNumber("ARM Abs Enc Func", getAbsolutePosition());
-//     SmartDashboard.putNumber("ARM Integrated Rotations", getMotorPosRotations().magnitude());
-//     SmartDashboard.putNumber(
-//         "ARM Integrated Current", master.getSupplyCurrent().getValue().magnitude());
-//     SmartDashboard.putNumber("ARM Integrated Error", master.getClosedLoopError().getValue());
-//     SmartDashboard.putNumber("ARM Arm Rotations", getArmPosRotations().magnitude());
-//     SmartDashboard.putNumber("ARM Arm Degrees", getRawDegrees().magnitude());
-//     SmartDashboard.putNumber("ARM Arm Degrees Corrected", getCorrectedDegrees());
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return m_sysIdRoutine.dynamic(direction);
+  }
 
-//     SmartDashboard.putNumber(
-//         "ARM Target Integrated Rots", calculateIntegratedTargetRots(targetDegrees));
-//     SmartDashboard.putNumber(
-//         "ARM FeedForward Calculations",
-//         armff.calculate((2 * Math.PI * getRawDegrees().magnitude()) / 360d, 0));
-//     SmartDashboard.putNumber("Master Velocity", master.getVelocity().getValue().magnitude());
-
-//     SmartDashboard.putNumber("Encoder Position", revEncoder.get());
-
-//     periodicSignalLogger();
-//   }
-
-//   public void periodicSignalLogger() {
-//     SignalLogger.writeDouble("ARM Abs Enc Func: ", getAbsolutePosition());
-//     SignalLogger.writeDouble(
-//         "ARM Integrated Current: ", master.getSupplyCurrent().getValue().magnitude());
-//     SignalLogger.writeDouble("ARM Integrated Error: ", master.getClosedLoopError().getValue());
-//     SignalLogger.writeDouble("Arm Corrected Degrees", getCorrectedDegrees());
-//     SignalLogger.writeDouble("Target Arm Degrees", targetDegrees);
-//     SignalLogger.writeDouble("Master Velocity", master.getVelocity().getValue().magnitude());
-//   }
-// }
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    DogLog.log("Arm at target", atTarget(5));
+    DogLog.log("Arm Degrees", getDegrees());
+    DogLog.log("Arm Target Degrees", targetDegrees);
+  }
+}
