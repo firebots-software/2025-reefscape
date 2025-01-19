@@ -9,7 +9,6 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.ZeroArm;
 import frc.robot.subsystems.NewArmSubsystem;
 import frc.robot.util.LoggedTalonFX;
@@ -60,8 +59,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     DogLog.setOptions(
         new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
-
-
   }
 
   @Override

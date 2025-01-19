@@ -73,7 +73,7 @@ public class NewArmSubsystem extends SubsystemBase {
     moc.withInverted(InvertedValue.CounterClockwise_Positive);
     FeedbackConfigs fc = new FeedbackConfigs();
     ClosedLoopGeneralConfigs clgc = new ClosedLoopGeneralConfigs();
-    Slot0Configs s0c = new Slot0Configs().withKP(Constants.Arm.S0C_KP*0.75).withKI(0).withKD(0);
+    Slot0Configs s0c = new Slot0Configs().withKP(Constants.Arm.S0C_KP * 0.75).withKI(0).withKD(0);
 
     armFeedForward =
         new ArmFeedforward(Constants.Arm.ARMFF_KS, Constants.Arm.ARMFF_KG, Constants.Arm.ARMFF_KV);
