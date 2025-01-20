@@ -30,10 +30,14 @@ public final class Constants {
     public static final double DEFAULT_ARM_ANGLE = 250.0;
     public static final double INTAKE_ANGLE = 3; // subject to change
     public static final double AMP_ANGLE = 95; // subject to change
-    // public static final double ARM_ENCODER_OFFSET = 0; // TODO: Change the offset so that the 0
-    // position is when the arm is at its resting
-    // position.
-    public static final String CANBUS_NAME = "Patrice the Pineapple";
+
+    public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
+      double conversionFactor =
+          0.159344d; // TODO: Find for actual bot. Will change with gear ratios.
+      double zeroOffset =
+          0.088; // TODO: For some reason when zeroing arm, zeros to 0.088. Fix on actual bot
+      return (conversionFactor * angle) + zeroOffset;
+    }
 
     public static final int RT_PORT = 14; // Right Top motor
     public static final int RB_PORT = 13; // Right Bottom motor
@@ -50,7 +54,7 @@ public final class Constants {
     public static final double MOTIONMAGIC_KA =
         2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
 
-    // Lmao this i s useless, but it has my name on it
+    // Lmao this is useless, but it has my name on it
     public static double GET_YAJWINS_EQUATION(double distance) {
       double a = -6.02207;
       double b = -8.6529 * Math.pow(10, 15);
@@ -64,56 +68,6 @@ public final class Constants {
     public static final double LEFT_JOYSTICK_DEADBAND = 0.07;
     public static final double RIGHT_JOYSTICK_DEADBAND = 0.07;
     public static final int JOYSTICK_A_PORT = 0;
-
-    public enum XBoxButtonID {
-      /** A. */
-      A(1),
-      /** B. */
-      B(2),
-      /** X. */
-      X(3),
-      /** Y. */
-      Y(4),
-      /** Left bumper. */
-      LeftBumper(5),
-      /** Right bumper. */
-      RightBumper(6),
-      /** Left stick. */
-      LeftStick(9),
-      /** Right stick. */
-      RightStick(10),
-      /** Back. */
-      Back(7),
-      /** Start. */
-      Start(8);
-      public final int value;
-
-      XBoxButtonID(int value) {
-        this.value = value;
-      }
-    }
-
-    public enum AxisID {
-      /** Left X. */
-      LeftX(0),
-      /** Right X. */
-      RightX(4),
-      /** Left Y. */
-      LeftY(1),
-      /** Right Y. */
-      RightY(5),
-      /** Left trigger. */
-      LeftTrigger(2),
-      /** Right trigger. */
-      RightTrigger(3);
-
-      /** Axis value. */
-      public final int value;
-
-      AxisID(int value) {
-        this.value = value;
-      }
-    }
   }
 
   public static class Swerve {

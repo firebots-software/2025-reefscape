@@ -98,7 +98,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void setPosition(double angleDegrees) {
     targetDegrees = angleDegrees;
-    armMotor.setControl(new MotionMagicVoltage((0.159344d * angleDegrees)).withSlot(0));
+    armMotor.setControl(
+        new MotionMagicVoltage(Constants.Arm.ANGLE_TO_ENCODER_ROTATIONS(angleDegrees)));
   }
 
   private double getDegrees() {
@@ -113,7 +114,10 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void moveMuyNegative() {
-    armMotor.setControl(new MotionMagicVoltage((0.159344d * (-1000)) + 0.355).withSlot(0));
+    double veryNegativeNumberToTurnTo = -1000d;
+    armMotor.setControl(
+        new MotionMagicVoltage(Constants.Arm.ANGLE_TO_ENCODER_ROTATIONS(veryNegativeNumberToTurnTo))
+            .withSlot(0));
   }
 
   public boolean checkCurrent() {

@@ -14,6 +14,7 @@ public class ArmToAngleCmd extends Command {
 
   private final ArmSubsystem arm;
   private final Supplier<Double> angle;
+  private double tolerance = 5;
 
   @Override
   public void initialize() {}
@@ -26,7 +27,7 @@ public class ArmToAngleCmd extends Command {
 
   @Override
   public boolean isFinished() {
-    return arm.atTarget(5);
+    return arm.atTarget(tolerance);
   }
 
   @Override
