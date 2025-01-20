@@ -57,7 +57,7 @@ public final class Constants {
       new Rotation2d(Degrees.of(-60))
     };
 
-    public static final Translation2d[] leftBranchesRed = {
+    public static final Translation2d[] rightBranchesRed = {
       new Translation2d(13.839825, 4.191),
       new Translation2d(13.590905, 3.4328608),
       new Translation2d(12.811379, 3.2685736),
@@ -67,7 +67,7 @@ public final class Constants {
     };
 
     // blue side
-    public static final Translation2d[] rightBranchesRed = {
+    public static final Translation2d[] leftBranchesRed = {
       new Translation2d(13.8396472, 3.861562),
       new Translation2d(13.3069584, 3.267583),
       new Translation2d(12.5262132, 3.4318702),
@@ -153,6 +153,17 @@ public final class Constants {
       }
     }
 
+    public static enum BumperThickness {
+      SERRANO(Inches.of(2.625)), // thickness
+      PROTO(Inches.of(2.625)), // thickness
+      JAMES_HARDEN(Inches.of(3.313)); // thickness
+      public final Distance thickness;
+
+      BumperThickness(Distance thickness) {
+        this.thickness = thickness;
+      }
+    }
+
     public static enum SwerveType {
       SERRANO(
           Rotations.of(-0.466552734375), // front left
@@ -163,7 +174,8 @@ public final class Constants {
           SwerveDrivePIDValues.SERRANO,
           SwerveSteerPIDValues.SERRANO,
           RobotDimensions.SERRANO,
-          "Patrice the Pineapple"),
+          "Patrice the Pineapple",
+          BumperThickness.SERRANO),
       PROTO(
           Rotations.of(0.3876953125), // front left
           Rotations.of(0.159912109375), // front right
@@ -173,7 +185,8 @@ public final class Constants {
           SwerveDrivePIDValues.PROTO,
           SwerveSteerPIDValues.PROTO,
           RobotDimensions.PROTO,
-          "rio"),
+          "rio",
+          BumperThickness.PROTO),
       JAMES_HARDEN(
           Rotations.of(-0.158447265625), // front left
           Rotations.of(-0.310791015625), // front right
@@ -183,7 +196,9 @@ public final class Constants {
           SwerveDrivePIDValues.JAMES_HARDEN,
           SwerveSteerPIDValues.JAMES_HARDEN,
           RobotDimensions.JAMES_HARDEN,
-          "FireBot");
+          "FireBot",
+          BumperThickness.JAMES_HARDEN);
+
       public final Angle FRONT_LEFT_ENCODER_OFFSET,
           FRONT_RIGHT_ENCODER_OFFSET,
           BACK_LEFT_ENCODER_OFFSET,
@@ -193,7 +208,7 @@ public final class Constants {
       public final SwerveSteerPIDValues SWERVE_STEER_PID_VALUES;
       public final RobotDimensions ROBOT_DIMENSIONS;
       public final String CANBUS_NAME;
-
+      public final BumperThickness BUMPER_THICKNESS;
       SwerveType(
           Angle fl,
           Angle fr,
@@ -203,7 +218,8 @@ public final class Constants {
           SwerveDrivePIDValues swerveDrivePIDValues,
           SwerveSteerPIDValues swerveSteerPIDValues,
           RobotDimensions robotDimensions,
-          String canbus_name) {
+          String canbus_name,
+          BumperThickness thickness) {
         FRONT_LEFT_ENCODER_OFFSET = fl;
         FRONT_RIGHT_ENCODER_OFFSET = fr;
         BACK_LEFT_ENCODER_OFFSET = bl;
@@ -213,6 +229,7 @@ public final class Constants {
         SWERVE_STEER_PID_VALUES = swerveSteerPIDValues;
         ROBOT_DIMENSIONS = robotDimensions;
         CANBUS_NAME = canbus_name;
+        BUMPER_THICKNESS = thickness;
       }
     }
 

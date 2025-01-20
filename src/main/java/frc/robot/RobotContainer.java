@@ -124,10 +124,10 @@ public class RobotContainer {
     // Pose2d station =
     //     new Pose2d(new Translation2d(0.78, 1.19), new Rotation2d((-2.0 * Math.PI) / 3.0));
 
-    joystick.x().whileTrue(JamesHardenMovement.toClosestLeftBranch(driveTrain, redAlliance));
+    // joystick.x().whileTrue(JamesHardenMovement.toClosestLeftBranch(driveTrain, redAlliance));
     joystick
         .y()
-        .whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redAlliance));
+        .whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
   }
 
   public static void setAlliance() {
