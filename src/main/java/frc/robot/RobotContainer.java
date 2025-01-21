@@ -104,14 +104,14 @@ public class RobotContainer {
                         new Pose2d(
                             new Translation2d(
                                 Constants.Landmarks.middleOfRedHumanPlayerStationRight.getX()
-                                    - (Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-                                            .in(Meters)
+                                    - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
+                                            .in(Meters)/2.0) + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters))
                                         * Constants.Landmarks.middleOfRedHumanPlayerStationRight
                                             .getRotation()
                                             .getCos()),
                                 Constants.Landmarks.middleOfRedHumanPlayerStationRight.getY()
-                                    - (Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-                                            .in(Meters)
+                                    - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
+                                            .in(Meters)/2.0) + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters))
                                         * Constants.Landmarks.middleOfRedHumanPlayerStationRight
                                             .getRotation()
                                             .getSin())),
