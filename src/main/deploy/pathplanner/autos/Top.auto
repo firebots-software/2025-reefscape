@@ -27,6 +27,18 @@
           "data": {
             "pathName": "top reef2 to HP"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "top HP to reef2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "top reef2 to HP"
+          }
         }
       ]
     }
