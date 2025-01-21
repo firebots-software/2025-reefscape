@@ -31,13 +31,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "bottom HP to reef2"
+            "pathName": "bottom HP to reef3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "bottom reef2 to HP"
+            "pathName": "bottom reef3 to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "bottom HP to reef4"
           }
         }
       ]
