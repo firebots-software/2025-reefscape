@@ -36,6 +36,8 @@ public class ArmSubsystem extends SubsystemBase {
   private DutyCycleEncoder revEncoder;
   private ArmFeedforward armFeedForward;
   private MotionMagicConfigs motionMagicConfigs;
+  private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+  private double encoderDegrees;
 
   private double targetDegrees;
 
@@ -99,16 +101,16 @@ public class ArmSubsystem extends SubsystemBase {
   public void setPosition(double angleDegrees) {
     targetDegrees = angleDegrees;
     armMotor.setControl(
-        new MotionMagicVoltage(Constants.Arm.ANGLE_TO_ENCODER_ROTATIONS(angleDegrees)));
+        controlRequest.withPosition(Constants.Arm.ANGLE_TO_ENCODER_ROTATIONS(angleDegrees)));
   }
 
-  private double getDegrees() {
+  private double calculateDegrees() {
     return revEncoder.get() * 360d;
   }
 
   public boolean atTarget(double endToleranceDegrees) {
-    if (getDegrees() < targetDegrees + endToleranceDegrees
-        && getDegrees() > targetDegrees - endToleranceDegrees) {
+    if (encoderDegrees < targetDegrees + endToleranceDegrees
+        && encoderDegrees > targetDegrees - endToleranceDegrees) {
       return true;
     } else return false;
   }
@@ -116,7 +118,8 @@ public class ArmSubsystem extends SubsystemBase {
   public void moveMuyNegative() {
     double veryNegativeNumberToTurnTo = -1000d;
     armMotor.setControl(
-        new MotionMagicVoltage(Constants.Arm.ANGLE_TO_ENCODER_ROTATIONS(veryNegativeNumberToTurnTo))
+        controlRequest
+            .withPosition(Constants.Arm.ANGLE_TO_ENCODER_ROTATIONS(veryNegativeNumberToTurnTo))
             .withSlot(0));
   }
 
@@ -145,9 +148,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    encoderDegrees = calculateDegrees();
     // This method will be called once per scheduler run
     DogLog.log("Arm at target", atTarget(5));
-    DogLog.log("Arm Degrees", getDegrees());
+    DogLog.log("Arm Degrees", encoderDegrees);
     DogLog.log("Arm Target Degrees", targetDegrees);
   }
 }
