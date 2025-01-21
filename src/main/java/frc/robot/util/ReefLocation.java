@@ -1,6 +1,3 @@
 package frc.robot.util;
 
-public class ReefLocation {
-    
-    
-}
+public class ReefLocation {}

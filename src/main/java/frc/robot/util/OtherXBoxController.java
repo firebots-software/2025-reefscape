@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import java.util.function.BooleanSupplier;
 
 // TODO: SEE IF THIS IS STILL NECESSARY (WE USED THIS DUE TO BOOLEAN EVENT LOOP SLOWDOWN)
@@ -17,19 +16,58 @@ public class OtherXBoxController extends CommandXboxController {
   double threshold;
   int port;
 
+  public static class OI {
+    public static final double LEFT_JOYSTICK_DEADBAND = 0.07;
+    public static final double RIGHT_JOYSTICK_DEADBAND = 0.07;
+    public static final int JOYSTICK_A_PORT = 0;
+
+    public enum XBoxButtonID {
+      A(1),
+      B(2),
+      X(3),
+      Y(4),
+      LeftBumper(5),
+      RightBumper(6),
+      LeftStick(9),
+      RightStick(10),
+      Back(7),
+      Start(8);
+      public final int value;
+
+      XBoxButtonID(int value) {
+        this.value = value;
+      }
+    }
+
+    public enum AxisID {
+      LeftX(0),
+      RightX(4),
+      LeftY(1),
+      RightY(5),
+      LeftTrigger(2),
+      RightTrigger(3);
+
+      public final int value;
+
+      AxisID(int value) {
+        this.value = value;
+      }
+    }
+  }
+
   public OtherXBoxController(int port) {
     super(port);
     this.port = port;
-    a = new JoystickButton(getHID(), Constants.OI.XBoxButtonID.A.value);
-    b = new JoystickButton(getHID(), Constants.OI.XBoxButtonID.B.value);
-    x = new JoystickButton(getHID(), Constants.OI.XBoxButtonID.X.value);
-    y = new JoystickButton(getHID(), Constants.OI.XBoxButtonID.Y.value);
-    start = new JoystickButton(getHID(), Constants.OI.XBoxButtonID.Start.value);
-    back = new JoystickButton(getHID(), Constants.OI.XBoxButtonID.Back.value);
-    leftStick = new JoystickButton(getHID(), Constants.OI.XBoxButtonID.LeftStick.value);
-    rightStick = new JoystickButton(getHID(), Constants.OI.XBoxButtonID.RightStick.value);
-    leftBump = new JoystickButton(getHID(), Constants.OI.XBoxButtonID.LeftBumper.value);
-    rightBump = new JoystickButton(getHID(), Constants.OI.XBoxButtonID.RightBumper.value);
+    a = new JoystickButton(getHID(), OI.XBoxButtonID.A.value);
+    b = new JoystickButton(getHID(), OI.XBoxButtonID.B.value);
+    x = new JoystickButton(getHID(), OI.XBoxButtonID.X.value);
+    y = new JoystickButton(getHID(), OI.XBoxButtonID.Y.value);
+    start = new JoystickButton(getHID(), OI.XBoxButtonID.Start.value);
+    back = new JoystickButton(getHID(), OI.XBoxButtonID.Back.value);
+    leftStick = new JoystickButton(getHID(), OI.XBoxButtonID.LeftStick.value);
+    rightStick = new JoystickButton(getHID(), OI.XBoxButtonID.RightStick.value);
+    leftBump = new JoystickButton(getHID(), OI.XBoxButtonID.LeftBumper.value);
+    rightBump = new JoystickButton(getHID(), OI.XBoxButtonID.RightBumper.value);
     // POV = new
     threshold = 0.5;
   }
@@ -66,44 +104,42 @@ public class OtherXBoxController extends CommandXboxController {
 
   @Override
   public double getLeftY() {
-    return this.getRawAxis(Constants.OI.AxisID.LeftY.value);
+    return this.getRawAxis(OI.AxisID.LeftY.value);
   }
 
   @Override
   public double getLeftX() {
-    return this.getRawAxis(Constants.OI.AxisID.LeftX.value);
+    return this.getRawAxis(OI.AxisID.LeftX.value);
   }
 
   @Override
   public double getRightX() {
-    return this.getRawAxis(Constants.OI.AxisID.RightX.value);
+    return this.getRawAxis(OI.AxisID.RightX.value);
   }
 
   @Override
   public double getRightY() {
-    return this.getRawAxis(Constants.OI.AxisID.RightY.value);
+    return this.getRawAxis(OI.AxisID.RightY.value);
   }
 
   @Override
   public Trigger leftTrigger() {
-    return new Trigger(
-        () -> this.getRawAxis(Constants.OI.AxisID.LeftTrigger.value) > this.threshold);
+    return new Trigger(() -> this.getRawAxis(OI.AxisID.LeftTrigger.value) > this.threshold);
   }
 
   @Override
   public Trigger rightTrigger() {
-    return new Trigger(
-        () -> this.getRawAxis(Constants.OI.AxisID.RightTrigger.value) > this.threshold);
+    return new Trigger(() -> this.getRawAxis(OI.AxisID.RightTrigger.value) > this.threshold);
   }
 
   @Override
   public Trigger leftTrigger(double t) {
-    return new Trigger(() -> this.getRawAxis(Constants.OI.AxisID.LeftTrigger.value) > t);
+    return new Trigger(() -> this.getRawAxis(OI.AxisID.LeftTrigger.value) > t);
   }
 
   @Override
   public Trigger rightTrigger(double t) {
-    return new Trigger(() -> this.getRawAxis(Constants.OI.AxisID.RightTrigger.value) > t);
+    return new Trigger(() -> this.getRawAxis(OI.AxisID.RightTrigger.value) > t);
   }
 
   @Override
@@ -177,11 +213,9 @@ public class OtherXBoxController extends CommandXboxController {
 
           @Override
           public boolean getAsBoolean() {
-            // TODO Auto-generated method stub
             return getPOV(pov) == angle;
             // throw new UnsupportedOperationException("Unimplemented method 'getAsBoolean'");
           }
         });
   }
 }
-
