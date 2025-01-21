@@ -25,7 +25,8 @@ import frc.robot.commands.ArmToAngleCmd;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import java.util.function.Supplier;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 public class RobotContainer {
 
@@ -33,7 +34,7 @@ public class RobotContainer {
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
   // Alliance color
-  private Supplier<Boolean> redside = () -> redAlliance;
+  private BooleanSupplier redside = () -> redAlliance;
   private static boolean redAlliance;
 
   private final SwerveSubsystem driveTrain =
@@ -63,8 +64,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
-
-    Supplier<Double>
+    DoubleSupplier
         frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
         leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
         rotationFunction = () -> -joystick.getRightX(),
@@ -97,10 +97,7 @@ public class RobotContainer {
   }
 
   public static void setAlliance() {
-    redAlliance =
-        (DriverStation.getAlliance().isEmpty())
-            ? false
-            : (DriverStation.getAlliance().get() == Alliance.Red);
+    redAlliance = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
   }
 
   public Command getAutonomousCommand() {

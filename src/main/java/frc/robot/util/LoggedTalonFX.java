@@ -99,25 +99,25 @@ public class LoggedTalonFX extends TalonFX {
   }
 
   public void periodic() {
-    DogLog.log(temperature, this.getDeviceTemp().getValue().magnitude());
-    DogLog.log(closedLoopError, this.getClosedLoopError().getValue());
-    DogLog.log(closedLoopReference, this.getClosedLoopReference().getValue());
+    DogLog.log(temperature, this.getDeviceTemp().getValueAsDouble());
+    DogLog.log(closedLoopError, this.getClosedLoopError().getValueAsDouble());
+    DogLog.log(closedLoopReference, this.getClosedLoopReference().getValueAsDouble());
 
-    DogLog.log(error, this.getClosedLoopError().getValue().doubleValue());
+    DogLog.log(error, this.getClosedLoopError().getValueAsDouble());
     DogLog.log(reference, this.getClosedLoopReference().getValueAsDouble());
     DogLog.log(rotorPosition, this.getRotorPosition().getValueAsDouble());
 
-    DogLog.log(position, this.getPosition().getValue().magnitude());
-    DogLog.log(velocity, this.getVelocity().getValue().magnitude());
-    DogLog.log(acceleration, this.getAcceleration().getValue().magnitude());
+    DogLog.log(position, this.getPosition().getValueAsDouble());
+    DogLog.log(velocity, this.getVelocity().getValueAsDouble());
+    DogLog.log(acceleration, this.getAcceleration().getValueAsDouble());
 
     // Current
-    DogLog.log(supplycurrent, this.getSupplyCurrent().getValue().magnitude());
-    DogLog.log(statorcurrent, this.getStatorCurrent().getValue().magnitude());
-    DogLog.log(torquecurrent, this.getTorqueCurrent().getValue().magnitude());
+    DogLog.log(supplycurrent, this.getSupplyCurrent().getValueAsDouble());
+    DogLog.log(statorcurrent, this.getStatorCurrent().getValueAsDouble());
+    DogLog.log(torquecurrent, this.getTorqueCurrent().getValueAsDouble());
 
     // Voltage
-    DogLog.log(motorvoltage, this.getMotorVoltage().getValue().magnitude());
-    DogLog.log(supplyvoltage, this.getSupplyVoltage().getValue().magnitude());
+    DogLog.log(motorvoltage, this.getMotorVoltage().getValueAsDouble());
+    DogLog.log(supplyvoltage, this.getSupplyVoltage().getValueAsDouble());
   }
 }
