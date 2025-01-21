@@ -428,7 +428,7 @@ public final class Constants {
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
 
     public class Odometry {
-        public final static double ODOMETRY_UPDATE_CONSTANT = 250.0;
+      public static final double ODOMETRY_UPDATE_CONSTANT = 250.0;
     }
   }
 }
