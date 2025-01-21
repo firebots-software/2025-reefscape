@@ -22,8 +22,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.SwerveJoystickCommand;
-//import frc.robot.generated.TunerConstants;
-//import frc.robot.subsystems.CommandSwerveDrivetrain;
+// import frc.robot.generated.TunerConstants;
+// import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
 
@@ -34,17 +34,19 @@ public class RobotContainer {
   // Alliance color
   private static boolean redAlliance;
 
-  private final SwerveSubsystem driveTrain = new SwerveSubsystem(
-      Constants.Swerve.DrivetrainConstants,
-      Constants.Swerve.Odometry.ODOMETRY_UPDATE_CONSTANT,
-      odometryMatrix,
-      visionMatrix,
-      Constants.Swerve.FrontLeft,
-      Constants.Swerve.FrontRight,
-      Constants.Swerve.BackLeft,
-      Constants.Swerve.BackRight);
+  private final SwerveSubsystem driveTrain =
+      new SwerveSubsystem(
+          Constants.Swerve.DrivetrainConstants,
+          Constants.Swerve.Odometry.ODOMETRY_UPDATE_CONSTANT,
+          odometryMatrix,
+          visionMatrix,
+          Constants.Swerve.FrontLeft,
+          Constants.Swerve.FrontRight,
+          Constants.Swerve.BackLeft,
+          Constants.Swerve.BackRight);
 
-  private final Telemetry logger = new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
+  private final Telemetry logger =
+      new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard,
@@ -53,7 +55,7 @@ public class RobotContainer {
     logger.telemeterize(driveTrain.getState());
   }
 
-  //public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+  // public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
   /* Modular Auto Selection */
   private final SendableChooser<String> startPosChooser = new SendableChooser<String>();
@@ -83,19 +85,23 @@ public class RobotContainer {
   private void configureBindings() {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    Supplier<Double> frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
+    Supplier<Double>
+        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
         leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
         rotationFunction = () -> -joystick.getRightX(),
-        speedFunction = () -> leftShoulderTrigger.getAsBoolean()
-            ? 0d
-            : 1d; // slowmode when left shoulder is pressed, otherwise fast
-    SwerveJoystickCommand swerveJoystickCommand = new SwerveJoystickCommand(
-        frontBackFunction,
-        leftRightFunction,
-        rotationFunction,
-        speedFunction, // slowmode when left shoulder is pressed, otherwise fast
-        () -> joystick.leftTrigger().getAsBoolean(),
-        driveTrain);
+        speedFunction =
+            () ->
+                leftShoulderTrigger.getAsBoolean()
+                    ? 0d
+                    : 1d; // slowmode when left shoulder is pressed, otherwise fast
+    SwerveJoystickCommand swerveJoystickCommand =
+        new SwerveJoystickCommand(
+            frontBackFunction,
+            leftRightFunction,
+            rotationFunction,
+            speedFunction, // slowmode when left shoulder is pressed, otherwise fast
+            () -> joystick.leftTrigger().getAsBoolean(),
+            driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
     joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
@@ -115,9 +121,10 @@ public class RobotContainer {
   }
 
   public static void setAlliance() {
-    redAlliance = (DriverStation.getAlliance().isEmpty())
-        ? false
-        : (DriverStation.getAlliance().get() == Alliance.Red);
+    redAlliance =
+        (DriverStation.getAlliance().isEmpty())
+            ? false
+            : (DriverStation.getAlliance().get() == Alliance.Red);
   }
 
   public Command getAutonomousCommand() {
