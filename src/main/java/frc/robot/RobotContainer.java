@@ -120,7 +120,7 @@ public class RobotContainer {
     joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
-  public static void setAlliance() {
+  public void setAlliance() {
     redAlliance =
         (DriverStation.getAlliance().isEmpty())
             ? false
