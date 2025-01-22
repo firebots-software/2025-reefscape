@@ -41,7 +41,7 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public void execute() {
-    ChassisSpeeds speeds = swerve.calculateRequiredChassisSpeeds(swerve.getCurrentState().Pose, targetPose);
+    ChassisSpeeds speeds = swerve.calculateRequiredChassisSpeeds(targetPose);
 
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
