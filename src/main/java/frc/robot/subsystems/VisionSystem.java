@@ -109,6 +109,6 @@ public class VisionSystem extends SubsystemBase {
     // } else {
     //   SmartDashboard.putBoolean("No Pose", false);
     // }
-    logger.logVisionPose(frontSystem.getMultiTagPose3d(new Pose2d()));
+    // logger.logVisionPose(frontSystem.getMultiTagPose3d(new Pose2d()));
   }
 }

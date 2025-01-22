@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.VisionSystem;
+
 import java.util.function.Supplier;
 
 public class RobotContainer {
@@ -42,11 +45,14 @@ public class RobotContainer {
 
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
+  private VisionSystem frontCamera = VisionSystem.getInstance("front-camera");
   private final CommandXboxController joystick = new CommandXboxController(0);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
     // logger.telemeterize(driveTrain.getState());
+    logger.logVisionPose(frontCamera.getMultiTagPose3d(new Pose2d()));
+    SmartDashboard.putBoolean("Im loggin here", true);
   }
 
   public RobotContainer() {

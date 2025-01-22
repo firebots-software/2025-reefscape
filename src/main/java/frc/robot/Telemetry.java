@@ -107,6 +107,7 @@ public class Telemetry {
   private final double[] m_poseArray = new double[3];
   private final double[] m_moduleStatesArray = new double[8];
   private final double[] m_moduleTargetsArray = new double[8];
+  private final double[] m_visionPoseArray = new double[3];
 
   /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
   public void telemeterize(SwerveDriveState state) {
@@ -135,6 +136,7 @@ public class Telemetry {
     SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
     SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
 
+
     /* Telemeterize the pose to a Field2d */
     fieldTypePub.set("Field2d");
     fieldPub.set(m_poseArray);
@@ -152,24 +154,30 @@ public class Telemetry {
   public void logVisionPose(Optional<EstimatedRobotPose> visionPose) {
     if (!visionPose.isEmpty()) {
 
+      m_visionPoseArray[0] = visionPose.get().estimatedPose.getX();
+      m_visionPoseArray[1] = visionPose.get().estimatedPose.getY();
+      m_visionPoseArray[2] = visionPose.get().estimatedPose.getRotation().getAngle();
+
       wizonPose.set(
           new Pose2d(
-              visionPose.get().estimatedPose.getX(),
-              visionPose.get().estimatedPose.getY(),
-              new Rotation2d(visionPose.get().estimatedPose.getRotation().getAngle())));
+              m_visionPoseArray[0], m_visionPoseArray[1], new Rotation2d(m_visionPoseArray[2])));
+
+      SignalLogger.writeDoubleArray("VisionData/Pose", m_visionPoseArray);
       fieldTypePub.set("Field2d");
-      fieldPub.set(m_poseArray);
+      fieldPub.set(m_visionPoseArray);
     }
   }
 
   public void logVisionPose(Pose3d visionPose) {
-
+    m_visionPoseArray[0] = visionPose.getX();
+    m_visionPoseArray[1] = visionPose.getY();
+    m_visionPoseArray[2] = visionPose.getRotation().getAngle();
     wizonPose.set(
         new Pose2d(
-            visionPose.getX(),
-            visionPose.getY(),
-            new Rotation2d(visionPose.getRotation().getAngle())));
+            m_visionPoseArray[0], m_visionPoseArray[1], new Rotation2d(m_visionPoseArray[2])));
+
+    SignalLogger.writeDoubleArray("VisionData/Pose", m_visionPoseArray);
     fieldTypePub.set("Field2d");
-    fieldPub.set(m_poseArray);
+    fieldPub.set(m_visionPoseArray);
   }
 }
