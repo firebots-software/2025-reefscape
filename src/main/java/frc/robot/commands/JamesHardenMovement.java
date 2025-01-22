@@ -37,8 +37,6 @@ public class JamesHardenMovement extends Command {
       targetPose = targetPoseSupplier.get();
     }
     swerve.resetPIDs();
-    ct++;
-    SmartDashboard.putNumber("ct", ct);
   }
 
   @Override
