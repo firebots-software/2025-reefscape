@@ -10,13 +10,14 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
 
+import dev.doglog.DogLog;
+
 public class JamesHardenMovement extends Command {
 
   private final SwerveSubsystem swerve;
 
   private Supplier<Pose2d> targetPoseSupplier = null;
   private Pose2d targetPose = null;
-  private int ct = 0;
 
   public JamesHardenMovement(SwerveSubsystem swerve, Supplier<Pose2d> targetPoseSupplier) {
     this.swerve = swerve;
@@ -41,6 +42,15 @@ public class JamesHardenMovement extends Command {
   @Override
   public void execute() {
     ChassisSpeeds speeds = swerve.calculateRequiredChassisSpeeds(swerve.getCurrentState().Pose, targetPose);
+
+    DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
+    DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
+    DogLog.log("JamesHardenMovement/TargetPoseTheta(deg)", targetPose.getRotation().getDegrees());
+
+    DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(mps)", speeds.vxMetersPerSecond);
+    DogLog.log("JamesHardenMovement/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
+    DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(radps)", speeds.omegaRadiansPerSecond);
+
     swerve.setChassisSpeeds(speeds);
   }
 
