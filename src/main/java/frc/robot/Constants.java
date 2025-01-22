@@ -48,15 +48,6 @@ public final class Constants {
       new Translation2d(3.9566596, 4.619879)
     };
 
-    public static final Rotation2d[] reefFacingAngleBlue = {
-      new Rotation2d(Degrees.of(0)),
-      new Rotation2d(Degrees.of(60)),
-      new Rotation2d(Degrees.of(120)),
-      new Rotation2d(Degrees.of(180)),
-      new Rotation2d(Degrees.of(-120)),
-      new Rotation2d(Degrees.of(-60))
-    };
-
     public static final Translation2d[] rightBranchesRed = {
       new Translation2d(13.839825, 4.191),
       new Translation2d(13.590905, 3.4328608),
@@ -74,6 +65,15 @@ public final class Constants {
       new Translation2d(12.2781314, 4.1901872),
       new Translation2d(12.8108202, 4.7841916),
       new Translation2d(13.5915654, 4.619879)
+    };
+
+    public static final Rotation2d[] reefFacingAngleBlue = {
+      new Rotation2d(Degrees.of(0)),
+      new Rotation2d(Degrees.of(60)),
+      new Rotation2d(Degrees.of(120)),
+      new Rotation2d(Degrees.of(180)),
+      new Rotation2d(Degrees.of(-120)),
+      new Rotation2d(Degrees.of(-60))
     };
 
     public static final Rotation2d[] reefFacingAngleRed = {
