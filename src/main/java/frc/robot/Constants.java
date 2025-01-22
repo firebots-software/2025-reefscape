@@ -76,10 +76,6 @@ public final class Constants {
       new Translation2d(13.5915654, 4.619879)
     };
 
-    public static final Pose2d middleOfRedHumanPlayerStationRight =
-        new Pose2d(
-            new Translation2d(16.701262, 7.402068), new Rotation2d(Degrees.of(90 - 37.49500797)));
-
     public static final Rotation2d[] reefFacingAngleRed = {
       new Rotation2d(Degrees.of(180)),
       new Rotation2d(Degrees.of(120)),
