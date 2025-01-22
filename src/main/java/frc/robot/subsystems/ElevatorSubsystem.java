@@ -1,4 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -6,16 +5,15 @@ package frc.robot.subsystems;
 
 import frc.robot.util.LoggedTalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+<<<<<<< HEAD
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.math.geometry.Pose3d;
+=======
+>>>>>>> c7af24d (1/21 progress manually typed sim code)
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
-import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -27,41 +25,44 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.mechanisms.MechanismState;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import dev.doglog.DogLog;
 import frc.robot.Constants;
-import frc.robot.commands.ElevatorLevel1;
-import frc.robot.commands.ElevatorLevel2; 
-import frc.robot.subsystems.ElevatorSubsystem;
+import dev.doglog.DogLog;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private static ElevatorSubsystem instance;
 
-
-    private LoggedTalonFX motor1;
-    private LoggedTalonFX motor2;
-    private LoggedTalonFX master;
-    private Double holdPosValue = 0.0;
+    private final LoggedTalonFX motor1;
+    private final LoggedTalonFX motor2;
+    private final LoggedTalonFX master;
+    private double holdPosValue = 0.0;
 
     // Mechanism visualization variables
-    private Mechanism2d mech;
-    private MechanismRoot2d root;
-    private MechanismLigament2d m_elevator1;
-    private MechanismLigament2d m_elevator2;
-    private MechanismLigament2d m_wrist;
+    private final Mechanism2d mech;
+    private final MechanismRoot2d root;
+    private final MechanismLigament2d m_elevator1;
+    private final MechanismLigament2d m_elevator2;
+    private final MechanismLigament2d m_wrist;
 
-    //Elevator lengths
-    public static double elevator1Length=0;
-    public static double elevator2Length=0;
+    // Elevator lengths
+    private static double elevator1Length = 0;
+    private static double elevator2Length = 0;
 
+<<<<<<< HEAD
     private final CommandXboxController joystick = new CommandXboxController(1);
 
     public ElevatorSubsystem() {
         motor1 = new LoggedTalonFX(51); // Unique ID for motor1
         motor2 = new LoggedTalonFX(52); // Unique ID for motor2
+=======
+    private ElevatorSubsystem() {
+        // Motor initialization
+        motor1 = new LoggedTalonFX(51);
+        motor2 = new LoggedTalonFX(52);
+        master = motor1;
+>>>>>>> c7af24d (1/21 progress manually typed sim code)
 
-        motor2.setControl(new Follower(51, false)); // motor1 ID as master
+        motor2.setControl(new Follower(51, false)); // motor1 as master
 
         TalonFXConfigurator m1Config = motor1.getConfigurator();
         TalonFXConfigurator m2Config = motor2.getConfigurator();
@@ -82,8 +83,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         m2Config.apply(moc);
         m1Config.apply(clc);
         m2Config.apply(clc);
-
-        master = motor1;
         master.getConfigurator().apply(s0c);
 
         MotionMagicConfigs mmc = new MotionMagicConfigs()
@@ -92,12 +91,21 @@ public class ElevatorSubsystem extends SubsystemBase {
         master.getConfigurator().apply(mmc);
 
         // Initialize Mechanism2d visualization
+<<<<<<< HEAD
         mech = new Mechanism2d(10, 10);
         root = mech.getRoot("climber", 2.5, 0);
         m_elevator1 = root.append(new MechanismLigament2d("elevator1", Constants.ElevatorConstants.kElevatorMinimumLength, 90, 6, new Color8Bit(Color.kRed)));
         m_elevator2 = root.append(new MechanismLigament2d("elevator2", Constants.ElevatorConstants.kElevatorMinimumLength2, 90, 6, new Color8Bit(Color.kBlue)));
         m_wrist = m_elevator2.append(
                 new MechanismLigament2d("wrist", 0.5, 90, 6, new Color8Bit(Color.kPurple)));
+=======
+        mech = new Mechanism2d(4, 4);
+        root = mech.getRoot("elevator", 2, 2);
+        m_elevator1 = root.append(new MechanismLigament2d("Elevator1", 0, 90, 6, new Color8Bit(Color.kRed)));
+        m_elevator2 = root.append(new MechanismLigament2d("Elevator2", 0, 90, 6, new Color8Bit(Color.kBlue)));
+        m_wrist = m_elevator2.append(new MechanismLigament2d("Wrist", 0.5, 90, 6, new Color8Bit(Color.kPurple)));
+
+>>>>>>> c7af24d (1/21 progress manually typed sim code)
         SmartDashboard.putData("Elevator Mechanism", mech);
     }
 
@@ -116,7 +124,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         return master.getVelocity().getValueAsDouble();
     }
 
-    public boolean getStopped() {
+    public boolean isStopped() {
         return getSpeed() == 0;
     }
 
@@ -144,7 +152,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         return Math.abs(getPIDError()) < Constants.ElevatorConstants.SETPOINT_TOLERANCE;
     }
 
-    public boolean getBottomLimits() {
+    public boolean isAtBottomLimit() {
         return master.getSupplyCurrent().getValueAsDouble() > Constants.ElevatorConstants.STATOR_CURRENT_LIMIT;
     }
 
@@ -165,7 +173,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putString("Elevator Error", "Level: " + level + ", Error: " + getPIDError());
     }
 
-    // Methods to control the elevators
     public void moveElevator1(double length) {
         elevator1Length = length;
         m_elevator1.setLength(elevator1Length);
@@ -174,20 +181,20 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void moveElevator2(double length) {
         elevator2Length = length;
         m_elevator2.setLength(elevator2Length);
-    }  
+    }
 
     @Override
     public void periodic() {
-        if (getBottomLimits()) {
+        if (isAtBottomLimit()) {
             resetEncoderPos();
             holdPosValue = 0.5;
             master.setControl(new MotionMagicVoltage(0));
         }
-        DogLog.log("HoldPosValue", holdPosValue);
 
         elevator1Length = master.getPosition().getValueAsDouble();
         elevator2Length = master.getPosition().getValueAsDouble();
 
+<<<<<<< HEAD
         // m_elevator1.setLength(elevator1Length);
         // m_elevator2.setLength(elevator2Length);
 
@@ -200,6 +207,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Elevator 2 Length", elevator1Length);
         SmartDashboard.putNumber("Wrist Angle", wristAngle);
 
+=======
+        m_elevator1.setLength(elevator1Length);
+        m_elevator2.setLength(elevator2Length);
+
+        SmartDashboard.putNumber("Elevator1 Length", elevator1Length);
+        SmartDashboard.putNumber("Elevator2 Length", elevator2Length);
+        DogLog.log("HoldPosValue", holdPosValue);
+>>>>>>> c7af24d (1/21 progress manually typed sim code)
     }
 
     @Override
@@ -213,4 +228,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Simulated Position", newPosition);
         SmartDashboard.putNumber("Simulated Speed", simulatedSpeed);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c7af24d (1/21 progress manually typed sim code)
