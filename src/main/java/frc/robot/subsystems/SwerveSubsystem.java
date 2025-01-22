@@ -220,6 +220,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
   /**
+   * Getter for Robot's SwerveDriveState
+   * @return Robot's current SwerveDriveState
+   */
+  public SwerveDriveState getCurrentState() {
+    return currentState;
+  }
+
+  /**
    * @return Robot's current Chassis Speeds
    */
   public ChassisSpeeds getCurrentRobotChassisSpeeds() {
