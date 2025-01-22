@@ -3,7 +3,6 @@ package frc.robot.commands;
 import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -74,107 +73,151 @@ public class JamesHardenMovement extends Command {
     swerve.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
-  public static JamesHardenMovement toClosestLeftBranch(SwerveSubsystem swerve, Supplier<Boolean> redSide) {
-    Supplier<Pose2d> targetPose = () -> {
-      Translation2d currPosition = swerve.getState().Pose.getTranslation();
-      if (redSide.get()) {
-        double minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesRed[0]);
-        int sideOfMinDist = 0;
-        for (int i = 1; i < 6; i++) {
-          if (currPosition.getDistance(Constants.Landmarks.leftBranchesRed[i]) < minDist) {
-            minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesRed[i]);
-            sideOfMinDist = i;
-          }
-        }
+  public static JamesHardenMovement toClosestLeftBranch(
+      SwerveSubsystem swerve, Supplier<Boolean> redSide) {
+    Supplier<Pose2d> targetPose =
+        () -> {
+          Translation2d currPosition = swerve.getState().Pose.getTranslation();
+          if (redSide.get()) {
+            double minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesRed[0]);
+            int sideOfMinDist = 0;
+            for (int i = 1; i < 6; i++) {
+              if (currPosition.getDistance(Constants.Landmarks.leftBranchesRed[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesRed[i]);
+                sideOfMinDist = i;
+              }
+            }
 
-        Pose2d target =
-            (new Pose2d(
-                new Translation2d(
-                    Constants.Landmarks.leftBranchesRed[sideOfMinDist].getX()
-                        - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(Meters)+ (2.0*Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters)))/2.0)
-                            * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getCos()),
-                    Constants.Landmarks.leftBranchesRed[sideOfMinDist].getY()
-                        - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(Meters)+ (2.0*Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters)))/2.0)
-                        * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getSin())),
-                            Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]));
-        return target;
-      } else {
-        double minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesBlue[0]);
-        int sideOfMinDist = 0;
-        for (int i = 1; i < 6; i++) {
-          if (currPosition.getDistance(Constants.Landmarks.leftBranchesBlue[i]) < minDist) {
-            minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesBlue[i]);
-            sideOfMinDist = i;
-          }
-        }
+            Pose2d target =
+                (new Pose2d(
+                    new Translation2d(
+                        Constants.Landmarks.leftBranchesRed[sideOfMinDist].getX()
+                            - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(
+                                            Meters)
+                                        + (2.0
+                                            * Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                    / 2.0)
+                                * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getCos()),
+                        Constants.Landmarks.leftBranchesRed[sideOfMinDist].getY()
+                            - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(
+                                            Meters)
+                                        + (2.0
+                                            * Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                    / 2.0)
+                                * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getSin())),
+                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]));
+            return target;
+          } else {
+            double minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesBlue[0]);
+            int sideOfMinDist = 0;
+            for (int i = 1; i < 6; i++) {
+              if (currPosition.getDistance(Constants.Landmarks.leftBranchesBlue[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesBlue[i]);
+                sideOfMinDist = i;
+              }
+            }
 
-        Pose2d target = 
-            (new Pose2d(
-                new Translation2d(
-                    Constants.Landmarks.leftBranchesBlue[sideOfMinDist].getX()
-                        - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(Meters)+ (2.0*Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters)))/2.0)
-                        * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getCos()),
-                    Constants.Landmarks.leftBranchesBlue[sideOfMinDist].getY()
-                        - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(Meters)+ (2.0*Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters)))/2.0)
-                        * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getSin())),
-                            Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]));
-        
-        return target;
-      }
-    };
+            Pose2d target =
+                (new Pose2d(
+                    new Translation2d(
+                        Constants.Landmarks.leftBranchesBlue[sideOfMinDist].getX()
+                            - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(
+                                            Meters)
+                                        + (2.0
+                                            * Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                    / 2.0)
+                                * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getCos()),
+                        Constants.Landmarks.leftBranchesBlue[sideOfMinDist].getY()
+                            - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(
+                                            Meters)
+                                        + (2.0
+                                            * Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                    / 2.0)
+                                * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getSin())),
+                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]));
+
+            return target;
+          }
+        };
 
     return new JamesHardenMovement(swerve, targetPose);
   }
 
-  public static JamesHardenMovement toClosestRightBranch(SwerveSubsystem swerve, Supplier<Boolean> redSide) {
-    Supplier<Pose2d> targetPose = () -> {
-      Translation2d currPosition = swerve.getState().Pose.getTranslation();
-      if (redSide.get()) {
-        double minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesRed[0]);
-        int sideOfMinDist = 0;
-        for (int i = 1; i < 6; i++) {
-          if (currPosition.getDistance(Constants.Landmarks.rightBranchesRed[i]) < minDist) {
-            minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesRed[i]);
-            sideOfMinDist = i;
-          }
-        }
+  public static JamesHardenMovement toClosestRightBranch(
+      SwerveSubsystem swerve, Supplier<Boolean> redSide) {
+    Supplier<Pose2d> targetPose =
+        () -> {
+          Translation2d currPosition = swerve.getState().Pose.getTranslation();
+          if (redSide.get()) {
+            double minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesRed[0]);
+            int sideOfMinDist = 0;
+            for (int i = 1; i < 6; i++) {
+              if (currPosition.getDistance(Constants.Landmarks.rightBranchesRed[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesRed[i]);
+                sideOfMinDist = i;
+              }
+            }
 
-        Pose2d target =
-            (new Pose2d(
-                new Translation2d(
-                    Constants.Landmarks.rightBranchesRed[sideOfMinDist].getX()
-                        - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(Meters)+ (2.0*Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters)))/2.0)
-                            * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getCos()),
-                    Constants.Landmarks.rightBranchesRed[sideOfMinDist].getY()
-                        - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(Meters)+ (2.0*Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters)))/2.0)
-                        * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getSin())),
-                            Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]));
-        return target;
-      } else {
-        double minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesBlue[0]);
-        int sideOfMinDist = 0;
-        for (int i = 1; i < 6; i++) {
-          if (currPosition.getDistance(Constants.Landmarks.rightBranchesBlue[i]) < minDist) {
-            minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesBlue[i]);
-            sideOfMinDist = i;
-          }
-        }
+            Pose2d target =
+                (new Pose2d(
+                    new Translation2d(
+                        Constants.Landmarks.rightBranchesRed[sideOfMinDist].getX()
+                            - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(
+                                            Meters)
+                                        + (2.0
+                                            * Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                    / 2.0)
+                                * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getCos()),
+                        Constants.Landmarks.rightBranchesRed[sideOfMinDist].getY()
+                            - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(
+                                            Meters)
+                                        + (2.0
+                                            * Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                    / 2.0)
+                                * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getSin())),
+                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]));
+            return target;
+          } else {
+            double minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesBlue[0]);
+            int sideOfMinDist = 0;
+            for (int i = 1; i < 6; i++) {
+              if (currPosition.getDistance(Constants.Landmarks.rightBranchesBlue[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesBlue[i]);
+                sideOfMinDist = i;
+              }
+            }
 
-        Pose2d target = 
-            (new Pose2d(
-                new Translation2d(
-                    Constants.Landmarks.rightBranchesBlue[sideOfMinDist].getX()
-                        - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(Meters)+ (2.0*Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters)))/2.0)
-                        * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getCos()),
-                    Constants.Landmarks.rightBranchesBlue[sideOfMinDist].getY()
-                        - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(Meters)+ (2.0*Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters)))/2.0)
-                        * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getSin())),
-                            Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]));
-        
-        return target;
-      }
-    };
+            Pose2d target =
+                (new Pose2d(
+                    new Translation2d(
+                        Constants.Landmarks.rightBranchesBlue[sideOfMinDist].getX()
+                            - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(
+                                            Meters)
+                                        + (2.0
+                                            * Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                    / 2.0)
+                                * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getCos()),
+                        Constants.Landmarks.rightBranchesBlue[sideOfMinDist].getY()
+                            - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.in(
+                                            Meters)
+                                        + (2.0
+                                            * Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                    / 2.0)
+                                * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getSin())),
+                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]));
+
+            return target;
+          }
+        };
 
     return new JamesHardenMovement(swerve, targetPose);
-  } 
+  }
 }

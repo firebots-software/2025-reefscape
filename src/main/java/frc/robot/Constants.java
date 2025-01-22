@@ -77,7 +77,8 @@ public final class Constants {
     };
 
     public static final Pose2d middleOfRedHumanPlayerStationRight =
-        new Pose2d(new Translation2d(16.701262, 7.402068), new Rotation2d(Degrees.of(90-37.49500797)));
+        new Pose2d(
+            new Translation2d(16.701262, 7.402068), new Rotation2d(Degrees.of(90 - 37.49500797)));
 
     public static final Rotation2d[] reefFacingAngleRed = {
       new Rotation2d(Degrees.of(180)),
@@ -198,7 +199,6 @@ public final class Constants {
           RobotDimensions.JAMES_HARDEN,
           "FireBot",
           BumperThickness.JAMES_HARDEN);
-
       public final Angle FRONT_LEFT_ENCODER_OFFSET,
           FRONT_RIGHT_ENCODER_OFFSET,
           BACK_LEFT_ENCODER_OFFSET,
@@ -209,6 +209,7 @@ public final class Constants {
       public final RobotDimensions ROBOT_DIMENSIONS;
       public final String CANBUS_NAME;
       public final BumperThickness BUMPER_THICKNESS;
+
       SwerveType(
           Angle fl,
           Angle fr,

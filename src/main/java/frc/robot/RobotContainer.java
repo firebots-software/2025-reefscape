@@ -10,6 +10,7 @@ import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -103,20 +104,22 @@ public class RobotContainer {
                     driveTrain.resetPose(
                         new Pose2d(
                             new Translation2d(
-                                Constants.Landmarks.middleOfRedHumanPlayerStationRight.getX()
+                                Constants.Landmarks.leftBranchesRed[5].getX()
                                     - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-                                            .in(Meters)/2.0) + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters))
-                                        * Constants.Landmarks.middleOfRedHumanPlayerStationRight
-                                            .getRotation()
-                                            .getCos()),
-                                Constants.Landmarks.middleOfRedHumanPlayerStationRight.getY()
+                                                    .in(Meters)
+                                                / 2.0)
+                                            + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                        * Constants.Landmarks.reefFacingAngleRed[5].getCos(),
+                                Constants.Landmarks.leftBranchesRed[5].getY()
                                     - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-                                            .in(Meters)/2.0) + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS.thickness.in(Meters))
-                                        * Constants.Landmarks.middleOfRedHumanPlayerStationRight
-                                            .getRotation()
-                                            .getSin())),
-                            Constants.Landmarks.middleOfRedHumanPlayerStationRight
-                                .getRotation()))));
+                                                    .in(Meters)
+                                                / 2.0)
+                                            + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                        * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
+                            new Rotation2d(
+                                Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
 
     // Pose2d coral1 = new Pose2d(new Translation2d(3.22, 4.25), new Rotation2d());
     // Pose2d coral2 = new Pose2d(new Translation2d(3.22, 3.92), new Rotation2d());
@@ -125,9 +128,7 @@ public class RobotContainer {
     //     new Pose2d(new Translation2d(0.78, 1.19), new Rotation2d((-2.0 * Math.PI) / 3.0));
 
     // joystick.x().whileTrue(JamesHardenMovement.toClosestLeftBranch(driveTrain, redAlliance));
-    joystick
-        .y()
-        .whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
+    joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
   }
 
   public static void setAlliance() {
