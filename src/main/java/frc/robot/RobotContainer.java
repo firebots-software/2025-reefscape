@@ -50,7 +50,7 @@ public class RobotContainer {
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
-    logger.telemeterize(driveTrain.getState());
+    logger.telemeterize(driveTrain.getCurrentState());
   }
 
   public RobotContainer() {

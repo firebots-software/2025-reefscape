@@ -43,7 +43,7 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public void execute() {
-    ChassisSpeeds speeds = swerve.calculateChassisSpeeds(swerve.getState().Pose, targetPose);
+    ChassisSpeeds speeds = swerve.calculateChassisSpeeds(swerve.getCurrentState().Pose, targetPose);
     SmartDashboard.putNumber("x mps", speeds.vxMetersPerSecond);
     SmartDashboard.putNumber("y mps", speeds.vyMetersPerSecond);
     SmartDashboard.putNumber("theta radians ps", speeds.omegaRadiansPerSecond);
@@ -56,13 +56,13 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public boolean isFinished() {
-    double currRot = swerve.getState().Pose.getRotation().getRadians();
+    double currRot = swerve.getCurrentState().Pose.getRotation().getRadians();
     currRot = (Math.PI + (currRot % Math.PI)) % Math.PI;
     double targetRot = targetPose.getRotation().getRadians();
     targetRot = (Math.PI + (targetRot % Math.PI)) % Math.PI;
 
-    if ((Math.abs(swerve.getState().Pose.getX() - targetPose.getX()) < 0.01)
-        && (Math.abs(swerve.getState().Pose.getY() - targetPose.getY()) < 0.01)
+    if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX()) < 0.01)
+        && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY()) < 0.01)
         && (Math.abs(targetRot - currRot) < 0.04)) {
       return true;
     } else return false;
@@ -77,7 +77,7 @@ public class JamesHardenMovement extends Command {
       SwerveSubsystem swerve, Supplier<Boolean> redSide) {
     Supplier<Pose2d> targetPose =
         () -> {
-          Translation2d currPosition = swerve.getState().Pose.getTranslation();
+          Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.get()) {
             double minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesRed[0]);
             int sideOfMinDist = 0;
@@ -151,7 +151,7 @@ public class JamesHardenMovement extends Command {
       SwerveSubsystem swerve, Supplier<Boolean> redSide) {
     Supplier<Pose2d> targetPose =
         () -> {
-          Translation2d currPosition = swerve.getState().Pose.getTranslation();
+          Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.get()) {
             double minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesRed[0]);
             int sideOfMinDist = 0;
