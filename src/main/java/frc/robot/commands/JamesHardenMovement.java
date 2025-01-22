@@ -57,9 +57,9 @@ public class JamesHardenMovement extends Command {
   @Override
   public boolean isFinished() {
     double currRot = swerve.getCurrentState().Pose.getRotation().getRadians();
-    currRot = (Math.PI + (currRot % Math.PI)) % Math.PI;
+    currRot = ((2.0*Math.PI) + (currRot % (2.0*Math.PI))) % (2.0*Math.PI);
     double targetRot = targetPose.getRotation().getRadians();
-    targetRot = (Math.PI + (targetRot % Math.PI)) % Math.PI;
+    targetRot = ((2.0*Math.PI) + (targetRot % (2.0*Math.PI))) % (2.0*Math.PI);
 
     if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX()) < 0.01)
         && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY()) < 0.01)
