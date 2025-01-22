@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.934295107309228,
-        "y": 5.121570853205412
+        "x": 3.7466018744454304,
+        "y": 4.971930630268412
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.11838077191538,
-        "y": 5.7171061044932765
+        "x": 2.9228881649124148,
+        "y": 5.533563085870195
       },
       "isLocked": false,
-      "linkedName": "top reef 1"
+      "linkedName": "top reef 3"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 7.078390500221827
       },
       "prevControl": {
-        "x": 2.8465164307532302,
-        "y": 5.869617767800945
+        "x": 1.5401404681862425,
+        "y": 6.670790519142092
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -61.181643113483766
   },
   "useDefaultConstraints": true
 }
