@@ -45,7 +45,7 @@ public class JamesHardenMovement extends Command {
 
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
-    DogLog.log("JamesHardenMovement/TargetPoseTheta(deg)", targetPose.getRotation().getDegrees());
+    DogLog.log("JamesHardenMovement/TargetPoseHeading(deg)", targetPose.getRotation().getDegrees());
 
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(mps)", speeds.vxMetersPerSecond);
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
@@ -108,6 +108,10 @@ public class JamesHardenMovement extends Command {
                                     / 2.0)
                                 * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getSin())),
                     Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]));
+            
+            DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
+            DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
+
             return target;
           } else {
             double minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesBlue[0]);
@@ -140,9 +144,13 @@ public class JamesHardenMovement extends Command {
                                 * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getSin())),
                     Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]));
 
+            DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
+            DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
+
             return target;
           }
         };
+
 
     return new JamesHardenMovement(swerve, targetPose);
   }
@@ -182,6 +190,10 @@ public class JamesHardenMovement extends Command {
                                     / 2.0)
                                 * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getSin())),
                     Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]));
+
+            DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
+            DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
+
             return target;
           } else {
             double minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesBlue[0]);
@@ -213,6 +225,9 @@ public class JamesHardenMovement extends Command {
                                     / 2.0)
                                 * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getSin())),
                     Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]));
+
+            DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
+            DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
 
             return target;
           }
