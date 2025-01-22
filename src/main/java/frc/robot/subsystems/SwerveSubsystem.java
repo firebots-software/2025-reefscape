@@ -231,7 +231,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
    * @return Robot's current Chassis Speeds
    */
   public ChassisSpeeds getCurrentRobotChassisSpeeds() {
-    return getKinematics().toChassisSpeeds(currentState.ModuleStates);
+    return currentState.Speeds;
   }
 
   public void setChassisSpeeds(ChassisSpeeds speeds) {
