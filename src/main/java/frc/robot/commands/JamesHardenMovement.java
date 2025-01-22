@@ -43,14 +43,7 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public void execute() {
-    ChassisSpeeds speeds = swerve.calculateChassisSpeeds(swerve.getCurrentState().Pose, targetPose);
-    SmartDashboard.putNumber("x mps", speeds.vxMetersPerSecond);
-    SmartDashboard.putNumber("y mps", speeds.vyMetersPerSecond);
-    SmartDashboard.putNumber("theta radians ps", speeds.omegaRadiansPerSecond);
-
-    SmartDashboard.putNumber("desiredHeading", targetPose.getRotation().getDegrees());
-    SmartDashboard.putNumber("desired x", targetPose.getTranslation().getX());
-    SmartDashboard.putNumber("desired y", targetPose.getTranslation().getY());
+    ChassisSpeeds speeds = swerve.calculateRequiredChassisSpeeds(swerve.getCurrentState().Pose, targetPose);
     swerve.setChassisSpeeds(speeds);
   }
 
