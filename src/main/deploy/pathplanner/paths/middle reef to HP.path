@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.759358869280134,
-        "y": 4.186440168108259
+        "x": 5.713823341836735,
+        "y": 4.203169192269299
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.548706926614979,
-        "y": 5.718974086216699
+        "x": 6.503171399171579,
+        "y": 5.735703110377739
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "middle reef 1"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "middle HP"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -50.86013555429348
+    "rotation": -54.44443104481713
   },
   "reversed": false,
   "folder": null,

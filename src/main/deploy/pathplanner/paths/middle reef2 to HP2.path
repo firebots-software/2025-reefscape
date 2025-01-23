@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7189431423611103,
-        "y": 5.049767795138888
+        "x": 3.6946021412037027,
+        "y": 4.99217628761574
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9484455512324383,
-        "y": 5.67045447595265
+        "x": 2.9241045500750307,
+        "y": 5.612862968429502
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "middle reef 2"
     },
     {
       "anchor": {
-        "x": 1.3156477864583322,
-        "y": 7.267419343171295
+        "x": 1.2805546351841517,
+        "y": 7.268595668247767
       },
       "prevControl": {
-        "x": 2.0718073565170263,
-        "y": 6.67047639280406
+        "x": 2.0367142052428457,
+        "y": 6.671652717880532
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "middle HP"
     }
   ],
   "rotationTargets": [],
