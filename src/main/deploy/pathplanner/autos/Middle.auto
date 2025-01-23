@@ -9,6 +9,36 @@
           "data": {
             "pathName": "middle to reef1"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle reef to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle HP to reef2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle reef2 to HP2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle HP2 to reef3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle reef3 to HP3"
+          }
         }
       ]
     }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.033412301741349,
-        "y": 5.132155161657054
+        "x": 3.9050528067129617,
+        "y": 5.109572120949074
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.209698592208333,
-        "y": 5.693787617258837
+        "x": 3.081339097179946,
+        "y": 5.671204576550857
       },
       "isLocked": false,
       "linkedName": "top reef 2"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.225,
+    "maxAcceleration": 8.0,
     "maxAngularVelocity": 270.0,
     "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,
