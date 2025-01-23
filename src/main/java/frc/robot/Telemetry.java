@@ -136,7 +136,6 @@ public class Telemetry {
     SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
     SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
 
-
     /* Telemeterize the pose to a Field2d */
     fieldTypePub.set("Field2d");
     fieldPub.set(m_poseArray);
@@ -166,6 +165,19 @@ public class Telemetry {
       fieldTypePub.set("Field2d");
       fieldPub.set(m_visionPoseArray);
     }
+  }
+
+  public void logVisionPose(Pose2d visionPose) {
+
+      m_visionPoseArray[0] = visionPose.getX();
+      m_visionPoseArray[1] = visionPose.getY();
+      m_visionPoseArray[2] = visionPose.getRotation().getDegrees();
+
+      wizonPose.set(visionPose);
+
+      SignalLogger.writeDoubleArray("VisionData/Pose", m_visionPoseArray);
+      fieldTypePub.set("Field2d");
+      fieldPub.set(m_visionPoseArray);
   }
 
   public void logVisionPose(Pose3d visionPose) {

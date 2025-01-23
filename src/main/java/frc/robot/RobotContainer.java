@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.VisionSystem;
-
 import java.util.function.Supplier;
 
 public class RobotContainer {
@@ -45,14 +44,20 @@ public class RobotContainer {
 
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
-  private VisionSystem frontCamera = VisionSystem.getInstance("front-camera");
+  private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
+  private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
   private final CommandXboxController joystick = new CommandXboxController(0);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
     // logger.telemeterize(driveTrain.getState());
-    logger.logVisionPose(frontCamera.getMultiTagPose3d(new Pose2d()));
-    SmartDashboard.putBoolean("Im loggin here", true);
+    Pose2d camPose = visionFront.getPose2d();
+    Pose2d camPose2 = visionBack.getPose2d();
+    if(camPose != null || camPose2 != null){
+      logger.logVisionPose(VisionSystem.getAverageForOffBotTesting(camPose, camPose2));
+    }
+    
+    
   }
 
   public RobotContainer() {
