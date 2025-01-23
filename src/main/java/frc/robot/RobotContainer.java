@@ -84,6 +84,10 @@ public class RobotContainer {
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
     /*
+
+    Sysid button commands, commented out (I like keeping this commented because 
+    every branch will have access to the necessary commands to run SysID immediately)
+    
        joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
        joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
 
