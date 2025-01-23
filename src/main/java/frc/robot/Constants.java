@@ -27,6 +27,9 @@ public final class Constants {
   }
 
   public static class Landmarks {
+    // midline constant
+    public static final double MIDLINE_X = 8.774;
+
     // blude side
     public static final Translation2d[] leftBranchesBlue = {
       new Translation2d(3.7084, 4.191),
