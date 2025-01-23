@@ -138,7 +138,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    SmartDashboard.putNumber("arjun IQ", 2.0);
     return new WaitCommand(10);
   }
 }
