@@ -56,6 +56,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     DogLog.setOptions(new DogLogOptions().withCaptureDs(true).withLogExtras(true));
+    // Commented this code that logs the electric data because it crashed the robot code
+    // there is an error related to the usage of this
     // DogLog.setPdh(new PowerDistribution());
     RobotContainer.setAlliance();
   }
