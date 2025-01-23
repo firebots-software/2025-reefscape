@@ -50,12 +50,14 @@ public class TootsieSlideSubsystem extends SubsystemBase{
 
     public static LinearSystem<N1,N1,N1> tootsieSystem = LinearSystemId.identifyVelocitySystem(1.0 , 1.0);
 
-    private final FlywheelSim m_flywheelSim = new FlywheelSim(tootsieSystem, m_tootsieSlideGearbox, 1.0);
+    private final FlywheelSim m_flywheelSim = new FlywheelSim(tootsieSystem, m_tootsieSlideGearbox, 1);
+
+
 
 
   public TootsieSlideSubsystem() {
 
-    
+    m_flywheelSim.setInputVoltage(0.0);
     upMotor = new LoggedTalonFX(1); // Unique ID for motor1
     downMotor = new LoggedTalonFX(2); // Unique ID for motor2
 
@@ -70,24 +72,23 @@ public class TootsieSlideSubsystem extends SubsystemBase{
             .withSupplyCurrentLimitEnable(true)
             .withSupplyCurrentLimit(Constants.TootsieSlide.SUPPLY_CURRENT_LIMIT);
 
-    MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
     Slot0Configs s0c = new Slot0Configs()
             .withKP(Constants.TootsieSlide.S0C_KP)
             .withKI(Constants.TootsieSlide.S0C_KI)
             .withKD(Constants.TootsieSlide.S0C_KD);
 
-    m1Config.apply(moc);
-    m2Config.apply(moc);
     m1Config.apply(clc);
     m2Config.apply(clc);
 
     master = upMotor;
     master.getConfigurator().apply(s0c);
+    master.getConfigurator().apply(clc);
+    master.setVoltage(0);
 
-    MotionMagicConfigs mmc = new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(Constants.TootsieSlide.CRUISE_VELOCITY)
-            .withMotionMagicAcceleration(Constants.TootsieSlide.ACCELERATION);
-    master.getConfigurator().apply(mmc);
+    // MotionMagicConfigs mmc = new MotionMagicConfigs()
+    //          .withMotionMagicCruiseVelocity(Constants.TootsieSlide.CRUISE_VELOCITY)
+    //          .withMotionMagicAcceleration(Constants.TootsieSlide.ACCELERATION);
+    //  master.getConfigurator().apply(mmc);
 }
 
 public static TootsieSlideSubsystem getInstance() {
@@ -101,23 +102,23 @@ public static TootsieSlideSubsystem getInstance() {
 
   public void setPosition(double pos) {
     master.setControl(new MotionMagicVoltage(pos));
-    m_flywheelSim.setInputVoltage(master.getMotorVoltage().getValue().magnitude());
-    }
+  }
 
   private void runTootsieAtRPS(double speed) {
     VelocityVoltage m_velocityControl =
-        new VelocityVoltage(speed * Constants.TootsieSlide.GEAR_RATIO);
+        new VelocityVoltage(speed);
+    SmartDashboard.putBoolean("is it running", true);
     master.setControl(m_velocityControl);
-
-    m_flywheelSim.setInputVoltage(master.getMotorVoltage().getValue().magnitude());
+    SmartDashboard.putNumber("VelocityVoltage", master.getMotorVoltage().getValue().magnitude());
   }
 
   public void spinTootsie() {
-    runTootsieAtRPS(Constants.TootsieSlide.SPEED_RPS);
+    runTootsieAtRPS(3000);
   }
 
    public void stopTootsie() {
     master.stopMotor();
+    m_flywheelSim.setInputVoltage(0);
   }
 
     // Simulation
@@ -136,7 +137,16 @@ public static TootsieSlideSubsystem getInstance() {
 
   @Override
   public void periodic() {
+    m_flywheelSim.setInputVoltage(0.0);
+
     // This method will be called once per scheduler run
+    m_flywheelSim.update(0.02);
+    SmartDashboard.putNumber("voltage", master.getMotorVoltage().getValue().magnitude());
+    SmartDashboard.putNumber("SIMvoltage", m_flywheelSim.getInputVoltage());
+    RoboRioSim.setVInVoltage(
+      BatterySim.calculateDefaultBatteryLoadedVoltage(m_flywheelSim.getCurrentDrawAmps()));
+
+    SmartDashboard.putNumber("Flywheel Velocity", m_flywheelSim.getAngularVelocityRPM());
   }
 
   @Override
@@ -153,7 +163,12 @@ public static TootsieSlideSubsystem getInstance() {
     // // SimBattery estimates loaded battery voltages
     // RoboRioSim.setVInVoltage(
     //     BatterySim.calculateDefaultBatteryLoadedVoltage(m_flywheelSim.getCurrentDrawAmps()));
-    SmartDashboard.putNumber("Flywheel Velocity", m_flywheelSim.getAngularVelocityRadPerSec());
+    // m_flywheelSim.setInputVoltage(10.0);
+
+    
+
+    // SmartDashboard.putNumber("voltage", master.getMotorVoltage().getValue().magnitude());
+    // SmartDashboard.putNumber("Flywheel Velocity", m_flywheelSim.getAngularVelocityRPM());
   }
 
 public boolean coralPresent() {

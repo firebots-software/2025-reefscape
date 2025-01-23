@@ -31,6 +31,8 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
+  TootsieSlideSubsystem testerTootsie = new TootsieSlideSubsystem();
+
   // Alliance color
   private Supplier<Boolean> redside = () -> redAlliance;
   private static boolean redAlliance;
@@ -81,7 +83,7 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    joystick.rightTrigger().whileTrue(new TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
+    joystick.rightBumper().whileTrue(new TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
 
     joystick
         .x()
