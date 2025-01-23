@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,8 +26,6 @@ import frc.robot.commands.JamesHardenMovement;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
-
-import com.ctre.phoenix6.SignalLogger;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -99,7 +98,7 @@ public class RobotContainer {
 
     joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
     joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
-    
+
     joystick
         .a()
         .onTrue(

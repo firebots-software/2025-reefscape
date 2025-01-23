@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Meters;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -9,8 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
-
-import dev.doglog.DogLog;
 
 public class JamesHardenMovement extends Command {
 
@@ -57,9 +56,9 @@ public class JamesHardenMovement extends Command {
   @Override
   public boolean isFinished() {
     double currRot = swerve.getCurrentState().Pose.getRotation().getRadians();
-    currRot = ((2.0*Math.PI) + (currRot % (2.0*Math.PI))) % (2.0*Math.PI);
+    currRot = ((2.0 * Math.PI) + (currRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
     double targetRot = targetPose.getRotation().getRadians();
-    targetRot = ((2.0*Math.PI) + (targetRot % (2.0*Math.PI))) % (2.0*Math.PI);
+    targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
 
     if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX()) < 0.01)
         && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY()) < 0.01)
@@ -108,7 +107,7 @@ public class JamesHardenMovement extends Command {
                                     / 2.0)
                                 * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getSin())),
                     Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]));
-            
+
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
 
@@ -150,7 +149,6 @@ public class JamesHardenMovement extends Command {
             return target;
           }
         };
-
 
     return new JamesHardenMovement(swerve, targetPose);
   }
