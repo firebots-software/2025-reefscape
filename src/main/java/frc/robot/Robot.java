@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     DogLog.setOptions(new DogLogOptions().withCaptureDs(true).withLogExtras(true));
-    DogLog.setPdh(new PowerDistribution());
+    // DogLog.setPdh(new PowerDistribution());
     RobotContainer.setAlliance();
   }
 
