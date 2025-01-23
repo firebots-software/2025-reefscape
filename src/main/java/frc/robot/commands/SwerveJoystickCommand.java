@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class SwerveJoystickCommand extends Command {
@@ -16,7 +18,7 @@ public class SwerveJoystickCommand extends Command {
       turningSpdFunction,
       speedControlFunction;
 
-  protected final Supplier<Boolean> fieldRelativeFunction;
+  protected final BooleanSupplier fieldRelativeFunction;
 
   // Limits rate of change (in this case x, y, and turning movement)
   protected final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
@@ -34,7 +36,7 @@ public class SwerveJoystickCommand extends Command {
       Supplier<Double> leftRightFunction,
       Supplier<Double> turningSpdFunction,
       Supplier<Double> speedControlFunction,
-      Supplier<Boolean> fieldRelativeFunction,
+      BooleanSupplier fieldRelativeFunction,
       SwerveSubsystem swerveSubsystem) {
     this.xSpdFunction = frontBackFunction;
     this.ySpdFunction = leftRightFunction;
@@ -156,7 +158,7 @@ public class SwerveJoystickCommand extends Command {
     // 5. Applying the drive request on the swerve drivetrain
     // Uses SwerveRequestFieldCentric (from java.frc.robot.util to apply module optimization)
     SwerveRequest drive =
-        !fieldRelativeFunction.get()
+        !fieldRelativeFunction.getAsBoolean()
             ? fieldCentricDrive.withVelocityX(x).withVelocityY(y).withRotationalRate(turn)
             : robotCentricDrive.withVelocityX(x).withVelocityY(y).withRotationalRate(turn);
 

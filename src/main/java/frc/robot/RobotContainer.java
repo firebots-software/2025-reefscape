@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.JamesHardenMovement;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class RobotContainer {
@@ -32,7 +34,7 @@ public class RobotContainer {
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
   // Alliance color
-  private Supplier<Boolean> redside = () -> redAlliance;
+  private BooleanSupplier redside = () -> redAlliance;
   private static boolean redAlliance;
 
   private final SwerveSubsystem driveTrain =

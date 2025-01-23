@@ -9,6 +9,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class JamesHardenMovement extends Command {
@@ -73,11 +75,11 @@ public class JamesHardenMovement extends Command {
   }
 
   public static JamesHardenMovement toClosestLeftBranch(
-      SwerveSubsystem swerve, Supplier<Boolean> redSide) {
+      SwerveSubsystem swerve, BooleanSupplier redSide) {
     Supplier<Pose2d> targetPose =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
-          if (redSide.get()) {
+          if (redSide.getAsBoolean()) {
             double minDist = currPosition.getDistance(Constants.Landmarks.leftBranchesRed[0]);
             int sideOfMinDist = 0;
             for (int i = 1; i < 6; i++) {
@@ -154,11 +156,11 @@ public class JamesHardenMovement extends Command {
   }
 
   public static JamesHardenMovement toClosestRightBranch(
-      SwerveSubsystem swerve, Supplier<Boolean> redSide) {
+      SwerveSubsystem swerve, BooleanSupplier redSide) {
     Supplier<Pose2d> targetPose =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
-          if (redSide.get()) {
+          if (redSide.getAsBoolean()) {
             double minDist = currPosition.getDistance(Constants.Landmarks.rightBranchesRed[0]);
             int sideOfMinDist = 0;
             for (int i = 1; i < 6; i++) {
