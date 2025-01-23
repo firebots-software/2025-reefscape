@@ -153,7 +153,7 @@ public static TootsieSlideSubsystem getInstance() {
     // // SimBattery estimates loaded battery voltages
     // RoboRioSim.setVInVoltage(
     //     BatterySim.calculateDefaultBatteryLoadedVoltage(m_flywheelSim.getCurrentDrawAmps()));
-    SmartDashboard.putNumber("Flywheel Velocity", m_flywheelSim.getAngularVelocityRadPerSec());
+    SmartDashboard.putNumber("Flywheel Velocity", m_flywheelSim.getAngularVelocityRPM());
   }
 
 public boolean coralPresent() {

@@ -81,7 +81,7 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    joystick.rightTrigger().whileTrue(new TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
+    joystick.rightBumper().whileTrue(new TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
 
     joystick
         .x()
