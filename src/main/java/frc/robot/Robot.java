@@ -9,6 +9,7 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.util.LoggedTalonFX;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -95,7 +96,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    LoggedTalonFX.periodic_static();
+  }
 
   @Override
   public void testInit() {
