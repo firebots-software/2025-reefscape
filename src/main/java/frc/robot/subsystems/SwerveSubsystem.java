@@ -58,10 +58,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     if (Utils.isSimulation()) {
       startSimThread();
     }
-    configureAutoBuilder();
-  }
 
-    currentState = getState();
+    currentState = getCurrentState();
 
     xPidController =
         new ProfiledPIDController(
