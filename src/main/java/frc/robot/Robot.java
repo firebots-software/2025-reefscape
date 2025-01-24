@@ -4,9 +4,20 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 
 /**
@@ -23,11 +34,71 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
+  private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+  private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
+  private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
+   private final SwerveSubsystem driveTrain = new SwerveSubsystem(
+      Constants.Swerve.DrivetrainConstants,
+      250.0, // TODO: CHANGE ODOMETRY UPDATE FREQUENCY TO CONSTANT,
+      odometryMatrix,
+      visionMatrix,
+      Constants.Swerve.FrontLeft,
+      Constants.Swerve.FrontRight,
+      Constants.Swerve.BackLeft,
+      Constants.Swerve.BackRight
+  );
+  private double leastDist;
+
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+      m_robotContainer.doTelemetry();
+    CommandScheduler.getInstance().run();
+    Optional<EstimatedRobotPose> frontRobotPose =
+        visionFront.getMultiTagPose3d(driveTrain.getState().Pose);
+    Optional<EstimatedRobotPose> backRobotPose =
+    visionBack.getMultiTagPose3d(driveTrain.getState().Pose);
+    if (frontRobotPose.isPresent() || backRobotPose.isPresent() ) {
+
+      double frontdistToAprilTag =
+          visionFront.gTagFieldLayout().getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
+              .get()
+              .getTranslation()
+              .getDistance(
+                  new Translation3d(
+                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+
+    double backdistToAprilTag =
+    visionBack.gTagFieldLayout().getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
+        .get()
+        .getTranslation()
+        .getDistance(
+            new Translation3d(
+                driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+
+    if (frontdistToAprilTag <= backdistToAprilTag){
+       leastDist = frontdistToAprilTag;
+    }
+    else {
+       leastDist = backdistToAprilTag;
+    }
+
+      double xKalman = 0.01 * Math.pow(1.15, leastDist);
+
+      double yKalman = 0.01 * Math.pow(1.4, leastDist);
+
+      visionMatrix.set(0, 0, xKalman);
+      visionMatrix.set(1, 0, yKalman);
+
+      driveTrain.addVisionMeasurement(
+          frontRobotPose.get().estimatedPose.toPose2d(),
+          Timer.getFPGATimestamp() - 0.02,
+          visionMatrix);
+    }
   }
+  
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
