@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 // Simulation imports
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
@@ -48,16 +49,12 @@ public class TootsieSlideSubsystem extends SubsystemBase{
 
     private final DCMotor m_tootsieSlideGearbox = DCMotor.getKrakenX60(1);
 
-    public static LinearSystem<N1,N1,N1> tootsieSystem = LinearSystemId.identifyVelocitySystem(1.0 , 1.0);
+    public static LinearSystem<N1,N1,N1> tootsieSystem = LinearSystemId.identifyVelocitySystem(1, 2.2);
 
-    private final FlywheelSim m_flywheelSim = new FlywheelSim(tootsieSystem, m_tootsieSlideGearbox, 1);
-
-
-
+    private final FlywheelSim m_flywheelSim = new FlywheelSim(tootsieSystem, m_tootsieSlideGearbox, 0);
 
   public TootsieSlideSubsystem() {
 
-    m_flywheelSim.setInputVoltage(0.0);
     upMotor = new LoggedTalonFX(1); // Unique ID for motor1
     downMotor = new LoggedTalonFX(2); // Unique ID for motor2
 
@@ -83,7 +80,8 @@ public class TootsieSlideSubsystem extends SubsystemBase{
     master = upMotor;
     master.getConfigurator().apply(s0c);
     master.getConfigurator().apply(clc);
-    master.setVoltage(0);
+
+
 
     // MotionMagicConfigs mmc = new MotionMagicConfigs()
     //          .withMotionMagicCruiseVelocity(Constants.TootsieSlide.CRUISE_VELOCITY)
@@ -110,6 +108,7 @@ public static TootsieSlideSubsystem getInstance() {
     SmartDashboard.putBoolean("is it running", true);
     master.setControl(m_velocityControl);
     SmartDashboard.putNumber("VelocityVoltage", master.getMotorVoltage().getValue().magnitude());
+    m_flywheelSim.setInputVoltage(master.getMotorVoltage().getValue().magnitude());
   }
 
   public void spinTootsie() {
@@ -118,7 +117,10 @@ public static TootsieSlideSubsystem getInstance() {
 
    public void stopTootsie() {
     master.stopMotor();
+    master.setVoltage(0);
+
     m_flywheelSim.setInputVoltage(0);
+
   }
 
     // Simulation
@@ -137,16 +139,16 @@ public static TootsieSlideSubsystem getInstance() {
 
   @Override
   public void periodic() {
-    m_flywheelSim.setInputVoltage(0.0);
+
 
     // This method will be called once per scheduler run
     m_flywheelSim.update(0.02);
     SmartDashboard.putNumber("voltage", master.getMotorVoltage().getValue().magnitude());
     SmartDashboard.putNumber("SIMvoltage", m_flywheelSim.getInputVoltage());
-    RoboRioSim.setVInVoltage(
-      BatterySim.calculateDefaultBatteryLoadedVoltage(m_flywheelSim.getCurrentDrawAmps()));
 
     SmartDashboard.putNumber("Flywheel Velocity", m_flywheelSim.getAngularVelocityRPM());
+    SmartDashboard.putNumber("Flywheel Current", m_flywheelSim.getCurrentDrawAmps());
+
   }
 
   @Override
