@@ -17,22 +17,29 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
 import java.util.function.Supplier;
 
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
     implements Subsystem {
+
+  private ProfiledPIDController xPidController, yPidController, driverRotationPidController;
+  private SwerveDriveState currentState;
+
   public SwerveSubsystem(
       SwerveDrivetrainConstants drivetrainConstants,
       double OdometryUpdateFrequency,
@@ -52,11 +59,37 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       startSimThread();
     }
     configureAutoBuilder();
+
+    currentState = getCurrentState();
+
+    xPidController =
+        new ProfiledPIDController(
+            5.5,
+            0,
+            0,
+            new TrapezoidProfile.Constraints(
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
+    yPidController =
+        new ProfiledPIDController(
+            5.5,
+            0,
+            0,
+            new TrapezoidProfile.Constraints(
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
+
+    driverRotationPidController =
+        new ProfiledPIDController(
+            2.5,
+            0,
+            0,
+            new TrapezoidProfile.Constraints(
+                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE,
+                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND));
+    driverRotationPidController.enableContinuousInput(-Math.PI, Math.PI);
+    configureAutoBuilder();
   }
 
-  SwerveControlParameters swerveInformation = new SwerveControlParameters();
-
-  // TODO: re-organize these values (which are only necessary for the simulation) to another place
+  // Values relevant for the simulation
   private static final double kSimLoopPeriod = 0.005; // 5 ms
   private Notifier m_simNotifier = null;
   private double m_lastSimTime;
@@ -79,7 +112,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     m_simNotifier.startPeriodic(kSimLoopPeriod);
   }
 
-  // These values are used later to deal w/ perspective stuff
   /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
   private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
   /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
@@ -91,15 +123,13 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds =
       new SwerveRequest.ApplyRobotSpeeds();
 
-  // TODO: Tune these constants (check last years code for better idea)
-  // TODO: Read up and figure out exactly why PathPlanner needs these values
   private void configureAutoBuilder() {
     try {
       var config = RobotConfig.fromGUISettings();
       AutoBuilder.configure(
-          () -> getState().Pose, // Supplier of current robot pose
+          () -> currentState.Pose, // Supplier of current robot pose
           this::resetPose, // Consumer for seeding pose against auto
-          () -> getState().Speeds, // Supplier of current robot speeds
+          () -> currentState.Speeds, // Supplier of current robot speeds
           // Consumer of ChassisSpeeds and feedforwards to drive the robot
           (speeds, feedforwards) ->
               setControl(
@@ -121,6 +151,13 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       DriverStation.reportError(
           "Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
     }
+  }
+
+  // Resets PID controllers
+  public void resetPIDs() {
+    xPidController.reset(currentState.Pose.getX());
+    yPidController.reset(currentState.Pose.getY());
+    driverRotationPidController.reset(currentState.Pose.getRotation().getRadians());
   }
 
   /* Swerve requests to apply during SysId characterization */
@@ -183,20 +220,35 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   /* The SysId routine to test */
   private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
-  private ChassisSpeeds robotChassisSpeeds = new ChassisSpeeds();
-
   /**
-   * @return Robot's latest Chassis Speeds
+   * Getter for Robot's SwerveDriveState
+   *
+   * @return Robot's current SwerveDriveState
    */
-  public ChassisSpeeds getRobotChassisSpeeds() {
-    return robotChassisSpeeds;
+  public SwerveDriveState getCurrentState() {
+    return currentState;
   }
 
   /**
    * @return Robot's current Chassis Speeds
    */
-  private ChassisSpeeds calculateCurrentRobotChassisSpeeds() {
-    return getKinematics().toChassisSpeeds(getState().ModuleStates);
+  public ChassisSpeeds getCurrentRobotChassisSpeeds() {
+    return currentState.Speeds;
+  }
+
+  public void setChassisSpeeds(ChassisSpeeds speeds) {
+    setControl(m_pathApplyRobotSpeeds.withSpeeds(speeds));
+  }
+
+  public ChassisSpeeds calculateRequiredChassisSpeeds(Pose2d targetPose) {
+    double xFeedback = xPidController.calculate(currentState.Pose.getX(), targetPose.getX());
+    double yFeedback = yPidController.calculate(currentState.Pose.getY(), targetPose.getY());
+    double thetaFeedback =
+        driverRotationPidController.calculate(
+            currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
+
+    return ChassisSpeeds.fromFieldRelativeSpeeds(
+        xFeedback, yFeedback, thetaFeedback, currentState.Pose.getRotation());
   }
 
   /**
@@ -233,7 +285,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   @Override
   public void periodic() {
-    robotChassisSpeeds = calculateCurrentRobotChassisSpeeds();
+    currentState = getState();
 
     if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
       DriverStation.getAlliance()
@@ -246,21 +298,12 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 m_hasAppliedOperatorPerspective = true;
               });
     }
-    SmartDashboard.putNumber("chassisspeedX", robotChassisSpeeds.vxMetersPerSecond);
-    SmartDashboard.putNumber("chassisspeedY", robotChassisSpeeds.vyMetersPerSecond);
-    SmartDashboard.putNumber("chassisspeedOMEGA", robotChassisSpeeds.omegaRadiansPerSecond);
 
-    var drivetrainState = getState();
-    SmartDashboard.putNumber("fl_speed", drivetrainState.ModuleStates[0].speedMetersPerSecond);
-    SmartDashboard.putNumber("fl_angle", drivetrainState.ModuleStates[0].angle.getDegrees());
-    SmartDashboard.putNumber("fr_speed", drivetrainState.ModuleStates[1].speedMetersPerSecond);
-    SmartDashboard.putNumber("fr_angle", drivetrainState.ModuleStates[1].angle.getDegrees());
-    SmartDashboard.putNumber("bl_speed", drivetrainState.ModuleStates[2].speedMetersPerSecond);
-    SmartDashboard.putNumber("bl_angle", drivetrainState.ModuleStates[2].angle.getDegrees());
-    SmartDashboard.putNumber("br_speed", drivetrainState.ModuleStates[3].speedMetersPerSecond);
-    SmartDashboard.putNumber("br_angle", drivetrainState.ModuleStates[3].angle.getDegrees());
-    DogLog.log("chassis/speed_x", robotChassisSpeeds);
-    DogLog.log("chassis/speed_y", robotChassisSpeeds.vyMetersPerSecond);
-    DogLog.log("chassis/rotation_speed_radps", robotChassisSpeeds.omegaRadiansPerSecond);
+    currentState = getState();
+
+    DogLog.log("Swerve/ChassisSpeedsX(mps)", getCurrentRobotChassisSpeeds().vxMetersPerSecond);
+    DogLog.log("Swerve/ChassisSpeedsY(mps)", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
+    DogLog.log(
+        "Swerve/ChassisSpeedsTurning(radps)", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
   }
 }

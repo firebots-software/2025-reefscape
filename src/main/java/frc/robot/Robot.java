@@ -6,7 +6,6 @@ package frc.robot;
 
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -47,19 +46,25 @@ public class Robot extends TimedRobot {
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // // block in order for anything in the Command-based framework to work.
-    // m_robotContainer.doTelemetry();
+    // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.doTelemetry();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    RobotContainer.setAlliance();
+  }
 
   @Override
   public void robotInit() {
-    DogLog.setOptions(new DogLogOptions().withCaptureDs(true).withLogExtras(true));
-    DogLog.setPdh(new PowerDistribution());
+    DogLog.setOptions(
+        new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
+    // Commented this code that logs the electric data because it crashed the robot code
+    // there is an error related to the usage of this
+    // DogLog.setPdh(new PowerDistribution());
+    RobotContainer.setAlliance();
   }
 
   @Override
@@ -99,7 +104,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
     LoggedTalonFX.periodic_static();
   }
 
