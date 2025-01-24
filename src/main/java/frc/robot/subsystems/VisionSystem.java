@@ -33,12 +33,12 @@ public class VisionSystem extends SubsystemBase {
   private Transform3d[] camToRobots = {
     // Front Camera transform
     new Transform3d(
-        new Translation3d(Units.inchesToMeters(9), Units.inchesToMeters(-6.5), 0),
-        new Rotation3d(0, 0, 0)),
+        new Translation3d(Units.inchesToMeters(-9.5), Units.inchesToMeters(6.5), 0),
+        new Rotation3d(0, Units.degreesToRadians(25.37693353),  Math.PI)),
     // Back Camera
     new Transform3d(
-      new Translation3d(Units.inchesToMeters(10), Units.inchesToMeters(6), 0),
-      new Rotation3d(0, 0, 0))
+      new Translation3d(Units.inchesToMeters(8), Units.inchesToMeters(5.75), 0),
+      new Rotation3d(0,0, 0))
       
   };
   private PhotonCamera camera;
