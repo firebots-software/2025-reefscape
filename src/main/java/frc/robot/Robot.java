@@ -6,9 +6,12 @@ package frc.robot;
 
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.ZeroArm;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.util.LoggedTalonFX;
 
 /**
@@ -18,6 +21,7 @@ import frc.robot.util.LoggedTalonFX;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
   private final RobotContainer m_robotContainer;
 
@@ -80,7 +84,7 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
-  @Override
+  // @Override
   public void autonomousPeriodic() {}
 
   @Override
@@ -89,10 +93,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    RobotContainer.setAlliance();
+    // RobotContainer.setAlliance();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    CommandScheduler.getInstance()
+        .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
 
   /** This function is called periodically during operator control. */
@@ -104,7 +111,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    RobotContainer.setAlliance();
+    // RobotContainer.setAlliance();
     CommandScheduler.getInstance().cancelAll();
   }
 

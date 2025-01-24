@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
+import java.util.function.DoubleSupplier;
 
 public class SwerveJoystickCommand extends Command {
-  protected final Supplier<Double> xSpdFunction,
+  protected final DoubleSupplier xSpdFunction,
       ySpdFunction,
       turningSpdFunction,
       speedControlFunction;
@@ -31,10 +31,10 @@ public class SwerveJoystickCommand extends Command {
   private boolean squaredTurn;
 
   public SwerveJoystickCommand(
-      Supplier<Double> frontBackFunction,
-      Supplier<Double> leftRightFunction,
-      Supplier<Double> turningSpdFunction,
-      Supplier<Double> speedControlFunction,
+      DoubleSupplier frontBackFunction,
+      DoubleSupplier leftRightFunction,
+      DoubleSupplier turningSpdFunction,
+      DoubleSupplier speedControlFunction,
       BooleanSupplier fieldRelativeFunction,
       SwerveSubsystem swerveSubsystem) {
     this.xSpdFunction = frontBackFunction;
@@ -57,10 +57,10 @@ public class SwerveJoystickCommand extends Command {
 
   // Sets everything, not field relative
   public SwerveJoystickCommand(
-      Supplier<Double> frontBackFunction,
-      Supplier<Double> leftRightFunction,
-      Supplier<Double> turningSpdFunction,
-      Supplier<Double> speedControlFunction,
+      DoubleSupplier frontBackFunction,
+      DoubleSupplier leftRightFunction,
+      DoubleSupplier turningSpdFunction,
+      DoubleSupplier speedControlFunction,
       SwerveSubsystem swerveSubsystem) {
 
     this(
@@ -73,10 +73,10 @@ public class SwerveJoystickCommand extends Command {
   }
 
   public SwerveJoystickCommand(
-      Supplier<Double> frontBackFunction,
-      Supplier<Double> leftRightFunction,
-      Supplier<Double> turningSpdFunction,
-      Supplier<Double> speedControlFunction,
+      DoubleSupplier frontBackFunction,
+      DoubleSupplier leftRightFunction,
+      DoubleSupplier turningSpdFunction,
+      DoubleSupplier speedControlFunction,
       SwerveSubsystem swerveSubsystem,
       boolean squaredTurn) {
 
@@ -95,10 +95,10 @@ public class SwerveJoystickCommand extends Command {
   @Override
   public void execute() {
     // 1. Get real-time joystick inputs
-    double xSpeed = xSpdFunction.get(); // xSpeed is actually front back (front +, back -)
-    double ySpeed = ySpdFunction.get(); // ySpeed is actually left right (left +, right -)
+    double xSpeed = xSpdFunction.getAsDouble(); // xSpeed is actually front back (front +, back -)
+    double ySpeed = ySpdFunction.getAsDouble(); // ySpeed is actually left right (left +, right -)
     double turningSpeed =
-        turningSpdFunction.get(); // turning speed is (anti-clockwise +, clockwise -)
+        turningSpdFunction.getAsDouble(); // turning speed is (anti-clockwise +, clockwise -)
 
     // 2. Normalize inputs
     double length = xSpeed * xSpeed + ySpeed * ySpeed; // acutally length squared
@@ -124,7 +124,7 @@ public class SwerveJoystickCommand extends Command {
     // This is a double between TELE_DRIVE_SLOW_MODE_SPEED_PERCENT and
     // TELE_DRIVE_FAST_MODE_SPEED_PERCENT
     double driveSpeed =
-        (Constants.Swerve.TELE_DRIVE_PERCENT_SPEED_RANGE * (speedControlFunction.get()))
+        (Constants.Swerve.TELE_DRIVE_PERCENT_SPEED_RANGE * (speedControlFunction.getAsDouble()))
             + Constants.Swerve.TELE_DRIVE_SLOW_MODE_SPEED_PERCENT;
 
     // Applies slew rate limiter
