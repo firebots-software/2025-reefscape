@@ -552,4 +552,3 @@ public final class Constants {
         TELE_DRIVE_MAX_ANGULAR_RATE * 8;
   }
 }
-
