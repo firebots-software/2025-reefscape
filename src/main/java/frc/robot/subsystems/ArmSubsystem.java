@@ -19,9 +19,17 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.sim.ChassisReference;
+import com.ctre.phoenix6.sim.TalonFXSimState;
+
 import dev.doglog.DogLog;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -38,7 +46,11 @@ public class ArmSubsystem extends SubsystemBase {
   private MotionMagicConfigs motionMagicConfigs;
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
   private double encoderDegrees;
-
+  private TalonFXSimState armSim;
+  private static final double kGearRatio = 10.0;
+  private LinearSystem<N2, N1, N2> elevatorSystem = new 
+  private final DCMotorSim m_motorSimModel =
+    new DCMotorSim(kGearRatio,DCMotor.getKrakenX60Foc(1), 0.001);
   private double targetDegrees;
 
   private final VoltageOut m_voltReq = new VoltageOut(0.0);
@@ -96,6 +108,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Initialize absolute encoder
     revEncoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
+    armSim = armMotor.getSimState();
+    armSim.Orientation = ChassisReference.CounterClockwise_Positive;
+    armSim.setSupplyVoltage(12);
   }
 
   public void setPosition(double angleDegrees) {
@@ -148,6 +163,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+
+
     encoderDegrees = calculateDegrees();
     // This method will be called once per scheduler run
     DogLog.log("Arm at target", atTarget(5));
