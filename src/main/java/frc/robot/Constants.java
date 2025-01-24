@@ -86,6 +86,8 @@ public final class Constants {
       new Rotation2d(Degrees.of(-60)),
       new Rotation2d(Degrees.of(-120))
     };
+  }
+
   public static final class Arm {
     public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
     public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
@@ -550,3 +552,4 @@ public final class Constants {
         TELE_DRIVE_MAX_ANGULAR_RATE * 8;
   }
 }
+
