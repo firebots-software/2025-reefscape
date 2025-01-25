@@ -61,9 +61,9 @@ public class RobotContainer {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier
-        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
-        leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
-        rotationFunction = () -> -joystick.getRightX(),
+        frontBackFunction = () -> -joystick.getLeftY(),//((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
+        leftRightFunction = () -> -joystick.getLeftX(),//((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
+        rotationFunction = () -> -joystick.getRightY(),
         speedFunction =
             () ->
                 leftShoulderTrigger.getAsBoolean()

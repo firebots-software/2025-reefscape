@@ -135,7 +135,7 @@ public final class Constants {
   }
 
   public static class Swerve {
-    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.PROTO;
+    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.JAMES_HARDEN;
 
     public static enum SwerveLevel {
       L2(6.75, 21.428571428571427),
@@ -331,7 +331,7 @@ public final class Constants {
         new TalonFXConfiguration()
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
-                    .withStatorCurrentLimit(Amps.of(90.0))
+                    .withStatorCurrentLimit(Amps.of(90.0)) // TEMPORARY ->90
                     .withStatorCurrentLimitEnable(true)
                     .withSupplyCurrentLimit(Amps.of(40.0))
                     .withSupplyCurrentLimitEnable(true));
@@ -544,7 +544,7 @@ public final class Constants {
     public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
     public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.75;
     public static final double TELE_DRIVE_SLOW_MODE_SPEED_PERCENT = 0.3;
-    public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420;
+    public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 3.01420;
     public static final double TELE_DRIVE_PERCENT_SPEED_RANGE =
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
     public static final double TELE_DRIVE_MAX_ANGULAR_RATE = Math.PI * 1.5;

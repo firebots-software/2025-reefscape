@@ -161,6 +161,8 @@ public class SwerveJoystickCommand extends Command {
             ? fieldCentricDrive.withVelocityX(x).withVelocityY(y).withRotationalRate(turn)
             : robotCentricDrive.withVelocityX(x).withVelocityY(y).withRotationalRate(turn);
 
+    DogLog.log("joystickCommand/fieldRelative", fieldRelativeFunction.getAsBoolean());
+    
     // Applies request
     this.swerveDrivetrain.setControl(drive);
   } // Drive counterclockwise with negative X (left))
