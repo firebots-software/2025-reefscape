@@ -6,10 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.ctre.phoenix6.SignalLogger;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import choreo.auto.AutoFactory;
+import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
@@ -76,13 +74,13 @@ public class RobotContainer {
     // using the
     // selected options and Pose2d list
 
-    autoFactory = new AutoFactory(
-      () -> driveTrain.getState().Pose,
-      driveTrain::resetPose,
-      driveTrain:: followTrajectory,
-      true,
-      driveTrain
-    );
+    autoFactory =
+        new AutoFactory(
+            () -> driveTrain.getState().Pose,
+            driveTrain::resetPose,
+            driveTrain::followTrajectory,
+            true,
+            driveTrain);
 
     startPosChooser.setDefaultOption("Top (Next to Blue Barge Zone)", "Top");
     startPosChooser.addOption("Middle (In between to Barge Zones)", "Middle");
@@ -140,8 +138,8 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-   // return new PathPlannerAuto(startPosChooser.getSelected(), redAlliance); // flips when red
+    // return new PathPlannerAuto(startPosChooser.getSelected(), redAlliance); // flips when red
 
-   return autoFactory.trajectoryCmd(startPosChooser.getSelected());
+    return autoFactory.trajectoryCmd(startPosChooser.getSelected());
   }
 }
