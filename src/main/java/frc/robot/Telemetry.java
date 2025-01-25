@@ -57,6 +57,9 @@ public class Telemetry {
   private final DoubleArrayPublisher fieldPub = table.getDoubleArrayTopic("robotPose").publish();
   private final StringPublisher fieldTypePub = table.getStringTopic(".type").publish();
 
+  StructPublisher<Pose2d> publisher =
+      NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose2d.struct).publish();
+
   /* Mechanisms to represent the swerve module states */
   private final Mechanism2d[] m_moduleMechanisms =
       new Mechanism2d[] {
@@ -121,11 +124,11 @@ public class Telemetry {
       m_moduleTargetsArray[i * 2 + 1] = state.ModuleTargets[i].speedMetersPerSecond;
     }
 
-    SignalLogger.writeDoubleArray("DriveState/Pose", m_poseArray);
+    // SignalLogger.writeDoubleArray("DriveState/Pose", state.Pose);
     SignalLogger.writeDoubleArray("DriveState/ModuleStates", m_moduleStatesArray);
     SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
     SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
-
+    publisher.set(state.Pose);
     /* Telemeterize the pose to a Field2d */
     fieldTypePub.set("Field2d");
     fieldPub.set(m_poseArray);
