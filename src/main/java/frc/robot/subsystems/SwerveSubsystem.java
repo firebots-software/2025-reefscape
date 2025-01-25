@@ -35,8 +35,8 @@ import java.util.function.Supplier;
 
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
     implements Subsystem {
-  private final PIDController xController = new PIDController(10.0, 0.0, 0.0);
-  private final PIDController yController = new PIDController(10.0, 0.0, 0.0);
+  private final PIDController xController = new PIDController(50.0, 0.0, 0.0);
+  private final PIDController yController = new PIDController(50.0, 0.0, 0.0);
   private final PIDController headingController = new PIDController(7.5, 0.0, 0.0);
 
   public SwerveSubsystem(
@@ -88,6 +88,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   }
 
   public void followTrajectory(SwerveSample sample) {
+    SmartDashboard.putString("follow_traj_running", "yes");
     // Get the current pose of the robot
     Pose2d pose = getState().Pose;
 
@@ -100,7 +101,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 + headingController.calculate(pose.getRotation().getRadians(), sample.heading));
 
     // Apply the generated speeds
-    new SwerveRequest.ApplyRobotSpeeds().withSpeeds(speeds);
+    setControl(m_pathApplyRobotSpeeds.withSpeeds(speeds));
   }
 
   // These values are used later to deal w/ perspective stuff

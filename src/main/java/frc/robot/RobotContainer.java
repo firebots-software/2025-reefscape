@@ -73,6 +73,7 @@ public class RobotContainer {
     // TODO: Use commands > AutoCommands > ModularAuto.java command to run the auto
     // using the
     // selected options and Pose2d list
+    SmartDashboard.putString("follow_traj_running", "no");
 
     autoFactory =
         new AutoFactory(
@@ -81,10 +82,11 @@ public class RobotContainer {
             driveTrain::followTrajectory,
             true,
             driveTrain);
+            
 
-    startPosChooser.setDefaultOption("Top (Next to Blue Barge Zone)", "Top");
-    startPosChooser.addOption("Middle (In between to Barge Zones)", "Middle");
-    startPosChooser.addOption("Bottom (Next to Red Barge Zone)", "Bottom");
+    startPosChooser.setDefaultOption("Top (Next to Blue Barge Zone)", "top");
+    //startPosChooser.addOption("Middle (In between to Barge Zones)", "Middle");
+    startPosChooser.addOption("Bottom (Next to Red Barge Zone)", "bottom");
     SmartDashboard.putData("Auto Start Position", startPosChooser);
 
     configureBindings();
