@@ -101,6 +101,7 @@ public final class Constants {
     // TODO: investigate Pigeon2Configuration and how it's relevant
     private static final Pigeon2Configuration PIGEON2_CONFIGS = null;
 
+
     // TODO: CHANGE FOR NEW ROBOT
     // CAN bus that the devices are located on;
     // All swerve devices must share the same CAN bus
@@ -294,19 +295,19 @@ public final class Constants {
   public static class ElevatorConstants {
     public static final int MOTOR1_PORT = 51; // TODO: change port
     public static final int MOTOR2_PORT = 52; // TODO: change port
-    public static final int kDriverControllerPort = 0; // todo: change port
+    public static final int kDriverControllerPort = 1; // todo: change port
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
-    public static final int S0C_KP = 0;
-    public static final int S0C_KI = 0;
-    public static final int S0C_KD = 0;
-    public static final int MOTIONMAGIC_KV = 0;
-    public static final int MOTIONMAGIC_KA = 0;
-    public static final double level1 = 5;
-    public static final double level2 = 10;
-    public static final double level3 = 15;
-    public static final double level4 = 20;
-    public static final double currentLimit = 0;
+    public static final int S0C_KP = 5;
+    public static final int S0C_KI = 5;
+    public static final int S0C_KD = 5;
+    public static final int MOTIONMAGIC_KV = 5;
+    public static final int MOTIONMAGIC_KA = 5;
+    public static final double level1 = 5.0;
+    public static final double level2 = 10.0;
+    public static final double level3 = 15.0;
+    public static final double level4 = 20.0;
+    public static final double currentLimit = 10;
     public static final double CRUISE_VELOCITY = 10; //To-do
     public static final double ACCELERATION = 10.0;//To-do
     public static final double SETPOINT_TOLERANCE = 10.0;//To-do
@@ -320,10 +321,10 @@ public final class Constants {
     public static enum ElevatorPositions {
         //TODO: Change the height values based on heights needed to score/intake coral on
         Intake(0,0.0),
-        L1(1,0.0),
-        L2(2,0.0),
-        L3(3,0.0),
-        L4(4,0.0);
+        L1(1,5),
+        L2(2,10),
+        L3(3,15),
+        L4(4,20);
     
         public final int position;
         public final double height;

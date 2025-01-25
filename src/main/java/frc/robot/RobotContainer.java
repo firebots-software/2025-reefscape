@@ -26,6 +26,7 @@ import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -34,6 +35,7 @@ import java.util.function.Supplier;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
@@ -55,7 +57,7 @@ public class RobotContainer {
   private final ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
-  private final CommandXboxController joystick = new CommandXboxController(0);
+  private final CommandXboxController joystick = new CommandXboxController(1);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
@@ -63,7 +65,7 @@ public class RobotContainer {
   }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  public RobotContainer() { 
     // Configure the trigger bindings
     configureBindings();
   }
@@ -72,7 +74,7 @@ public class RobotContainer {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
     
-    Supplier<Double>
+    /* Supplier<Double>
         frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
         leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
         rotationFunction = () -> -joystick.getRightX(),
@@ -90,14 +92,14 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
+    */
+  
 
-   joystick.povUp().onTrue(new ElevatorLevel1(m_ElevatorSubsystem));
-   joystick.povRight().onTrue(new ElevatorLevel2(m_ElevatorSubsystem));
-   joystick.povDown().onTrue(new ElevatorLevel3(m_ElevatorSubsystem));
-   joystick.povLeft().onTrue(new ElevatorLevel4(m_ElevatorSubsystem));
+   joystick.a().whileTrue(new ElevatorLevel1(m_ElevatorSubsystem)); 
+   //joystick.x().whileTrue(new ElevatorLevel2(m_ElevatorSubsystem)); // motor no active 
+   ///joystick.y().whileTrue(new ElevatorLevel3(m_ElevatorSubsystem)); // motor no active
+   joystick.b().whileTrue(new ElevatorLevel4(m_ElevatorSubsystem)); 
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
   }
   
   public static void setAlliance() {
