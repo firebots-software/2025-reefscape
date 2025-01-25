@@ -429,18 +429,18 @@ public final class Constants {
   }
 
   public static class TootsieSlide {
-    public static final int UP_MOTOR_PORT = 0; // TODO
-    public static final int DOWN_MOTOR_PORT = 0; // TODO
-    public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO
-    public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO
+    public static final int UP_MOTOR_PORT = 1; // TODO
+    public static final int DOWN_MOTOR_PORT = 2; // TODO
+    public static final double SUPPLY_CURRENT_LIMIT = 90.0; // TODO
+    public static final double STATOR_CURRENT_LIMIT = 90.0; // TODO
     public static final double S0C_KP = 0.1; // TODO
-    public static final double S0C_KI = 0.0; // TODO
-    public static final double S0C_KD = 0.0; // TODO
-    public static final double CRUISE_VELOCITY = 5; // TODO
-    public static final double ACCELERATION = 5; // TODO
+    public static final double S0C_KI = 0; // TODO
+    public static final double S0C_KD = 0; // TODO
+    public static final double CRUISE_VELOCITY = 1000; // TODO
+    public static final double ACCELERATION = 1000; // TODO
 
-    public static final int GEAR_RATIO = 2; // TODO
-    public static final double SPEED_RPS = 300; // TODO
+    public static final int GEAR_RATIO = 12/15; // TODO
+    public static final double SPEED_RPS = 2000; // TODO
 
   }
 
