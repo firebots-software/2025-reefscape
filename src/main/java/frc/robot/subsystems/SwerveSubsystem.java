@@ -29,6 +29,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -58,6 +59,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         odometryStandardDeviation,
         visionStandardDeviation,
         modules);
+        SmartDashboard.putString("follow traj", "off");
     if (Utils.isSimulation()) {
       startSimThread();
     }
@@ -285,10 +287,18 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return m_sysIdRoutineToApply.dynamic(direction);
   }
-
+  int followTrajCount = 0;
   public void followTrajectory(SwerveSample sample) {
-        // Get the current pose of the robot
         Pose2d pose = getCurrentState().Pose;
+        followTrajCount++;
+        SmartDashboard.putString("follow traj", "working");
+        SmartDashboard.putNumber("follow traj desired X", sample.x);
+        SmartDashboard.putNumber("follow traj cur X", followTrajCount);
+        SmartDashboard.putNumber("follow traj ITERATION", followTrajCount);
+
+        // TODO: followTrajectory only runs twice.
+        // Get the current pose of the robot
+        
 
         // Generate the next speeds for the robot
         ChassisSpeeds speeds = new ChassisSpeeds(
