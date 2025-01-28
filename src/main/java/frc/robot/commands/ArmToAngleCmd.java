@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import dev.doglog.DogLog;
+//import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 import java.util.function.DoubleSupplier;
@@ -21,7 +21,7 @@ public class ArmToAngleCmd extends Command {
 
   @Override
   public void execute() {
-    DogLog.log("Running to target angle: ", angle.getAsDouble());
+    //DogLog.log("Running to target angle: ", angle.getAsDouble());
     arm.setPosition(angle.getAsDouble());
   }
 

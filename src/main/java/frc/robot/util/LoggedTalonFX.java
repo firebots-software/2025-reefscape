@@ -3,7 +3,7 @@ package frc.robot.util;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
-import dev.doglog.DogLog;
+//import dev.doglog.DogLog;
 import java.util.ArrayList;
 
 public class LoggedTalonFX extends TalonFX {
@@ -100,6 +100,7 @@ public class LoggedTalonFX extends TalonFX {
   }
 
   public void periodic() {
+    /*
     DogLog.log(temperature, this.getDeviceTemp().getValueAsDouble());
     DogLog.log(closedLoopError, this.getClosedLoopError().getValueAsDouble());
     DogLog.log(closedLoopReference, this.getClosedLoopReference().getValueAsDouble());
@@ -120,5 +121,6 @@ public class LoggedTalonFX extends TalonFX {
     // Voltage
     DogLog.log(motorvoltage, this.getMotorVoltage().getValueAsDouble());
     DogLog.log(supplyvoltage, this.getSupplyVoltage().getValueAsDouble());
+    */
   }
 }
