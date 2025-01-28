@@ -120,7 +120,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             });
     m_simNotifier.startPeriodic(kSimLoopPeriod);
   }
-/*
 
   public void followTrajectory(SwerveSample sample) {
     SmartDashboard.putString("follow_traj_running", "yes");
@@ -138,7 +137,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // Apply the generated speeds
     setControl(m_pathApplyRobotSpeeds.withSpeeds(speeds));
   }
-    */
 
   /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
   private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
