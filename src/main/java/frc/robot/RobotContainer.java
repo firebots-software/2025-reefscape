@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.*;
 
 import choreo.auto.AutoFactory;
 import com.ctre.phoenix6.SignalLogger;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
