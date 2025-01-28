@@ -30,6 +30,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -49,9 +50,11 @@ public class TootsieSlideSubsystem extends SubsystemBase{
 
     private final DCMotor m_tootsieSlideGearbox = DCMotor.getKrakenX60(1);
 
-    public static LinearSystem<N1,N1,N1> tootsieSystem = LinearSystemId.identifyVelocitySystem(1, 2.2);
+    public static LinearSystem<N1,N1,N1> tootsieSystem = LinearSystemId.identifyVelocitySystem(0.05, 0.1);
 
     private final FlywheelSim m_flywheelSim = new FlywheelSim(tootsieSystem, m_tootsieSlideGearbox, 0);
+
+    private final VelocityVoltage m_velocity = new VelocityVoltage(0);
 
   public TootsieSlideSubsystem() {
 
@@ -59,6 +62,8 @@ public class TootsieSlideSubsystem extends SubsystemBase{
     downMotor = new LoggedTalonFX(2); // Unique ID for motor2
 
     downMotor.setControl(new Follower(1, false)); // motor1 ID as master
+
+
 
     TalonFXConfigurator m1Config = upMotor.getConfigurator();
     TalonFXConfigurator m2Config = downMotor.getConfigurator();
@@ -74,6 +79,7 @@ public class TootsieSlideSubsystem extends SubsystemBase{
             .withKI(Constants.TootsieSlide.S0C_KI)
             .withKD(Constants.TootsieSlide.S0C_KD);
 
+    m_velocity.Slot = 0;
     m1Config.apply(clc);
     m2Config.apply(clc);
 
@@ -103,22 +109,19 @@ public static TootsieSlideSubsystem getInstance() {
   }
 
   private void runTootsieAtRPS(double speed) {
-    VelocityVoltage m_velocityControl =
-        new VelocityVoltage(speed);
     SmartDashboard.putBoolean("is it running", true);
-    master.setControl(m_velocityControl);
-    SmartDashboard.putNumber("VelocityVoltage", master.getMotorVoltage().getValue().magnitude());
-    m_flywheelSim.setInputVoltage(master.getMotorVoltage().getValue().magnitude());
+    master.setControl(m_velocity.withVelocity(speed));
+    SmartDashboard.putNumber("VelocityVoltage", master.getMotorVoltage().getValueAsDouble());
+    m_flywheelSim.setInputVoltage(master.getSupplyVoltage().getValueAsDouble());
   }
 
   public void spinTootsie() {
-    runTootsieAtRPS(3000);
+    runTootsieAtRPS(30);
   }
 
    public void stopTootsie() {
     master.stopMotor();
-    master.setVoltage(0);
-
+    master.setControl(m_velocity.withVelocity(0));
     m_flywheelSim.setInputVoltage(0);
 
   }
@@ -146,7 +149,7 @@ public static TootsieSlideSubsystem getInstance() {
     SmartDashboard.putNumber("voltage", master.getMotorVoltage().getValue().magnitude());
     SmartDashboard.putNumber("SIMvoltage", m_flywheelSim.getInputVoltage());
 
-    SmartDashboard.putNumber("Flywheel Velocity", m_flywheelSim.getAngularVelocityRPM());
+    SmartDashboard.putNumber("Shooter Speed at RPM", m_flywheelSim.getAngularVelocityRPM());
     SmartDashboard.putNumber("Flywheel Current", m_flywheelSim.getCurrentDrawAmps());
 
   }

@@ -433,7 +433,7 @@ public final class Constants {
     public static final int DOWN_MOTOR_PORT = 2; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 90.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 90.0; // TODO
-    public static final double S0C_KP = 0.1; // TODO
+    public static final double S0C_KP = 1; // TODO
     public static final double S0C_KI = 0; // TODO
     public static final double S0C_KD = 0; // TODO
     public static final double CRUISE_VELOCITY = 1000; // TODO
