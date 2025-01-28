@@ -64,11 +64,11 @@ public class RobotContainer {
         frontBackFunction =
             () ->
                 -joystick
-                    .getLeftY(), // ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
+                    .getLeftY(), 
         leftRightFunction =
             () ->
                 -joystick
-                    .getLeftX(), // ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
+                    .getLeftX(),
         rotationFunction = () -> -joystick.getRightX(),
         speedFunction =
             () ->
