@@ -25,6 +25,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import dev.doglog.DogLog;
+
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
@@ -61,8 +63,8 @@ public class RobotContainer {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier
-        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
-        leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
+        frontBackFunction = () -> -joystick.getLeftY(),//((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
+        leftRightFunction = () -> -joystick.getLeftX(),//((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
         rotationFunction = () -> -joystick.getRightX(),
         speedFunction =
             () ->

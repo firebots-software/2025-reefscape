@@ -20,7 +20,11 @@ import frc.robot.util.LoggedTalonFX;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
+  // Commented this out because arm is not on bot and this is activiating
+  // something that doesn't physically exist
+  // TODO: uncomment when arm is on real bot
+
+  // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
   private final RobotContainer m_robotContainer;
 
@@ -97,8 +101,8 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    CommandScheduler.getInstance()
-        .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
+    CommandScheduler.getInstance();
+        // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
 
   /** This function is called periodically during operator control. */
