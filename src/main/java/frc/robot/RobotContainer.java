@@ -60,15 +60,8 @@ public class RobotContainer {
   private void configureBindings() {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    DoubleSupplier
-        frontBackFunction =
-            () ->
-                -joystick
-                    .getLeftY(), 
-        leftRightFunction =
-            () ->
-                -joystick
-                    .getLeftX(),
+    DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
+        leftRightFunction = () -> -joystick.getLeftX(),
         rotationFunction = () -> -joystick.getRightX(),
         speedFunction =
             () ->
