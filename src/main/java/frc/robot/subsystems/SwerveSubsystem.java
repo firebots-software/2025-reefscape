@@ -15,6 +15,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
+import choreo.trajectory.SwerveSample;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -159,6 +161,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     driverRotationPidController.reset(currentState.Pose.getRotation().getRadians());
   }
 
+  public Pose2d getPose() {
+    return currentState.Pose;
+  }
+
   /* Swerve requests to apply during SysId characterization */
   private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization =
       new SwerveRequest.SysIdSwerveTranslation();
@@ -250,6 +256,20 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         xFeedback, yFeedback, thetaFeedback, currentState.Pose.getRotation());
   }
 
+  public void followTrajectory(SwerveSample sample) {
+        // Get the current pose of the robot
+        Pose2d pose = getCurrentState().Pose;
+
+        // Generate the next speeds for the robot
+        ChassisSpeeds speeds = new ChassisSpeeds(
+            sample.vx + xPidController.calculate(pose.getX(), sample.x),
+            sample.vy + yPidController.calculate(pose.getY(), sample.y),
+            sample.omega + driverRotationPidController.calculate(pose.getRotation().getRadians(), sample.heading)
+        );
+
+        // Apply the generated speeds
+        setChassisSpeeds(speeds);
+    }
   /**
    * Returns a command that applies the specified control request to this swerve drivetrain.
    *

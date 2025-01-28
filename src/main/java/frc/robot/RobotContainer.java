@@ -25,6 +25,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import choreo.auto.AutoFactory;
+
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
@@ -44,6 +46,8 @@ public class RobotContainer {
           Constants.Swerve.BackLeft,
           Constants.Swerve.BackRight);
 
+  private final AutoFactory autoFactory;
+  
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
@@ -55,6 +59,13 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    autoFactory = new AutoFactory(
+            driveTrain::getPose, // A function that returns the current robot pose
+            driveTrain::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            driveTrain::followTrajectory, // The drive subsystem trajectory follower 
+            true, // If alliance flipping should be enabled
+            driveTrain 
+        );
   }
 
   private void configureBindings() {
