@@ -82,10 +82,9 @@ public class RobotContainer {
             driveTrain::followTrajectory,
             true,
             driveTrain);
-            
 
     startPosChooser.setDefaultOption("Top (Next to Blue Barge Zone)", "top");
-    //startPosChooser.addOption("Middle (In between to Barge Zones)", "Middle");
+    // startPosChooser.addOption("Middle (In between to Barge Zones)", "Middle");
     startPosChooser.addOption("Bottom (Next to Red Barge Zone)", "bottom");
     SmartDashboard.putData("Auto Start Position", startPosChooser);
 
