@@ -131,6 +131,6 @@ public class Robot extends TimedRobot {
   public void simulationPeriodic() {}
 
   public void absoluteInit() {
-      RobotContainer.setAlliance();
+    RobotContainer.setAlliance();
   }
 }
