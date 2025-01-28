@@ -9,8 +9,6 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ZeroArm;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.util.LoggedTalonFX;
 
 /**
@@ -102,7 +100,7 @@ public class Robot extends TimedRobot {
     }
 
     CommandScheduler.getInstance();
-        // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
+    // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
 
   /** This function is called periodically during operator control. */
