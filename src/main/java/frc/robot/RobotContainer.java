@@ -14,20 +14,11 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-<<<<<<< HEAD
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-=======
->>>>>>> ab340fdcb5c3658064d3f8e0a7165599d4f27e52
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-<<<<<<< HEAD
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-=======
 import frc.robot.commands.JamesHardenMovement;
->>>>>>> ab340fdcb5c3658064d3f8e0a7165599d4f27e52
 import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.generated.TunerConstants;
 // import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -41,10 +32,7 @@ public class RobotContainer {
 
   private final AutoFactory autoFactory;
   // Alliance color
-<<<<<<< HEAD
-=======
   private BooleanSupplier redside = () -> redAlliance;
->>>>>>> ab340fdcb5c3658064d3f8e0a7165599d4f27e52
   private static boolean redAlliance;
 
   private final SwerveSubsystem driveTrain =
