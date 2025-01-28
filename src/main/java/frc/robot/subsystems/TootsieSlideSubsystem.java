@@ -44,8 +44,7 @@ public class TootsieSlideSubsystem extends SubsystemBase{
     private static TootsieSlideSubsystem instance;
     
     private DigitalInput coralSensor;
-    private LoggedTalonFX upMotor;
-    private LoggedTalonFX downMotor;
+    private LoggedTalonFX motor;
     private LoggedTalonFX master;
 
     private final DCMotor m_tootsieSlideGearbox = DCMotor.getKrakenX60(1);
@@ -58,15 +57,9 @@ public class TootsieSlideSubsystem extends SubsystemBase{
 
   public TootsieSlideSubsystem() {
 
-    upMotor = new LoggedTalonFX(1); // Unique ID for motor1
-    downMotor = new LoggedTalonFX(2); // Unique ID for motor2
+    motor = new LoggedTalonFX(1); // Unique ID for motor
 
-    downMotor.setControl(new Follower(1, false)); // motor1 ID as master
-
-
-
-    TalonFXConfigurator m1Config = upMotor.getConfigurator();
-    TalonFXConfigurator m2Config = downMotor.getConfigurator();
+    TalonFXConfigurator m1Config = motor.getConfigurator();
 
     CurrentLimitsConfigs clc = new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -81,9 +74,8 @@ public class TootsieSlideSubsystem extends SubsystemBase{
 
     m_velocity.Slot = 0;
     m1Config.apply(clc);
-    m2Config.apply(clc);
 
-    master = upMotor;
+    master = motor;
     master.getConfigurator().apply(s0c);
     master.getConfigurator().apply(clc);
 
