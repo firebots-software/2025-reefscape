@@ -121,22 +121,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     m_simNotifier.startPeriodic(kSimLoopPeriod);
   }
 /*
-  public void followTrajectory(SwerveSample sample) {
-    SmartDashboard.putString("follow_traj_running", "yes");
-    // Get the current pose of the robot
-    Pose2d pose = getState().Pose;
-
-    // Generate the next speeds for the robot
-    ChassisSpeeds speeds =
-        new ChassisSpeeds(
-            sample.vx + xController.calculate(pose.getX(), sample.x),
-            sample.vy + yController.calculate(pose.getY(), sample.y),
-            sample.omega
-                + headingController.calculate(pose.getRotation().getRadians(), sample.heading));
-
-    // Apply the generated speeds
-    setControl(m_pathApplyRobotSpeeds.withSpeeds(speeds));
-  }
 
   public void followTrajectory(SwerveSample sample) {
     SmartDashboard.putString("follow_traj_running", "yes");
