@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    CommandScheduler.getInstance();
+    // CommandScheduler.getInstance();
     // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
 
