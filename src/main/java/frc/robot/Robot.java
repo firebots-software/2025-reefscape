@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    RobotContainer.setAlliance();
+    absoluteInit();
   }
 
   @Override
@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
     // Commented this code that logs the electric data because it crashed the robot code
     // there is an error related to the usage of this
     // DogLog.setPdh(new PowerDistribution());
-    RobotContainer.setAlliance();
+    absoluteInit();
   }
 
   @Override
@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    RobotContainer.setAlliance();
+    absoluteInit();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    // RobotContainer.setAlliance();
+    absoluteInit();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -122,9 +122,15 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    absoluteInit();
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  public void absoluteInit() {
+    RobotContainer.setAlliance();
+  }
 }
