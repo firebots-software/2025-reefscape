@@ -43,7 +43,7 @@ import frc.robot.Constants;
 public class TootsieSlideSubsystem extends SubsystemBase{
     private static TootsieSlideSubsystem instance;
     
-    private DigitalInput coralSensor;
+    private DigitalInput drakeSensor;
     private LoggedTalonFX upMotor;
     private LoggedTalonFX downMotor;
     private LoggedTalonFX master;
@@ -115,8 +115,11 @@ public static TootsieSlideSubsystem getInstance() {
     m_flywheelSim.setInputVoltage(master.getSupplyVoltage().getValueAsDouble());
   }
 
-  public void spinTootsie() {
-    runTootsieAtRPS(30);
+  public void spinTootsie(boolean thing) {
+    if(!thing && coralPresent()){
+      runTootsieAtRPS(30);
+    }
+    
   }
 
    public void stopTootsie() {
@@ -135,7 +138,7 @@ public static TootsieSlideSubsystem getInstance() {
    *
    * @return value of some boolean subsystem state, such as a digital sensor.
    */
-  public boolean exampleCondition() {
+  public boolean atTarget() {
     // Query some boolean state, such as a digital sensor.
     return false;
   }
@@ -156,27 +159,10 @@ public static TootsieSlideSubsystem getInstance() {
 
   @Override
   public void simulationPeriodic() {
-    // In this method, we update our simulation of what our elevator is doing
-    // First, we set our "inputs" (voltages)
-    // m_flywheelSim.setInputVolatge()
 
-    // // Next, we update it. The standard loop time is 20ms.
-    // m_flywheelSim.update(0.020);
-
-    // // Finally, we set our simulated encoder's readings and simulated battery voltage
-    // m_flywheelSim.setDistance(m_flywheelSim.getPositionMeters());
-    // // SimBattery estimates loaded battery voltages
-    // RoboRioSim.setVInVoltage(
-    //     BatterySim.calculateDefaultBatteryLoadedVoltage(m_flywheelSim.getCurrentDrawAmps()));
-    // m_flywheelSim.setInputVoltage(10.0);
-
-    
-
-    // SmartDashboard.putNumber("voltage", master.getMotorVoltage().getValue().magnitude());
-    // SmartDashboard.putNumber("Flywheel Velocity", m_flywheelSim.getAngularVelocityRPM());
   }
 
 public boolean coralPresent() {
-  return !coralSensor.get();
+  return drakeSensor.get();
 }
 }
