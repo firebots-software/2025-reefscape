@@ -145,6 +145,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    return new WaitCommand(10);
+    return autoFactory.trajectoryCmd("TestPath");
   }
 }

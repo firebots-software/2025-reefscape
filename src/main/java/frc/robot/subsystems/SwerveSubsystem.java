@@ -41,6 +41,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   private ProfiledPIDController xPidController, yPidController, driverRotationPidController;
   private SwerveDriveState currentState;
+  private int followTrajectoryCt;
 
   public SwerveSubsystem(
       SwerveDrivetrainConstants drivetrainConstants,
@@ -60,7 +61,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     if (Utils.isSimulation()) {
       startSimThread();
     }
-
+    followTrajectoryCt = 0;
     currentState = getCurrentState();
 
     xPidController =
@@ -259,7 +260,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   public void followTrajectory(SwerveSample sample) {
         // Get the current pose of the robot
         Pose2d pose = getCurrentState().Pose;
-
         // Generate the next speeds for the robot
         ChassisSpeeds speeds = new ChassisSpeeds(
             sample.vx + xPidController.calculate(pose.getX(), sample.x),
@@ -267,6 +267,9 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             sample.omega + driverRotationPidController.calculate(pose.getRotation().getRadians(), sample.heading)
         );
 
+        DogLog.log("followTrajectory/sample.vx", sample.vx);
+        DogLog.log("followTrajectory/sample.vy", sample.vy);
+        DogLog.log("followTrajectory/sample.omega", sample.omega);
         // Apply the generated speeds
         setChassisSpeeds(speeds);
     }
@@ -324,5 +327,13 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     DogLog.log("Swerve/ChassisSpeedsY(mps)", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
     DogLog.log(
         "Swerve/ChassisSpeedsTurning(radps)", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+    DogLog.log("Swerve/CurrentCommand", (getCurrentCommand() == null) ? "nothing" : getCurrentCommand().getName());
+    if (getCurrentCommand() != null) {
+      if (!getCurrentCommand().getName().equals("SwerveJoystickCommand")) {
+        DogLog.log("Swerve/nonswervejoystickcommand", getCurrentCommand().getName());
+        followTrajectoryCt++;
+      }
+    }
+    DogLog.log("Swerve/timesCalled", followTrajectoryCt);
   }
 }
