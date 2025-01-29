@@ -96,6 +96,14 @@ public class VisionSystem extends SubsystemBase {
 
     return new Pose2d((one.getX() + two.getX())/2 , (one.getY() + two.getY())/2 , one.getRotation());
   }
+  public AprilTagFieldLayout gAprilTagFieldLayout(){
+    return this.aprilTagFieldLayout; 
+  }
+
+  public PhotonPipelineResult gPipelineResult(){
+    return camera.getLatestResult();
+  }
+
 
   @Override
   public void periodic() {

@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
     if (frontRobotPose.isPresent() || backRobotPose.isPresent() ) {
 
       double frontdistToAprilTag =
-          visionFront.gTagFieldLayout().getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
+          visionFront.gAprilTagFieldLayout().getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
               .get()
               .getTranslation()
               .getDistance(
@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
                       driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
 
     double backdistToAprilTag =
-    visionBack.gTagFieldLayout().getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
+    visionBack.gAprilTagFieldLayout().getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
         .get()
         .getTranslation()
         .getDistance(
