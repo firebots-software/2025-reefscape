@@ -97,6 +97,10 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     }
   }
 
+  public void shootTootsie() {
+    runTootsieAtRPS(30);
+  }
+
   public void stopTootsie() {
     master.stopMotor();
     master.setControl(m_velocity.withVelocity(0));

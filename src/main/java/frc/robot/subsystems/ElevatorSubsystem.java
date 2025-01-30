@@ -26,6 +26,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private LoggedTalonFX master;
   private Double holdPosValue = 0.0;
 
+
   public ElevatorSubsystem() {
     motor1 = new LoggedTalonFX(1); // Unique ID for motor1
     motor2 = new LoggedTalonFX(2); // Unique ID for motor2
@@ -130,6 +131,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     holdPosition(targetPosition);
     SmartDashboard.putString("Elevator Error", "Level: " + level + ", Error: " + getPIDError());
   }
+
 
   @Override
   public void periodic() {

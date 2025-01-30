@@ -25,7 +25,7 @@ public class TootsieSlideShooting extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    tootsieSlideSubsystem.spinTootsie(!tootsieSlideSubsystem.coralPresent()); // spinTootsie function runs only if the boolean is opposite so ! makes coralPresent true
+    tootsieSlideSubsystem.shootTootsie();
   }
 
   // Called once the command ends or is interrupted.
@@ -37,6 +37,6 @@ public class TootsieSlideShooting extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return tootsieSlideSubsystem.atTarget();
+    return false;
   }
 }
