@@ -547,15 +547,13 @@ public final class Constants {
     public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420;
     public static final double TELE_DRIVE_PERCENT_SPEED_RANGE =
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
-<<<<<<< HEAD
 
     public class Odometry {
       public static final double ODOMETRY_UPDATE_CONSTANT = 250.0;
     }
-=======
+
     public static final double TELE_DRIVE_MAX_ANGULAR_RATE = Math.PI * 1.5;
     public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND =
         TELE_DRIVE_MAX_ANGULAR_RATE * 8;
->>>>>>> ab340fdcb5c3658064d3f8e0a7165599d4f27e52
   }
 }

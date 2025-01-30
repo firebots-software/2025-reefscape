@@ -19,7 +19,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import dev.doglog.DogLog;
+//import dev.doglog.DogLog;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -150,8 +150,10 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
     encoderDegrees = calculateDegrees();
     // This method will be called once per scheduler run
+    /*
     DogLog.log("Arm at target", atTarget(5));
     DogLog.log("Arm Degrees", encoderDegrees);
     DogLog.log("Arm Target Degrees", targetDegrees);
+    */
   }
 }

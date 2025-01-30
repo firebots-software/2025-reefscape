@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Meters;
 
-import dev.doglog.DogLog;
+//import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -42,7 +42,7 @@ public class JamesHardenMovement extends Command {
   @Override
   public void execute() {
     ChassisSpeeds speeds = swerve.calculateRequiredChassisSpeeds(targetPose);
-
+/*
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
     DogLog.log("JamesHardenMovement/TargetPoseHeading(deg)", targetPose.getRotation().getDegrees());
@@ -50,6 +50,7 @@ public class JamesHardenMovement extends Command {
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(mps)", speeds.vxMetersPerSecond);
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(radps)", speeds.omegaRadiansPerSecond);
+    */
 
     swerve.setChassisSpeeds(speeds);
   }
@@ -109,8 +110,8 @@ public class JamesHardenMovement extends Command {
                                 * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getSin())),
                     Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]));
 
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
+            //DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
+            //DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
 
             return target;
           } else {
@@ -144,8 +145,8 @@ public class JamesHardenMovement extends Command {
                                 * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getSin())),
                     Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]));
 
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
+            //DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
+            //DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
 
             return target;
           }
@@ -190,8 +191,8 @@ public class JamesHardenMovement extends Command {
                                 * Constants.Landmarks.reefFacingAngleRed[sideOfMinDist].getSin())),
                     Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]));
 
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
+            //DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
+            //DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
 
             return target;
           } else {
@@ -225,8 +226,8 @@ public class JamesHardenMovement extends Command {
                                 * Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist].getSin())),
                     Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]));
 
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
+            //DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
+            //DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
 
             return target;
           }

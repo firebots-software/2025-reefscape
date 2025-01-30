@@ -54,23 +54,20 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    RobotContainer.setAlliance();
+    m_robotContainer.setAlliance();
   }
 
   @Override
-<<<<<<< HEAD
-=======
   public void robotInit() {
-    DogLog.setOptions(
-        new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
+    //DogLog.setOptions(
+        //new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
     // Commented this code that logs the electric data because it crashed the robot code
     // there is an error related to the usage of this
     // DogLog.setPdh(new PowerDistribution());
-    RobotContainer.setAlliance();
+    m_robotContainer.setAlliance();
   }
 
   @Override
->>>>>>> ab340fdcb5c3658064d3f8e0a7165599d4f27e52
   public void disabledPeriodic() {}
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -96,10 +93,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-<<<<<<< HEAD
-=======
     // RobotContainer.setAlliance();
->>>>>>> ab340fdcb5c3658064d3f8e0a7165599d4f27e52
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -117,10 +111,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-<<<<<<< HEAD
-=======
     // RobotContainer.setAlliance();
->>>>>>> ab340fdcb5c3658064d3f8e0a7165599d4f27e52
     CommandScheduler.getInstance().cancelAll();
   }
 
