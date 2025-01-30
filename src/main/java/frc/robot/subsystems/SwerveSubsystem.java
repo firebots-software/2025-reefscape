@@ -15,7 +15,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+<<<<<<< HEAD
+=======
 import dev.doglog.DogLog;
+>>>>>>> 2fd1d20fa3567adb5c7ccf81c1fb371110ac2922
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -248,9 +251,16 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     SmartDashboard.putNumber("bl_angle", getState().ModuleStates[2].angle.getDegrees());
     SmartDashboard.putNumber("br_speed", getState().ModuleStates[3].speedMetersPerSecond);
     SmartDashboard.putNumber("br_angle", getState().ModuleStates[3].angle.getDegrees());
+<<<<<<< HEAD
+    // DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
+    // DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
+    // DogLog.log("chassis/rotation_speed_radps",
+    // getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+=======
     DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
     DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
     DogLog.log(
         "chassis/rotation_speed_radps", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+>>>>>>> 2fd1d20fa3567adb5c7ccf81c1fb371110ac2922
   }
 }

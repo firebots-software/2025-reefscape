@@ -1,6 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
@@ -244,6 +245,9 @@ public final class Constants {
     public static final Current DRIVE_SUPPLY_CURRENT_LIMIT_AMPS = Amps.of(40.0);
     public static final Current TURNING_SUPPLY_CURRENT_LIMIT_AMPS = Amps.of(30.0);
 
+    public static final Current DUTY_CYCLE_VELOCITY = Current.ofBaseUnits(30.0, Amp);
+    public static final Current ACCELERATION = Current.ofBaseUnits(50.0, Amp);
+
     // Theoretical free speed (m/s) at 12v applied output;
     // This needs to be tuned to your individual robot
     public static final LinearVelocity SPEED_AT_12V_METERS_PER_SECOND =
@@ -463,5 +467,70 @@ public final class Constants {
     public static final int CHECK_IN_PORT = 0;
     public static final int CHECK_OUT_PORT = 0;
     public static final int DRAKE_PORT = 0;
+  }
+
+  public static class ElevatorConstants {
+    public static final int MOTOR1_PORT = 0; // TODO: change port
+    public static final int MOTOR2_PORT = 0; // TODO: change port
+    public static final int kDriverControllerPort = 0; // todo: change port
+    public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
+    public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
+    public static final int S0C_KP = 0;
+    public static final int S0C_KI = 0;
+    public static final int S0C_KD = 0;
+    public static final int MOTIONMAGIC_KV = 0;
+    public static final int MOTIONMAGIC_KA = 0;
+    public static final double level1 = 0;
+    public static final double level2 = 0;
+    public static final double level3 = 0;
+    public static final double level4 = 0;
+    public static final double currentLimit = 0;
+    public static final double CRUISE_VELOCITY = 10000000; //To-do
+    public static final double ACCELERATION = 0.0;//To-do
+    public static final double SETPOINT_TOLERANCE = 0;//To-do
+
+    public static enum ElevatorPositions {
+        //TODO: Change the height values based on heights needed to score/intake coral on
+        Intake(0,0.0),
+        L1(1,0.0),
+        L2(2,0.0),
+        L3(3,0.0),
+        L4(4,0.0);
+    
+        public final int position;
+        public final double height;
+    
+        ElevatorPositions(int pos, double height) {
+          this.position = pos;
+          this.height = height;
+        }
+      }
+  }
+
+  public static final class MotorConstants {
+    public final int PORT;
+    public final boolean REVERSED;
+    public final double GEAR_RATIO;
+    public final double STATOR_CURRENT_LIMIT_AMPS;
+    public final double SPEED_RPS;
+    public final double AMP_SPEED_RPS;
+    public final double SPEED_VOLTAGE;
+
+    private MotorConstants(
+        int port,
+        boolean reversed,
+        double gearRatio,
+        double statorCurrent,
+        double speed,
+        double ampSpeed,
+        double voltage) {
+      PORT = port;
+      REVERSED = reversed;
+      GEAR_RATIO = gearRatio;
+      STATOR_CURRENT_LIMIT_AMPS = statorCurrent;
+      SPEED_RPS = speed;
+      AMP_SPEED_RPS = ampSpeed;
+      SPEED_VOLTAGE = voltage;
+    }
   }
 }
