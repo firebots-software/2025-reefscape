@@ -47,8 +47,8 @@ public class ElevatorSubsystem extends SubsystemBase{
     private LoggedTalonFX upMotor;
     private LoggedTalonFX downMotor;
     private LoggedTalonFX master;
+    private boolean coralDetected = false;
 
-    private final DCMotor m_ElevatorSlideGearbox = DCMotor.getKrakenX60(1);
 
     public static LinearSystem<N1,N1,N1> ElevatorSystem = LinearSystemId.identifyVelocitySystem(0.05, 0.1);
 
@@ -113,10 +113,9 @@ public static ElevatorSubsystem getInstance() {
   }
 
   public void spinElevator(boolean checkOutSensor) {
-    if(!checkOutSensor && coralPresent()){
+    if(!checkOutSensor && coralDetected){
       runElevatorAtRPS(30);
     }
-    
   }
 
    public void stopElevator() {
@@ -134,8 +133,12 @@ public static ElevatorSubsystem getInstance() {
    *
    * @return value of some boolean subsystem state, such as a digital sensor.
    */
-  public boolean atTarget(boolean atTop) {
+  public boolean atTarget(boolean checkingIfAtTop) {
+    boolean thingToReturn = false;
     // Query some boolean state, such as a digital sensor.
+    if(thingToReturn){
+      coralDetected = false;
+    }
     return false;
   }
 
@@ -144,6 +147,9 @@ public static ElevatorSubsystem getInstance() {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(coralPresent()){
+      coralDetected = true;
+    }
 
   }
 
