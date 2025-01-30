@@ -21,6 +21,7 @@ import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Voltage;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.LoggedTalonFX;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -38,14 +39,14 @@ import com.ctre.phoenix6.controls.compound.Diff_DutyCycleOut_Velocity;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
 import frc.robot.Constants;
+import frc.robot.Constants.TootsieSlide;
 
 
 public class TootsieSlideSubsystem extends SubsystemBase{
     private static TootsieSlideSubsystem instance;
     
     private DigitalInput drakeSensor;
-    private LoggedTalonFX upMotor;
-    private LoggedTalonFX downMotor;
+    private LoggedTalonFX motor;
     private LoggedTalonFX master;
 
     private final DCMotor m_tootsieSlideGearbox = DCMotor.getKrakenX60(1);
@@ -61,6 +62,8 @@ public class TootsieSlideSubsystem extends SubsystemBase{
     motor = new LoggedTalonFX(1); // Unique ID for motor
 
     TalonFXConfigurator m1Config = motor.getConfigurator();
+
+    drakeSensor = new DigitalInput(TootsieSlide.CHECKOUT_PORT);
 
     CurrentLimitsConfigs clc = new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)

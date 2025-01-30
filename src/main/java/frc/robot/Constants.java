@@ -429,8 +429,8 @@ public final class Constants {
   }
 
   public static class TootsieSlide {
-    public static final int UP_MOTOR_PORT = 1; // TODO
-    public static final int DOWN_MOTOR_PORT = 2; // TODO
+    public static final int MOTOR_PORT = 1; // TODO
+    public static final int CHECKOUT_PORT = 1; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 90.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 90.0; // TODO
     public static final double S0C_KP = 1; // TODO
