@@ -41,6 +41,6 @@ public class RunTootsieUntilDetection extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return tootsieSubsystem.atTarget();
+    return tootsieSubsystem.coralPresent();
   }
 }

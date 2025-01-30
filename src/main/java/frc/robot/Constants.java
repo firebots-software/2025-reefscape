@@ -520,10 +520,11 @@ public final class Constants {
     public static final int S0C_KD = 0;
     public static final int MOTIONMAGIC_KV = 0;
     public static final int MOTIONMAGIC_KA = 0;
-    public static final double level1 = 0;
-    public static final double level2 = 0;
-    public static final double level3 = 0;
-    public static final double level4 = 0;
+    public static final int INTAKE_LEVEL = 0; // TODO
+    public static final double LEVEL_1 = 0;
+    public static final double LEVEL_2 = 0;
+    public static final double LEVEL_3 = 0;
+    public static final double LEVEL_4 = 0;
     public static final double currentLimit = 0;
     public static final double CRUISE_VELOCITY = 10000000; // To-do
     public static final double ACCELERATION = 0.0; // To-do

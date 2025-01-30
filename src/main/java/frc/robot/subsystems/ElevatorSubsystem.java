@@ -118,11 +118,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void setLevelOfElevator(int level) {
     double targetPosition =
-        switch (level) {
-          case 1 -> Constants.ElevatorConstants.level1;
-          case 2 -> Constants.ElevatorConstants.level2;
-          case 3 -> Constants.ElevatorConstants.level3;
-          case 4 -> Constants.ElevatorConstants.level4;
+        switch (level) {  // writing 1 here would be intake level and etc.
+          case 1 -> Constants.ElevatorConstants.INTAKE_LEVEL;
+          case 2 -> Constants.ElevatorConstants.LEVEL_1;
+          case 3 -> Constants.ElevatorConstants.LEVEL_2;
+          case 4 -> Constants.ElevatorConstants.LEVEL_3;
+          case 5 -> Constants.ElevatorConstants.LEVEL_4;
           default -> throw new IllegalArgumentException("Invalid level: " + level);
         };
 
