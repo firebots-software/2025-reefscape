@@ -484,13 +484,12 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 1000; // TODO
     public static final double ACCELERATION = 1000; // TODO
 
-    public static final int GEAR_RATIO = 12/15; // TODO
+    public static final int GEAR_RATIO = 12 / 15; // TODO
     public static final double SPEED_RPS = 2000; // TODO
-
   }
 
   public static class FunnelConstants {
-     public static final int UP_MOTOR_PORT = 0; // TODO
+    public static final int UP_MOTOR_PORT = 0; // TODO
     public static final int DOWN_MOTOR_PORT = 0; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO
@@ -526,26 +525,26 @@ public final class Constants {
     public static final double level3 = 0;
     public static final double level4 = 0;
     public static final double currentLimit = 0;
-    public static final double CRUISE_VELOCITY = 10000000; //To-do
-    public static final double ACCELERATION = 0.0;//To-do
-    public static final double SETPOINT_TOLERANCE = 0;//To-do
+    public static final double CRUISE_VELOCITY = 10000000; // To-do
+    public static final double ACCELERATION = 0.0; // To-do
+    public static final double SETPOINT_TOLERANCE = 0; // To-do
 
     public static enum ElevatorPositions {
-        //TODO: Change the height values based on heights needed to score/intake coral on
-        Intake(0,0.0),
-        L1(1,0.0),
-        L2(2,0.0),
-        L3(3,0.0),
-        L4(4,0.0);
-    
-        public final int position;
-        public final double height;
-    
-        ElevatorPositions(int pos, double height) {
-          this.position = pos;
-          this.height = height;
-        }
+      // TODO: Change the height values based on heights needed to score/intake coral on
+      Intake(0, 0.0),
+      L1(1, 0.0),
+      L2(2, 0.0),
+      L3(3, 0.0),
+      L4(4, 0.0);
+
+      public final int position;
+      public final double height;
+
+      ElevatorPositions(int pos, double height) {
+        this.position = pos;
+        this.height = height;
       }
+    }
   }
 
   public static final class MotorConstants {

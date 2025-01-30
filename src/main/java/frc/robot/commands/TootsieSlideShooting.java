@@ -12,7 +12,7 @@
 // public class TootsieSlideShooting extends Command {
 //   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 //   private final TootsieSlideSubsystem m_subsystem;
-//   private final 
+//   private final
 //   public TootsieSlideShooting(TootsieSlideSubsystem subsystem) {
 //     m_subsystem = subsystem;
 //     addRequirements(m_subsystem);
@@ -23,7 +23,6 @@
 //   public void initialize() {
 //     SmartDashboard.putString("TootsieSlideSHootingisRunning", "true");
 //   }
-   
 
 //   // Called every time the scheduler runs while the command is scheduled.
 //   @Override

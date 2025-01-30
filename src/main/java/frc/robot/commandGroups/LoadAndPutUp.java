@@ -14,11 +14,11 @@ import frc.robot.commands.RunTootsieUntilDetection;
 public class LoadAndPutUp extends SequentialCommandGroup {
   RunTootsieUntilDetection tootsieSlide;
   RunFunnelUntilDetection funnel;
+
   public LoadAndPutUp() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    
     addCommands(funnel);
     addCommands(tootsieSlide);
   }

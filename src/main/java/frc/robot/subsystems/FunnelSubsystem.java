@@ -4,21 +4,17 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.util.LoggedTalonFX;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import dev.doglog.DogLog;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.LoggedTalonFX;
 
 public class FunnelSubsystem extends SubsystemBase {
   private static FunnelSubsystem instance;
@@ -38,14 +34,16 @@ public class FunnelSubsystem extends SubsystemBase {
     TalonFXConfigurator m1Config = topMotor.getConfigurator();
     TalonFXConfigurator m2Config = bottomMotor.getConfigurator();
 
-    CurrentLimitsConfigs clc = new CurrentLimitsConfigs()
+    CurrentLimitsConfigs clc =
+        new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
             .withStatorCurrentLimit(Constants.FunnelConstants.STATOR_CURRENT_LIMIT)
             .withSupplyCurrentLimitEnable(true)
             .withSupplyCurrentLimit(Constants.FunnelConstants.SUPPLY_CURRENT_LIMIT);
 
     MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
-    Slot0Configs s0c = new Slot0Configs()
+    Slot0Configs s0c =
+        new Slot0Configs()
             .withKP(Constants.FunnelConstants.S0C_KP)
             .withKI(Constants.FunnelConstants.S0C_KI)
             .withKD(Constants.FunnelConstants.S0C_KD);
@@ -58,13 +56,12 @@ public class FunnelSubsystem extends SubsystemBase {
     topMotor.getConfigurator().apply(s0c);
     bottomMotor.getConfigurator().apply(s0c);
 
-    MotionMagicConfigs mmc = new MotionMagicConfigs()
+    MotionMagicConfigs mmc =
+        new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(Constants.FunnelConstants.CRUISE_VELOCITY)
             .withMotionMagicAcceleration(Constants.FunnelConstants.ACCELERATION);
     topMotor.getConfigurator().apply(mmc);
     bottomMotor.getConfigurator().apply(mmc);
-
-
   }
 
   public static FunnelSubsystem getInstance() {
@@ -74,7 +71,7 @@ public class FunnelSubsystem extends SubsystemBase {
     return instance;
   }
 
-   private void runFunnelAtRPS(double speed) {
+  private void runFunnelAtRPS(double speed) {
     VelocityVoltage m_velocityControlTop =
         new VelocityVoltage(speed * Constants.FunnelConstants.TOP_GEAR_RATIO);
     VelocityVoltage m_velocityControlBottom =
@@ -88,7 +85,7 @@ public class FunnelSubsystem extends SubsystemBase {
     runFunnelAtRPS(Constants.FunnelConstants.BOTTOM_MOTOR_SPEED_RPS);
   }
 
-   public void stopFunnel() {
+  public void stopFunnel() {
     topMotor.stopMotor();
     bottomMotor.stopMotor();
   }
@@ -97,7 +94,7 @@ public class FunnelSubsystem extends SubsystemBase {
     return checkOutSensor.get();
   }
 
-  public boolean isCoralCheckedIn(){
+  public boolean isCoralCheckedIn() {
     return checkInSensor.get();
   }
 

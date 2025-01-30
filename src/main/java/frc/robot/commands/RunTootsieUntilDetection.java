@@ -1,10 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.FunnelConstants;
-import frc.robot.Constants.TootsieSlide;
 import frc.robot.subsystems.FunnelSubsystem;
-import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
 /**
@@ -15,7 +12,9 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 public class RunTootsieUntilDetection extends Command {
   private TootsieSlideSubsystem tootsieSubsystem;
   private FunnelSubsystem funnelSubsystem;
-  public RunTootsieUntilDetection(TootsieSlideSubsystem tootsieSubsystem, FunnelSubsystem funnelSubsystem) {
+
+  public RunTootsieUntilDetection(
+      TootsieSlideSubsystem tootsieSubsystem, FunnelSubsystem funnelSubsystem) {
     this.tootsieSubsystem = tootsieSubsystem;
     this.funnelSubsystem = funnelSubsystem;
 
@@ -25,9 +24,7 @@ public class RunTootsieUntilDetection extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

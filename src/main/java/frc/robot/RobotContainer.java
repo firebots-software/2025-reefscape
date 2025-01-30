@@ -6,7 +6,6 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,24 +15,21 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.ElevatorLevel1;
-import frc.robot.commands.ElevatorLevel2;
-import frc.robot.commands.ElevatorLevel3;
-import frc.robot.commands.ElevatorLevel4;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ArmToAngleCmd;
+import frc.robot.commands.ElevatorLevel1;
+import frc.robot.commands.ElevatorLevel2;
+import frc.robot.commands.ElevatorLevel3;
+import frc.robot.commands.ElevatorLevel4;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -96,7 +92,8 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    //joystick.rightBumper().whileTrue(new TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
+    // joystick.rightBumper().whileTrue(new
+    // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
 
     joystick
         .x()
@@ -109,11 +106,11 @@ public class RobotContainer {
     Trigger rightBumper = joystick.rightBumper();
     rightBumper.onTrue(new ArmToAngleCmd(() -> 90d, ArmSubsystem.getInstance()));
     rightBumper.onFalse(new ArmToAngleCmd(() -> 45d, ArmSubsystem.getInstance()));
-  
-   joystick.povUp().onTrue(new ElevatorLevel1(m_ElevatorSubsystem));
-   joystick.povRight().onTrue(new ElevatorLevel2(m_ElevatorSubsystem));
-   joystick.povDown().onTrue(new ElevatorLevel3(m_ElevatorSubsystem));
-   joystick.povLeft().onTrue(new ElevatorLevel4(m_ElevatorSubsystem));
+
+    joystick.povUp().onTrue(new ElevatorLevel1(m_ElevatorSubsystem));
+    joystick.povRight().onTrue(new ElevatorLevel2(m_ElevatorSubsystem));
+    joystick.povDown().onTrue(new ElevatorLevel3(m_ElevatorSubsystem));
+    joystick.povLeft().onTrue(new ElevatorLevel4(m_ElevatorSubsystem));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
