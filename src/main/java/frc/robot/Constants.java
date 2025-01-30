@@ -428,7 +428,7 @@ public final class Constants {
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
   }
 
-  public static class TootsieSlide {
+  public static class Elevator {
     public static final int UP_MOTOR_PORT = 1; // TODO
     public static final int DOWN_MOTOR_PORT = 2; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 90.0; // TODO

@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.TootsieSlideSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 import java.util.function.Supplier;
 
@@ -30,7 +30,7 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  TootsieSlideSubsystem testerTootsie = new TootsieSlideSubsystem();
+  ElevatorSubsystem elevator = new ElevatorSubsystem();
 
   // Alliance color
   private Supplier<Boolean> redside = () -> redAlliance;
@@ -102,7 +102,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    SmartDashboard.putNumber("arjun IQ", 2.0);
     return new WaitCommand(10);
   }
 }

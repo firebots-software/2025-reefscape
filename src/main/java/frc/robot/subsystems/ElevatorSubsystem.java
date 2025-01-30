@@ -40,23 +40,21 @@ import dev.doglog.DogLog;
 import frc.robot.Constants;
 
 
-public class TootsieSlideSubsystem extends SubsystemBase{
-    private static TootsieSlideSubsystem instance;
+public class ElevatorSubsystem extends SubsystemBase{
+    private static ElevatorSubsystem instance;
     
     private DigitalInput drakeSensor;
     private LoggedTalonFX upMotor;
     private LoggedTalonFX downMotor;
     private LoggedTalonFX master;
 
-    private final DCMotor m_tootsieSlideGearbox = DCMotor.getKrakenX60(1);
+    private final DCMotor m_ElevatorSlideGearbox = DCMotor.getKrakenX60(1);
 
-    public static LinearSystem<N1,N1,N1> tootsieSystem = LinearSystemId.identifyVelocitySystem(0.05, 0.1);
-
-    private final FlywheelSim m_flywheelSim = new FlywheelSim(tootsieSystem, m_tootsieSlideGearbox, 0);
+    public static LinearSystem<N1,N1,N1> ElevatorSystem = LinearSystemId.identifyVelocitySystem(0.05, 0.1);
 
     private final VelocityVoltage m_velocity = new VelocityVoltage(0);
 
-  public TootsieSlideSubsystem() {
+  public ElevatorSubsystem() {
 
     upMotor = new LoggedTalonFX(1); // Unique ID for motor1
     downMotor = new LoggedTalonFX(2); // Unique ID for motor2
@@ -70,14 +68,14 @@ public class TootsieSlideSubsystem extends SubsystemBase{
 
     CurrentLimitsConfigs clc = new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(Constants.TootsieSlide.STATOR_CURRENT_LIMIT)
+            .withStatorCurrentLimit(Constants.Elevator.STATOR_CURRENT_LIMIT)
             .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(Constants.TootsieSlide.SUPPLY_CURRENT_LIMIT);
+            .withSupplyCurrentLimit(Constants.Elevator.SUPPLY_CURRENT_LIMIT);
 
     Slot0Configs s0c = new Slot0Configs()
-            .withKP(Constants.TootsieSlide.S0C_KP)
-            .withKI(Constants.TootsieSlide.S0C_KI)
-            .withKD(Constants.TootsieSlide.S0C_KD);
+            .withKP(Constants.Elevator.S0C_KP)
+            .withKI(Constants.Elevator.S0C_KI)
+            .withKD(Constants.Elevator.S0C_KD);
 
     m_velocity.Slot = 0;
     m1Config.apply(clc);
@@ -90,14 +88,14 @@ public class TootsieSlideSubsystem extends SubsystemBase{
 
 
     // MotionMagicConfigs mmc = new MotionMagicConfigs()
-    //          .withMotionMagicCruiseVelocity(Constants.TootsieSlide.CRUISE_VELOCITY)
-    //          .withMotionMagicAcceleration(Constants.TootsieSlide.ACCELERATION);
+    //          .withMotionMagicCruiseVelocity(Constants.Elevator.CRUISE_VELOCITY)
+    //          .withMotionMagicAcceleration(Constants.Elevator.ACCELERATION);
     //  master.getConfigurator().apply(mmc);
 }
 
-public static TootsieSlideSubsystem getInstance() {
+public static ElevatorSubsystem getInstance() {
     if (instance == null) {
-        instance = new TootsieSlideSubsystem();
+        instance = new ElevatorSubsystem();
     }
     return instance;
 
@@ -108,24 +106,22 @@ public static TootsieSlideSubsystem getInstance() {
     master.setControl(new MotionMagicVoltage(pos));
   }
 
-  private void runTootsieAtRPS(double speed) {
+  private void runElevatorAtRPS(double speed) {
     SmartDashboard.putBoolean("is it running", true);
     master.setControl(m_velocity.withVelocity(speed));
     SmartDashboard.putNumber("VelocityVoltage", master.getMotorVoltage().getValueAsDouble());
-    m_flywheelSim.setInputVoltage(master.getSupplyVoltage().getValueAsDouble());
   }
 
-  public void spinTootsie(boolean thing) {
-    if(!thing && coralPresent()){
-      runTootsieAtRPS(30);
+  public void spinElevator(boolean checkOutSensor) {
+    if(!checkOutSensor && coralPresent()){
+      runElevatorAtRPS(30);
     }
     
   }
 
-   public void stopTootsie() {
+   public void stopElevator() {
     master.stopMotor();
     master.setControl(m_velocity.withVelocity(0));
-    m_flywheelSim.setInputVoltage(0);
 
   }
 
@@ -138,22 +134,16 @@ public static TootsieSlideSubsystem getInstance() {
    *
    * @return value of some boolean subsystem state, such as a digital sensor.
    */
-  public boolean atTarget() {
+  public boolean atTarget(boolean atTop) {
     // Query some boolean state, such as a digital sensor.
     return false;
   }
 
+
+
   @Override
   public void periodic() {
-
-
     // This method will be called once per scheduler run
-    m_flywheelSim.update(0.02);
-    SmartDashboard.putNumber("voltage", master.getMotorVoltage().getValue().magnitude());
-    SmartDashboard.putNumber("SIMvoltage", m_flywheelSim.getInputVoltage());
-
-    SmartDashboard.putNumber("Shooter Speed at RPM", m_flywheelSim.getAngularVelocityRPM());
-    SmartDashboard.putNumber("Flywheel Current", m_flywheelSim.getCurrentDrawAmps());
 
   }
 

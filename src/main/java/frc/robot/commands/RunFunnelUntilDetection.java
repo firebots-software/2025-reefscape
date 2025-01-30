@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.TootsieSlide;
+import frc.robot.Constants.Elevator;
 import frc.robot.subsystems.FunnelSubsystem;
 
 /**
@@ -32,7 +32,8 @@ public class RunFunnelUntilDetection extends Command {
   @Override
   public void end(boolean interrupted) {
     funnelSubsystem.stopFunnel();
-    }
+    //TODO: Reverse the motors a bit ig if the coral falls out
+  }
 
   // Returns true when the command should end.
   @Override
