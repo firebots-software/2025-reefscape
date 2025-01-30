@@ -6,9 +6,13 @@ package frc.robot;
 
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.ZeroArm;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.util.LoggedTalonFX;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -17,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
   private final RobotContainer m_robotContainer;
 
@@ -42,8 +47,8 @@ public class Robot extends TimedRobot {
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
-    m_robotContainer.doTelemetry();
+    // // block in order for anything in the Command-based framework to work.
+    // m_robotContainer.doTelemetry();
     CommandScheduler.getInstance().run();
   }
 
@@ -53,8 +58,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    //DogLog.setOptions(
-        //new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
+    DogLog.setOptions(new DogLogOptions().withCaptureDs(true).withLogExtras(true));
+    DogLog.setPdh(new PowerDistribution());
   }
 
   @Override
@@ -73,7 +78,7 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
-  @Override
+  // @Override
   public void autonomousPeriodic() {}
 
   @Override
@@ -82,20 +87,26 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    RobotContainer.setAlliance();
+    // RobotContainer.setAlliance();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    CommandScheduler.getInstance()
+        .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+    LoggedTalonFX.periodic_static();
+  }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    RobotContainer.setAlliance();
+    // RobotContainer.setAlliance();
     CommandScheduler.getInstance().cancelAll();
   }
 

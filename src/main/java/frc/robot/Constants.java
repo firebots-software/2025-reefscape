@@ -25,6 +25,46 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
 
+  public static final class Arm {
+    public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double DEFAULT_ARM_ANGLE = 250.0;
+    public static final double INTAKE_ANGLE = 3; // subject to change
+    public static final double AMP_ANGLE = 95; // subject to change
+
+    public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
+      double conversionFactor =
+          0.159344d; // TODO: Find for actual bot. Will change with gear ratios.
+      double zeroOffset =
+          0.088; // TODO: For some reason when zeroing arm, zeros to 0.088. Fix on actual bot
+      return (conversionFactor * angle) + zeroOffset;
+    }
+
+    public static final int RT_PORT = 14; // Right Top motor
+    public static final int RB_PORT = 13; // Right Bottom motor
+    public static final int LT_PORT = 1; // Left Top motor
+    public static final int LB_PORT = 11; // Left Bottom motor
+    public static final int ENCODER_PORT = 0; // subject to change
+
+    public static final double CURRENT_LIMIT = 8.0;
+    public static final double S0C_KP = 1.0;
+    public static final double ARMFF_KS = 0.16969;
+    public static final double ARMFF_KG = 0.34;
+    public static final double ARMFF_KV = 2.49;
+    public static final double MOTIONMAGIC_KV = 36; // MotionMagic Cruise Velocity in RPS of the arm
+    public static final double MOTIONMAGIC_KA =
+        2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
+
+    // Lmao this is useless, but it has my name on it
+    public static double GET_YAJWINS_EQUATION(double distance) {
+      double a = -6.02207;
+      double b = -8.6529 * Math.pow(10, 15);
+      double c = 252.816;
+      double d = 35.7582;
+      return b * Math.pow((distance + c), a) + d;
+    }
+  }
+
   public static class OI {
     public static final double LEFT_JOYSTICK_DEADBAND = 0.07;
     public static final double RIGHT_JOYSTICK_DEADBAND = 0.07;
@@ -200,7 +240,8 @@ public final class Constants {
         SteerMotorArrangement.TalonFX_Integrated;
 
     // The remote sensor feedback type to use for the steer motors;
-    // When not Pro-licensed, FusedCANcoder/SyncCANcoder automatically fall back to RemoteCANcoder
+    // When not Pro-licensed, FusedCANcoder/SyncCANcoder automatically fall back to
+    //  RemoteCANcoder
     private static final SteerFeedbackType STEER_FEEDBACK_TYPE = SteerFeedbackType.FusedCANcoder;
 
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
