@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.BiConsumer;
-
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -65,25 +63,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     DogLog.setOptions(
         new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
-
-    var scheduler = CommandScheduler.getInstance();
-    BiConsumer<Command, Boolean> logCommandFunction =
-        (Command command, Boolean active) -> {
-        DogLog.log("Commands/" + command.getName(), active);
-        };
-    scheduler.onCommandInitialize(
-        (Command command) -> {
-        logCommandFunction.accept(command, true);
-        });
-    scheduler.onCommandFinish(
-        (Command command) -> {
-        logCommandFunction.accept(command, false);
-        });
-    scheduler.onCommandInterrupt(
-        (Command command) -> {
-        logCommandFunction.accept(command, false);
-        });
-            
     // Commented this code that logs the electric data because it crashed the robot code
     // there is an error related to the usage of this
     // DogLog.setPdh(new PowerDistribution());
