@@ -17,6 +17,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.JamesHardenMovement;
@@ -148,9 +149,22 @@ public class RobotContainer {
         .active()
         .onTrue(
             routine
-                .trajectory("TestPath")
+                .trajectory("BSTART-L2")
                 .resetOdometry()
-                .andThen(routine.trajectory("TestPath").cmd()));
+                .andThen(routine.trajectory("BSTART-L2").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("L2-BHPS").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("BHPS-R1").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("R1-BHPS").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("BHPS-L1").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("L1-BHPS").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("BHPS-R0").cmd()));
+
     return routine.cmd();
   }
 }
