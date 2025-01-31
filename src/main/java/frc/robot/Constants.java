@@ -520,15 +520,14 @@ public final class Constants {
     public static final int S0C_KD = 0;
     public static final int MOTIONMAGIC_KV = 0;
     public static final int MOTIONMAGIC_KA = 0;
-    public static final int INTAKE_LEVEL = 0; // TODO
-    public static final double LEVEL_1 = 0;
-    public static final double LEVEL_2 = 0;
-    public static final double LEVEL_3 = 0;
-    public static final double LEVEL_4 = 0;
     public static final double currentLimit = 0;
-    public static final double CRUISE_VELOCITY = 10000000; // To-do
+    public static final double CRUISE_VELOCITY = 0.0; // To-do
     public static final double ACCELERATION = 0.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0; // To-do
+
+    public static final double PULLEY_CIRCUM = 2 * Math.PI * 0; // TODO: change 0 to radius/diameter
+    public static final double PULLEY_GEAR_RATIO = 1/5; // TODO
+    public static final double PULLEY_FACTOR = PULLEY_CIRCUM * PULLEY_GEAR_RATIO;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on

@@ -40,7 +40,7 @@ public class RobotContainer {
 
   TootsieSlideSubsystem testerTootsie = new TootsieSlideSubsystem();
 
-  ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  private final ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
 
   // Alliance color
   private BooleanSupplier redside = () -> redAlliance;
