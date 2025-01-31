@@ -9,6 +9,10 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import dev.doglog.DogLog;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -21,6 +25,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private LoggedTalonFX motor1;
   private LoggedTalonFX motor2;
+  private LoggedTalonFX master;
+  private Double holdPosValue = 0.0;
+  private DigitalInput drake;
+  private boolean drakeHasSeenThings = false;
+
 
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
@@ -28,6 +37,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ElevatorSubsystem() {
     // Initialize motors
     // TODO: Would it make more sense to call these motor up/down?
+
+    drake = new DigitalInput(0);
+
     motor1 = new LoggedTalonFX(ElevatorConstants.MOTOR1_PORT);
     motor2 = new LoggedTalonFX(ElevatorConstants.MOTOR2_PORT);
 
@@ -92,7 +104,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPosition() {
-    return (Math.abs(getError()) < ElevatorConstants.SETPOINT_TOLERANCE);
+    boolean toReturn = (Math.abs(getError()) < ElevatorConstants.SETPOINT_TOLERANCE);
+    if(toReturn){
+      drakeHasSeenThings = false;
+    }
+    return toReturn;
   }
 
   public ElevatorPositions getLevel() {
@@ -111,6 +127,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean exampleCondition() {
     // Query some boolean level, such as a digital sensor.
     return false;
+  }
+
+  public boolean drakeTripped(){
+    if(drake.get()){
+      drakeHasSeenThings = true;
+    }
+    return drake.get();
   }
 
   @Override
