@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -25,8 +26,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   private LoggedTalonFX motor2;
   private LoggedTalonFX master;
   private Double holdPosValue = 0.0;
+  private DigitalInput drake;
+  private boolean drakeHasSeenThings = false;
 
   public ElevatorSubsystem() {
+
+    drake = new DigitalInput(0);
+
     motor1 = new LoggedTalonFX(1); // Unique ID for motor1
     motor2 = new LoggedTalonFX(2); // Unique ID for motor2
 
@@ -104,7 +110,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean isAtSetpoint() {
-    return Math.abs(getPIDError()) < Constants.ElevatorConstants.SETPOINT_TOLERANCE;
+    boolean toReturn = Math.abs(getPIDError()) < Constants.ElevatorConstants.SETPOINT_TOLERANCE;
+    if(toReturn){
+      drakeHasSeenThings = false;
+    }
+    return toReturn;
   }
 
   public boolean getBottomLimits() {
@@ -129,6 +139,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     holdPosition(targetPosition);
     SmartDashboard.putString("Elevator Error", "Level: " + level + ", Error: " + getPIDError());
+  }
+
+  public boolean drakeTripped(){
+    if(drake.get()){
+      drakeHasSeenThings = true;
+    }
+    return drake.get();
   }
 
   @Override
