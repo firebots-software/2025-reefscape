@@ -589,8 +589,8 @@ public final class Constants {
   }
 
   public static class FunnelConstants {
-    public static final int UP_MOTOR_PORT = 0; // TODO
-    public static final int DOWN_MOTOR_PORT = 0; // TODO
+    public static final int RIGHT_MOTOR_PORT = 0; // TODO
+    public static final int LEFT_MOTOR_PORT = 0; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO
     public static final double S0C_KP = 0.0; // TODO
@@ -599,10 +599,8 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 0.0; // TODO
     public static final double ACCELERATION = 0.0; // TODO
 
-    public static final double TOP_MOTOR_SPEED_RPS = 0.0; // TODO
-    public static final double BOTTOM_MOTOR_SPEED_RPS = 0.0; // TODO
-    public static final int TOP_GEAR_RATIO = 0; // TODO
-    public static final int BOTTOM_GEAR_RATIO = 0; // TODO
+    public static final double SPEED_RPS = 0.0; // TODO
+    public static final int GEAR_RATIO = 0; // TODO
 
     public static final int CHECK_IN_PORT = 0;
     public static final int CHECK_OUT_PORT = 0;

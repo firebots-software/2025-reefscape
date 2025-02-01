@@ -60,22 +60,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     TalonFXConfigurator m1Config = motor1.getConfigurator();
     TalonFXConfigurator m2Config = motor2.getConfigurator();
 
-    // Apply Slot0Configs to motor1(master)
-    TalonFXConfigurator motor1Configurator = motor1.getConfigurator();
-    motor1Configurator.apply(s0c);
+    m1Config.apply(s0c);
+    m2Config.apply(s0c);
 
     // Apply MotionMagic to motor1(master)
     mmc = new MotionMagicConfigs();
     mmc.MotionMagicCruiseVelocity = ElevatorConstants.MOTIONMAGIC_KV;
     mmc.MotionMagicAcceleration = ElevatorConstants.MOTIONMAGIC_KA;
-    motor1Configurator.apply(mmc);
 
     m1Config.apply(mmc);
     m2Config.apply(mmc);
-
-    // Apply Slot0Configs to master
-    TalonFXConfigurator masterConfigurator = motor1.getConfigurator();
-    masterConfigurator.apply(s0c);
   }
 
   // instance for elevator subsystem
