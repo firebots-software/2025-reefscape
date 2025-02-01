@@ -81,7 +81,6 @@ public final class Constants {
       return (conversionFactor * angle) + zeroOffset;
     }
   }
-  
 
   public static class OI {
     public static final double LEFT_JOYSTICK_DEADBAND = 0.07;
@@ -544,7 +543,7 @@ public final class Constants {
     public static final double SETPOINT_TOLERANCE = 0; // To-do
 
     public static final double PULLEY_CIRCUM = 2 * Math.PI * 0; // TODO: change 0 to radius/diameter
-    public static final double PULLEY_GEAR_RATIO = 1/5; // TODO
+    public static final double PULLEY_GEAR_RATIO = 1 / 5; // TODO
     public static final double CONVERSION_FACTOR = PULLEY_CIRCUM * PULLEY_GEAR_RATIO;
 
     public static enum ElevatorPositions {

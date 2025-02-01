@@ -14,8 +14,8 @@ public class TransferPieceBetweenFunnelAndElevator extends Command {
   private ElevatorSubsystem elevatorSubsystem;
   private FunnelSubsystem funnelSubsystem;
 
-
-  public TransferPieceBetweenFunnelAndElevator(ElevatorSubsystem elevatorSubsystem, FunnelSubsystem funnelSubsystem) {
+  public TransferPieceBetweenFunnelAndElevator(
+      ElevatorSubsystem elevatorSubsystem, FunnelSubsystem funnelSubsystem) {
     this.elevatorSubsystem = elevatorSubsystem;
     this.funnelSubsystem = funnelSubsystem;
 
@@ -25,14 +25,12 @@ public class TransferPieceBetweenFunnelAndElevator extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(elevatorSubsystem.isAtPosition()){
+    if (elevatorSubsystem.isAtPosition()) {
       funnelSubsystem.spinFunnel();
     }
   }
@@ -48,5 +46,4 @@ public class TransferPieceBetweenFunnelAndElevator extends Command {
   public boolean isFinished() {
     return elevatorSubsystem.drakeTripped();
   }
-
 }

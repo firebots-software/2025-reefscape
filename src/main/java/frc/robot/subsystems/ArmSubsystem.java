@@ -20,7 +20,6 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -56,7 +55,9 @@ public class ArmSubsystem extends SubsystemBase {
               // Log state with Phoenix SignalLogger class
               (state) -> SignalLogger.writeString("state", state.toString())),
           new SysIdRoutine.Mechanism(
-              (volts) -> armMotor.setControl(voltRequestArm.withOutput(volts.in(Volts))), null, this));
+              (volts) -> armMotor.setControl(voltRequestArm.withOutput(volts.in(Volts))),
+              null,
+              this));
 
   public static ArmSubsystem getInstance() {
     if (instance == null) {
@@ -72,7 +73,7 @@ public class ArmSubsystem extends SubsystemBase {
             .withStatorCurrentLimit(Constants.Arm.ARM_STATOR_CURRENT_LIMIT_AMPS)
             .withSupplyCurrentLimitEnable(true)
             .withSupplyCurrentLimit(Constants.Arm.ARM_SUPPLY_CURRENT_LIMIT_AMPS);
-    CurrentLimitsConfigs clcFlywheel = 
+    CurrentLimitsConfigs clcFlywheel =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
             .withStatorCurrentLimit(Constants.Flywheel.FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS)
@@ -80,13 +81,16 @@ public class ArmSubsystem extends SubsystemBase {
             .withSupplyCurrentLimit(Constants.Flywheel.FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS);
     FeedbackConfigs fcArm = new FeedbackConfigs();
     MotorOutputConfigs mocArm = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
-    MotorOutputConfigs mocFlywheel = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast);
+    MotorOutputConfigs mocFlywheel =
+        new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast);
     mocArm.withInverted(InvertedValue.CounterClockwise_Positive);
     mocFlywheel.withInverted(InvertedValue.Clockwise_Positive);
     ClosedLoopGeneralConfigs clgcArm = new ClosedLoopGeneralConfigs();
     ClosedLoopGeneralConfigs clgcFlywheel = new ClosedLoopGeneralConfigs();
-    Slot0Configs s0cArm = new Slot0Configs().withKP(Constants.Arm.S0C_KP * 0.75).withKI(0).withKD(0);
-    Slot0Configs s0cFlywheel = new Slot0Configs().withKP(Constants.Flywheel.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
+    Slot0Configs s0cArm =
+        new Slot0Configs().withKP(Constants.Arm.S0C_KP * 0.75).withKI(0).withKD(0);
+    Slot0Configs s0cFlywheel =
+        new Slot0Configs().withKP(Constants.Flywheel.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
 
     // Initialize master motor only
     armMotor = new LoggedTalonFX(Constants.Arm.LT_PORT);
@@ -117,7 +121,6 @@ public class ArmSubsystem extends SubsystemBase {
     motionMagicConfigsFlywheel.MotionMagicAcceleration = Constants.Flywheel.MOTIONMAGIC_KA;
     masterConfiguratorFlywheel.apply(motionMagicConfigsFlywheel);
 
-
     // Initialize absolute encoder
     revEncoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
   }
@@ -127,15 +130,15 @@ public class ArmSubsystem extends SubsystemBase {
     armMotor.setControl(
         controlRequestArm.withPosition(Constants.Arm.ANGLE_TO_ENCODER_ROTATIONS(angleDegrees)));
   }
- 
+
   public void startFlywheel(double angleDegrees) {
     flywheelMotor.setControl(
-        controlRequestFlywheel.withPosition(Constants.Flywheel.ANGLE_TO_ENCODER_ROTATIONS(angleDegrees)));
+        controlRequestFlywheel.withPosition(
+            Constants.Flywheel.ANGLE_TO_ENCODER_ROTATIONS(angleDegrees)));
   }
 
-  public void stopEveryingONG(){
+  public void stopEveryingONG() {
     flywheelMotor.stopMotor();
-    
   }
 
   private double calculateDegrees() {

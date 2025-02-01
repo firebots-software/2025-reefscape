@@ -9,10 +9,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -30,7 +27,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   private DigitalInput drake;
   private boolean drakeHasSeenThings = false;
 
-
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
 
@@ -45,8 +41,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     currentLevel = ElevatorPositions.Intake;
 
-    
-
     // Set up motor followers and deal with inverted motors
     Follower follower = new Follower(ElevatorConstants.MOTOR1_PORT, false);
     motor2.setControl(follower);
@@ -59,11 +53,9 @@ public class ElevatorSubsystem extends SubsystemBase {
             .withKS(0);
 
     motor1.updateCurrentLimits(
-        ElevatorConstants.STATOR_CURRENT_LIMIT,
-        ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+        ElevatorConstants.STATOR_CURRENT_LIMIT, ElevatorConstants.SUPPLY_CURRENT_LIMIT);
     motor2.updateCurrentLimits(
-        ElevatorConstants.STATOR_CURRENT_LIMIT,
-        ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+        ElevatorConstants.STATOR_CURRENT_LIMIT, ElevatorConstants.SUPPLY_CURRENT_LIMIT);
 
     TalonFXConfigurator m1Config = motor1.getConfigurator();
     TalonFXConfigurator m2Config = motor2.getConfigurator();
@@ -105,7 +97,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public boolean isAtPosition() {
     boolean toReturn = (Math.abs(getError()) < ElevatorConstants.SETPOINT_TOLERANCE);
-    if(toReturn){
+    if (toReturn) {
       drakeHasSeenThings = false;
     }
     return toReturn;
@@ -129,8 +121,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     return false;
   }
 
-  public boolean drakeTripped(){
-    if(drake.get()){
+  public boolean drakeTripped() {
+    if (drake.get()) {
       drakeHasSeenThings = true;
     }
     return drake.get();

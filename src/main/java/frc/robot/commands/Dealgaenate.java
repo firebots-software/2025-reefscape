@@ -11,7 +11,9 @@ import frc.robot.subsystems.ArmSubsystem;
 public class Dealgaenate extends Command {
   /** Creates a new Dealgaenate. */
   private ArmSubsystem armPlusFlywheel;
+
   private double somethingArbitrary;
+
   public Dealgaenate(ArmSubsystem armSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     armPlusFlywheel = armSub;
@@ -40,4 +42,3 @@ public class Dealgaenate extends Command {
     return false;
   }
 }
- 
