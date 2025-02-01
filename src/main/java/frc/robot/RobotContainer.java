@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -187,7 +188,7 @@ public class RobotContainer {
     // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
     String chosenPath = startPosChooser.getSelected();
 
-    var routine = autoFactory.newRoutine("routine");
+    AutoRoutine routine = autoFactory.newRoutine("routine");
     switch (chosenPath) {
       case "B":
         routine
@@ -196,20 +197,13 @@ public class RobotContainer {
                 routine
                     .trajectory("BSTART-2L")
                     .resetOdometry()
-                    .andThen(Commands.parallel(routine.trajectory("BSTART-2L").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
-                    .andThen(new TootsieSlideShooting(testerTootsie))
-                    .andThen(Commands.parallel(routine.trajectory("2L-BHPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
-                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
-                    .andThen(Commands.parallel(routine.trajectory("BHPS-1R").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
-                    .andThen(new TootsieSlideShooting(testerTootsie))
-                    .andThen(Commands.parallel(routine.trajectory("1R-BHPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
-                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
-                    .andThen(Commands.parallel(routine.trajectory("BHPS-1L").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
-                    .andThen(new TootsieSlideShooting(testerTootsie))
-                    .andThen(Commands.parallel(routine.trajectory("1L-BHPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
-                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
-                    .andThen(Commands.parallel(routine.trajectory("BHPS-0R").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
-                    .andThen(new TootsieSlideShooting(testerTootsie)));
+                    .andThen(autoSubCommand(routine, "BSTART-2L"))
+                    .andThen(autoSubCommand(routine, "2L-BHPS"))
+                    .andThen(autoSubCommand(routine, "BHPS-1R"))
+                    .andThen(autoSubCommand(routine, "1R-BHPS"))
+                    .andThen(autoSubCommand(routine, "BHPS-1L"))
+                    .andThen(autoSubCommand(routine, "1L-BHPS"))
+                    .andThen(autoSubCommand(routine, "BHPS-0R")));
         break;
 
       case "T":
@@ -219,20 +213,13 @@ public class RobotContainer {
                 routine
                     .trajectory("TSTART-4R")
                     .resetOdometry()
-                    .andThen(Commands.parallel(routine.trajectory("TSTART-4R").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
-                    .andThen(new TootsieSlideShooting(testerTootsie))
-                    .andThen(Commands.parallel(routine.trajectory("4R-THPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
-                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
-                    .andThen(Commands.parallel(routine.trajectory("THPS-5L").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
-                    .andThen(new TootsieSlideShooting(testerTootsie))
-                    .andThen(Commands.parallel(routine.trajectory("5L-THPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
-                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
-                    .andThen(Commands.parallel(routine.trajectory("THPS-4R").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
-                    .andThen(new TootsieSlideShooting(testerTootsie))
-                    .andThen(Commands.parallel(routine.trajectory("4R-THPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
-                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
-                    .andThen(Commands.parallel(routine.trajectory("THPS-0L").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
-                    .andThen(new TootsieSlideShooting(testerTootsie)));
+                    .andThen(autoSubCommand(routine, "TSTART-4R"))
+                    .andThen(autoSubCommand(routine, "4R-THPS"))
+                    .andThen(autoSubCommand(routine, "THPS-5L"))
+                    .andThen(autoSubCommand(routine, "5L-THPS"))
+                    .andThen(autoSubCommand(routine, "THPS-5R"))
+                    .andThen(autoSubCommand(routine, "5R-THPS"))
+                    .andThen(autoSubCommand(routine, "THPS-0L")));
         break;
 
       case "M":
@@ -242,11 +229,22 @@ public class RobotContainer {
                 routine
                     .trajectory("MSTART-3R")
                     .resetOdometry()
-                    .andThen(Commands.parallel(routine.trajectory("MSTART-3R").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
-                    .andThen(new TootsieSlideShooting(testerTootsie)));
+                    .andThen(autoSubCommand(routine, "MSTART-3R")));
         break;
     }
 
     return routine.cmd();
+  }
+
+  public Command autoSubCommand(AutoRoutine routine, String baseCommandName) {
+    return Commands.parallel(routine.trajectory(baseCommandName).cmd(),
+            (baseCommandName.contains("HPS-") || baseCommandName.contains("START-") ? 
+            new ElevatorLevel4(m_ElevatorSubsystem) 
+            : new ElevatorIntakeLevel(m_ElevatorSubsystem)))
+
+            .andThen
+            (baseCommandName.contains("HPS-") || baseCommandName.contains("START-") ? 
+            new TootsieSlideShooting(testerTootsie) 
+            : new RunFunnelUntilDetection(m_FunnelSubsystem));
   }
 }
