@@ -16,6 +16,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -33,6 +35,9 @@ public class RobotContainer {
   // Alliance color
   private BooleanSupplier redside = () -> redAlliance;
   private static boolean redAlliance;
+
+  // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
+  private final SendableChooser<String> startPosChooser = new SendableChooser<String>();
 
   private final SwerveSubsystem driveTrain =
       new SwerveSubsystem(
@@ -57,6 +62,12 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
+    // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
+    startPosChooser.setDefaultOption("Top (Next to Blue Barge Zone)", "T");
+    startPosChooser.addOption("Middle (In between to Barge Zones)", "M");
+    startPosChooser.addOption("Bottom (Next to Red Barge Zone)", "B");
+    SmartDashboard.putData("Auto Start Position", startPosChooser);
+    
     configureBindings();
     autoFactory =
         new AutoFactory(
@@ -144,12 +155,15 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
+    String chosenPath = startPosChooser.getSelected();
+
     var routine = autoFactory.newRoutine("routine");
     routine
         .active()
         .onTrue(
             routine
-                .trajectory("BSTART-L2")
+                .trajectory("BSTART-2L")
                 .resetOdometry()
                 .andThen(routine.trajectory("BSTART-L2").cmd())
                 .andThen(new WaitCommand(0.3))
