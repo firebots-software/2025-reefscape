@@ -186,6 +186,26 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
+
+    /* Field Diagram
+            BLUE                       RED
+    __________________________________________________
+    |THPS                 TSTART                 THPS|
+    |                       | |                      |
+    |        5    4         | |         4    5       |
+    |    0           3    MSTART    3           0    |
+    |        1    2         | |         2    1       |
+    |                       | |                      |
+    |BHPS_________________BSTART_________________BHPS|
+
+    L and R branches are on the left and right of the robot when it is at the reef in between the two branches
+
+    a path name consists of a start and a destination
+    a start and a destinantion can be on any one of those marked areas
+    the format for a path is start-destination
+    ex. 2L-BHPS
+    which is starting from the left branch on the second part of the reef (L2), and going to the bottom human player station (BHPS)
+    */
     String chosenPath = startPosChooser.getSelected();
 
     AutoRoutine routine = autoFactory.newRoutine("routine");
