@@ -188,12 +188,13 @@ public class RobotContainer {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
 
     /* Field Diagram
-            BLUE                       RED
+
+              BLUE                        RED
     __________________________________________________
     |THPS                 TSTART                 THPS|
     |                       | |                      |
     |        5    4         | |         4    5       |
-    |    0           3    MSTART    3           0    |
+    |     0          3    MSTART     3          0    |
     |        1    2         | |         2    1       |
     |                       | |                      |
     |BHPS_________________BSTART_________________BHPS|
@@ -204,7 +205,7 @@ public class RobotContainer {
     a start and a destinantion can be on any one of those marked areas
     the format for a path is start-destination
     ex. 2L-BHPS
-    which is starting from the left branch on the second part of the reef (L2), and going to the bottom human player station (BHPS)
+    this path starts from the left branch on the second part of the reef (2L), and goes to the bottom human player station (BHPS)
     */
     String chosenPath = startPosChooser.getSelected();
 
