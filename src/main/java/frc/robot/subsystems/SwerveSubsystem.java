@@ -263,7 +263,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     return new ChassisSpeeds(xFeedback, yFeedback, thetaFeedback);
   }
-
+/*
   public void followTrajectory(SwerveSample sample) {
     // Get the current pose of the robot
     Pose2d pose = getCurrentState().Pose;
@@ -289,6 +289,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // Apply the generated speed
     setChassisSpeeds(speeds);
   }
+  */
 
   /**
    * Returns a command that applies the specified control request to this swerve drivetrain.
