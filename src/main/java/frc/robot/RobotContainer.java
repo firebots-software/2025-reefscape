@@ -212,47 +212,47 @@ public class RobotContainer {
 
     AutoRoutine routine = autoFactory.newRoutine("routine");
     switch (chosenPath) {
-      case "bottom":
-        routine
-            .active()
-            .onTrue(
-                routine
-                    .trajectory("BSTART-2L")
-                    .resetOdometry()
-                    .andThen(autoSubCommand(routine, "BSTART-2L"))
-                    .andThen(autoSubCommand(routine, "2L-BHPS"))
-                    .andThen(autoSubCommand(routine, "BHPS-1R"))
-                    .andThen(autoSubCommand(routine, "1R-BHPS"))
-                    .andThen(autoSubCommand(routine, "BHPS-1L"))
-                    .andThen(autoSubCommand(routine, "1L-BHPS"))
-                    .andThen(autoSubCommand(routine, "BHPS-0R")));
-        break;
+        case "top":
+            routine
+                .active()
+                .onTrue(
+                    routine
+                        .trajectory("TSTART-4R")
+                        .resetOdometry()
+                        .andThen(autoSubCommand(routine, "TSTART-4R"))
+                        .andThen(autoSubCommand(routine, "4R-THPS"))
+                        .andThen(autoSubCommand(routine, "THPS-5L"))
+                        .andThen(autoSubCommand(routine, "5L-THPS"))
+                        .andThen(autoSubCommand(routine, "THPS-5R"))
+                        .andThen(autoSubCommand(routine, "5R-THPS"))
+                        .andThen(autoSubCommand(routine, "THPS-0L")));
+            break;
 
-      case "top":
-        routine
-            .active()
-            .onTrue(
-                routine
-                    .trajectory("TSTART-4R")
-                    .resetOdometry()
-                    .andThen(autoSubCommand(routine, "TSTART-4R"))
-                    .andThen(autoSubCommand(routine, "4R-THPS"))
-                    .andThen(autoSubCommand(routine, "THPS-5L"))
-                    .andThen(autoSubCommand(routine, "5L-THPS"))
-                    .andThen(autoSubCommand(routine, "THPS-5R"))
-                    .andThen(autoSubCommand(routine, "5R-THPS"))
-                    .andThen(autoSubCommand(routine, "THPS-0L")));
-        break;
+        case "middle":
+            routine
+                .active()
+                .onTrue(
+                    routine
+                        .trajectory("MSTART-3R")
+                        .resetOdometry()
+                        .andThen(autoSubCommand(routine, "MSTART-3R")));
+            break;
 
-      case "middle":
-        routine
-            .active()
-            .onTrue(
-                routine
-                    .trajectory("MSTART-3R")
-                    .resetOdometry()
-                    .andThen(autoSubCommand(routine, "MSTART-3R")));
-        break;
+        case "bottom":
+            routine
+                .active()
+                .onTrue(
+                    routine
+                        .trajectory("BSTART-2L")
+                        .resetOdometry()
+                        .andThen(autoSubCommand(routine, "BSTART-2L"))
+                        .andThen(autoSubCommand(routine, "2L-BHPS"))
+                        .andThen(autoSubCommand(routine, "BHPS-1R"))
+                        .andThen(autoSubCommand(routine, "1R-BHPS"))
+                        .andThen(autoSubCommand(routine, "BHPS-1L"))
+                        .andThen(autoSubCommand(routine, "1L-BHPS"))
+                        .andThen(autoSubCommand(routine, "BHPS-0R")));
+            break;
     }
 
     return routine.cmd();
