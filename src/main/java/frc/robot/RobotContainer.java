@@ -24,13 +24,26 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.JamesHardenMovement;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.ArmToAngleCmd;
+import frc.robot.commands.ElevatorLevel1;
+import frc.robot.commands.ElevatorLevel2;
+import frc.robot.commands.ElevatorLevel3;
+import frc.robot.commands.ElevatorLevel4;
+import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+
+  TootsieSlideSubsystem testerTootsie = new TootsieSlideSubsystem();
+
+  private final ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
 
   // Alliance color
   private BooleanSupplier redside = () -> redAlliance;
@@ -145,6 +158,17 @@ public class RobotContainer {
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
 
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
+    Trigger rightBumper = joystick.rightBumper();
+    rightBumper.onTrue(new ArmToAngleCmd(() -> 90d, ArmSubsystem.getInstance()));
+    rightBumper.onFalse(new ArmToAngleCmd(() -> 45d, ArmSubsystem.getInstance()));
+
+    joystick.povUp().onTrue(new ElevatorLevel1(m_ElevatorSubsystem));
+    joystick.povRight().onTrue(new ElevatorLevel2(m_ElevatorSubsystem));
+    joystick.povDown().onTrue(new ElevatorLevel3(m_ElevatorSubsystem));
+    joystick.povLeft().onTrue(new ElevatorLevel4(m_ElevatorSubsystem));
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
   }
 
   public static void setAlliance() {
