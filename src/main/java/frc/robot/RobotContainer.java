@@ -145,25 +145,26 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     var routine = autoFactory.newRoutine("routine");
+    
     routine
         .active()
         .onTrue(
             routine
-                .trajectory("BSTART-L2")
+                .trajectory("BSTART-2L")
                 .resetOdometry()
-                .andThen(routine.trajectory("BSTART-L2").cmd())
+                .andThen(routine.trajectory("BSTART-2L").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("L2-BHPS").cmd())
+                .andThen(routine.trajectory("2L-BHPS").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("BHPS-R1").cmd())
+                .andThen(routine.trajectory("BHPS-1R").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("R1-BHPS").cmd())
+                .andThen(routine.trajectory("1R-BHPS").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("BHPS-L1").cmd())
+                .andThen(routine.trajectory("BHPS-1L").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("L1-BHPS").cmd())
+                .andThen(routine.trajectory("1L-BHPS").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("BHPS-R0").cmd()));
+                .andThen(routine.trajectory("BHPS-0R").cmd()));
 
     return routine.cmd();
   }
