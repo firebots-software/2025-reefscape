@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import choreo.auto.AutoFactory;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -48,6 +49,8 @@ public class RobotContainer {
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
 
+  private final AutoFactory autoFactory;
+
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
     logger.telemeterize(driveTrain.getCurrentState());
@@ -55,14 +58,21 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    autoFactory =
+        new AutoFactory(
+            driveTrain::getPose, // A function that returns the current robot pose
+            driveTrain
+                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            driveTrain::followTrajectory, // The drive subsystem trajectory follower
+            true, // If alliance flipping should be enabled
+            driveTrain);
   }
 
   private void configureBindings() {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    DoubleSupplier
-        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
-        leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
+    DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
+        leftRightFunction = () -> -joystick.getLeftX(),
         rotationFunction = () -> -joystick.getRightX(),
         speedFunction =
             () ->
@@ -134,7 +144,27 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    /* Run the path selected from the auto chooser */
-    return new WaitCommand(10);
+    var routine = autoFactory.newRoutine("routine");
+    routine
+        .active()
+        .onTrue(
+            routine
+                .trajectory("BSTART-L2")
+                .resetOdometry()
+                .andThen(routine.trajectory("BSTART-L2").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("L2-BHPS").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("BHPS-R1").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("R1-BHPS").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("BHPS-L1").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("L1-BHPS").cmd())
+                .andThen(new WaitCommand(0.3))
+                .andThen(routine.trajectory("BHPS-R0").cmd()));
+
+    return routine.cmd();
   }
 }

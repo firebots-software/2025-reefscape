@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import choreo.trajectory.SwerveSample;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -61,8 +62,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     if (Utils.isSimulation()) {
       startSimThread();
     }
-    configureAutoBuilder();
-
     currentState = getCurrentState();
 
     xPidController =
@@ -126,6 +125,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds =
       new SwerveRequest.ApplyRobotSpeeds();
 
+  /** Swerve request to apply during field-centric path following */
+  private final SwerveRequest.ApplyFieldSpeeds m_pathApplyFieldSpeeds =
+      new SwerveRequest.ApplyFieldSpeeds();
+
   private void configureAutoBuilder() {
     try {
       var config = RobotConfig.fromGUISettings();
@@ -161,6 +164,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     xPidController.reset(currentState.Pose.getX());
     yPidController.reset(currentState.Pose.getY());
     driverRotationPidController.reset(currentState.Pose.getRotation().getRadians());
+  }
+
+  public Pose2d getPose() {
+    return currentState.Pose;
   }
 
   /* Swerve requests to apply during SysId characterization */
@@ -239,8 +246,12 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     return currentState.Speeds;
   }
 
+  public ChassisSpeeds getCurrentFieldChassisSpeeds() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(getCurrentRobotChassisSpeeds(), currentState.Pose.getRotation());
+  }
+
   public void setChassisSpeeds(ChassisSpeeds speeds) {
-    setControl(m_pathApplyRobotSpeeds.withSpeeds(speeds));
+    setControl(m_pathApplyFieldSpeeds.withSpeeds(speeds));
   }
 
   public ChassisSpeeds calculateRequiredChassisSpeeds(Pose2d targetPose) {
@@ -250,8 +261,33 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         driverRotationPidController.calculate(
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-    return ChassisSpeeds.fromFieldRelativeSpeeds(
-        xFeedback, yFeedback, thetaFeedback, currentState.Pose.getRotation());
+    return new ChassisSpeeds(xFeedback, yFeedback, thetaFeedback);
+  }
+
+  public void followTrajectory(SwerveSample sample) {
+    // Get the current pose of the robot
+    Pose2d pose = getCurrentState().Pose;
+    // Generate the next speeds for the robot
+    ChassisSpeeds speeds =
+        new ChassisSpeeds(
+            sample.vx + xPidController.calculate(pose.getX(), sample.x),
+            sample.vy + yPidController.calculate(pose.getY(), sample.y),
+            sample.omega
+                + driverRotationPidController.calculate(
+                    pose.getRotation().getRadians(), sample.heading));
+
+    DogLog.log("followTrajectory/sample.x", sample.x);
+    DogLog.log("followTrajectory/sample.y", sample.y);
+    DogLog.log("followTrajectory/sample.heading", sample.heading);
+
+    DogLog.log("followTrajectory/pidOutputX", xPidController.calculate(pose.getX(), sample.x));
+    DogLog.log("followTrajectory/sample.vx", sample.vx);
+    DogLog.log("followTrajectory/sample.vy", sample.vy);
+    DogLog.log("followTrajectory/sample.omega", sample.omega);
+
+    DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
+    // Apply the generated speed
+    setChassisSpeeds(speeds);
   }
 
   /**
@@ -319,9 +355,16 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     currentState = getState();
 
-    DogLog.log("Swerve/ChassisSpeedsX(mps)", getCurrentRobotChassisSpeeds().vxMetersPerSecond);
-    DogLog.log("Swerve/ChassisSpeedsY(mps)", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
+    DogLog.log("Swerve/RobotChassisSpeedsX(mps)", getCurrentRobotChassisSpeeds().vxMetersPerSecond);
+    DogLog.log("Swerve/RobotChassisSpeedsY(mps)", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
     DogLog.log(
-        "Swerve/ChassisSpeedsTurning(radps)", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+        "Swerve/RobotChassisSpeedsTurning(radps)", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+    DogLog.log("Swerve/FieldChassisSpeedsX(mps)", getCurrentFieldChassisSpeeds().vxMetersPerSecond);
+    DogLog.log("Swerve/FieldChassisSpeedsY(mps)", getCurrentFieldChassisSpeeds().vyMetersPerSecond);
+    DogLog.log(
+        "Swerve/FieldChassisSpeedsTurning(radps)", getCurrentFieldChassisSpeeds().omegaRadiansPerSecond);
+    DogLog.log(
+        "Swerve/CurrentCommand",
+        (getCurrentCommand() == null) ? "nothing" : getCurrentCommand().getName());
   }
 }

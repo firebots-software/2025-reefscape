@@ -9,8 +9,6 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ZeroArm;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.util.LoggedTalonFX;
 
 /**
@@ -20,7 +18,11 @@ import frc.robot.util.LoggedTalonFX;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
+  // Commented this out because arm is not on bot and this is activiating
+  // something that doesn't physically exist
+  // TODO: uncomment when arm is on real bot
+
+  // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
   private final RobotContainer m_robotContainer;
 
@@ -54,7 +56,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    RobotContainer.setAlliance();
+    absoluteInit();
   }
 
   @Override
@@ -64,7 +66,7 @@ public class Robot extends TimedRobot {
     // Commented this code that logs the electric data because it crashed the robot code
     // there is an error related to the usage of this
     // DogLog.setPdh(new PowerDistribution());
-    RobotContainer.setAlliance();
+    absoluteInit();
   }
 
   @Override
@@ -73,7 +75,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    RobotContainer.setAlliance();
+    absoluteInit();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -92,13 +94,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    // RobotContainer.setAlliance();
+    absoluteInit();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
 
-    CommandScheduler.getInstance()
-        .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
+    // CommandScheduler.getInstance();
+    // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
 
   /** This function is called periodically during operator control. */
@@ -120,9 +122,15 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    absoluteInit();
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  public void absoluteInit() {
+    RobotContainer.setAlliance();
+  }
 }
