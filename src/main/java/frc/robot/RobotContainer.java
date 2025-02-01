@@ -237,7 +237,8 @@ public class RobotContainer {
   }
 
   public Command autoSubCommand(AutoRoutine routine, String baseCommandName) {
-    boolean pathGoesToReef = baseCommandName.contains("HPS-") || baseCommandName.contains("START-");
+    boolean pathGoesToReef = baseCommandName.contains("HPS-") || baseCommandName.contains("START-"); 
+    //if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator and shoot, else lower elevator and intake
     return Commands.parallel(routine.trajectory(baseCommandName).cmd(), (
             (pathGoesToReef) ? 
             new ElevatorLevel4(m_ElevatorSubsystem) 
