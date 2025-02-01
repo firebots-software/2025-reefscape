@@ -136,7 +136,7 @@ public class RobotContainer {
             driveTrain::followTrajectory,
             true,
             driveTrain);
-    Command auto = Commands.sequence(autoFactory.resetOdometry(startPosChooser.getSelected() == "middle" ? "middle " : "" + "start to reef1"));
+    Command auto = Commands.sequence(autoFactory.resetOdometry(startPosChooser.getSelected() + " start to reef1").andThen());
     return auto;
   }
 }
