@@ -82,9 +82,9 @@ public class RobotContainer {
 
   public RobotContainer() {
     // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
-    startPosChooser.setDefaultOption("Top (Next to Blue Barge Zone)", "T");
-    startPosChooser.addOption("Middle (In between to Barge Zones)", "M");
-    startPosChooser.addOption("Bottom (Next to Red Barge Zone)", "B");
+    startPosChooser.setDefaultOption("Top (Next to Blue Barge Zone)", "top");
+    startPosChooser.addOption("Middle (In between to Barge Zones)", "middle");
+    startPosChooser.addOption("Bottom (Next to Red Barge Zone)", "bottom");
     SmartDashboard.putData("Auto Start Position", startPosChooser);
 
     configureBindings();
@@ -190,7 +190,7 @@ public class RobotContainer {
 
     AutoRoutine routine = autoFactory.newRoutine("routine");
     switch (chosenPath) {
-      case "B":
+      case "bottom":
         routine
             .active()
             .onTrue(
@@ -206,7 +206,7 @@ public class RobotContainer {
                     .andThen(autoSubCommand(routine, "BHPS-0R")));
         break;
 
-      case "T":
+      case "top":
         routine
             .active()
             .onTrue(
@@ -222,7 +222,7 @@ public class RobotContainer {
                     .andThen(autoSubCommand(routine, "THPS-0L")));
         break;
 
-      case "M":
+      case "middle":
         routine
             .active()
             .onTrue(
