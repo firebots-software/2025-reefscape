@@ -10,6 +10,8 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -23,6 +25,68 @@ import edu.wpi.first.units.measure.*;
 public final class Constants {
   public static class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
+  }
+
+  public static class Landmarks {
+    // midline constant
+    public static final double MIDLINE_X = 8.774;
+
+    // blude side
+    public static final Translation2d[] leftBranchesBlue = {
+      new Translation2d(3.7084, 4.191),
+      new Translation2d(3.95732, 3.4328608),
+      new Translation2d(4.736846, 3.2685736),
+      new Translation2d(5.2689506, 3.861562),
+      new Translation2d(5.0214276, 4.6188884),
+      new Translation2d(4.2418254, 4.783201)
+    };
+
+    // blue side
+    public static final Translation2d[] rightBranchesBlue = {
+      new Translation2d(3.7085778, 3.861562),
+      new Translation2d(4.2412666, 3.267583),
+      new Translation2d(5.0220118, 3.4318702),
+      new Translation2d(5.2700936, 4.1901872),
+      new Translation2d(4.7374048, 4.7841916),
+      new Translation2d(3.9566596, 4.619879)
+    };
+
+    public static final Translation2d[] rightBranchesRed = {
+      new Translation2d(13.839825, 4.191),
+      new Translation2d(13.590905, 3.4328608),
+      new Translation2d(12.811379, 3.2685736),
+      new Translation2d(12.2792744, 3.861562),
+      new Translation2d(12.5267974, 4.6188884),
+      new Translation2d(13.3063996, 4.783201)
+    };
+
+    // blue side
+    public static final Translation2d[] leftBranchesRed = {
+      new Translation2d(13.8396472, 3.861562),
+      new Translation2d(13.3069584, 3.267583),
+      new Translation2d(12.5262132, 3.4318702),
+      new Translation2d(12.2781314, 4.1901872),
+      new Translation2d(12.8108202, 4.7841916),
+      new Translation2d(13.5915654, 4.619879)
+    };
+
+    public static final Rotation2d[] reefFacingAngleBlue = {
+      new Rotation2d(Degrees.of(0)),
+      new Rotation2d(Degrees.of(60)),
+      new Rotation2d(Degrees.of(120)),
+      new Rotation2d(Degrees.of(180)),
+      new Rotation2d(Degrees.of(-120)),
+      new Rotation2d(Degrees.of(-60))
+    };
+
+    public static final Rotation2d[] reefFacingAngleRed = {
+      new Rotation2d(Degrees.of(180)),
+      new Rotation2d(Degrees.of(120)),
+      new Rotation2d(Degrees.of(60)),
+      new Rotation2d(Degrees.of(0)),
+      new Rotation2d(Degrees.of(-60)),
+      new Rotation2d(Degrees.of(-120))
+    };
   }
 
   public static final class Arm {
@@ -120,7 +184,7 @@ public final class Constants {
 
     public static enum SwerveSteerPIDValues {
       SERRANO(50d, 0d, 0.2, 0d, 1.5, 0d),
-      PROTO(50d, 0d, 0d, 0d, 0d, 0d),
+      PROTO(20d, 0d, 0d, 0d, 0d, 0d),
       JAMES_HARDEN(50d, 0d, 0d, 0d, 0d, 0d);
       public final double KP, KI, KD, KS, KV, KA;
 
@@ -146,6 +210,17 @@ public final class Constants {
       }
     }
 
+    public static enum BumperThickness {
+      SERRANO(Inches.of(2.625)), // thickness
+      PROTO(Inches.of(2.625)), // thickness
+      JAMES_HARDEN(Inches.of(3.313)); // thickness
+      public final Distance thickness;
+
+      BumperThickness(Distance thickness) {
+        this.thickness = thickness;
+      }
+    }
+
     public static enum SwerveType {
       SERRANO(
           Rotations.of(-0.466552734375), // front left
@@ -156,7 +231,8 @@ public final class Constants {
           SwerveDrivePIDValues.SERRANO,
           SwerveSteerPIDValues.SERRANO,
           RobotDimensions.SERRANO,
-          "Patrice the Pineapple"),
+          "Patrice the Pineapple",
+          BumperThickness.SERRANO),
       PROTO(
           Rotations.of(0.3876953125), // front left
           Rotations.of(0.159912109375), // front right
@@ -166,7 +242,8 @@ public final class Constants {
           SwerveDrivePIDValues.PROTO,
           SwerveSteerPIDValues.PROTO,
           RobotDimensions.PROTO,
-          "rio"),
+          "rio",
+          BumperThickness.PROTO),
       JAMES_HARDEN(
           Rotations.of(-0.158447265625), // front left
           Rotations.of(-0.310791015625), // front right
@@ -176,16 +253,18 @@ public final class Constants {
           SwerveDrivePIDValues.JAMES_HARDEN,
           SwerveSteerPIDValues.JAMES_HARDEN,
           RobotDimensions.JAMES_HARDEN,
-          "FireBot");
+          "FireBot",
+          BumperThickness.JAMES_HARDEN);
       public final Angle FRONT_LEFT_ENCODER_OFFSET,
           FRONT_RIGHT_ENCODER_OFFSET,
           BACK_LEFT_ENCODER_OFFSET,
           BACK_RIGHT_ENCODER_OFFSET;
-      SwerveLevel SWERVE_LEVEL;
-      SwerveDrivePIDValues SWERVE_DRIVE_PID_VALUES;
-      SwerveSteerPIDValues SWERVE_STEER_PID_VALUES;
-      RobotDimensions ROBOT_DIMENSIONS;
-      String CANBUS_NAME;
+      public final SwerveLevel SWERVE_LEVEL;
+      public final SwerveDrivePIDValues SWERVE_DRIVE_PID_VALUES;
+      public final SwerveSteerPIDValues SWERVE_STEER_PID_VALUES;
+      public final RobotDimensions ROBOT_DIMENSIONS;
+      public final String CANBUS_NAME;
+      public final BumperThickness BUMPER_THICKNESS;
 
       SwerveType(
           Angle fl,
@@ -196,7 +275,8 @@ public final class Constants {
           SwerveDrivePIDValues swerveDrivePIDValues,
           SwerveSteerPIDValues swerveSteerPIDValues,
           RobotDimensions robotDimensions,
-          String canbus_name) {
+          String canbus_name,
+          BumperThickness thickness) {
         FRONT_LEFT_ENCODER_OFFSET = fl;
         FRONT_RIGHT_ENCODER_OFFSET = fr;
         BACK_LEFT_ENCODER_OFFSET = bl;
@@ -206,6 +286,7 @@ public final class Constants {
         SWERVE_STEER_PID_VALUES = swerveSteerPIDValues;
         ROBOT_DIMENSIONS = robotDimensions;
         CANBUS_NAME = canbus_name;
+        BUMPER_THICKNESS = thickness;
       }
     }
 
@@ -484,10 +565,12 @@ public final class Constants {
     public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
     public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.75;
     public static final double TELE_DRIVE_SLOW_MODE_SPEED_PERCENT = 0.3;
-    public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
     public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420;
     public static final double TELE_DRIVE_PERCENT_SPEED_RANGE =
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
+    public static final double TELE_DRIVE_MAX_ANGULAR_RATE = Math.PI * 1.5;
+    public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND =
+        TELE_DRIVE_MAX_ANGULAR_RATE * 8;
   }
 
   public static class TootsieSlide {

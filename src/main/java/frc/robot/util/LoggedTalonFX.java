@@ -10,6 +10,7 @@ public class LoggedTalonFX extends TalonFX {
 
   private static ArrayList<LoggedTalonFX> motors = new ArrayList<>();
   private String name;
+  private boolean refresh;
   private String temperature,
       closedLoopError,
       closedLoopReference,

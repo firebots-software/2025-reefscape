@@ -6,12 +6,9 @@ package frc.robot;
 
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ZeroArm;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.util.LoggedTalonFX;
 
 /**
@@ -21,7 +18,11 @@ import frc.robot.util.LoggedTalonFX;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
+  // Commented this out because arm is not on bot and this is activiating
+  // something that doesn't physically exist
+  // TODO: uncomment when arm is on real bot
+
+  // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
   private final RobotContainer m_robotContainer;
 
@@ -47,19 +48,25 @@ public class Robot extends TimedRobot {
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // // block in order for anything in the Command-based framework to work.
-    // m_robotContainer.doTelemetry();
+    // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.doTelemetry();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    absoluteInit();
+  }
 
   @Override
   public void robotInit() {
-    DogLog.setOptions(new DogLogOptions().withCaptureDs(true).withLogExtras(true));
-    DogLog.setPdh(new PowerDistribution());
+    DogLog.setOptions(
+        new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
+    // Commented this code that logs the electric data because it crashed the robot code
+    // there is an error related to the usage of this
+    // DogLog.setPdh(new PowerDistribution());
+    absoluteInit();
   }
 
   @Override
@@ -87,19 +94,18 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    // RobotContainer.setAlliance();
+    absoluteInit();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
 
-    CommandScheduler.getInstance()
-        .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
+    // CommandScheduler.getInstance();
+    // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
     LoggedTalonFX.periodic_static();
   }
 
@@ -116,9 +122,15 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    absoluteInit();
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  public void absoluteInit() {
+    RobotContainer.setAlliance();
+  }
 }

@@ -19,7 +19,7 @@ import frc.robot.util.LoggedTalonFX;
 public class FunnelSubsystem extends SubsystemBase {
   private static FunnelSubsystem instance;
 
-  private LoggedTalonFX topMotor;
+  private LoggedTalonFX topMotor; // TODO: change to left and right motors
   private LoggedTalonFX bottomMotor;
   private DigitalInput checkOutSensor;
   private DigitalInput checkInSensor;
