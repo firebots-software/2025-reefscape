@@ -5,12 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class ElevatorLevel3 extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ElevatorSubsystem elevatorSubsystem;
+  private final ElevatorSubsystem m_subsystem;
 
   /**
    * Creates a new ExampleCommand.
@@ -18,9 +19,9 @@ public class ElevatorLevel3 extends Command {
    * @param subsystem The subsystem used by this command.
    */
   public ElevatorLevel3(ElevatorSubsystem subsystem) {
-    this.elevatorSubsystem = subsystem;
+    m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevatorSubsystem);
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -28,18 +29,19 @@ public class ElevatorLevel3 extends Command {
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    elevatorSubsystem.setLevelOfElevator(3);
-  }
 
-  // Called once the command ends or is interrupted.
+  public void execute() {
+    m_subsystem.setLevelOfElevator(1);
+  }
+ // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
+
   }
 }

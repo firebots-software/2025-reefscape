@@ -73,31 +73,10 @@ public class RobotContainer {
   private void configureBindings() {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    
-    /* Supplier<Double>
-        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
-        leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
-        rotationFunction = () -> -joystick.getRightX(),
-        speedFunction =
-            () ->
-                leftShoulderTrigger.getAsBoolean()
-                    ? 0d
-                    : 1d; // slowmode when left shoulder is pressed, otherwise fast
-    SwerveJoystickCommand swerveJoystickCommand =
-        new SwerveJoystickCommand(
-            frontBackFunction,
-            leftRightFunction,
-            rotationFunction,
-            speedFunction, // slowmode when left shoulder is pressed, otherwise fast
-            () -> joystick.leftTrigger().getAsBoolean(),
-            driveTrain);
-    driveTrain.setDefaultCommand(swerveJoystickCommand);
-    */
-  
 
    joystick.a().whileTrue(new ElevatorLevel1(m_ElevatorSubsystem)); 
-   //joystick.x().whileTrue(new ElevatorLevel2(m_ElevatorSubsystem)); // motor no active 
-   ///joystick.y().whileTrue(new ElevatorLevel3(m_ElevatorSubsystem)); // motor no active
+   joystick.x().whileTrue(new ElevatorLevel2(m_ElevatorSubsystem));  // this doesnt work 
+   joystick.y().whileTrue(new ElevatorLevel3(m_ElevatorSubsystem)); 
    joystick.b().whileTrue(new ElevatorLevel4(m_ElevatorSubsystem)); 
 
   }

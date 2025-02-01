@@ -1,0 +1,40 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ElevatorSubsystem;
+
+public class MoveToLevelCommand extends CommandBase {
+    private final ElevatorSubsystem elevator;
+    private final int targetLevel;
+
+    public MoveToLevelCommand(ElevatorSubsystem elevator, int level) {
+        this.elevator = elevator;
+        this.targetLevel = level;
+        addRequirements(elevator);
+    }
+
+    @Override
+    public void initialize() {
+        elevator.setLevelOfElevator(targetLevel);
+    }
+
+    @Override
+    public void execute() {
+        // Continuously check if the elevator is moving towards the target
+    }
+
+    @Override
+    public boolean isFinished() {
+        return elevator.isAtSetpoint(); // Ends the command when the elevator reaches the setpoint
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        if (interrupted) {
+            System.out.println("Move to level " + targetLevel + " was interrupted.");
+        } else {
+            System.out.println("Elevator reached level " + targetLevel);
+        }
+        elevator.holdPosition(elevator.getCurrentPosition()); // Hold the current position
+    }
+}

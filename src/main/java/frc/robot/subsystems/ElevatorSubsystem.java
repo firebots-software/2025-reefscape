@@ -43,8 +43,11 @@ public class ElevatorSubsystem extends SubsystemBase {
    private final MechanismLigament2d m_wrist;
 
    // Elevator lengths  
-   private static double elevator1Length = 0;
-   private static double elevator2Length = 0;
+   private static double elevator1Length = 5;
+   private static double elevator2Length = 10;
+   private static double elevator3Length = 15;
+   private static double elevator4Length = 20;
+   private double targetPosition = 0.0;
 
    //sensors
      Ultrasonic m_rangeFinder = new Ultrasonic(1, 2);
@@ -156,18 +159,18 @@ public class ElevatorSubsystem extends SubsystemBase {
    }
 
    public void setLevelOfElevator(int level) {
-       double targetPosition = switch (level) {
-           case 1 -> Constants.ElevatorConstants.level1;
-           case 2 -> Constants.ElevatorConstants.level2;
-           case 3 -> Constants.ElevatorConstants.level3;
-           case 4 -> Constants.ElevatorConstants.level4;
-           default -> throw new IllegalArgumentException("Invalid level: " + level);
-       };
+    targetPosition = switch (level) {
+        case 1 -> Constants.ElevatorConstants.level1;
+        case 2 -> Constants.ElevatorConstants.level2;
+        case 3 -> Constants.ElevatorConstants.level3;
+        case 4 -> Constants.ElevatorConstants.level4;
+        default -> throw new IllegalArgumentException("Invalid level: " + level);
+    };
 
+    holdPosition(targetPosition);
+    SmartDashboard.putString("Elevator Error", "Level: " + level + ", Error: " + getPIDError());
+}
 
-       holdPosition(targetPosition);
-       SmartDashboard.putString("Elevator Error", "Level: " + level + ", Error: " + getPIDError());
-   }
 
    public void moveElevator1(double length) {
        elevator1Length = length;
@@ -181,19 +184,26 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
 
-   public void periodic() {
-        
+   @Override
+public void periodic() {
+    elevator1Length = master.getPosition().getValueAsDouble();
+    elevator2Length = master.getPosition().getValueAsDouble();
 
-        elevator1Length = master.getPosition().getValueAsDouble();
-        elevator2Length = master.getPosition().getValueAsDouble();
+    m_elevator1.setLength(elevator1Length);
+    m_elevator2.setLength(elevator2Length);
 
-        m_elevator1.setLength(elevator1Length);
-        m_elevator2.setLength(elevator2Length);
+    SmartDashboard.putNumber("Elevator1 Length", elevator1Length);
+    SmartDashboard.putNumber("Elevator2 Length", elevator2Length);
+    SmartDashboard.putBoolean("At Target", isAtSetpoint());
+    DogLog.log("HoldPosValue", holdPosValue);
 
-        SmartDashboard.putNumber("Elevator1 Length", elevator1Length);
-        SmartDashboard.putNumber("Elevator2 Length", elevator2Length);
-        DogLog.log("HoldPosValue", holdPosValue);
+    // Check if at the target and allow for next command
+    if (isAtSetpoint()) {
+        // Optionally trigger actions when the target is reached
+        SmartDashboard.putString("Elevator Status", "Target Reached");
     }
+}
+
 
     private void keyPressed() {
     // TODO Auto-generated method stub
