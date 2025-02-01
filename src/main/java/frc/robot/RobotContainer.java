@@ -67,7 +67,7 @@ public class RobotContainer {
     startPosChooser.addOption("Middle (In between to Barge Zones)", "M");
     startPosChooser.addOption("Bottom (Next to Red Barge Zone)", "B");
     SmartDashboard.putData("Auto Start Position", startPosChooser);
-    
+
     configureBindings();
     autoFactory =
         new AutoFactory(
@@ -184,34 +184,34 @@ public class RobotContainer {
 
       case "T":
         routine
-        .active()
-        .onTrue(
-            routine
-                .trajectory("TSTART-4R")
-                .resetOdometry()
-                .andThen(routine.trajectory("TSTART-4R").cmd())
-                .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("4R-THPS").cmd())
-                .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("THPS-5L").cmd())
-                .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("5L-THPS").cmd())
-                .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("THPS-4R").cmd())
-                .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("4R-THPS").cmd())
-                .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("THPS-0L").cmd()));
-        break;  
-        
+            .active()
+            .onTrue(
+                routine
+                    .trajectory("TSTART-4R")
+                    .resetOdometry()
+                    .andThen(routine.trajectory("TSTART-4R").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("4R-THPS").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("THPS-5L").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("5L-THPS").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("THPS-4R").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("4R-THPS").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("THPS-0L").cmd()));
+        break;
+
       case "M":
         routine
-          .active()
-          .onTrue(
-              routine
-                  .trajectory("MSTART-3R")
-                  .resetOdometry()
-                  .andThen(routine.trajectory("MSTART-3R").cmd()));
+            .active()
+            .onTrue(
+                routine
+                    .trajectory("MSTART-3R")
+                    .resetOdometry()
+                    .andThen(routine.trajectory("MSTART-3R").cmd()));
         break;
     }
 
