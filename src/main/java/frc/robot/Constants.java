@@ -65,6 +65,24 @@ public final class Constants {
     }
   }
 
+  public static class Flywheel {
+    public static final int FLYWHEEL_PORT = 0;
+    public static final double MOTIONMAGIC_KV = 0;
+    public static final double MOTIONMAGIC_KA = 0;
+    public static final double FLYWHEEL_S0C_KP = 0;
+    public static final double FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS = 5.0;
+
+    public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
+      double conversionFactor =
+          0.159344d; // TODO: Find for actual bot. Will change with gear ratios.
+      double zeroOffset =
+          0.088; // TODO: For some reason when zeroing arm, zeros to 0.088. Fix on actual bot
+      return (conversionFactor * angle) + zeroOffset;
+    }
+  }
+  
+
   public static class OI {
     public static final double LEFT_JOYSTICK_DEADBAND = 0.07;
     public static final double RIGHT_JOYSTICK_DEADBAND = 0.07;
@@ -527,7 +545,7 @@ public final class Constants {
 
     public static final double PULLEY_CIRCUM = 2 * Math.PI * 0; // TODO: change 0 to radius/diameter
     public static final double PULLEY_GEAR_RATIO = 1/5; // TODO
-    public static final double PULLEY_FACTOR = PULLEY_CIRCUM * PULLEY_GEAR_RATIO;
+    public static final double CONVERSION_FACTOR = PULLEY_CIRCUM * PULLEY_GEAR_RATIO;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on

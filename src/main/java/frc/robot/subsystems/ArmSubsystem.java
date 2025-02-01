@@ -75,9 +75,9 @@ public class ArmSubsystem extends SubsystemBase {
     CurrentLimitsConfigs clcFlywheel = 
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(Constants.Arm.FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS)
+            .withStatorCurrentLimit(Constants.Flywheel.FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS)
             .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(Constants.Arm.FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS);
+            .withSupplyCurrentLimit(Constants.Flywheel.FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS);
     FeedbackConfigs fcArm = new FeedbackConfigs();
     MotorOutputConfigs mocArm = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
     MotorOutputConfigs mocFlywheel = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast);
@@ -86,11 +86,11 @@ public class ArmSubsystem extends SubsystemBase {
     ClosedLoopGeneralConfigs clgcArm = new ClosedLoopGeneralConfigs();
     ClosedLoopGeneralConfigs clgcFlywheel = new ClosedLoopGeneralConfigs();
     Slot0Configs s0cArm = new Slot0Configs().withKP(Constants.Arm.S0C_KP * 0.75).withKI(0).withKD(0);
-    Slot0Configs s0cFlywheel = new Slot0Configs().withKP(Constants.Arm.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
+    Slot0Configs s0cFlywheel = new Slot0Configs().withKP(Constants.Flywheel.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
 
     // Initialize master motor only
     armMotor = new LoggedTalonFX(Constants.Arm.LT_PORT);
-    flywheelMotor = new LoggedTalonFX(Constants.Arm.FLYWHEEL_PORT);
+    flywheelMotor = new LoggedTalonFX(Constants.Flywheel.FLYWHEEL_PORT);
 
     TalonFXConfigurator masterConfiguratorArm = armMotor.getConfigurator();
     TalonFXConfigurator masterConfiguratorFlywheel = flywheelMotor.getConfigurator();
@@ -128,7 +128,7 @@ public class ArmSubsystem extends SubsystemBase {
         controlRequestArm.withPosition(Constants.Arm.ANGLE_TO_ENCODER_ROTATIONS(angleDegrees)));
   }
  
-  public void startFlywheel() {
+  public void startFlywheel(double angleDegrees) {
     flywheelMotor.setControl(
         controlRequestFlywheel.withPosition(Constants.Flywheel.ANGLE_TO_ENCODER_ROTATIONS(angleDegrees)));
   }

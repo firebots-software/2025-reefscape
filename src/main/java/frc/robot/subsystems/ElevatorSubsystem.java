@@ -121,7 +121,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void setPosition(double position) {
-    motor1.setControl(new MotionMagicVoltage(position / ElevatorConstants.PULLEY_FACTOR));
+    motor1.setControl(new MotionMagicVoltage(position / ElevatorConstants.CONVERSION_FACTOR));
   }
 
   public boolean exampleCondition() {
