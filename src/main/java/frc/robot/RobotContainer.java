@@ -19,12 +19,16 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.JamesHardenMovement;
+import frc.robot.commands.RunFunnelUntilDetection;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.TootsieSlideShooting;
 import frc.robot.commands.ArmToAngleCmd;
+import frc.robot.commands.ElevatorIntakeLevel;
 import frc.robot.commands.ElevatorLevel1;
 import frc.robot.commands.ElevatorLevel2;
 import frc.robot.commands.ElevatorLevel3;
@@ -32,6 +36,7 @@ import frc.robot.commands.ElevatorLevel4;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
@@ -41,9 +46,9 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  TootsieSlideSubsystem testerTootsie = new TootsieSlideSubsystem();
-
+  TootsieSlideSubsystem testerTootsie = TootsieSlideSubsystem.getInstance();
   private final ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
+  private final FunnelSubsystem m_FunnelSubsystem = FunnelSubsystem.getInstance();
 
   // Alliance color
   private BooleanSupplier redside = () -> redAlliance;
@@ -191,19 +196,20 @@ public class RobotContainer {
                 routine
                     .trajectory("BSTART-2L")
                     .resetOdometry()
-                    .andThen(routine.trajectory("BSTART-2L").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("2L-BHPS").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("BHPS-1R").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("1R-BHPS").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("BHPS-1L").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("1L-BHPS").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("BHPS-0R").cmd()));
+                    .andThen(Commands.parallel(routine.trajectory("BSTART-2L").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
+                    .andThen(new TootsieSlideShooting(testerTootsie))
+                    .andThen(Commands.parallel(routine.trajectory("2L-BHPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
+                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
+                    .andThen(Commands.parallel(routine.trajectory("BHPS-1R").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
+                    .andThen(new TootsieSlideShooting(testerTootsie))
+                    .andThen(Commands.parallel(routine.trajectory("1R-BHPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
+                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
+                    .andThen(Commands.parallel(routine.trajectory("BHPS-1L").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
+                    .andThen(new TootsieSlideShooting(testerTootsie))
+                    .andThen(Commands.parallel(routine.trajectory("1L-BHPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
+                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
+                    .andThen(Commands.parallel(routine.trajectory("BHPS-0R").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
+                    .andThen(new TootsieSlideShooting(testerTootsie)));
         break;
 
       case "T":
@@ -213,19 +219,20 @@ public class RobotContainer {
                 routine
                     .trajectory("TSTART-4R")
                     .resetOdometry()
-                    .andThen(routine.trajectory("TSTART-4R").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("4R-THPS").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("THPS-5L").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("5L-THPS").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("THPS-4R").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("4R-THPS").cmd())
-                    .andThen(new WaitCommand(0.3))
-                    .andThen(routine.trajectory("THPS-0L").cmd()));
+                    .andThen(Commands.parallel(routine.trajectory("TSTART-4R").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
+                    .andThen(new TootsieSlideShooting(testerTootsie))
+                    .andThen(Commands.parallel(routine.trajectory("4R-THPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
+                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
+                    .andThen(Commands.parallel(routine.trajectory("THPS-5L").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
+                    .andThen(new TootsieSlideShooting(testerTootsie))
+                    .andThen(Commands.parallel(routine.trajectory("5L-THPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
+                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
+                    .andThen(Commands.parallel(routine.trajectory("THPS-4R").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
+                    .andThen(new TootsieSlideShooting(testerTootsie))
+                    .andThen(Commands.parallel(routine.trajectory("4R-THPS").cmd(), new ElevatorIntakeLevel(m_ElevatorSubsystem)))
+                    .andThen(new RunFunnelUntilDetection(m_FunnelSubsystem))
+                    .andThen(Commands.parallel(routine.trajectory("THPS-0L").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
+                    .andThen(new TootsieSlideShooting(testerTootsie)));
         break;
 
       case "M":
@@ -235,7 +242,8 @@ public class RobotContainer {
                 routine
                     .trajectory("MSTART-3R")
                     .resetOdometry()
-                    .andThen(routine.trajectory("MSTART-3R").cmd()));
+                    .andThen(Commands.parallel(routine.trajectory("MSTART-3R").cmd(), new ElevatorLevel4(m_ElevatorSubsystem)))
+                    .andThen(new TootsieSlideShooting(testerTootsie)));
         break;
     }
 
