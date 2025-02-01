@@ -237,13 +237,14 @@ public class RobotContainer {
   }
 
   public Command autoSubCommand(AutoRoutine routine, String baseCommandName) {
-    return Commands.parallel(routine.trajectory(baseCommandName).cmd(),
-            (baseCommandName.contains("HPS-") || baseCommandName.contains("START-") ? 
+    boolean pathGoesToReef = baseCommandName.contains("HPS-") || baseCommandName.contains("START-");
+    return Commands.parallel(routine.trajectory(baseCommandName).cmd(), (
+            (pathGoesToReef) ? 
             new ElevatorLevel4(m_ElevatorSubsystem) 
             : new ElevatorIntakeLevel(m_ElevatorSubsystem)))
 
-            .andThen
-            (baseCommandName.contains("HPS-") || baseCommandName.contains("START-") ? 
+            .andThen(
+            (pathGoesToReef) ? 
             new TootsieSlideShooting(testerTootsie) 
             : new RunFunnelUntilDetection(m_FunnelSubsystem));
   }
