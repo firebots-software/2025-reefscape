@@ -185,7 +185,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
+    // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
     String chosenPath = startPosChooser.getSelected();
 
     AutoRoutine routine = autoFactory.newRoutine("routine");
