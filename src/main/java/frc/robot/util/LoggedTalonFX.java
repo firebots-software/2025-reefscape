@@ -121,4 +121,9 @@ public class LoggedTalonFX extends TalonFX {
     DogLog.log(motorvoltage, this.getMotorVoltage().getValueAsDouble());
     DogLog.log(supplyvoltage, this.getSupplyVoltage().getValueAsDouble());
   }
+
+public static double getCurrentState() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getCurrentState'");
+}
 }

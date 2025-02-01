@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
+import frc.robot.subsystems.ArmSubsystem;
 import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -26,9 +27,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.util.LoggedTalonFX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 
 public class ArmSubsystem extends SubsystemBase {
-
+  private final DoubleSolenoid armSeoid;
   private static ArmSubsystem instance;
 
   private LoggedTalonFX armMotor;
@@ -43,6 +46,8 @@ public class ArmSubsystem extends SubsystemBase {
   private double encoderDegrees;
 
   private double targetDegrees;
+
+  
 
   private final VoltageOut voltRequestArm = new VoltageOut(0.0);
 
@@ -67,6 +72,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public ArmSubsystem() {
+    this.armSolenoid = armSolenoid;
     CurrentLimitsConfigs clcArm =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -190,5 +196,24 @@ public class ArmSubsystem extends SubsystemBase {
     DogLog.log("Arm at target", atTarget(5));
     DogLog.log("Arm Degrees", encoderDegrees);
     DogLog.log("Arm Target Degrees", targetDegrees);
+  }
+
+public void spinFlywheel(double flywheelSpeed) {
+    flywheelMotor.set(flywheelSpeed);
+  }
+
+  // Stops the flywheel
+  public void stopFlywheel() {
+    flywheelMotor.set(0);
+  }
+
+  // Deploys the arm
+  public void deployArm() {
+    armSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+
+  // Retracts the arm
+  public void retractArm() {
+    armSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 }

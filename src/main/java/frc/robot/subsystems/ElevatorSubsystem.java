@@ -131,7 +131,20 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  public boolean atTargetPosition(ElevatorPositions targetPosition) {
+
+    double currentPosition = getElevatorPosition();
+    double tolerance = 0.5; 
+
+    return Math.abs(currentPosition - targetPosition.getPosition()) <= tolerance;
 }
+
+  private double getElevatorPosition() {
+    return LoggedTalonFX.getCurrentState();
+  }
+}
+
 
 // public class ElevatorSubsystem extends SubsystemBase {
 //   private static ElevatorSubsystem instance;

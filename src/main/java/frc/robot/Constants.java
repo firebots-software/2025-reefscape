@@ -265,6 +265,7 @@ public final class Constants {
       public final RobotDimensions ROBOT_DIMENSIONS;
       public final String CANBUS_NAME;
       public final BumperThickness BUMPER_THICKNESS;
+    
 
       SwerveType(
           Angle fl,
@@ -287,6 +288,7 @@ public final class Constants {
         ROBOT_DIMENSIONS = robotDimensions;
         CANBUS_NAME = canbus_name;
         BUMPER_THICKNESS = thickness;
+        
       }
     }
 
@@ -642,6 +644,11 @@ public final class Constants {
         this.position = pos;
         this.height = height;
       }
+
+    public double getPosition() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
+    }
     }
   }
 
