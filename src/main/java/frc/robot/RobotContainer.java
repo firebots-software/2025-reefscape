@@ -187,7 +187,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
 
-    /* Field Diagram
+    /* 
+    Field Diagram
 
               BLUE                        RED
     ___________________________________________________
