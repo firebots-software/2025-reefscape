@@ -190,14 +190,14 @@ public class RobotContainer {
     /* Field Diagram
 
               BLUE                        RED
-    __________________________________________________
-    |THPS                 TSTART                 THPS|
-    |                       | |                      |
-    |        5    4         | |         4    5       |
-    |     0          3    MSTART     3          0    |
-    |        1    2         | |         2    1       |
-    |                       | |                      |
-    |BHPS_________________BSTART_________________BHPS|
+    ___________________________________________________
+    |THPS                 TSTART                  THPS|
+    |                       | |                       |
+    |        5    4         | |         4    5        |
+    |     0          3    MSTART     3          0     |
+    |        1    2         | |         2    1        |
+    |                       | |                       |
+    |BHPS_________________BSTART__________________BHPS|
 
     L and R branches are on the left and right of the robot when it is at the reef in between the two branches
 
