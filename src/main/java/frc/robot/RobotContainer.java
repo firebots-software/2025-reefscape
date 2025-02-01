@@ -159,26 +159,61 @@ public class RobotContainer {
     String chosenPath = startPosChooser.getSelected();
 
     var routine = autoFactory.newRoutine("routine");
-    
-    routine
+    switch (chosenPath) {
+      case "B":
+        routine
+            .active()
+            .onTrue(
+                routine
+                    .trajectory("BSTART-2L")
+                    .resetOdometry()
+                    .andThen(routine.trajectory("BSTART-2L").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("2L-BHPS").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("BHPS-1R").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("1R-BHPS").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("BHPS-1L").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("1L-BHPS").cmd())
+                    .andThen(new WaitCommand(0.3))
+                    .andThen(routine.trajectory("BHPS-0R").cmd()));
+        break;
+
+      case "T":
+        routine
         .active()
         .onTrue(
             routine
-                .trajectory("BSTART-2L")
+                .trajectory("TSTART-4R")
                 .resetOdometry()
-                .andThen(routine.trajectory("BSTART-2L").cmd())
+                .andThen(routine.trajectory("TSTART-4R").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("2L-BHPS").cmd())
+                .andThen(routine.trajectory("4R-THPS").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("BHPS-1R").cmd())
+                .andThen(routine.trajectory("THPS-5L").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("1R-BHPS").cmd())
+                .andThen(routine.trajectory("5L-THPS").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("BHPS-1L").cmd())
+                .andThen(routine.trajectory("THPS-4R").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("1L-BHPS").cmd())
+                .andThen(routine.trajectory("4R-THPS").cmd())
                 .andThen(new WaitCommand(0.3))
-                .andThen(routine.trajectory("BHPS-0R").cmd()));
+                .andThen(routine.trajectory("THPS-0L").cmd()));
+        break;  
+        
+      case "M":
+        routine
+          .active()
+          .onTrue(
+              routine
+                  .trajectory("MSTART-3R")
+                  .resetOdometry()
+                  .andThen(routine.trajectory("MSTART-3R").cmd()));
+        break;
+    }
 
     return routine.cmd();
   }
