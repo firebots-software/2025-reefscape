@@ -152,17 +152,17 @@ public class RobotContainer {
                 .trajectory("BSTART-L2")
                 .resetOdometry()
                 .andThen(routine.trajectory("BSTART-L2").cmd())
-                .andThen(new WaitCommand(0.3))
+                .andThen(new WaitCommand(0.75))
                 .andThen(routine.trajectory("L2-BHPS").cmd())
-                .andThen(new WaitCommand(0.3))
+                .andThen(new WaitCommand(0.75))
                 .andThen(routine.trajectory("BHPS-R1").cmd())
-                .andThen(new WaitCommand(0.3))
+                .andThen(new WaitCommand(0.75))
                 .andThen(routine.trajectory("R1-BHPS").cmd())
-                .andThen(new WaitCommand(0.3))
+                .andThen(new WaitCommand(0.75))
                 .andThen(routine.trajectory("BHPS-L1").cmd())
-                .andThen(new WaitCommand(0.3))
+                .andThen(new WaitCommand(0.75))
                 .andThen(routine.trajectory("L1-BHPS").cmd())
-                .andThen(new WaitCommand(0.3))
+                .andThen(new WaitCommand(0.75))
                 .andThen(routine.trajectory("BHPS-R0").cmd()));
 
     return routine.cmd();
