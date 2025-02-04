@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /** An example command that uses an example subsystem. */
@@ -30,17 +31,16 @@ public class RunElevator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
 
   public void execute() {
-    m_subsystem.elevate(10);
+    m_subsystem.elevate(ElevatorPositions.L1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_subsystem.isAtSetpoint();
+    return m_subsystem.isAtPosition();
   }
 }

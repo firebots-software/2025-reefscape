@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
+import frc.robot.subsystems.ArmSubsystem;
 import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -21,16 +22,17 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.util.LoggedTalonFX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 
 public class ArmSubsystem extends SubsystemBase {
-
+  private final DoubleSolenoid armSeoid;
   private static ArmSubsystem instance;
 
   private LoggedTalonFX armMotor;
@@ -46,6 +48,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   private double targetDegrees;
 
+  
+
   private final VoltageOut voltRequestArm = new VoltageOut(0.0);
 
   private final SysIdRoutine sysIdRoutineArm =
@@ -57,7 +61,9 @@ public class ArmSubsystem extends SubsystemBase {
               // Log state with Phoenix SignalLogger class
               (state) -> SignalLogger.writeString("state", state.toString())),
           new SysIdRoutine.Mechanism(
-              (volts) -> armMotor.setControl(voltRequestArm.withOutput(volts.in(Volts))), null, this));
+              (volts) -> armMotor.setControl(voltRequestArm.withOutput(volts.in(Volts))),
+              null,
+              this));
 
   public static ArmSubsystem getInstance() {
     if (instance == null) {
@@ -67,31 +73,35 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public ArmSubsystem() {
+    this.armSolenoid = armSolenoid;
     CurrentLimitsConfigs clcArm =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
             .withStatorCurrentLimit(Constants.Arm.ARM_STATOR_CURRENT_LIMIT_AMPS)
             .withSupplyCurrentLimitEnable(true)
             .withSupplyCurrentLimit(Constants.Arm.ARM_SUPPLY_CURRENT_LIMIT_AMPS);
-    CurrentLimitsConfigs clcFlywheel = 
+    CurrentLimitsConfigs clcFlywheel =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(Constants.Arm.FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS)
+            .withStatorCurrentLimit(Constants.Flywheel.FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS)
             .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(Constants.Arm.FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS);
+            .withSupplyCurrentLimit(Constants.Flywheel.FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS);
     FeedbackConfigs fcArm = new FeedbackConfigs();
     MotorOutputConfigs mocArm = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
-    MotorOutputConfigs mocFlywheel = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast);
+    MotorOutputConfigs mocFlywheel =
+        new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast);
     mocArm.withInverted(InvertedValue.CounterClockwise_Positive);
     mocFlywheel.withInverted(InvertedValue.Clockwise_Positive);
     ClosedLoopGeneralConfigs clgcArm = new ClosedLoopGeneralConfigs();
     ClosedLoopGeneralConfigs clgcFlywheel = new ClosedLoopGeneralConfigs();
-    Slot0Configs s0cArm = new Slot0Configs().withKP(Constants.Arm.S0C_KP * 0.75).withKI(0).withKD(0);
-    Slot0Configs s0cFlywheel = new Slot0Configs().withKP(Constants.Arm.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
+    Slot0Configs s0cArm =
+        new Slot0Configs().withKP(Constants.Arm.S0C_KP * 0.75).withKI(0).withKD(0);
+    Slot0Configs s0cFlywheel =
+        new Slot0Configs().withKP(Constants.Flywheel.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
 
     // Initialize master motor only
     armMotor = new LoggedTalonFX(Constants.Arm.LT_PORT);
-    flywheelMotor = new LoggedTalonFX(Constants.Arm.FLYWHEEL_PORT);
+    flywheelMotor = new LoggedTalonFX(Constants.Flywheel.FLYWHEEL_PORT);
 
     TalonFXConfigurator masterConfiguratorArm = armMotor.getConfigurator();
     TalonFXConfigurator masterConfiguratorFlywheel = flywheelMotor.getConfigurator();
@@ -118,7 +128,6 @@ public class ArmSubsystem extends SubsystemBase {
     motionMagicConfigsFlywheel.MotionMagicAcceleration = Constants.Flywheel.MOTIONMAGIC_KA;
     masterConfiguratorFlywheel.apply(motionMagicConfigsFlywheel);
 
-
     // Initialize absolute encoder
     revEncoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
   }
@@ -128,15 +137,17 @@ public class ArmSubsystem extends SubsystemBase {
     armMotor.setControl(
         controlRequestArm.withPosition(Constants.Arm.ANGLE_TO_ENCODER_ROTATIONS(angleDegrees)));
   }
- 
-  public void startFlywheel() {
+
+  public void startFlywheel(double angleDegrees) {
     flywheelMotor.setControl(
+
         new VelocityVoltage(30));
+
+
   }
 
-  public void stopEveryingONG(){
+  public void stopEveryingONG() {
     flywheelMotor.stopMotor();
-    
   }
 
   private double calculateDegrees() {
@@ -188,5 +199,24 @@ public class ArmSubsystem extends SubsystemBase {
     DogLog.log("Arm at target", atTarget(5));
     DogLog.log("Arm Degrees", encoderDegrees);
     DogLog.log("Arm Target Degrees", targetDegrees);
+  }
+
+public void spinFlywheel(double flywheelSpeed) {
+    flywheelMotor.set(flywheelSpeed);
+  }
+
+  // Stops the flywheel
+  public void stopFlywheel() {
+    flywheelMotor.set(0);
+  }
+
+  // Deploys the arm
+  public void deployArm() {
+    armSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+
+  // Retracts the arm
+  public void retractArm() {
+    armSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 }
