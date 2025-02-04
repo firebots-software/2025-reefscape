@@ -22,12 +22,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.JamesHardenMovement;
 import frc.robot.Constants.Arm;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ArmToAngleCmd;
 import frc.robot.commands.DefaultFunnelCommand;
-import frc.robot.commands.ElevatorLevel1;
-import frc.robot.commands.ElevatorLevel2;
-import frc.robot.commands.ElevatorLevel3;
-import frc.robot.commands.ElevatorLevel4;
+import frc.robot.commands.SetElevatorLevel;
 import frc.robot.commands.RunFunnelUntilDetection;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -150,10 +148,10 @@ public class RobotContainer {
     rightBumper.onFalse(new ArmToAngleCmd(() -> 45d, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
-    joystick.povUp().onTrue(new ElevatorLevel1(m_ElevatorSubsystem));
-    joystick.povRight().onTrue(new ElevatorLevel2(m_ElevatorSubsystem));
-    joystick.povDown().onTrue(new ElevatorLevel3(m_ElevatorSubsystem));
-    joystick.povLeft().onTrue(new ElevatorLevel4(m_ElevatorSubsystem));
+    joystick.povUp().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L1));
+    joystick.povRight().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L2));
+    joystick.povDown().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L3));
+    joystick.povLeft().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L4));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
