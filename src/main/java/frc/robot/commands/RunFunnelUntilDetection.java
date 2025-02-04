@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
  */
 public class RunFunnelUntilDetection extends Command {
   private FunnelSubsystem funnelSubsystem;
-  private boolean coralCheckedOut;
 
   public RunFunnelUntilDetection(FunnelSubsystem funnelSubsystem) {
     this.funnelSubsystem = funnelSubsystem;
@@ -23,14 +22,8 @@ public class RunFunnelUntilDetection extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    coralCheckedOut = false;
-
-
     // Store the position of the coral when it was first checked out.
-    if (funnelSubsystem.isCoralCheckedOut()) {
-      funnelSubsystem.updateCoralCheckedOutPosition();
-      coralCheckedOut = true;
-    }
+    funnelSubsystem.spinFunnel();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,17 +35,7 @@ public class RunFunnelUntilDetection extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    funnelSubsystem.stopFunnel();
-
-    if (coralCheckedOut) {
-      // Once the coral is detected as checked in, wait for momentum to carry it a little furthe
-      SequentialCommandGroup commandGroup = new SequentialCommandGroup(
-      new WaitCommand(.2));
-      // Then, readjust to the correct position based on the checked-out value
-      funnelSubsystem.reAdjustMotor();
-
-      commandGroup.schedule();
-    }
+    funnelSubsystem.maintainCurrentPosition();
   }
 
   // Returns true when the command should end.

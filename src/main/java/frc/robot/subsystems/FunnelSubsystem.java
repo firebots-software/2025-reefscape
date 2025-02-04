@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -32,8 +33,10 @@ public class FunnelSubsystem extends SubsystemBase {
 
 
   public FunnelSubsystem() {
-    topMotor = new LoggedTalonFX(1); // Unique ID for motor1
-    bottomMotor = new LoggedTalonFX(2); // Unique ID for motor2
+    topMotor = new LoggedTalonFX(Constants.FunnelConstants.UP_MOTOR_PORT); // Unique ID for motor1
+    bottomMotor = new LoggedTalonFX(Constants.FunnelConstants.DOWN_MOTOR_PORT); // Unique ID for motor2
+    Follower invertedfollower = new Follower(Constants.FunnelConstants.UP_MOTOR_PORT, true);
+    bottomMotor.setControl(invertedfollower);
 
     checkOutSensor = new DigitalInput(Constants.FunnelConstants.CHECK_OUT_PORT);
     checkInSensor = new DigitalInput(Constants.FunnelConstants.CHECK_IN_PORT);
@@ -72,7 +75,7 @@ public class FunnelSubsystem extends SubsystemBase {
 
 
     revEncoder = new DutyCycleEncoder(Constants.FunnelConstants.ENCODER_PORT);
-    coralCheckedOutPosition = 0.0;
+    coralCheckedOutPosition = topMotor.getPosition().getValueAsDouble();
   }
 
   public static FunnelSubsystem getInstance() {
@@ -100,30 +103,25 @@ public class FunnelSubsystem extends SubsystemBase {
     topMotor.stopMotor();
     bottomMotor.stopMotor();
   }
-public void reAdjustMotor(){
-  topMotor.setControl(
-    controlRequest
-    .withPosition(Constants.FunnelConstants.ANGLE_TO_ENCODER_ROTATIONS(coralCheckedOutPosition))
-    .withSlot(0)
-  );
 
-bottomMotor.setControl(
-  controlRequest
-  .withPosition(Constants.FunnelConstants.ANGLE_TO_ENCODER_ROTATIONS(coralCheckedOutPosition))
-  .withSlot(0)
-);
-  
-}
-  public boolean isCoralCheckedOut() {
-    return checkOutSensor.get();
+  public void maintainCurrentPosition() {
+    coralCheckedOutPosition = topMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
+    topMotor.setControl(
+      controlRequest
+      .withPosition(coralCheckedOutPosition)
+      .withSlot(0)
+      );
   }
 
-  public void updateCoralCheckedOutPosition() {
-    coralCheckedOutPosition = revEncoder.get(); // Store the current encoder position broom
-}
+  public void spinBackSlowly(){
+    topMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
+  }
 
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
+  }
+  public boolean isCoralCheckedOut() {
+    return checkOutSensor.get();
   }
 
   @Override

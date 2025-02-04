@@ -512,7 +512,7 @@ public final class Constants {
     public static final double BOTTOM_MOTOR_SPEED_RPS = 0.0; // TODO
     public static final int TOP_GEAR_RATIO = 0; // TODO
     public static final int BOTTOM_GEAR_RATIO = 0; // TODO
-
+    public static final double SLOW_BACKWARDS_VELOCITY = -0.1; //TODO
     public static final int CHECK_IN_PORT = 0;
     public static final int CHECK_OUT_PORT = 0;
     public static final int DRAKE_PORT = 0;
