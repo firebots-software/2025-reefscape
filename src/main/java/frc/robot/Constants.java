@@ -108,7 +108,8 @@ public final class Constants {
     public static final int RB_PORT = 13; // Right Bottom motor
     public static final int LT_PORT = 1; // Left Top motor
     public static final int LB_PORT = 11; // Left Bottom motor
-    public static final int ENCODER_PORT = 0; // subject to change
+    public static final int ENCODER_PORT =
+        0; // subject to changepublic static final int ENCODER_PORT = 0; // subject to change
 
     public static final double CURRENT_LIMIT = 8.0;
     public static final double S0C_KP = 1.0;
@@ -601,12 +602,14 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 0.0; // TODO
     public static final double ACCELERATION = 0.0; // TODO
 
+    public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
     public static final double SPEED_RPS = 0.0; // TODO
     public static final int GEAR_RATIO = 0; // TODO
 
     public static final int CHECK_IN_PORT = 0;
     public static final int CHECK_OUT_PORT = 0;
     public static final int DRAKE_PORT = 0;
+    public static final double MAX_POSITIONAL_ERROR = 0.05; // TODO
   }
 
   public static class ElevatorConstants {

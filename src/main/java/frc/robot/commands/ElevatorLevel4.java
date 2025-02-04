@@ -5,11 +5,11 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ElevatorLevel4 extends Command {
-  private final ElevatorSubsystem m_subsystem;
+  private final ElevatorSubsystem elevatorSubsystem;
 
   public ElevatorLevel4(ElevatorSubsystem subsystem) {
-    m_subsystem = subsystem;
-    addRequirements(m_subsystem);
+    elevatorSubsystem = subsystem;
+    addRequirements(elevatorSubsystem);
   }
 
   @Override
@@ -17,7 +17,7 @@ public class ElevatorLevel4 extends Command {
 
   @Override
   public void execute() {
-    m_subsystem.elevate(ElevatorPositions.L4);
+    elevatorSubsystem.elevate(ElevatorPositions.L4);
   }
 
   @Override
@@ -25,6 +25,6 @@ public class ElevatorLevel4 extends Command {
 
   @Override
   public boolean isFinished() {
-    return m_subsystem.atTargetPosition();
+    return elevatorSubsystem.atTargetPosition();
   }
 }

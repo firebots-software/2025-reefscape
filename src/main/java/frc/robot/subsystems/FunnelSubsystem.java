@@ -11,7 +11,11 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,10 +30,15 @@ public class FunnelSubsystem extends SubsystemBase {
   private LoggedTalonFX leftMotor;
   private DigitalInput checkOutSensor;
   private DigitalInput checkInSensor;
-
-  public FunnelSubsystem() {
+  private DigitalInput drake;
+  private double coralCheckedOutPosition; 
+  private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+  private boolean coralInFunnel;
+  private FunnelSubsystem() {
     rightMotor = new LoggedTalonFX(FunnelConstants.RIGHT_MOTOR_PORT); // Unique ID for motor1
-    leftMotor = new LoggedTalonFX(2); // Unique ID for motor2
+    leftMotor = new LoggedTalonFX(2); // Unique ID for motor2\
+
+    drake = new DigitalInput(0);
 
     checkOutSensor = new DigitalInput(Constants.FunnelConstants.CHECK_OUT_PORT);
     checkInSensor = new DigitalInput(Constants.FunnelConstants.CHECK_IN_PORT);
@@ -67,9 +76,11 @@ public class FunnelSubsystem extends SubsystemBase {
         new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(Constants.FunnelConstants.CRUISE_VELOCITY)
             .withMotionMagicAcceleration(Constants.FunnelConstants.ACCELERATION);
-            
     m1Config.apply(mmc);
     m2Config.apply(mmc);
+
+    coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble();
+    coralInFunnel = true;
   }
 
   public static FunnelSubsystem getInstance() {
@@ -77,6 +88,14 @@ public class FunnelSubsystem extends SubsystemBase {
       instance = new FunnelSubsystem();
     }
     return instance;
+  }
+
+  public double getAbsolutePositionalError() {
+    if (rightMotor.getControlMode().getValue().equals(ControlModeValue.PositionVoltage)) {
+      return Math.abs(rightMotor.getPosition().getValueAsDouble() - coralCheckedOutPosition);
+    } else {
+      return 0.0;
+    }
   }
 
   private void runFunnelAtRPS(double speed) {
@@ -98,12 +117,50 @@ public class FunnelSubsystem extends SubsystemBase {
       rightMotor.setControl(
           new PositionVoltage(randomAngleTBD)); 
   }
-  public boolean isCoralCheckedOut() {
-    return checkOutSensor.get();
+public void reAdjustMotor(){
+  rightMotor.setControl(
+    controlRequest
+    .withPosition(coralCheckedOutPosition)
+    .withSlot(0)
+  );
+  
+}
+
+  public void updateCoralCheckedOutPosition() {
+    coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
+}
+
+  public void maintainCurrentPosition() {
+    coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
+    rightMotor.setControl(
+      controlRequest
+      .withPosition(coralCheckedOutPosition)
+      .withSlot(0)
+      );
+  }
+
+  public void spinBackSlowly(){
+    rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
 
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
+  }
+
+  public boolean isCoralCheckedOut() {
+    return checkOutSensor.get();
+  }
+
+  public boolean drakeTripped() {
+    return drake.get();
+  }
+  
+    public void setCoralInFunnel(boolean coralInFunnel) {
+    this.coralInFunnel = coralInFunnel;
+  }
+
+  public boolean isCoralInFunnel() {
+    return coralInFunnel;
   }
 
   @Override
@@ -116,3 +173,5 @@ public class FunnelSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 }
+
+//

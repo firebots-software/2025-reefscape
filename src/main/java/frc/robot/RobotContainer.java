@@ -21,12 +21,18 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.JamesHardenMovement;
+import frc.robot.Constants.Arm;
+import frc.robot.commands.ArmToAngleCmd;
+import frc.robot.commands.DefaultFunnelCommand;
 import frc.robot.commands.ElevatorLevel1;
 import frc.robot.commands.ElevatorLevel2;
 import frc.robot.commands.ElevatorLevel3;
 import frc.robot.commands.ElevatorLevel4;
+import frc.robot.commands.RunFunnelUntilDetection;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
@@ -36,10 +42,10 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  TootsieSlideSubsystem testerTootsie = new TootsieSlideSubsystem();
-
-  private final ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
-
+  TootsieSlideSubsystem testerTootsie = TootsieSlideSubsystem.getInstance();
+  FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
+  ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
+  ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
   private BooleanSupplier redside = () -> redAlliance;
   private static boolean redAlliance;
@@ -70,6 +76,10 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Joystick suppliers,
+    funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
+    funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem));
+    
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
         leftRightFunction = () -> -joystick.getLeftX(),
@@ -135,7 +145,9 @@ public class RobotContainer {
                                         * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
                             new Rotation2d(
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
-
+    Trigger rightBumper = joystick.rightBumper();
+    rightBumper.onTrue(new ArmToAngleCmd(() -> 90d, ArmSubsystem.getInstance()));
+    rightBumper.onFalse(new ArmToAngleCmd(() -> 45d, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     joystick.povUp().onTrue(new ElevatorLevel1(m_ElevatorSubsystem));

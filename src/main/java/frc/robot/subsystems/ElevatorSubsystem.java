@@ -24,17 +24,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   private LoggedTalonFX motor2;
   private LoggedTalonFX master;
   private Double holdPosValue = 0.0;
-  private DigitalInput drake;
-  private boolean drakeHasSeenThings = false;
 
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
 
   private ElevatorSubsystem() {
     // Initialize motors
-    // TODO: Would it make more sense to call these motor up/down?
-
-    drake = new DigitalInput(0);
 
     motor1 = new LoggedTalonFX(ElevatorConstants.MOTOR1_PORT);
     motor2 = new LoggedTalonFX(ElevatorConstants.MOTOR2_PORT);
@@ -90,10 +85,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPosition() {
-    boolean toReturn = (Math.abs(getError()) < ElevatorConstants.SETPOINT_TOLERANCE);
-    if (toReturn) {
-      drakeHasSeenThings = false;
-    }
+    boolean toReturn = (Math.abs(getError()) <= ElevatorConstants.SETPOINT_TOLERANCE);
     return toReturn;
   }
 
@@ -113,13 +105,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean exampleCondition() {
     // Query some boolean level, such as a digital sensor.
     return false;
-  }
-
-  public boolean drakeTripped() {
-    if (drake.get()) {
-      drakeHasSeenThings = true;
-    }
-    return drake.get();
   }
 
   @Override

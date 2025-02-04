@@ -72,7 +72,7 @@ public class ArmSubsystem extends SubsystemBase {
     return instance;
   }
 
-  public ArmSubsystem() {
+  private ArmSubsystem() {
     CurrentLimitsConfigs clcArm =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
