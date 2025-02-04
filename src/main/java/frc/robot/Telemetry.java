@@ -3,6 +3,8 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -18,6 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import java.util.Optional;
+import org.photonvision.EstimatedRobotPose;
 
 public class Telemetry {
   private final double MaxSpeed;
@@ -37,6 +41,8 @@ public class Telemetry {
 
   /* Robot swerve drive state */
   private final NetworkTable driveStateTable = inst.getTable("DriveState");
+  private final NetworkTable visionStateTable = inst.getTable("VisionData");
+
   private final StructPublisher<Pose2d> drivePose =
       driveStateTable.getStructTopic("Pose", Pose2d.struct).publish();
   private final StructPublisher<ChassisSpeeds> driveSpeeds =
@@ -51,6 +57,9 @@ public class Telemetry {
       driveStateTable.getDoubleTopic("Timestamp").publish();
   private final DoublePublisher driveOdometryFrequency =
       driveStateTable.getDoubleTopic("OdometryFrequency").publish();
+
+  private final StructPublisher<Pose2d> wizonPose =
+      visionStateTable.getStructTopic("Pose", Pose2d.struct).publish();
 
   /* Robot pose for field positioning */
   private final NetworkTable table = inst.getTable("Pose");
@@ -101,6 +110,7 @@ public class Telemetry {
   private final double[] m_poseArray = new double[3];
   private final double[] m_moduleStatesArray = new double[8];
   private final double[] m_moduleTargetsArray = new double[8];
+  private final double[] m_visionPoseArray = new double[3];
 
   /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
   public void telemeterize(SwerveDriveState state) {
@@ -124,7 +134,7 @@ public class Telemetry {
       m_moduleTargetsArray[i * 2 + 1] = state.ModuleTargets[i].speedMetersPerSecond;
     }
 
-    // SignalLogger.writeDoubleArray("DriveState/Pose", state.Pose);
+    SignalLogger.writeDoubleArray("DriveState/Pose", m_poseArray);
     SignalLogger.writeDoubleArray("DriveState/ModuleStates", m_moduleStatesArray);
     SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
     SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
@@ -141,5 +151,48 @@ public class Telemetry {
 
       SmartDashboard.putData("Module " + i, m_moduleMechanisms[i]);
     }
+  }
+
+  public void logVisionPose(Optional<EstimatedRobotPose> visionPose) {
+    if (!visionPose.isEmpty()) {
+
+      m_visionPoseArray[0] = visionPose.get().estimatedPose.getX();
+      m_visionPoseArray[1] = visionPose.get().estimatedPose.getY();
+      m_visionPoseArray[2] = visionPose.get().estimatedPose.getRotation().getAngle();
+
+      wizonPose.set(
+          new Pose2d(
+              m_visionPoseArray[0], m_visionPoseArray[1], new Rotation2d(m_visionPoseArray[2])));
+
+      SignalLogger.writeDoubleArray("VisionData/Pose", m_visionPoseArray);
+      fieldTypePub.set("Field2d");
+      fieldPub.set(m_visionPoseArray);
+    }
+  }
+
+  public void logVisionPose(Pose2d visionPose) {
+
+      m_visionPoseArray[0] = visionPose.getX();
+      m_visionPoseArray[1] = visionPose.getY();
+      m_visionPoseArray[2] = visionPose.getRotation().getDegrees();
+
+      wizonPose.set(visionPose);
+
+      SignalLogger.writeDoubleArray("VisionData/Pose", m_visionPoseArray);
+      fieldTypePub.set("Field2d");
+      fieldPub.set(m_visionPoseArray);
+  }
+
+  public void logVisionPose(Pose3d visionPose) {
+    m_visionPoseArray[0] = visionPose.getX();
+    m_visionPoseArray[1] = visionPose.getY();
+    m_visionPoseArray[2] = visionPose.getRotation().getAngle();
+    wizonPose.set(
+        new Pose2d(
+            m_visionPoseArray[0], m_visionPoseArray[1], new Rotation2d(m_visionPoseArray[2])));
+
+    SignalLogger.writeDoubleArray("VisionData/Pose", m_visionPoseArray);
+    fieldTypePub.set("Field2d");
+    fieldPub.set(m_visionPoseArray);
   }
 }

@@ -13,6 +13,10 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import com.ctre.phoenix6.SignalLogger;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -34,7 +38,6 @@ import frc.robot.commands.ElevatorLevel1;
 import frc.robot.commands.ElevatorLevel2;
 import frc.robot.commands.ElevatorLevel3;
 import frc.robot.commands.ElevatorLevel4;
-import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -42,6 +45,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.VisionSystem;
+import java.util.function.Supplier;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -71,14 +76,13 @@ public class RobotContainer {
 
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
+      private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
+    private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
   private final CommandXboxController joystick = new CommandXboxController(0);
 
   private final AutoFactory autoFactory;
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
-  public void doTelemetry() {
-    logger.telemeterize(driveTrain.getCurrentState());
-  }
 
   public RobotContainer() {
     // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
@@ -98,11 +102,25 @@ public class RobotContainer {
             driveTrain);
   }
 
+  // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
+  public void doTelemetry() {
+    // logger.telemeterize(driveTrain.getState()); idk
+    // logger.telemeterize(driveTrain.getCurrentState());
+    Pose2d camPose = visionFront.getPose2d();
+    Pose2d camPose2 = visionBack.getPose2d();
+    if(camPose != null || camPose2 != null){
+      logger.logVisionPose(VisionSystem.getAverageForOffBotTesting(camPose, camPose2));
+    }
+    
+    
+  }
+
   private void configureBindings() {
     // Joystick suppliers,
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
-        leftRightFunction = () -> -joystick.getLeftX(),
+    Supplier<Double>
+        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
+        leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
         rotationFunction = () -> -joystick.getRightX(),
         speedFunction =
             () ->
