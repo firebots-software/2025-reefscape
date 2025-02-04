@@ -10,9 +10,12 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.FunnelConstants;
@@ -26,6 +29,8 @@ public class FunnelSubsystem extends SubsystemBase {
   private DigitalInput checkOutSensor;
   private DigitalInput checkInSensor;
   private DigitalInput drake;
+  private double coralCheckedOutPosition; 
+  private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
 
   public FunnelSubsystem() {
     rightMotor = new LoggedTalonFX(FunnelConstants.RIGHT_MOTOR_PORT); // Unique ID for motor1
@@ -94,10 +99,21 @@ public class FunnelSubsystem extends SubsystemBase {
   public void stopFunnel() {
     rightMotor.stopMotor();
   }
-
+public void reAdjustMotor(){
+  rightMotor.setControl(
+    controlRequest
+    .withPosition(Constants.FunnelConstants.ANGLE_TO_ENCODER_ROTATIONS(coralCheckedOutPosition))
+    .withSlot(0)
+  );
+  
+}
   public boolean isCoralCheckedOut() {
     return checkOutSensor.get();
   }
+
+  public void updateCoralCheckedOutPosition() {
+    coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
+}
 
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
@@ -117,3 +133,5 @@ public class FunnelSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 }
+
+//
