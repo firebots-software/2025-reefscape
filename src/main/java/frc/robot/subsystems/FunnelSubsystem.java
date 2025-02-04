@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -102,21 +103,34 @@ public class FunnelSubsystem extends SubsystemBase {
 public void reAdjustMotor(){
   rightMotor.setControl(
     controlRequest
-    .withPosition(Constants.FunnelConstants.ANGLE_TO_ENCODER_ROTATIONS(coralCheckedOutPosition))
+    .withPosition(coralCheckedOutPosition)
     .withSlot(0)
   );
   
 }
-  public boolean isCoralCheckedOut() {
-    return checkOutSensor.get();
-  }
 
   public void updateCoralCheckedOutPosition() {
     coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
 }
 
+  public void maintainCurrentPosition() {
+    coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
+    rightMotor.setControl(
+      controlRequest
+      .withPosition(coralCheckedOutPosition)
+      .withSlot(0)
+      );
+  }
+
+  public void spinBackSlowly(){
+    rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
+  }
+
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
+  }
+  public boolean isCoralCheckedOut() {
+    return checkOutSensor.get();
   }
 
   public boolean drakeTripped() {
