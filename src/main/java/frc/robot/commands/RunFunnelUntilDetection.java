@@ -30,6 +30,7 @@ public class RunFunnelUntilDetection extends Command {
   @Override
   public void end(boolean interrupted) {
     funnelSubsystem.stopFunnel();
+    funnelSubsystem.moveBackFlywheel();
   }
 
   // Returns true when the command should end.

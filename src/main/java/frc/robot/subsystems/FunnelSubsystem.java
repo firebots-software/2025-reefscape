@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -91,7 +92,12 @@ public class FunnelSubsystem extends SubsystemBase {
   public void stopFunnel() {
     rightMotor.stopMotor();
   }
-
+  public void moveBackFlywheel(){
+    //TODO: Fix this bro lmao l bozo lol rofl haha hee hee hee haw
+    double randomAngleTBD = 0.0d;
+      rightMotor.setControl(
+          new PositionVoltage(randomAngleTBD)); 
+  }
   public boolean isCoralCheckedOut() {
     return checkOutSensor.get();
   }

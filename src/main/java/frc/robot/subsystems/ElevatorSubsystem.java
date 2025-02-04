@@ -132,17 +132,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public boolean atTargetPosition(ElevatorPositions targetPosition) {
-
-    double currentPosition = getElevatorPosition();
+  public boolean atTargetPosition() {
     double tolerance = 0.5; 
-
-    return Math.abs(currentPosition - targetPosition.getPosition()) <= tolerance;
+    return master.getClosedLoopError().getValueAsDouble() <= tolerance;
 }
-
-  private double getElevatorPosition() {
-    return LoggedTalonFX.getCurrentState();
-  }
+  
 }
 
 

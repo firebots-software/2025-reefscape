@@ -23,7 +23,7 @@ public class LoadAndPutUp extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
 
     addCommands(new RunFunnelUntilDetection(funnel));
-    addCommands(new ElevatorIntakeLevel(elevator));
+    addCommands(new ElevatorIntakeLevel(elevator, funnel));
     addCommands(new RunElevator(elevator));
     addCommands(new TransferPieceBetweenFunnelAndElevator(elevator, funnel));
     addCommands(new ElevatorLevel4(elevator));

@@ -25,6 +25,6 @@ public class ElevatorLevel1 extends Command {
 
   @Override
   public boolean isFinished() {
-    return m_subsystem.atTargetPosition(ElevatorPositions.L1);
+    return m_subsystem.atTargetPosition();
   }
 }

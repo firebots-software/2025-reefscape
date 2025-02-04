@@ -203,20 +203,14 @@ public class ArmSubsystem extends SubsystemBase {
 
 public void spinFlywheel(double flywheelSpeed) {
     flywheelMotor.set(flywheelSpeed);
-  }
+}
+
+
 
   // Stops the flywheel
   public void stopFlywheel() {
     flywheelMotor.set(0);
   }
 
-  // Deploys the arm
-  public void deployArm() {
-    armSolenoid.set(DoubleSolenoid.Value.kForward);
-  }
 
-  // Retracts the arm
-  public void retractArm() {
-    armSolenoid.set(DoubleSolenoid.Value.kReverse);
-  }
 }
