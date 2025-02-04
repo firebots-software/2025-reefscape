@@ -29,6 +29,10 @@ import frc.robot.util.LoggedTalonFX;
 
 public class ArmSubsystem extends SubsystemBase {
 
+  /*
+   * The Arm Subsystem is the De-Algaenator (Dale) subsystem, controlling its Arm and Flywheel
+   */
+
   private static ArmSubsystem instance;
 
   private LoggedTalonFX armMotor;
@@ -146,8 +150,8 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean atTarget(double endToleranceDegrees) {
-    if (encoderDegrees < targetDegrees + endToleranceDegrees
-        && encoderDegrees > targetDegrees - endToleranceDegrees) {
+    if (encoderDegrees < (targetDegrees + endToleranceDegrees)
+        && encoderDegrees > (targetDegrees - endToleranceDegrees)) {
       return true;
     } else return false;
   }
