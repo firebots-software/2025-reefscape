@@ -33,7 +33,7 @@ public class FunnelSubsystem extends SubsystemBase {
   private double coralCheckedOutPosition; 
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
   private boolean coralInFunnel;
-  public FunnelSubsystem() {
+  private FunnelSubsystem() {
     rightMotor = new LoggedTalonFX(FunnelConstants.RIGHT_MOTOR_PORT); // Unique ID for motor1
     leftMotor = new LoggedTalonFX(2); // Unique ID for motor2\
 

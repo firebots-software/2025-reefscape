@@ -39,7 +39,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
 
-  public TootsieSlideSubsystem() {
+  private TootsieSlideSubsystem() {
 
     motor = new LoggedTalonFX(1); // Unique ID for motor
 

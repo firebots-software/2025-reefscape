@@ -42,7 +42,7 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  TootsieSlideSubsystem testerTootsie = new TootsieSlideSubsystem();
+  TootsieSlideSubsystem testerTootsie = TootsieSlideSubsystem.getInstance();
   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
   ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();

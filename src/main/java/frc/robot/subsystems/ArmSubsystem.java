@@ -72,7 +72,7 @@ public class ArmSubsystem extends SubsystemBase {
     return instance;
   }
 
-  public ArmSubsystem() {
+  private ArmSubsystem() {
     CurrentLimitsConfigs clcArm =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -208,15 +208,5 @@ public void spinFlywheel(double flywheelSpeed) {
   // Stops the flywheel
   public void stopFlywheel() {
     flywheelMotor.set(0);
-  }
-
-  // Deploys the arm
-  public void deployArm() {
-    armSolenoid.set(DoubleSolenoid.Value.kForward);
-  }
-
-  // Retracts the arm
-  public void retractArm() {
-    armSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 }
