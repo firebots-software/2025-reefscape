@@ -20,15 +20,19 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ArmToAngleCmd;
+import frc.robot.commands.ElevatorIntakeLevel;
 import frc.robot.commands.ElevatorLevel1;
 import frc.robot.commands.ElevatorLevel2;
 import frc.robot.commands.ElevatorLevel3;
 import frc.robot.commands.ElevatorLevel4;
 import frc.robot.commands.JamesHardenMovement;
+import frc.robot.commands.RunFunnelUntilDetection;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.TootsieSlideShooting;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -264,7 +268,6 @@ public class RobotContainer {
     return routine.cmd();
   }
 
-  /*
   public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { //for actual robot
     boolean pathGoesToReef = baseCommandName.contains("HPS-") || baseCommandName.contains("START-");
     // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator
@@ -278,9 +281,5 @@ public class RobotContainer {
             (pathGoesToReef)
                 ? new TootsieSlideShooting(testerTootsie)
                 : new RunFunnelUntilDetection(m_FunnelSubsystem));
-  }
-    */
-  public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { //for proto
-    return routine.trajectory(baseCommandName).cmd();
   }
 }
