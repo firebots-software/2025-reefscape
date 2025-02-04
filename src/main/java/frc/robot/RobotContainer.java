@@ -13,10 +13,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import com.ctre.phoenix6.SignalLogger;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,27 +21,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.JamesHardenMovement;
-import frc.robot.commands.RunFunnelUntilDetection;
-import frc.robot.commands.SwerveJoystickCommand;
-import frc.robot.commands.TootsieSlideShooting;
 import frc.robot.commands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorIntakeLevel;
 import frc.robot.commands.ElevatorLevel1;
 import frc.robot.commands.ElevatorLevel2;
 import frc.robot.commands.ElevatorLevel3;
 import frc.robot.commands.ElevatorLevel4;
+import frc.robot.commands.JamesHardenMovement;
+import frc.robot.commands.RunFunnelUntilDetection;
+import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.TootsieSlideShooting;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 import frc.robot.subsystems.VisionSystem;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class RobotContainer {
@@ -76,8 +70,8 @@ public class RobotContainer {
 
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
-      private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
-    private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
+  private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
+  private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
   private final CommandXboxController joystick = new CommandXboxController(0);
 
   private final AutoFactory autoFactory;
@@ -108,11 +102,9 @@ public class RobotContainer {
     // logger.telemeterize(driveTrain.getCurrentState());
     Pose2d camPose = visionFront.getPose2d();
     Pose2d camPose2 = visionBack.getPose2d();
-    if(camPose != null || camPose2 != null){
+    if (camPose != null || camPose2 != null) {
       logger.logVisionPose(VisionSystem.getAverageForOffBotTesting(camPose, camPose2));
     }
-    
-    
   }
 
   private void configureBindings() {
@@ -205,7 +197,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
 
-    /* 
+    /*
     Field Diagram
 
               BLUE                        RED
@@ -230,63 +222,64 @@ public class RobotContainer {
 
     AutoRoutine routine = autoFactory.newRoutine("routine");
     switch (chosenPath) {
-        case "top":
-            routine
-                .active()
-                .onTrue(
-                    routine
-                        .trajectory("TSTART-4R")
-                        .resetOdometry()
-                        .andThen(autoSubCommand(routine, "TSTART-4R"))
-                        .andThen(autoSubCommand(routine, "4R-THPS"))
-                        .andThen(autoSubCommand(routine, "THPS-5L"))
-                        .andThen(autoSubCommand(routine, "5L-THPS"))
-                        .andThen(autoSubCommand(routine, "THPS-5R"))
-                        .andThen(autoSubCommand(routine, "5R-THPS"))
-                        .andThen(autoSubCommand(routine, "THPS-0L")));
-            break;
+      case "top":
+        routine
+            .active()
+            .onTrue(
+                routine
+                    .trajectory("TSTART-4R")
+                    .resetOdometry()
+                    .andThen(autoSubCommand(routine, "TSTART-4R"))
+                    .andThen(autoSubCommand(routine, "4R-THPS"))
+                    .andThen(autoSubCommand(routine, "THPS-5L"))
+                    .andThen(autoSubCommand(routine, "5L-THPS"))
+                    .andThen(autoSubCommand(routine, "THPS-5R"))
+                    .andThen(autoSubCommand(routine, "5R-THPS"))
+                    .andThen(autoSubCommand(routine, "THPS-0L")));
+        break;
 
-        case "middle":
-            routine
-                .active()
-                .onTrue(
-                    routine
-                        .trajectory("MSTART-3R")
-                        .resetOdometry()
-                        .andThen(autoSubCommand(routine, "MSTART-3R")));
-            break;
+      case "middle":
+        routine
+            .active()
+            .onTrue(
+                routine
+                    .trajectory("MSTART-3R")
+                    .resetOdometry()
+                    .andThen(autoSubCommand(routine, "MSTART-3R")));
+        break;
 
-        case "bottom":
-            routine
-                .active()
-                .onTrue(
-                    routine
-                        .trajectory("BSTART-2L")
-                        .resetOdometry()
-                        .andThen(autoSubCommand(routine, "BSTART-2L"))
-                        .andThen(autoSubCommand(routine, "2L-BHPS"))
-                        .andThen(autoSubCommand(routine, "BHPS-1R"))
-                        .andThen(autoSubCommand(routine, "1R-BHPS"))
-                        .andThen(autoSubCommand(routine, "BHPS-1L"))
-                        .andThen(autoSubCommand(routine, "1L-BHPS"))
-                        .andThen(autoSubCommand(routine, "BHPS-0R")));
-            break;
+      case "bottom":
+        routine
+            .active()
+            .onTrue(
+                routine
+                    .trajectory("BSTART-2L")
+                    .resetOdometry()
+                    .andThen(autoSubCommand(routine, "BSTART-2L"))
+                    .andThen(autoSubCommand(routine, "2L-BHPS"))
+                    .andThen(autoSubCommand(routine, "BHPS-1R"))
+                    .andThen(autoSubCommand(routine, "1R-BHPS"))
+                    .andThen(autoSubCommand(routine, "BHPS-1L"))
+                    .andThen(autoSubCommand(routine, "1L-BHPS"))
+                    .andThen(autoSubCommand(routine, "BHPS-0R")));
+        break;
     }
 
     return routine.cmd();
   }
 
   public Command autoSubCommand(AutoRoutine routine, String baseCommandName) {
-    boolean pathGoesToReef = baseCommandName.contains("HPS-") || baseCommandName.contains("START-"); 
-    //if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator and shoot, else lower elevator and intake
-    return Commands.parallel(routine.trajectory(baseCommandName).cmd(), (
-            (pathGoesToReef) ? 
-            new ElevatorLevel4(m_ElevatorSubsystem) 
-            : new ElevatorIntakeLevel(m_ElevatorSubsystem)))
-
-            .andThen(
-            (pathGoesToReef) ? 
-            new TootsieSlideShooting(testerTootsie) 
-            : new RunFunnelUntilDetection(m_FunnelSubsystem));
+    boolean pathGoesToReef = baseCommandName.contains("HPS-") || baseCommandName.contains("START-");
+    // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator
+    // and shoot, else lower elevator and intake
+    return Commands.parallel(
+            routine.trajectory(baseCommandName).cmd(),
+            ((pathGoesToReef)
+                ? new ElevatorLevel4(m_ElevatorSubsystem)
+                : new ElevatorIntakeLevel(m_ElevatorSubsystem)))
+        .andThen(
+            (pathGoesToReef)
+                ? new TootsieSlideShooting(testerTootsie)
+                : new RunFunnelUntilDetection(m_FunnelSubsystem));
   }
 }

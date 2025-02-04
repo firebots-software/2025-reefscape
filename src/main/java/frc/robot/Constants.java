@@ -152,14 +152,12 @@ public final class Constants {
     public static final int JOYSTICK_A_PORT = 0;
   }
 
-  public static class Vision{
+  public static class Vision {
 
     public static enum Cameras {
-        FRONT_CAM,
-        BACK_CAM;
-        
+      FRONT_CAM,
+      BACK_CAM;
     }
-
   }
 
   public static class Swerve {

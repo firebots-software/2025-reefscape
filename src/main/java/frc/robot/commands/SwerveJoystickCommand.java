@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class SwerveJoystickCommand extends Command {
@@ -32,10 +31,10 @@ public class SwerveJoystickCommand extends Command {
   private boolean squaredTurn;
 
   public SwerveJoystickCommand(
-    Supplier<Double> frontBackFunction,
-    Supplier<Double> leftRightFunction,
-    Supplier<Double> turningSpdFunction,
-    Supplier<Double> speedControlFunction,
+      Supplier<Double> frontBackFunction,
+      Supplier<Double> leftRightFunction,
+      Supplier<Double> turningSpdFunction,
+      Supplier<Double> speedControlFunction,
       BooleanSupplier fieldRelativeFunction,
       SwerveSubsystem swerveSubsystem) {
     this.xSpdFunction = frontBackFunction;
@@ -58,10 +57,10 @@ public class SwerveJoystickCommand extends Command {
 
   // Sets everything, not field relative
   public SwerveJoystickCommand(
-    Supplier<Double> frontBackFunction,
-    Supplier<Double> leftRightFunction,
-    Supplier<Double> turningSpdFunction,
-    Supplier<Double> speedControlFunction,
+      Supplier<Double> frontBackFunction,
+      Supplier<Double> leftRightFunction,
+      Supplier<Double> turningSpdFunction,
+      Supplier<Double> speedControlFunction,
       SwerveSubsystem swerveSubsystem) {
 
     this(
@@ -74,10 +73,10 @@ public class SwerveJoystickCommand extends Command {
   }
 
   public SwerveJoystickCommand(
-    Supplier<Double> frontBackFunction,
-    Supplier<Double> leftRightFunction,
-    Supplier<Double> turningSpdFunction,
-    Supplier<Double> speedControlFunction,
+      Supplier<Double> frontBackFunction,
+      Supplier<Double> leftRightFunction,
+      Supplier<Double> turningSpdFunction,
+      Supplier<Double> speedControlFunction,
       SwerveSubsystem swerveSubsystem,
       boolean squaredTurn) {
 

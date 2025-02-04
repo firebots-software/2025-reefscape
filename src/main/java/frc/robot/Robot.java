@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import java.util.Optional;
-
-import org.photonvision.EstimatedRobotPose;
-
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.Matrix;
@@ -22,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
+import java.util.Optional;
+import org.photonvision.EstimatedRobotPose;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -43,55 +41,59 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
+
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
   private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
   private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
-   private final SwerveSubsystem driveTrain = new SwerveSubsystem(
-      Constants.Swerve.DrivetrainConstants,
-      250.0, // TODO: CHANGE ODOMETRY UPDATE FREQUENCY TO CONSTANT,
-      odometryMatrix,
-      visionMatrix,
-      Constants.Swerve.FrontLeft,
-      Constants.Swerve.FrontRight,
-      Constants.Swerve.BackLeft,
-      Constants.Swerve.BackRight
-  );
+  private final SwerveSubsystem driveTrain =
+      new SwerveSubsystem(
+          Constants.Swerve.DrivetrainConstants,
+          250.0, // TODO: CHANGE ODOMETRY UPDATE FREQUENCY TO CONSTANT,
+          odometryMatrix,
+          visionMatrix,
+          Constants.Swerve.FrontLeft,
+          Constants.Swerve.FrontRight,
+          Constants.Swerve.BackLeft,
+          Constants.Swerve.BackRight);
   private double leastDist;
 
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-      m_robotContainer.doTelemetry();
+    m_robotContainer.doTelemetry();
     CommandScheduler.getInstance().run();
     Optional<EstimatedRobotPose> frontRobotPose =
         visionFront.getMultiTagPose3d(driveTrain.getState().Pose);
     Optional<EstimatedRobotPose> backRobotPose =
-    visionBack.getMultiTagPose3d(driveTrain.getState().Pose);
-    if (frontRobotPose.isPresent() || backRobotPose.isPresent() ) {
+        visionBack.getMultiTagPose3d(driveTrain.getState().Pose);
+    if (frontRobotPose.isPresent() || backRobotPose.isPresent()) {
 
       double frontdistToAprilTag =
-          visionFront.gAprilTagFieldLayout().getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
+          visionFront
+              .gAprilTagFieldLayout()
+              .getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
               .get()
               .getTranslation()
               .getDistance(
                   new Translation3d(
                       driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
 
-    double backdistToAprilTag =
-    visionBack.gAprilTagFieldLayout().getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
-        .get()
-        .getTranslation()
-        .getDistance(
-            new Translation3d(
-                driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+      double backdistToAprilTag =
+          visionBack
+              .gAprilTagFieldLayout()
+              .getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
+              .get()
+              .getTranslation()
+              .getDistance(
+                  new Translation3d(
+                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
 
-    if (frontdistToAprilTag <= backdistToAprilTag){
-       leastDist = frontdistToAprilTag;
-    }
-    else {
-       leastDist = backdistToAprilTag;
-    }
+      if (frontdistToAprilTag <= backdistToAprilTag) {
+        leastDist = frontdistToAprilTag;
+      } else {
+        leastDist = backdistToAprilTag;
+      }
 
       double xKalman = 0.01 * Math.pow(1.15, leastDist);
 
@@ -106,7 +108,6 @@ public class Robot extends TimedRobot {
           visionMatrix);
     }
   }
-  
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
