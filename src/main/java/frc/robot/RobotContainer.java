@@ -21,13 +21,16 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ArmToAngleCmd;
+import frc.robot.commands.DefaultFunnelCommand;
 import frc.robot.commands.ElevatorLevel1;
 import frc.robot.commands.ElevatorLevel2;
 import frc.robot.commands.ElevatorLevel3;
 import frc.robot.commands.ElevatorLevel4;
+import frc.robot.commands.RunFunnelUntilDetection;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
@@ -39,7 +42,7 @@ public class RobotContainer {
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
   TootsieSlideSubsystem testerTootsie = new TootsieSlideSubsystem();
-
+  FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
   ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
 
   // Alliance color
@@ -72,6 +75,10 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Joystick suppliers,
+    funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
+    funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem));
+    
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier
         frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
@@ -102,7 +109,6 @@ public class RobotContainer {
                 () ->
                     driveTrain.resetPose(
                         new Pose2d(new Translation2d(0.48, 4), Rotation2d.fromDegrees(0)))));
-
     Trigger rightBumper = joystick.rightBumper();
     rightBumper.onTrue(new ArmToAngleCmd(() -> 90d, ArmSubsystem.getInstance()));
     rightBumper.onFalse(new ArmToAngleCmd(() -> 45d, ArmSubsystem.getInstance()));
@@ -122,8 +128,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    SmartDashboard.putNumber("arjun IQ", 2.0);
-    SmartDashboard.putNumber("Nikash's IQ which is muy mucho high", 2.0);
     return new WaitCommand(10);
   }
 }
