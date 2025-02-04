@@ -14,9 +14,9 @@ import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.FunnelConstants;
@@ -32,7 +32,7 @@ public class FunnelSubsystem extends SubsystemBase {
   private DigitalInput drake;
   private double coralCheckedOutPosition; 
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
-
+  private boolean coralInFunnel;
   public FunnelSubsystem() {
     rightMotor = new LoggedTalonFX(FunnelConstants.RIGHT_MOTOR_PORT); // Unique ID for motor1
     leftMotor = new LoggedTalonFX(2); // Unique ID for motor2\
@@ -75,9 +75,11 @@ public class FunnelSubsystem extends SubsystemBase {
         new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(Constants.FunnelConstants.CRUISE_VELOCITY)
             .withMotionMagicAcceleration(Constants.FunnelConstants.ACCELERATION);
-            
     m1Config.apply(mmc);
     m2Config.apply(mmc);
+
+    coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble();
+    coralInFunnel = true;
   }
 
   public static FunnelSubsystem getInstance() {
@@ -85,6 +87,14 @@ public class FunnelSubsystem extends SubsystemBase {
       instance = new FunnelSubsystem();
     }
     return instance;
+  }
+
+  public double getAbsolutePositionalError() {
+    if (rightMotor.getControlMode().getValue().equals(ControlModeValue.PositionVoltage)) {
+      return Math.abs(rightMotor.getPosition().getValueAsDouble() - coralCheckedOutPosition);
+    } else {
+      return 0.0;
+    }
   }
 
   private void runFunnelAtRPS(double speed) {
@@ -129,12 +139,21 @@ public void reAdjustMotor(){
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
   }
+
   public boolean isCoralCheckedOut() {
     return checkOutSensor.get();
   }
 
   public boolean drakeTripped() {
     return drake.get();
+  }
+  
+    public void setCoralInFunnel(boolean coralInFunnel) {
+    this.coralInFunnel = coralInFunnel;
+  }
+
+  public boolean isCoralInFunnel() {
+    return coralInFunnel;
   }
 
   @Override
