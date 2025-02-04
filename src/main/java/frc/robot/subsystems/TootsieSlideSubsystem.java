@@ -91,6 +91,10 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     m_flywheelSim.setInputVoltage(master.getSupplyVoltage().getValueAsDouble());
   }
 
+  public void intakeCoral(){
+    runTootsieAtRPS(1); //TODO: Change based on speed to intake Coral at
+  }
+
   public void spinTootsie(boolean thing) {
     if (!thing && coralPresent()) {
       runTootsieAtRPS(30);

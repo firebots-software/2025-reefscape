@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.util.LoggedTalonFX;
@@ -100,6 +101,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private void setPosition(double position) {
     motor1.setControl(new MotionMagicVoltage(position / ElevatorConstants.CONVERSION_FACTOR));
+  }
+
+  public boolean canFunnelShoot(){
+    return this.getLevel().equals(Constants.ElevatorConstants.ElevatorPositions.Intake) && this.getError() < Constants.ElevatorConstants.MAX_POSITIONAL_ERROR;
   }
 
   public boolean exampleCondition() {

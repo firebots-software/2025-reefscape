@@ -627,7 +627,7 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 0.0; // To-do
     public static final double ACCELERATION = 0.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0; // To-do
-
+    public static final double MAX_POSITIONAL_ERROR = 0.05;
     public static final double PULLEY_CIRCUM = 2 * Math.PI * 0; // TODO: change 0 to radius/diameter
     public static final double PULLEY_GEAR_RATIO = 1 / 5; // TODO
     public static final double CONVERSION_FACTOR = PULLEY_CIRCUM * PULLEY_GEAR_RATIO;
