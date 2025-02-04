@@ -1,3 +1,4 @@
+//TODO: THIS COMMAND NEED TO BE UPDATED TO WORK PROPERLY
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,7 +16,7 @@ public class Dealgaenate extends Command {
 
   @Override
   public void initialize() {
-    armPlusFlywheel.deployArm(); // Deploy the arm when command starts
+    // armPlusFlywheel.deployArm(); // Deploy the arm when command starts
   }
 
   @Override
@@ -26,7 +27,7 @@ public class Dealgaenate extends Command {
   @Override
   public void end(boolean interrupted) {
     armPlusFlywheel.stopFlywheel(); // Stop the flywheel
-    armPlusFlywheel.retractArm();   // Retract the arm
+    // armPlusFlywheel.retractArm();   // Retract the arm
   }
 
   @Override
