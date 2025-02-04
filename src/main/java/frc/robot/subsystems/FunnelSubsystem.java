@@ -9,13 +9,12 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LoggedTalonFX;
@@ -27,14 +26,14 @@ public class FunnelSubsystem extends SubsystemBase {
   private LoggedTalonFX bottomMotor;
   private DigitalInput checkOutSensor;
   private DigitalInput checkInSensor;
-  private DutyCycleEncoder revEncoder;
-  private double coralCheckedOutPosition; 
-   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
-
+  private double coralCheckedOutPosition;
+  private boolean coralInFunnel;
+  private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
 
   public FunnelSubsystem() {
     topMotor = new LoggedTalonFX(Constants.FunnelConstants.UP_MOTOR_PORT); // Unique ID for motor1
-    bottomMotor = new LoggedTalonFX(Constants.FunnelConstants.DOWN_MOTOR_PORT); // Unique ID for motor2
+    bottomMotor =
+        new LoggedTalonFX(Constants.FunnelConstants.DOWN_MOTOR_PORT); // Unique ID for motor2
     Follower invertedfollower = new Follower(Constants.FunnelConstants.UP_MOTOR_PORT, true);
     bottomMotor.setControl(invertedfollower);
 
@@ -73,8 +72,6 @@ public class FunnelSubsystem extends SubsystemBase {
     topMotor.getConfigurator().apply(mmc);
     bottomMotor.getConfigurator().apply(mmc);
 
-
-    revEncoder = new DutyCycleEncoder(Constants.FunnelConstants.ENCODER_PORT);
     coralCheckedOutPosition = topMotor.getPosition().getValueAsDouble();
   }
 
@@ -85,18 +82,22 @@ public class FunnelSubsystem extends SubsystemBase {
     return instance;
   }
 
+  public double getAbsolutePositionalError() {
+    if (topMotor.getControlMode().getValue().equals(ControlModeValue.PositionVoltage)) {
+      return Math.abs(topMotor.getPosition().getValueAsDouble() - coralCheckedOutPosition);
+    } else {
+      return 0.0;
+    }
+  }
+
   private void runFunnelAtRPS(double speed) {
     VelocityVoltage m_velocityControlTop =
         new VelocityVoltage(speed * Constants.FunnelConstants.TOP_GEAR_RATIO);
-    VelocityVoltage m_velocityControlBottom =
-        new VelocityVoltage(speed * Constants.FunnelConstants.BOTTOM_GEAR_RATIO);
     topMotor.setControl(m_velocityControlTop);
-    bottomMotor.setControl(m_velocityControlBottom);
   }
 
   public void spinFunnel() {
     runFunnelAtRPS(Constants.FunnelConstants.TOP_MOTOR_SPEED_RPS);
-    runFunnelAtRPS(Constants.FunnelConstants.BOTTOM_MOTOR_SPEED_RPS);
   }
 
   public void stopFunnel() {
@@ -105,23 +106,29 @@ public class FunnelSubsystem extends SubsystemBase {
   }
 
   public void maintainCurrentPosition() {
-    coralCheckedOutPosition = topMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
-    topMotor.setControl(
-      controlRequest
-      .withPosition(coralCheckedOutPosition)
-      .withSlot(0)
-      );
+    coralCheckedOutPosition =
+        topMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
+    topMotor.setControl(controlRequest.withPosition(coralCheckedOutPosition).withSlot(0));
   }
 
-  public void spinBackSlowly(){
+  public void spinBackSlowly() {
     topMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
 
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
   }
+
   public boolean isCoralCheckedOut() {
     return checkOutSensor.get();
+  }
+
+  public void setCoralInFunnel(boolean coralInFunnel) {
+    this.coralInFunnel = coralInFunnel;
+  }
+
+  public boolean isCoralInFunnel() {
+    return coralInFunnel;
   }
 
   @Override

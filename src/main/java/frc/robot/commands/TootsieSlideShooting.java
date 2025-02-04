@@ -4,13 +4,12 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.TootsieSlideSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.TootsieSlideSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class TootsieSlideShooting extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-
   private TootsieSlideSubsystem tootsieSlideSubsystem;
 
   public TootsieSlideShooting(TootsieSlideSubsystem subsystem) {
