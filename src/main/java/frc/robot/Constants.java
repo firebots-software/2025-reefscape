@@ -44,7 +44,7 @@ public final class Constants {
     public static final int RB_PORT = 13; // Right Bottom motor
     public static final int LT_PORT = 1; // Left Top motor
     public static final int LB_PORT = 11; // Left Bottom motor
-    public static final int ENCODER_PORT = 0; // subject to change
+    public static final int ENCODER_PORT = 0; // subject to changepublic static final int ENCODER_PORT = 0; // subject to change
 
     public static final double CURRENT_LIMIT = 8.0;
     public static final double S0C_KP = 1.0;
@@ -489,6 +489,15 @@ public final class Constants {
   }
 
   public static class FunnelConstants {
+
+    public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
+        double conversionFactor =
+            0.159344d; // TODO: Find for actual bot. Will change with gear ratios.
+        double zeroOffset =
+            0.088; //random value, need to change this
+        return (conversionFactor * angle) + zeroOffset;
+      }
+    
     public static final int UP_MOTOR_PORT = 0; // TODO
     public static final int DOWN_MOTOR_PORT = 0; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO
@@ -498,7 +507,7 @@ public final class Constants {
     public static final double S0C_KD = 0.0; // TODO
     public static final double CRUISE_VELOCITY = 0.0; // TODO
     public static final double ACCELERATION = 0.0; // TODO
-
+    public static final int ENCODER_PORT = 0; // subject to change
     public static final double TOP_MOTOR_SPEED_RPS = 0.0; // TODO
     public static final double BOTTOM_MOTOR_SPEED_RPS = 0.0; // TODO
     public static final int TOP_GEAR_RATIO = 0; // TODO

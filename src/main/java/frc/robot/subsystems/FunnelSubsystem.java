@@ -9,9 +9,12 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LoggedTalonFX;
@@ -23,6 +26,10 @@ public class FunnelSubsystem extends SubsystemBase {
   private LoggedTalonFX bottomMotor;
   private DigitalInput checkOutSensor;
   private DigitalInput checkInSensor;
+  private DutyCycleEncoder revEncoder;
+  private double coralCheckedOutPosition; 
+   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+
 
   public FunnelSubsystem() {
     topMotor = new LoggedTalonFX(1); // Unique ID for motor1
@@ -62,6 +69,10 @@ public class FunnelSubsystem extends SubsystemBase {
             .withMotionMagicAcceleration(Constants.FunnelConstants.ACCELERATION);
     topMotor.getConfigurator().apply(mmc);
     bottomMotor.getConfigurator().apply(mmc);
+
+
+    revEncoder = new DutyCycleEncoder(Constants.FunnelConstants.ENCODER_PORT);
+    coralCheckedOutPosition = 0.0;
   }
 
   public static FunnelSubsystem getInstance() {
@@ -89,10 +100,27 @@ public class FunnelSubsystem extends SubsystemBase {
     topMotor.stopMotor();
     bottomMotor.stopMotor();
   }
+public void reAdjustMotor(){
+  topMotor.setControl(
+    controlRequest
+    .withPosition(Constants.FunnelConstants.ANGLE_TO_ENCODER_ROTATIONS(coralCheckedOutPosition))
+    .withSlot(0)
+  );
 
+bottomMotor.setControl(
+  controlRequest
+  .withPosition(Constants.FunnelConstants.ANGLE_TO_ENCODER_ROTATIONS(coralCheckedOutPosition))
+  .withSlot(0)
+);
+  
+}
   public boolean isCoralCheckedOut() {
     return checkOutSensor.get();
   }
+
+  public void updateCoralCheckedOutPosition() {
+    coralCheckedOutPosition = revEncoder.get(); // Store the current encoder position broom
+}
 
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
@@ -108,3 +136,5 @@ public class FunnelSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 }
+
+//
