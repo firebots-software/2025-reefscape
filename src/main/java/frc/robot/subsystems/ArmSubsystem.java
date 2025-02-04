@@ -23,6 +23,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -32,7 +33,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 
 public class ArmSubsystem extends SubsystemBase {
-  private final DoubleSolenoid armSeoid;
   private static ArmSubsystem instance;
 
   private LoggedTalonFX armMotor;
@@ -73,7 +73,6 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public ArmSubsystem() {
-    this.armSolenoid = armSolenoid;
     CurrentLimitsConfigs clcArm =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -130,6 +129,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Initialize absolute encoder
     revEncoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
+    
   }
 
   public void setPosition(double angleDegrees) {
