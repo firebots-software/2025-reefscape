@@ -25,10 +25,13 @@ public class FunnelSubsystem extends SubsystemBase {
   private LoggedTalonFX leftMotor;
   private DigitalInput checkOutSensor;
   private DigitalInput checkInSensor;
+  private DigitalInput drake;
 
   public FunnelSubsystem() {
     rightMotor = new LoggedTalonFX(FunnelConstants.RIGHT_MOTOR_PORT); // Unique ID for motor1
-    leftMotor = new LoggedTalonFX(2); // Unique ID for motor2
+    leftMotor = new LoggedTalonFX(2); // Unique ID for motor2\
+
+    drake = new DigitalInput(0);
 
     checkOutSensor = new DigitalInput(Constants.FunnelConstants.CHECK_OUT_PORT);
     checkInSensor = new DigitalInput(Constants.FunnelConstants.CHECK_IN_PORT);
@@ -98,6 +101,10 @@ public class FunnelSubsystem extends SubsystemBase {
 
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
+  }
+
+  public boolean drakeTripped() {
+    return drake.get();
   }
 
   @Override

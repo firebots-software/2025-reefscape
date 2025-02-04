@@ -11,7 +11,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 /** An example command that uses an example subsystem. */
 public class ElevatorIntakeLevel extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ElevatorSubsystem m_subsystem;
+  private final ElevatorSubsystem elevatorSubsystem;
 
   /**
    * Creates a new ExampleCommand.
@@ -19,9 +19,9 @@ public class ElevatorIntakeLevel extends Command {
    * @param subsystem The subsystem used by this command.
    */
   public ElevatorIntakeLevel(ElevatorSubsystem subsystem) {
-    m_subsystem = subsystem;
+    elevatorSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_subsystem);
+    addRequirements(elevatorSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -31,7 +31,7 @@ public class ElevatorIntakeLevel extends Command {
   // Called every time the scheduler runs while the command is scheduled.
 
   public void execute() {
-    m_subsystem.elevate(ElevatorPositions.Intake);
+    elevatorSubsystem.elevate(ElevatorPositions.Intake);
     ;
   }
 
