@@ -9,6 +9,8 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
@@ -119,7 +121,17 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
+    // Simulate encoder behavior based on motor speed
+    double simulatedSpeed = master.getVelocity().getValueAsDouble();
+    double currentPosition = master.getPosition().getValueAsDouble();
+
+    // Update simulated position based on speed (simplified example)
+    double newPosition = currentPosition + simulatedSpeed * 0.02; // Assuming a 20ms loop
+    master.setPosition(newPosition);
+
+    // Log simulation data for debugging
+    SmartDashboard.putNumber("Simulated Position", newPosition);
+    SmartDashboard.putNumber("Simulated Speed", simulatedSpeed);
   }
 
   public boolean atTargetPosition() {
@@ -127,63 +139,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     return master.getClosedLoopError().getValueAsDouble() <= tolerance;
   }
 }
-
-// public class ElevatorSubsystem extends SubsystemBase {
-//   private static ElevatorSubsystem instance;
-
-//   private LoggedTalonFX motor1;
-//   private LoggedTalonFX motor2;
-//   private LoggedTalonFX master;
-//   private Double holdPosValue = 0.0;
-
-//   public ElevatorSubsystem() {
-//     motor1 = new LoggedTalonFX(1); // Unique ID for motor1
-//     motor2 = new LoggedTalonFX(2); // Unique ID for motor2
-
-//     motor2.setControl(new Follower(1, false)); // motor1 ID as master
-
-//     TalonFXConfigurator m1Config = motor1.getConfigurator();
-//     TalonFXConfigurator m2Config = motor2.getConfigurator();
-
-//     CurrentLimitsConfigs clc =
-//         new CurrentLimitsConfigs()
-//             .withStatorCurrentLimitEnable(true)
-//             .withStatorCurrentLimit(Constants.ElevatorConstants.STATOR_CURRENT_LIMIT)
-//             .withSupplyCurrentLimitEnable(true)
-//             .withSupplyCurrentLimit(Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
-
-//     MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
-//     Slot0Configs s0c =
-//         new Slot0Configs()
-//             .withKP(Constants.ElevatorConstants.S0C_KP)
-//             .withKI(Constants.ElevatorConstants.S0C_KI)
-//             .withKD(Constants.ElevatorConstants.S0C_KD);
-
-//     m1Config.apply(moc);
-//     m2Config.apply(moc);
-//     m1Config.apply(clc);
-//     m2Config.apply(clc);
-
-//     master = motor1;
-//     master.getConfigurator().apply(s0c);
-
-//     MotionMagicConfigs mmc =
-//         new MotionMagicConfigs()
-//             .withMotionMagicCruiseVelocity(Constants.ElevatorConstants.CRUISE_VELOCITY)
-//             .withMotionMagicAcceleration(Constants.ElevatorConstants.ACCELERATION);
-//     master.getConfigurator().apply(mmc);
-//   }
-
-//   public static ElevatorSubsystem getInstance() {
-//     if (instance == null) {
-//       instance = new ElevatorSubsystem();
-//     }
-//     return instance;
-//   }
-
-//   public void elevate(double speed) {
-//     master.setControl(new MotionMagicVoltage(speed));
-//   }
 
 //   public double getSpeed() {
 //     return master.getVelocity().getValueAsDouble();
@@ -239,31 +194,5 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 //     holdPosition(targetPosition);
 //     SmartDashboard.putString("Elevator Error", "Level: " + level + ", Error: " + getPIDError());
-//   }
-
-//   @Override
-//   public void periodic() {
-
-//     if (getBottomLimits()) {
-//       resetEncoderPos();
-//       holdPosValue = 0.5;
-//       master.setControl(new MotionMagicVoltage(0));
-//     }
-//     DogLog.log("HoldPosValue", holdPosValue);
-//   }
-
-//   @Override
-//   public void simulationPeriodic() {
-//     // Simulate encoder behavior based on motor speed
-//     double simulatedSpeed = master.getVelocity().getValueAsDouble();
-//     double currentPosition = master.getPosition().getValueAsDouble();
-
-//     // Update simulated position based on speed (simplified example)
-//     double newPosition = currentPosition + simulatedSpeed * 0.02; // Assuming a 20ms loop
-//     master.setPosition(newPosition);
-
-//     // Log simulation data for debugging
-//     SmartDashboard.putNumber("Simulated Position", newPosition);
-//     SmartDashboard.putNumber("Simulated Speed", simulatedSpeed);
 //   }
 // }
