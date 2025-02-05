@@ -17,5 +17,13 @@ public class GyroStabilizer {
         double	getZ():	
             Returns the counterclockwise rotation angle around the Z axis (yaw) in radians.
      */
+
+     /* ideas
+      *   private final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
+      *
+      *   and
+      * 
+      *   robotCentricDrive.withVelocityX(x).withVelocityY(y).withRotationalRate(turn);
+      */
     
 }
