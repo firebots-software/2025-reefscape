@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.Constants.Swerve;
 
 /** An example command that uses an example subsystem. */
 public class ElevatorLevel1 extends Command {
@@ -34,7 +33,8 @@ public class ElevatorLevel1 extends Command {
 
   public void execute() {
     m_subsystem.elevate(ElevatorPositions.L1);
-    Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND / 1;
+    Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND =
+        Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND / 1;
   }
 
   // Called once the command ends or is interrupted.

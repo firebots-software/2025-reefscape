@@ -33,7 +33,8 @@ public class ElevatorIntakeLevel extends Command {
 
   public void execute() {
     m_subsystem.elevate(ElevatorPositions.Intake);
-    Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND / 1;
+    Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND =
+        Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND / 1;
   }
 
   // Called once the command ends or is interrupted.

@@ -269,20 +269,21 @@ public class RobotContainer {
     return routine.cmd();
   }
 
-  public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { //for actual robot
-    BooleanSupplier pathGoesToHPS = () -> !(baseCommandName.contains("HPS-") || baseCommandName.contains("START-"));
-    // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator and shoot, else lower elevator and intake
+  public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // for actual robot
+    BooleanSupplier pathGoesToHPS =
+        () -> !(baseCommandName.contains("HPS-") || baseCommandName.contains("START-"));
+    // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator
+    // and shoot, else lower elevator and intake
     return Commands.parallel(
             routine.trajectory(baseCommandName).cmd(),
             ((pathGoesToHPS.getAsBoolean())
                 ? new ElevatorIntakeLevel(m_ElevatorSubsystem)
                 : new ElevatorLevel4(m_ElevatorSubsystem)))
-
         .andThen(
             (pathGoesToHPS.getAsBoolean())
                 ? new RunFunnelUntilDetection(m_FunnelSubsystem)
                 : new TootsieSlideShooting(testerTootsie))
-                
-        .andThen(new TransferPieceBetweenFunnelAndElevator(m_ElevatorSubsystem, m_FunnelSubsystem)).onlyIf(pathGoesToHPS); //transfers piece to elevator only if path doesnt go to hps
+        .andThen(new TransferPieceBetweenFunnelAndElevator(m_ElevatorSubsystem, m_FunnelSubsystem))
+        .onlyIf(pathGoesToHPS); // transfers piece to elevator only if path doesnt go to hps
   }
 }

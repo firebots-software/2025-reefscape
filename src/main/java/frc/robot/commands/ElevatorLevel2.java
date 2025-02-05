@@ -33,7 +33,8 @@ public class ElevatorLevel2 extends Command {
   @Override
   public void execute() {
     elevatorSubsystem.elevate(ElevatorPositions.L2);
-    Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND / 2;
+    Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND =
+        Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND / 2;
   }
 
   // Called once the command ends or is interrupted.
