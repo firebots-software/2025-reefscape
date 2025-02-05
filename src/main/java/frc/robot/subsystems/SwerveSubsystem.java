@@ -9,6 +9,7 @@ import dev.doglog.DogLog;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -264,34 +265,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     return new ChassisSpeeds(xFeedback, yFeedback, thetaFeedback);
   }
 
-  /*
-  public void followTrajectory(SwerveSample sample) {
-    // Get the current pose of the robot
-    Pose2d pose = getCurrentState().Pose;
-    // Generate the next speeds for the robot
-    ChassisSpeeds speeds =
-        new ChassisSpeeds(
-            sample.vx + xPidController.calculate(pose.getX(), sample.x),
-            sample.vy + yPidController.calculate(pose.getY(), sample.y),
-            sample.omega
-                + driverRotationPidController.calculate(
-                    pose.getRotation().getRadians(), sample.heading));
-
-    DogLog.log("followTrajectory/sample.x", sample.x);
-    DogLog.log("followTrajectory/sample.y", sample.y);
-    DogLog.log("followTrajectory/sample.heading", sample.heading);
-
-    DogLog.log("followTrajectory/pidOutputX", xPidController.calculate(pose.getX(), sample.x));
-    DogLog.log("followTrajectory/sample.vx", sample.vx);
-    DogLog.log("followTrajectory/sample.vy", sample.vy);
-    DogLog.log("followTrajectory/sample.omega", sample.omega);
-
-    DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
-    // Apply the generated speed
-    setChassisSpeeds(speeds);
-  }
-  */
-
   /**
    * Returns a command that applies the specified control request to this swerve drivetrain.
    *
@@ -338,6 +311,16 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                     pose.getRotation().getRadians(), sample.heading));
 
     // Apply the generated speeds
+    DogLog.log("followTrajectory/sample.x", sample.x);
+    DogLog.log("followTrajectory/sample.y", sample.y);
+    DogLog.log("followTrajectory/sample.heading", sample.heading);
+
+    DogLog.log("followTrajectory/pidOutputX", xPidController.calculate(pose.getX(), sample.x));
+    DogLog.log("followTrajectory/sample.vx", sample.vx);
+    DogLog.log("followTrajectory/sample.vy", sample.vy);
+    DogLog.log("followTrajectory/sample.omega", sample.omega);
+
+    DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
     setChassisSpeeds(speeds);
   }
 
