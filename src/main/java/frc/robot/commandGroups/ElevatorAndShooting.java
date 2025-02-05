@@ -6,8 +6,8 @@ package frc.robot.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.commands.SetElevatorLevel;
-import frc.robot.commands.TootsieSlideShooting;
+import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.TootsieSlideCommands.TootsieSlideShooting;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 

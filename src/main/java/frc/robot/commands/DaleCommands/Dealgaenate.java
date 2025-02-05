@@ -1,5 +1,5 @@
 // TODO: THIS COMMAND NEED TO BE UPDATED TO WORK PROPERLY
-package frc.robot.commands;
+package frc.robot.commands.DaleCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
