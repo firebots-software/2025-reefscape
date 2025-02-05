@@ -9,37 +9,47 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.FunnelConstants;
 import frc.robot.util.LoggedTalonFX;
 
 public class FunnelSubsystem extends SubsystemBase {
   private static FunnelSubsystem instance;
 
-  // The left and right motor of the funnel intake (should be renamed accordingly)
-  private LoggedTalonFX topMotor;
-  private LoggedTalonFX bottomMotor;
-
-  // The Check-out sensor is closer to the elevator, and is in charge of detecting a coral and stopping the motors to prevent it
-  // from going into the elevator.
+  private LoggedTalonFX rightMotor;
+  private LoggedTalonFX leftMotor;
   private DigitalInput checkOutSensor;
 
   // The Check-in sensor is closer to the back of the robot, and detects the coral before the Check-out sensor. It is in charge
   // of making sure the coral makes it into the intake funnel, before letting the robot go on from the Coral Station.
   private DigitalInput checkInSensor;
+  private DigitalInput drake;
+  private double coralCheckedOutPosition;
+  private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+  private boolean coralInFunnel;
 
-  public FunnelSubsystem() {
-    topMotor = new LoggedTalonFX(1); // Unique ID for motor1
-    bottomMotor = new LoggedTalonFX(2); // Unique ID for motor2
+  private FunnelSubsystem() {
+    rightMotor = new LoggedTalonFX(FunnelConstants.RIGHT_MOTOR_PORT); // Unique ID for motor1
+    leftMotor = new LoggedTalonFX(2); // Unique ID for motor2\
+
+    drake = new DigitalInput(0);
 
     checkOutSensor = new DigitalInput(Constants.FunnelConstants.CHECK_OUT_PORT);
     checkInSensor = new DigitalInput(Constants.FunnelConstants.CHECK_IN_PORT);
 
-    TalonFXConfigurator m1Config = topMotor.getConfigurator();
-    TalonFXConfigurator m2Config = bottomMotor.getConfigurator();
+    Follower invertedfollower = new Follower(FunnelConstants.RIGHT_MOTOR_PORT, true);
+    leftMotor.setControl(invertedfollower);
+
+    TalonFXConfigurator m1Config = rightMotor.getConfigurator();
+    TalonFXConfigurator m2Config = leftMotor.getConfigurator();
 
     CurrentLimitsConfigs clc =
         new CurrentLimitsConfigs()
@@ -57,18 +67,22 @@ public class FunnelSubsystem extends SubsystemBase {
 
     m1Config.apply(moc);
     m2Config.apply(moc);
+
     m1Config.apply(clc);
     m2Config.apply(clc);
 
-    topMotor.getConfigurator().apply(s0c);
-    bottomMotor.getConfigurator().apply(s0c);
+    m1Config.apply(s0c);
+    m2Config.apply(s0c);
 
     MotionMagicConfigs mmc =
         new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(Constants.FunnelConstants.CRUISE_VELOCITY)
             .withMotionMagicAcceleration(Constants.FunnelConstants.ACCELERATION);
-    topMotor.getConfigurator().apply(mmc);
-    bottomMotor.getConfigurator().apply(mmc);
+    m1Config.apply(mmc);
+    m2Config.apply(mmc);
+
+    coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble();
+    coralInFunnel = true;
   }
 
   public static FunnelSubsystem getInstance() {
@@ -78,29 +92,61 @@ public class FunnelSubsystem extends SubsystemBase {
     return instance;
   }
 
+  public double getAbsolutePositionalError() {
+    if (rightMotor.getControlMode().getValue().equals(ControlModeValue.PositionVoltage)) {
+      return Math.abs(rightMotor.getPosition().getValueAsDouble() - coralCheckedOutPosition);
+    } else {
+      return 0.0;
+    }
+  }
+
   private void runFunnelAtRPS(double speed) {
     VelocityVoltage m_velocityControlTop =
-        new VelocityVoltage(speed * Constants.FunnelConstants.TOP_GEAR_RATIO);
-    VelocityVoltage m_velocityControlBottom =
-        new VelocityVoltage(speed * Constants.FunnelConstants.BOTTOM_GEAR_RATIO);
-    topMotor.setControl(m_velocityControlTop);
-    bottomMotor.setControl(m_velocityControlBottom);
+        new VelocityVoltage(speed * Constants.FunnelConstants.GEAR_RATIO);
+    rightMotor.setControl(m_velocityControlTop);
   }
 
   /**
    * Spin the funnel intake motors at the default speeds
    */
   public void spinFunnel() {
-    runFunnelAtRPS(Constants.FunnelConstants.TOP_MOTOR_SPEED_RPS);
-    runFunnelAtRPS(Constants.FunnelConstants.BOTTOM_MOTOR_SPEED_RPS);
+    runFunnelAtRPS(Constants.FunnelConstants.SPEED_RPS);
   }
 
   /**
    * Stop both funnel intake motors
    */
   public void stopFunnel() {
-    topMotor.stopMotor();
-    bottomMotor.stopMotor();
+    rightMotor.stopMotor();
+  }
+
+  public void moveBackFlywheel() {
+    // TODO: Fix this bro lmao l bozo lol rofl haha hee hee hee haw
+    double randomAngleTBD = 0.0d;
+    rightMotor.setControl(new PositionVoltage(randomAngleTBD));
+  }
+
+  public void reAdjustMotor() {
+    rightMotor.setControl(controlRequest.withPosition(coralCheckedOutPosition).withSlot(0));
+  }
+
+  public void updateCoralCheckedOutPosition() {
+    coralCheckedOutPosition =
+        rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
+  }
+
+  public void maintainCurrentPosition() {
+    coralCheckedOutPosition =
+        rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
+    rightMotor.setControl(controlRequest.withPosition(coralCheckedOutPosition).withSlot(0));
+  }
+
+  public void spinBackSlowly() {
+    rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
+  }
+
+  public boolean isCoralCheckedIn() {
+    return checkInSensor.get();
   }
 
   /**
@@ -115,8 +161,16 @@ public class FunnelSubsystem extends SubsystemBase {
    * Returns whether or not the Check-in sensor is detecting an object
    * @return Boolean - whether the Check-in sensor is detecting an object
    */
-  public boolean isCoralCheckedIn() {
-    return checkInSensor.get();
+  public boolean drakeTripped() {
+    return drake.get();
+  }
+
+  public void setCoralInFunnel(boolean coralInFunnel) {
+    this.coralInFunnel = coralInFunnel;
+  }
+
+  public boolean isCoralInFunnel() {
+    return coralInFunnel;
   }
 
   @Override
@@ -129,3 +183,5 @@ public class FunnelSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 }
+
+//

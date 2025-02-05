@@ -2,27 +2,31 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.ElevatorCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class ElevatorLevel2 extends Command {
+public class ElevatorIntakeLevel extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ElevatorSubsystem elevatorSubsystem;
+  private final ElevatorSubsystem m_subsystem;
+
+  private final FunnelSubsystem funnel;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ElevatorLevel2(ElevatorSubsystem subsystem) {
-    this.elevatorSubsystem = subsystem;
+  public ElevatorIntakeLevel(ElevatorSubsystem subsystem, FunnelSubsystem funnel) {
+    m_subsystem = subsystem;
+    this.funnel = funnel;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevatorSubsystem);
+    addRequirements(m_subsystem, funnel);
   }
 
   // Called when the command is initially scheduled.
@@ -30,10 +34,13 @@ public class ElevatorLevel2 extends Command {
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
-  @Override
+
   public void execute() {
-    elevatorSubsystem.elevate(ElevatorPositions.L2);
-    Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND / 2;
+    if (!funnel.isCoralCheckedOut()) {
+      m_subsystem.elevate(ElevatorPositions.Intake);
+    } else {
+      m_subsystem.elevate(ElevatorPositions.L1);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -43,6 +50,6 @@ public class ElevatorLevel2 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_subsystem.atTargetPosition();
   }
 }

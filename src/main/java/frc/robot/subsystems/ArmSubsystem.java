@@ -16,6 +16,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -70,7 +71,7 @@ public class ArmSubsystem extends SubsystemBase {
     return instance;
   }
 
-  public ArmSubsystem() {
+  private ArmSubsystem() {
     CurrentLimitsConfigs clcArm =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -136,9 +137,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void startFlywheel(double angleDegrees) {
-    flywheelMotor.setControl(
-        controlRequestFlywheel.withPosition(
-            Constants.Flywheel.ANGLE_TO_ENCODER_ROTATIONS(angleDegrees)));
+    flywheelMotor.setControl(new VelocityVoltage(30));
   }
 
   public void stopEveryingONG() {
@@ -194,5 +193,14 @@ public class ArmSubsystem extends SubsystemBase {
     DogLog.log("Arm at target", atTarget(5));
     DogLog.log("Arm Degrees", encoderDegrees);
     DogLog.log("Arm Target Degrees", targetDegrees);
+  }
+
+  public void spinFlywheel(double flywheelSpeed) {
+    flywheelMotor.set(flywheelSpeed);
+  }
+
+  // Stops the flywheel
+  public void stopFlywheel() {
+    flywheelMotor.set(0);
   }
 }

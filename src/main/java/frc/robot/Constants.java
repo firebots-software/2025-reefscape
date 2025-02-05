@@ -108,7 +108,8 @@ public final class Constants {
     public static final int RB_PORT = 13; // Right Bottom motor
     public static final int LT_PORT = 1; // Left Top motor
     public static final int LB_PORT = 11; // Left Bottom motor
-    public static final int ENCODER_PORT = 0; // subject to change
+    public static final int ENCODER_PORT =
+        0; // subject to changepublic static final int ENCODER_PORT = 0; // subject to change
 
     public static final double CURRENT_LIMIT = 8.0;
     public static final double S0C_KP = 1.0;
@@ -598,8 +599,8 @@ public final class Constants {
   }
 
   public static class FunnelConstants {
-    public static final int UP_MOTOR_PORT = 0; // TODO
-    public static final int DOWN_MOTOR_PORT = 0; // TODO
+    public static final int RIGHT_MOTOR_PORT = 0; // TODO
+    public static final int LEFT_MOTOR_PORT = 0; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO
     public static final double S0C_KP = 0.0; // TODO
@@ -608,14 +609,14 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 0.0; // TODO
     public static final double ACCELERATION = 0.0; // TODO
 
-    public static final double TOP_MOTOR_SPEED_RPS = 0.0; // TODO
-    public static final double BOTTOM_MOTOR_SPEED_RPS = 0.0; // TODO
-    public static final int TOP_GEAR_RATIO = 0; // TODO
-    public static final int BOTTOM_GEAR_RATIO = 0; // TODO
+    public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
+    public static final double SPEED_RPS = 0.0; // TODO
+    public static final int GEAR_RATIO = 0; // TODO
 
     public static final int CHECK_IN_PORT = 0;
     public static final int CHECK_OUT_PORT = 0;
     public static final int DRAKE_PORT = 0;
+    public static final double MAX_POSITIONAL_ERROR = 0.05; // TODO
   }
 
   public static class ElevatorConstants {
@@ -633,7 +634,7 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 0.0; // To-do
     public static final double ACCELERATION = 0.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0; // To-do
-
+    public static final double MAX_POSITIONAL_ERROR = 0.05;
     public static final double PULLEY_CIRCUM = 2 * Math.PI * 0; // TODO: change 0 to radius/diameter
     public static final double PULLEY_GEAR_RATIO = 1 / 5; // TODO
     public static final double CONVERSION_FACTOR = PULLEY_CIRCUM * PULLEY_GEAR_RATIO;
@@ -652,6 +653,11 @@ public final class Constants {
       ElevatorPositions(int pos, double height) {
         this.position = pos;
         this.height = height;
+      }
+
+      public double getPosition() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
       }
     }
   }
