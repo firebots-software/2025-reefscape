@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ElevatorSubsystem;
 
@@ -32,6 +33,7 @@ public class ElevatorLevel4 extends Command {
   @Override
   public void execute() {
     elevatorSubsystem.elevate(ElevatorPositions.L4);
+    Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND / 4;
   }
 
   // Called once the command ends or is interrupted.
