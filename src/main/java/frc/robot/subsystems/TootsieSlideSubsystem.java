@@ -29,7 +29,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   private LoggedTalonFX master;
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
 
-  //FOR SIMULATION
+  // FOR SIMULATION
   private final DCMotor m_tootsieSlideGearbox = DCMotor.getKrakenX60(1);
   public static LinearSystem<N1, N1, N1> tootsieSystem =
       LinearSystemId.identifyVelocitySystem(0.05, 0.1);
