@@ -85,7 +85,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     //TODO: add constant to convert distance to encoder values
     if (distance.isConnected()) {
       master.setPosition(
-          (getDistance()));
+          (getDistance()) * ElevatorConstants.CONVERSION_FACTOR);
     }
   }
 
@@ -103,7 +103,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void setPosition(double position) {
-    motor1.setControl(new MotionMagicVoltage(position / ElevatorConstants.CONVERSION_FACTOR));
+    motor1.setControl(new MotionMagicVoltage(position * ElevatorConstants.CONVERSION_FACTOR));
   }
 
   public boolean isAtPosition() {
