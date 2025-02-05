@@ -626,17 +626,20 @@ public final class Constants {
     public static final double ACCELERATION = 0.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0; // To-do
     public static final double MAX_POSITIONAL_ERROR = 0.05;
-    public static final double PULLEY_CIRCUM = 1.751 * Math.PI; // TODO: change 0 to radius/diameter
-    public static final double PULLEY_GEAR_RATIO = 1 / 4; // TODO
-    public static final double CONVERSION_FACTOR = PULLEY_GEAR_RATIO/PULLEY_CIRCUM;
+    public static final double SPROCKET_CIRCUM = 1.751 * Math.PI; // TODO: change 0 to radius/diameter
+    public static final double SPROCKET_GEAR_RATIO = 4 / 1; // TODO
+    public static final double CARRAIGE_UPDUCTION = 5 / 1; // TODO
+    public static final double CONVERSION_FACTOR = SPROCKET_GEAR_RATIO/SPROCKET_CIRCUM * 0.0254; //This is converted to meters
+    public static final double CONVERSION_FACTOR_UP = SPROCKET_GEAR_RATIO/SPROCKET_CIRCUM * 0.0254; //This is converted to meters
+
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
       Intake(0, 0.0),
-      L1(1, 0.0),
-      L2(2, 0.0),
-      L3(3, 0.0),
-      L4(4, 0.0);
+      L1(1, 0.657),
+      L2(2, 0.8636),
+      L3(3, 1.27),
+      L4(4, 1.905);
 
       public final int position;
       public final double height;
