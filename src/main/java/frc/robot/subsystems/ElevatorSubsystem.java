@@ -97,7 +97,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     motor1.setControl(new MotionMagicVoltage(position / ElevatorConstants.CONVERSION_FACTOR));
   }
 
-
   public boolean isAtPosition() {
     boolean toReturn = (Math.abs(getError()) <= ElevatorConstants.SETPOINT_TOLERANCE);
     return toReturn;

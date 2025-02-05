@@ -16,13 +16,16 @@ public class TransferPieceBetweenFunnelAndElevator extends Command {
   private ElevatorSubsystem elevatorSubsystem;
   private FunnelSubsystem funnelSubsystem;
   private TootsieSlideSubsystem tootsieSlideSubsystem;
+
   public TransferPieceBetweenFunnelAndElevator(
-      ElevatorSubsystem elevatorSubsystem, FunnelSubsystem funnelSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem) {
+      ElevatorSubsystem elevatorSubsystem,
+      FunnelSubsystem funnelSubsystem,
+      TootsieSlideSubsystem tootsieSlideSubsystem) {
     this.elevatorSubsystem = elevatorSubsystem;
     this.funnelSubsystem = funnelSubsystem;
-    this.tootsieSlideSubsystem=tootsieSlideSubsystem;
+    this.tootsieSlideSubsystem = tootsieSlideSubsystem;
 
-    addRequirements(elevatorSubsystem,funnelSubsystem,tootsieSlideSubsystem);
+    addRequirements(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem);
   }
 
   // Called when the command is initially scheduled.
