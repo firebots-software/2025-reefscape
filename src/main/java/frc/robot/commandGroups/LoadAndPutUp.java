@@ -18,14 +18,13 @@ import frc.robot.subsystems.FunnelSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class LoadAndPutUp extends SequentialCommandGroup {
 
-  public LoadAndPutUp(ElevatorSubsystem elevator, FunnelSubsystem funnel) {
+  public LoadAndPutUp(ElevatorSubsystem elevator, FunnelSubsystem funnel, ElevatorPositions level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
     addCommands(new RunFunnelUntilDetection(funnel));
     addCommands(new ElevatorIntakeLevel(elevator, funnel));
     addCommands(new TransferPieceBetweenFunnelAndElevator(elevator, funnel));
-    addCommands(new SetElevatorLevel(elevator, ElevatorPositions.L4));
-    
+    addCommands(new SetElevatorLevel(elevator, level));
   }
 }
