@@ -36,9 +36,9 @@ public class ElevatorIntakeLevel extends Command {
 
   public void execute() {
     if (!funnel.isCoralCheckedOut()) {
-      m_subsystem.elevate(ElevatorPositions.Intake);
+      m_subsystem.elevateTo(ElevatorPositions.Intake);
     } else {
-      m_subsystem.elevate(ElevatorPositions.L1);
+      m_subsystem.elevateTo(ElevatorPositions.L1);
     }
   }
 

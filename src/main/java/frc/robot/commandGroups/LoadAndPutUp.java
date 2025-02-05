@@ -12,19 +12,20 @@ import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetection;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class LoadAndPutUp extends SequentialCommandGroup {
 
-  public LoadAndPutUp(ElevatorSubsystem elevator, FunnelSubsystem funnel, ElevatorPositions level) {
+  public LoadAndPutUp(ElevatorSubsystem elevator, FunnelSubsystem funnel, TootsieSlideSubsystem tootsieSlideSubsystem, ElevatorPositions level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
     addCommands(new RunFunnelUntilDetection(funnel));
     addCommands(new ElevatorIntakeLevel(elevator, funnel));
-    addCommands(new TransferPieceBetweenFunnelAndElevator(elevator, funnel));
+    addCommands(new TransferPieceBetweenFunnelAndElevator(elevator, funnel,tootsieSlideSubsystem));
     addCommands(new SetElevatorLevel(elevator, level));
   }
 }

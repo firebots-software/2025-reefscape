@@ -106,8 +106,8 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   }
 
   public void stopTootsie() {
-    master.stopMotor();
     master.setControl(m_velocity.withVelocity(0));
+    master.stopMotor();
     m_flywheelSim.setInputVoltage(0);
   }
 

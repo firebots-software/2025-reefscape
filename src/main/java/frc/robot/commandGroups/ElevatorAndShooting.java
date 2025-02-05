@@ -7,7 +7,7 @@ package frc.robot.commandGroups;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.TootsieSlideCommands.TootsieSlideShooting;
+import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
@@ -16,13 +16,13 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 
 public class ElevatorAndShooting extends SequentialCommandGroup {
-  TootsieSlideShooting tootsieSlideShooting;
+  ShootTootsieSlide tootsieSlideShooting;
 
   public ElevatorAndShooting(
       ElevatorSubsystem elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       ElevatorPositions level) {
     addCommands(new SetElevatorLevel(elevatorSubsystem, level));
-    addCommands(new TootsieSlideShooting(tootsieSlideSubsystem));
+    addCommands(new ShootTootsieSlide(tootsieSlideSubsystem));
   }
 }

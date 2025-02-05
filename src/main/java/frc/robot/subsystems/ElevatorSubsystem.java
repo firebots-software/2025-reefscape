@@ -84,16 +84,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     return currentLevel.height - motor1.getPosition().getValueAsDouble();
   }
 
-  public boolean isAtPosition() {
-    boolean toReturn = (Math.abs(getError()) <= ElevatorConstants.SETPOINT_TOLERANCE);
-    return toReturn;
-  }
-
   public ElevatorPositions getLevel() {
     return currentLevel;
   }
 
-  public void elevate(ElevatorPositions level) {
+  public void elevateTo(ElevatorPositions level) {
     this.currentLevel = level;
     this.setPosition(level.height);
   }
@@ -102,7 +97,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     motor1.setControl(new MotionMagicVoltage(position / ElevatorConstants.CONVERSION_FACTOR));
   }
 
-  public boolean canFunnelShoot() {
+
+  public boolean isAtPosition() {
+    boolean toReturn = (Math.abs(getError()) <= ElevatorConstants.SETPOINT_TOLERANCE);
+    return toReturn;
+  }
+
+  public boolean canFunnelTransferCoralToDale() {
     return this.getLevel().equals(Constants.ElevatorConstants.ElevatorPositions.Intake)
         && this.getError() < Constants.ElevatorConstants.MAX_POSITIONAL_ERROR;
   }
