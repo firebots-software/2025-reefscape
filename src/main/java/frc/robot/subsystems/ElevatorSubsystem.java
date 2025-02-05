@@ -20,14 +20,25 @@ import frc.robot.util.LoggedTalonFX;
 public class ElevatorSubsystem extends SubsystemBase {
   private static ElevatorSubsystem instance;
 
+  // The elevator is lifted by two motors spinning a single gear. They should spin in the same direction.
   private LoggedTalonFX motor1;
   private LoggedTalonFX motor2;
+
+  // The master motor will be spun; the other motor should follow its movements
   private LoggedTalonFX master;
-  private Double holdPosValue = 0.0;
+
+  private Double holdPosValue = 0.0; // Not used
+
+  // Drake is the sensor in front of the ToosieSlide that will detect if it contains a coral
   private DigitalInput drake;
   private boolean drakeHasSeenThings = false;
 
   private MotionMagicConfigs mmc;
+
+  // ElevatorPositions is an Enum containing a 'pos' and 'height' attribute.
+  // 'pos' = 0, 1, 2, 3, and 4, corresponding to Intake, L1, L2, L3, and L4.
+  // 'height' is the actual height measurement (units?) connected to each 'pos'
+  // The currentLevel variable keeps track of the current desired elevator position/height
   private ElevatorPositions currentLevel;
 
   private ElevatorSubsystem() {
@@ -39,6 +50,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     motor1 = new LoggedTalonFX(ElevatorConstants.MOTOR1_PORT);
     motor2 = new LoggedTalonFX(ElevatorConstants.MOTOR2_PORT);
 
+    // Initial elevator goal position is Intake
     currentLevel = ElevatorPositions.Intake;
 
     // Set up motor followers and deal with inverted motors
@@ -107,6 +119,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     return currentLevel;
   }
 
+  /**
+   * Sets the desired elevator position and height
+   * @param level An ElevatorPositions enum containing the desired position and height of the elevator (Intake, L1, L2, L3, L4)
+   */
   public void elevate(ElevatorPositions level) {
     this.currentLevel = level;
     this.setPosition(level.height);
