@@ -26,10 +26,17 @@ public class FunnelSubsystem extends SubsystemBase {
 
   private LoggedTalonFX rightMotor;
   private LoggedTalonFX leftMotor;
+  // The left and right motor of the funnel intake (should be renamed accordingly)
+
+  // The Check-out sensor is closer to the elevator, and is in charge of detecting a coral and
+  // stopping the motors to prevent it
+  // from going into the elevator.
   private DigitalInput checkOutSensor;
 
-  // The Check-in sensor is closer to the back of the robot, and detects the coral before the Check-out sensor. It is in charge
-  // of making sure the coral makes it into the intake funnel, before letting the robot go on from the Coral Station.
+  // The Check-in sensor is closer to the back of the robot, and detects the coral before the
+  // Check-out sensor. It is in charge
+  // of making sure the coral makes it into the intake funnel, before letting the robot go on from
+  // the Coral Station.
   private DigitalInput checkInSensor;
   private DigitalInput drake;
   private double coralCheckedOutPosition;
@@ -106,16 +113,12 @@ public class FunnelSubsystem extends SubsystemBase {
     rightMotor.setControl(m_velocityControlTop);
   }
 
-  /**
-   * Spin the funnel intake motors at the default speeds
-   */
+  /** Spin the funnel intake motors at the default speeds */
   public void spinFunnel() {
     runFunnelAtRPS(Constants.FunnelConstants.SPEED_RPS);
   }
 
-  /**
-   * Stop both funnel intake motors
-   */
+  /** Stop both funnel intake motors */
   public void stopFunnel() {
     rightMotor.stopMotor();
   }
@@ -151,6 +154,7 @@ public class FunnelSubsystem extends SubsystemBase {
 
   /**
    * Returns whether or not the Check-out sensor is detecting an object
+   *
    * @return Boolean - whether the Check-out sensor is detecting an object
    */
   public boolean isCoralCheckedOut() {
@@ -159,6 +163,7 @@ public class FunnelSubsystem extends SubsystemBase {
 
   /**
    * Returns whether or not the Check-in sensor is detecting an object
+   *
    * @return Boolean - whether the Check-in sensor is detecting an object
    */
   public boolean drakeTripped() {

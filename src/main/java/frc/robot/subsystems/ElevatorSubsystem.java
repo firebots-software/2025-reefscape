@@ -23,7 +23,8 @@ import frc.robot.util.LoggedTalonFX;
 public class ElevatorSubsystem extends SubsystemBase {
   private static ElevatorSubsystem instance;
 
-  // The elevator is lifted by two motors spinning a single gear. They should spin in the same direction.
+  // The elevator is lifted by two motors spinning a single gear. They should spin in the same
+  // direction.
   private LoggedTalonFX motor1;
   private LoggedTalonFX motor2;
 
@@ -107,7 +108,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   /**
    * Sets the desired elevator position and height
-   * @param level An ElevatorPositions enum containing the desired position and height of the elevator (Intake, L1, L2, L3, L4)
+   *
+   * @param level An ElevatorPositions enum containing the desired position and height of the
+   *     elevator (Intake, L1, L2, L3, L4)
    */
   public void elevate(ElevatorPositions level) {
     this.currentLevel = level;
