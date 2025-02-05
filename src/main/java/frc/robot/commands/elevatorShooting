@@ -1,0 +1,48 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+
+public class ElevatorScoringCommand extends Command {
+  private final ElevatorSubsystem m_elevator;
+  private final ShooterSubsystem m_shooter;
+  private final double targetHeight;
+
+  public ElevatorScoringCommand(ElevatorSubsystem elevator, ShooterSubsystem shooter, double maxHeight) {
+    m_elevator = elevator;
+    m_shooter = shooter;
+    targetHeight = maxHeight;
+    addRequirements(elevator, shooter);
+  }
+
+  @Override
+  public void initialize() {
+    m_elevator.moveToHeight(targetHeight);
+  }
+
+  @Override
+  public void execute() {
+    double currentHeight = m_elevator.getCurrentHeight();
+    double error = targetHeight - currentHeight;
+    m_elevator.adjustHeight(error);
+
+    if (m_elevator.getCurrentHeight() == targetHeight) {
+      m_shooter.shoot(); // pew pew
+    }
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    if (interrupted) {
+      m_elevator.stop();
+      m_shooter.stop();
+  }
+
+
+  @Override
+  public boolean isFinished() {
+    return m_elevator.getCurrentHeight() == targetHeight && m_shooter.isFinishedShooting();
+  }
+}
+}

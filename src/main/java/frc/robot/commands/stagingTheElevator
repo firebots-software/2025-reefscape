@@ -1,0 +1,40 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ElevatorSubsystem;
+
+public class ElevatorStagingCommand extends Command {
+  private final ElevatorSubsystem m_elevator;
+  private final double targetHeight;
+
+  public ElevatorStagingCommand(ElevatorSubsystem elevator, double maxHeight) {
+    m_elevator = elevator;
+    targetHeight = maxHeight / 2; 
+    addRequirements(elevator);
+  }
+
+  @Override
+  public void initialize() {
+
+    m_elevator.moveToHeight(targetHeight);
+  }
+
+  @Override
+  public void execute() {
+    double currentHeight = m_elevator.getCurrentHeight();
+    double error = targetHeight - currentHeight;
+    m_elevator.adjustHeight(error);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    if (interrupted) {
+      m_elevator.stop();
+    } 
+  }
+
+  @Override
+  public boolean isFinished() {
+    return m_elevator.getCurrentHeight() == targetHeight;
+  }
+}
