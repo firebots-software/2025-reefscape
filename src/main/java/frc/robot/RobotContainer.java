@@ -23,16 +23,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ElevatorCommands.*;
-import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
+import frc.robot.commands.ElevatorCommands.*;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetection;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
+import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -286,12 +286,13 @@ public class RobotContainer {
             ((pathGoesToHPS.getAsBoolean())
                 ? new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.Intake)
                 : new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L4)))
-
         .andThen(
             (pathGoesToHPS.getAsBoolean())
                 ? new RunFunnelUntilDetection(funnelSubsystem)
                 : new ShootTootsieSlide(testerTootsie))
-                
-        .andThen(new TransferPieceBetweenFunnelAndElevator(m_ElevatorSubsystem, funnelSubsystem, testerTootsie)).onlyIf(pathGoesToHPS); //transfers piece to elevator only if path doesnt go to hps
+        .andThen(
+            new TransferPieceBetweenFunnelAndElevator(
+                m_ElevatorSubsystem, funnelSubsystem, testerTootsie))
+        .onlyIf(pathGoesToHPS); // transfers piece to elevator only if path doesnt go to hps
   }
 }

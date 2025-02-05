@@ -22,17 +22,23 @@ public class SetElevatorLevel extends Command {
   public void execute() {
     elevatorSubsystem.elevate(pos);
 
-    //so depending on height of the elvator acceleration is less (im sorry code gods i made a constant not actaully constant please forgive me)
+    // so depending on height of the elvator acceleration is less (im sorry code gods i made a
+    // constant not actaully constant please forgive me)
     if (pos == ElevatorPositions.L4) {
-      Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L4;
+      Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND =
+          Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L4;
     } else if (pos == ElevatorPositions.L3) {
-      Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L3;
+      Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND =
+          Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L3;
     } else if (pos == ElevatorPositions.L2) {
-      Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L2;
+      Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND =
+          Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L2;
     } else if (pos == ElevatorPositions.L1) {
-      Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L1;
+      Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND =
+          Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L1;
     } else {
-      Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_INTAKE;
+      Constants.Swerve.TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND =
+          Constants.Swerve.CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_INTAKE;
     }
   }
 

@@ -574,8 +574,8 @@ public final class Constants {
     public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
     public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.75;
     public static final double TELE_DRIVE_SLOW_MODE_SPEED_PERCENT = 0.3;
-    public static double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420; //im sorry for making this not constant
-    public static final double CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_INTAKE = 6.01420; //TODO: change these to be accurate
+    public static double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420; // im sorry for making this not constant
+    public static final double CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_INTAKE = 6.01420; // TODO: change these to be accurate
     public static final double CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L1 = 6.01420;
     public static final double CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L2 = 6.01420;
     public static final double CONST_TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND_ELEVATOR_L3 = 6.01420;
