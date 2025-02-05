@@ -10,10 +10,8 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.ControlRequest;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -31,9 +29,10 @@ public class FunnelSubsystem extends SubsystemBase {
   private DigitalInput checkOutSensor;
   private DigitalInput checkInSensor;
   private DigitalInput drake;
-  private double coralCheckedOutPosition; 
+  private double coralCheckedOutPosition;
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
   private boolean coralInFunnel;
+
   private FunnelSubsystem() {
     rightMotor = new LoggedTalonFX(FunnelConstants.RIGHT_MOTOR_PORT); // Unique ID for motor1
     leftMotor = new LoggedTalonFX(2); // Unique ID for motor2\
@@ -111,35 +110,29 @@ public class FunnelSubsystem extends SubsystemBase {
   public void stopFunnel() {
     rightMotor.stopMotor();
   }
-  public void moveBackFlywheel(){
-    //TODO: Fix this bro lmao l bozo lol rofl haha hee hee hee haw
+
+  public void moveBackFlywheel() {
+    // TODO: Fix this bro lmao l bozo lol rofl haha hee hee hee haw
     double randomAngleTBD = 0.0d;
-      rightMotor.setControl(
-          new PositionVoltage(randomAngleTBD)); 
+    rightMotor.setControl(new PositionVoltage(randomAngleTBD));
   }
-public void reAdjustMotor(){
-  rightMotor.setControl(
-    controlRequest
-    .withPosition(coralCheckedOutPosition)
-    .withSlot(0)
-  );
-  
-}
+
+  public void reAdjustMotor() {
+    rightMotor.setControl(controlRequest.withPosition(coralCheckedOutPosition).withSlot(0));
+  }
 
   public void updateCoralCheckedOutPosition() {
-    coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
-}
-
-  public void maintainCurrentPosition() {
-    coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
-    rightMotor.setControl(
-      controlRequest
-      .withPosition(coralCheckedOutPosition)
-      .withSlot(0)
-      );
+    coralCheckedOutPosition =
+        rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
   }
 
-  public void spinBackSlowly(){
+  public void maintainCurrentPosition() {
+    coralCheckedOutPosition =
+        rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
+    rightMotor.setControl(controlRequest.withPosition(coralCheckedOutPosition).withSlot(0));
+  }
+
+  public void spinBackSlowly() {
     rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
 
@@ -154,8 +147,8 @@ public void reAdjustMotor(){
   public boolean drakeTripped() {
     return drake.get();
   }
-  
-    public void setCoralInFunnel(boolean coralInFunnel) {
+
+  public void setCoralInFunnel(boolean coralInFunnel) {
     this.coralInFunnel = coralInFunnel;
   }
 

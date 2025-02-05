@@ -9,7 +9,6 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
@@ -103,8 +102,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     motor1.setControl(new MotionMagicVoltage(position / ElevatorConstants.CONVERSION_FACTOR));
   }
 
-  public boolean canFunnelShoot(){
-    return this.getLevel().equals(Constants.ElevatorConstants.ElevatorPositions.Intake) && this.getError() < Constants.ElevatorConstants.MAX_POSITIONAL_ERROR;
+  public boolean canFunnelShoot() {
+    return this.getLevel().equals(Constants.ElevatorConstants.ElevatorPositions.Intake)
+        && this.getError() < Constants.ElevatorConstants.MAX_POSITIONAL_ERROR;
   }
 
   public boolean exampleCondition() {
@@ -123,12 +123,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean atTargetPosition() {
-    double tolerance = 0.5; 
+    double tolerance = 0.5;
     return master.getClosedLoopError().getValueAsDouble() <= tolerance;
+  }
 }
-  
-}
-
 
 // public class ElevatorSubsystem extends SubsystemBase {
 //   private static ElevatorSubsystem instance;

@@ -1,4 +1,4 @@
-//TODO: THIS COMMAND NEED TO BE UPDATED TO WORK PROPERLY
+// TODO: THIS COMMAND NEED TO BE UPDATED TO WORK PROPERLY
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;

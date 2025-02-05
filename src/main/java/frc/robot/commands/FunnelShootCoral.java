@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
@@ -18,27 +16,29 @@ public class FunnelShootCoral extends Command {
   private FunnelSubsystem funnelSubsystem;
   private ElevatorSubsystem elevatorSubsystem;
   private TootsieSlideSubsystem tootsieSlideSubsystem;
-  
-  public FunnelShootCoral(FunnelSubsystem funnelSubsystem, ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem) {
+
+  public FunnelShootCoral(
+      FunnelSubsystem funnelSubsystem,
+      ElevatorSubsystem elevatorSubsystem,
+      TootsieSlideSubsystem tootsieSlideSubsystem) {
     this.funnelSubsystem = funnelSubsystem;
-    this.tootsieSlideSubsystem=tootsieSlideSubsystem;
-    this.elevatorSubsystem=elevatorSubsystem;
-    addRequirements(funnelSubsystem,tootsieSlideSubsystem);
+    this.tootsieSlideSubsystem = tootsieSlideSubsystem;
+    this.elevatorSubsystem = elevatorSubsystem;
+    addRequirements(funnelSubsystem, tootsieSlideSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (elevatorSubsystem.canFunnelShoot()){
-        funnelSubsystem.spinFunnel();
-        tootsieSlideSubsystem.intakeCoral();
+    if (elevatorSubsystem.canFunnelShoot()) {
+      funnelSubsystem.spinFunnel();
+      tootsieSlideSubsystem.intakeCoral();
     } else {
-        funnelSubsystem.maintainCurrentPosition();
+      funnelSubsystem.maintainCurrentPosition();
     }
   }
 

@@ -6,7 +6,6 @@ package frc.robot.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.commands.ElevatorIntakeLevel;
 import frc.robot.commands.SetElevatorLevel;
 import frc.robot.commands.TootsieSlideShooting;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -19,7 +18,10 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 public class ElevatorAndShooting extends SequentialCommandGroup {
   TootsieSlideShooting tootsieSlideShooting;
 
-  public ElevatorAndShooting(ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem, ElevatorPositions level) {
+  public ElevatorAndShooting(
+      ElevatorSubsystem elevatorSubsystem,
+      TootsieSlideSubsystem tootsieSlideSubsystem,
+      ElevatorPositions level) {
     addCommands(new SetElevatorLevel(elevatorSubsystem, level));
     addCommands(new TootsieSlideShooting(tootsieSlideSubsystem));
   }

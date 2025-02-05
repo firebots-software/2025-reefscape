@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
-import frc.robot.subsystems.ArmSubsystem;
 import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -23,14 +22,11 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.util.LoggedTalonFX;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 
 public class ArmSubsystem extends SubsystemBase {
   private static ArmSubsystem instance;
@@ -47,8 +43,6 @@ public class ArmSubsystem extends SubsystemBase {
   private double encoderDegrees;
 
   private double targetDegrees;
-
-  
 
   private final VoltageOut voltRequestArm = new VoltageOut(0.0);
 
@@ -129,7 +123,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Initialize absolute encoder
     revEncoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
-    
   }
 
   public void setPosition(double angleDegrees) {
@@ -139,11 +132,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void startFlywheel(double angleDegrees) {
-    flywheelMotor.setControl(
-
-        new VelocityVoltage(30));
-
-
+    flywheelMotor.setControl(new VelocityVoltage(30));
   }
 
   public void stopEveryingONG() {
@@ -201,16 +190,12 @@ public class ArmSubsystem extends SubsystemBase {
     DogLog.log("Arm Target Degrees", targetDegrees);
   }
 
-public void spinFlywheel(double flywheelSpeed) {
+  public void spinFlywheel(double flywheelSpeed) {
     flywheelMotor.set(flywheelSpeed);
-}
-
-
+  }
 
   // Stops the flywheel
   public void stopFlywheel() {
     flywheelMotor.set(0);
   }
-
-
 }

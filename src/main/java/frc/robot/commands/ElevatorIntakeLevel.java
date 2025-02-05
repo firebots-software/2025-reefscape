@@ -13,7 +13,9 @@ import frc.robot.subsystems.FunnelSubsystem;
 public class ElevatorIntakeLevel extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ElevatorSubsystem m_subsystem;
+
   private final FunnelSubsystem funnel;
+
   /**
    * Creates a new ExampleCommand.
    *
@@ -23,7 +25,7 @@ public class ElevatorIntakeLevel extends Command {
     m_subsystem = subsystem;
     this.funnel = funnel;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_subsystem,funnel);
+    addRequirements(m_subsystem, funnel);
   }
 
   // Called when the command is initially scheduled.
@@ -33,13 +35,11 @@ public class ElevatorIntakeLevel extends Command {
   // Called every time the scheduler runs while the command is scheduled.
 
   public void execute() {
-    if(!funnel.isCoralCheckedOut()){
+    if (!funnel.isCoralCheckedOut()) {
       m_subsystem.elevate(ElevatorPositions.Intake);
-    }
-    else{
+    } else {
       m_subsystem.elevate(ElevatorPositions.L1);
     }
-    
   }
 
   // Called once the command ends or is interrupted.
