@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.TootsieSlideShooting;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
@@ -82,7 +83,7 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    //joystick.rightBumper().whileTrue(new TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
+    joystick.rightBumper().whileTrue(new TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
 
     joystick
         .x()

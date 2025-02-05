@@ -63,7 +63,7 @@ public class TootsieSlideSubsystem extends SubsystemBase{
 
     TalonFXConfigurator m1Config = motor.getConfigurator();
 
-    drakeSensor = new DigitalInput(TootsieSlide.CHECKOUT_PORT);
+    // drakeSensor = new DigitalInput(TootsieSlide.CHECKOUT_PORT);
 
     CurrentLimitsConfigs clc = new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -111,10 +111,9 @@ public static TootsieSlideSubsystem getInstance() {
     m_flywheelSim.setInputVoltage(master.getSupplyVoltage().getValueAsDouble());
   }
 
-  public void spinTootsie(boolean thing) {
-    if(!thing && coralPresent()){
+  public void spinTootsie() {
       runTootsieAtRPS(30);
-    }
+
     
   }
 
