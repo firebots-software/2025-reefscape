@@ -9,6 +9,8 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.CANrange;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -28,9 +30,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
+  private CANrange distance;
 
   private ElevatorSubsystem() {
     // Initialize motors
+
+    distance = new CANrange(0);
 
     motor1 = new LoggedTalonFX(ElevatorConstants.MOTOR1_PORT);
     motor2 = new LoggedTalonFX(ElevatorConstants.MOTOR2_PORT);
@@ -76,9 +81,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     return instance;
   }
 
-  // elevator functions
-  public void resetEncoderPos() {
-    motor1.setPosition(0);
+  public void resetPosition() {
+    //TODO: add constant to convert distance to encoder values
+    if (distance.isConnected()) {
+      master.setPosition(
+          (getDistance()));
+    }
   }
 
   public double getError() {
@@ -111,6 +119,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean exampleCondition() {
     // Query some boolean level, such as a digital sensor.
     return false;
+  }
+
+  public double getDistance(){
+    return distance.getDistance().getValueAsDouble();
   }
 
   @Override

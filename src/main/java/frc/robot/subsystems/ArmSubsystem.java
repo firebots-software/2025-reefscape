@@ -181,6 +181,8 @@ public class ArmSubsystem extends SubsystemBase {
     return sysIdRoutineArm.dynamic(direction);
   }
 
+  
+
   @Override
   public void periodic() {
     encoderDegrees = calculateDegrees();
