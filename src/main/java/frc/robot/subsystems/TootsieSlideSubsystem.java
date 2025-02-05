@@ -26,27 +26,20 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   private static TootsieSlideSubsystem instance;
 
   private DigitalInput drakeSensor;
-  private LoggedTalonFX motor;
   private LoggedTalonFX master;
+  private final VelocityVoltage m_velocity = new VelocityVoltage(0);
 
+  //FOR SIMULATION
   private final DCMotor m_tootsieSlideGearbox = DCMotor.getKrakenX60(1);
-
   public static LinearSystem<N1, N1, N1> tootsieSystem =
       LinearSystemId.identifyVelocitySystem(0.05, 0.1);
-
   private final FlywheelSim m_flywheelSim =
       new FlywheelSim(tootsieSystem, m_tootsieSlideGearbox, 0);
 
-  private final VelocityVoltage m_velocity = new VelocityVoltage(0);
-
   private TootsieSlideSubsystem() {
-
-    motor = new LoggedTalonFX(1); // Unique ID for motor
-
-    TalonFXConfigurator m1Config = motor.getConfigurator();
-
+    master = new LoggedTalonFX(1); // Unique ID for motor
+    TalonFXConfigurator m1Config = master.getConfigurator();
     drakeSensor = new DigitalInput(TootsieSlide.CHECKOUT_PORT);
-
     CurrentLimitsConfigs clc =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -62,15 +55,8 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
     m_velocity.Slot = 0;
     m1Config.apply(clc);
-
-    master = motor;
     master.getConfigurator().apply(s0c);
     master.getConfigurator().apply(clc);
-
-    // MotionMagicConfigs mmc = new MotionMagicConfigs()
-    //          .withMotionMagicCruiseVelocity(Constants.TootsieSlide.CRUISE_VELOCITY)
-    //          .withMotionMagicAcceleration(Constants.TootsieSlide.ACCELERATION);
-    //  master.getConfigurator().apply(mmc);
   }
 
   public static TootsieSlideSubsystem getInstance() {
