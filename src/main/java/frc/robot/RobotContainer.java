@@ -6,18 +6,21 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.JamesHardenMovement;
@@ -25,6 +28,8 @@ import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import com.ctre.phoenix6.swerve.SwerveRequest;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -50,6 +55,7 @@ public class RobotContainer {
   private final CommandXboxController joystick = new CommandXboxController(0);
 
   private final AutoFactory autoFactory;
+  private final AutoChooser autoChooser;
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
@@ -66,6 +72,13 @@ public class RobotContainer {
             driveTrain::followTrajectory, // The drive subsystem trajectory follower
             true, // If alliance flipping should be enabled
             driveTrain);
+    autoChooser = new AutoChooser();
+    // Add options to the chooser
+    autoChooser.addRoutine("Example Routine", this::onlyRoutine);
+
+    // Put the auto chooser on the dashboard
+    SmartDashboard.putData("autochooser", autoChooser);
+    SmartDashboard.putNumber("random number", 1);
   }
 
   private void configureBindings() {
@@ -143,8 +156,10 @@ public class RobotContainer {
             : (DriverStation.getAlliance().get() == Alliance.Red);
   }
 
-  public Command getAutonomousCommand() {
-    var routine = autoFactory.newRoutine("routine");
+  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+
+  private AutoRoutine onlyRoutine() {
+    AutoRoutine routine = autoFactory.newRoutine("routine");
     routine
         .active()
         .onTrue(
@@ -152,19 +167,21 @@ public class RobotContainer {
                 .trajectory("BSTART-L2")
                 .resetOdometry()
                 .andThen(routine.trajectory("BSTART-L2").cmd())
-                .andThen(new WaitCommand(0.75))
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
                 .andThen(routine.trajectory("L2-BHPS").cmd())
-                .andThen(new WaitCommand(0.75))
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
                 .andThen(routine.trajectory("BHPS-R1").cmd())
-                .andThen(new WaitCommand(0.75))
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
                 .andThen(routine.trajectory("R1-BHPS").cmd())
-                .andThen(new WaitCommand(0.75))
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
                 .andThen(routine.trajectory("BHPS-L1").cmd())
-                .andThen(new WaitCommand(0.75))
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
                 .andThen(routine.trajectory("L1-BHPS").cmd())
-                .andThen(new WaitCommand(0.75))
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
                 .andThen(routine.trajectory("BHPS-R0").cmd()));
-
-    return routine.cmd();
+    return routine;
+  }
+  public Command getAutonomousCommand() {
+    return autoChooser.selectedCommandScheduler();
   }
 }

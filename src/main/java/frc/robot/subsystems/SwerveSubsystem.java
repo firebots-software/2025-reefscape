@@ -18,6 +18,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -39,6 +40,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     implements Subsystem {
 
   private ProfiledPIDController xPidController, yPidController, driverRotationPidController;
+  private PIDController choreoX_pid, choreoY_pid, choreoRotation_pid;
   private SwerveDriveState currentState;
 
   public SwerveSubsystem(
@@ -60,6 +62,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       startSimThread();
     }
     currentState = getCurrentState();
+
+    choreoX_pid = new PIDController(8, 0, 0);
+    choreoY_pid = new PIDController(8, 0, 0);
+    choreoRotation_pid = new PIDController(2.5, 0, 0);
+    choreoRotation_pid.enableContinuousInput(-Math.PI, Math.PI);
 
     xPidController =
         new ProfiledPIDController(
@@ -267,22 +274,28 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // Generate the next speeds for the robot
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            sample.vx + xPidController.calculate(pose.getX(), sample.x),
-            sample.vy + yPidController.calculate(pose.getY(), sample.y),
+            sample.vx + choreoX_pid.calculate(pose.getX(), sample.x),
+            sample.vy + choreoY_pid.calculate(pose.getY(), sample.y),
             sample.omega
-                + driverRotationPidController.calculate(
+                + choreoRotation_pid.calculate(
                     pose.getRotation().getRadians(), sample.heading));
 
     DogLog.log("followTrajectory/sample.x", sample.x);
     DogLog.log("followTrajectory/sample.y", sample.y);
     DogLog.log("followTrajectory/sample.heading", sample.heading);
 
-    DogLog.log("followTrajectory/pidOutputX", xPidController.calculate(pose.getX(), sample.x));
     DogLog.log("followTrajectory/sample.vx", sample.vx);
     DogLog.log("followTrajectory/sample.vy", sample.vy);
     DogLog.log("followTrajectory/sample.omega", sample.omega);
 
+    DogLog.log("followTrajectory/pidOutputX", choreoX_pid.calculate(pose.getX(), sample.x));
+    DogLog.log("followTrajectory/pidOutputY", choreoY_pid.calculate(pose.getY(), sample.y));
+    DogLog.log("followTrajectory/pidOutputX", choreoRotation_pid.calculate(pose.getRotation().getRadians(), sample.heading));
+
     DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
+    DogLog.log("followTrajectory/speeds.vy", speeds.vyMetersPerSecond);
+    DogLog.log("followTrajectory/speeds.omega", speeds.omegaRadiansPerSecond);
+
     // Apply the generated speed
     setChassisSpeeds(speeds);
   }
