@@ -19,9 +19,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.JamesHardenMovement;
-import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commands.DaleCommands.ArmToAngleCmd;
+import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilDetection;
+import frc.robot.commands.SwerveCommands.JamesHardenMovement;
+import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -29,6 +38,10 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
+  TootsieSlideSubsystem testerTootsie = TootsieSlideSubsystem.getInstance();
+  FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
+  ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
+  ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
   private BooleanSupplier redside = () -> redAlliance;
   private static boolean redAlliance;
@@ -59,6 +72,10 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Joystick suppliers,
+    funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
+    funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem));
+
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
         leftRightFunction = () -> -joystick.getLeftX(),
@@ -77,6 +94,9 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
+
+    // joystick.rightBumper().whileTrue(new
+    // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
 
     /*
 
@@ -121,8 +141,18 @@ public class RobotContainer {
                                         * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
                             new Rotation2d(
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
-
+    Trigger rightBumper = joystick.rightBumper();
+    rightBumper.onTrue(new ArmToAngleCmd(() -> 90d, ArmSubsystem.getInstance()));
+    rightBumper.onFalse(new ArmToAngleCmd(() -> 45d, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
+
+    joystick.povUp().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L1));
+    joystick.povRight().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L2));
+    joystick.povDown().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L3));
+    joystick.povLeft().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L4));
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
   }
 
   public static void setAlliance() {

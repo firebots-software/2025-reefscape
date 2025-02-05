@@ -75,8 +75,8 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    absoluteInit();
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    RobotContainer.setAlliance();
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -125,10 +125,6 @@ public class Robot extends TimedRobot {
   public void simulationInit() {
     absoluteInit();
   }
-
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {}
 
   public void absoluteInit() {
     RobotContainer.setAlliance();

@@ -15,7 +15,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -28,6 +27,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -297,12 +297,40 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 m_hasAppliedOperatorPerspective = true;
               });
     }
+    // SmartDashboard.putNumber("chassisspeedX", robotChassisSpeeds.vxMetersPerSecond);
+    // SmartDashboard.putNumber("chassisspeedY", robotChassisSpeeds.vyMetersPerSecond);
+    // SmartDashboard.putNumber("chassisspeedOMEGA", robotChassisSpeeds.omegaRadiansPerSecond);
 
-    currentState = getState();
+    SmartDashboard.putNumber("fl_speed", getState().ModuleStates[0].speedMetersPerSecond);
+    SmartDashboard.putNumber("fl_angle", getState().ModuleStates[0].angle.getDegrees());
+    SmartDashboard.putNumber("fr_speed", getState().ModuleStates[1].speedMetersPerSecond);
+    SmartDashboard.putNumber("fr_angle", getState().ModuleStates[1].angle.getDegrees());
+    SmartDashboard.putNumber("bl_speed", getState().ModuleStates[2].speedMetersPerSecond);
+    SmartDashboard.putNumber("bl_angle", getState().ModuleStates[2].angle.getDegrees());
+    SmartDashboard.putNumber("br_speed", getState().ModuleStates[3].speedMetersPerSecond);
+    SmartDashboard.putNumber("br_angle", getState().ModuleStates[3].angle.getDegrees());
+    // DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
+    // DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
+    // DogLog.log("chassis/rotation_speed_radps",
+    // getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
 
-    DogLog.log("Swerve/ChassisSpeedsX(mps)", getCurrentRobotChassisSpeeds().vxMetersPerSecond);
-    DogLog.log("Swerve/ChassisSpeedsY(mps)", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
+    /*
+    DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
+    DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
     DogLog.log(
-        "Swerve/ChassisSpeedsTurning(radps)", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+        "chassis/rotation_speed_radps", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+    */
+    var drivetrainState = getState();
+    SmartDashboard.putNumber("fl_speed", drivetrainState.ModuleStates[0].speedMetersPerSecond);
+    SmartDashboard.putNumber("fl_angle", drivetrainState.ModuleStates[0].angle.getDegrees());
+    SmartDashboard.putNumber("fr_speed", drivetrainState.ModuleStates[1].speedMetersPerSecond);
+    SmartDashboard.putNumber("fr_angle", drivetrainState.ModuleStates[1].angle.getDegrees());
+    SmartDashboard.putNumber("bl_speed", drivetrainState.ModuleStates[2].speedMetersPerSecond);
+    SmartDashboard.putNumber("bl_angle", drivetrainState.ModuleStates[2].angle.getDegrees());
+    SmartDashboard.putNumber("br_speed", drivetrainState.ModuleStates[3].speedMetersPerSecond);
+    SmartDashboard.putNumber("br_angle", drivetrainState.ModuleStates[3].angle.getDegrees());
+    // DogLog.log("chassis/speed_x", robotChassisSpeeds);
+    // DogLog.log("chassis/speed_y", robotChassisSpeeds.vyMetersPerSecond);
+    // DogLog.log("chassis/rotation_speed_radps", robotChassisSpeeds.omegaRadiansPerSecond);
   }
 }
