@@ -35,7 +35,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.util.GyroStabilizer;
-
 import java.util.function.Supplier;
 
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
@@ -102,7 +101,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   }
 
   public static SwerveSubsystem getInstance() {
-    if(instance == null) {
+    if (instance == null) {
       throw new Error("Please create one instance of SwerveSubsystem first.");
     }
     return instance;
@@ -264,7 +263,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   }
 
   public ChassisSpeeds getCurrentFieldChassisSpeeds() {
-    return ChassisSpeeds.fromRobotRelativeSpeeds(getCurrentRobotChassisSpeeds(), currentState.Pose.getRotation());
+    return ChassisSpeeds.fromRobotRelativeSpeeds(
+        getCurrentRobotChassisSpeeds(), currentState.Pose.getRotation());
   }
 
   public void setChassisSpeeds(ChassisSpeeds speeds) {
@@ -290,8 +290,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             sample.vx + choreoX_pid.calculate(pose.getX(), sample.x),
             sample.vy + choreoY_pid.calculate(pose.getY(), sample.y),
             sample.omega
-                + choreoRotation_pid.calculate(
-                    pose.getRotation().getRadians(), sample.heading));
+                + choreoRotation_pid.calculate(pose.getRotation().getRadians(), sample.heading));
 
     DogLog.log("followTrajectory/sample.x", sample.x);
     DogLog.log("followTrajectory/sample.y", sample.y);
@@ -303,7 +302,9 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     DogLog.log("followTrajectory/pidOutputX", choreoX_pid.calculate(pose.getX(), sample.x));
     DogLog.log("followTrajectory/pidOutputY", choreoY_pid.calculate(pose.getY(), sample.y));
-    DogLog.log("followTrajectory/pidOutputX", choreoRotation_pid.calculate(pose.getRotation().getRadians(), sample.heading));
+    DogLog.log(
+        "followTrajectory/pidOutputX",
+        choreoRotation_pid.calculate(pose.getRotation().getRadians(), sample.heading));
 
     DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
     DogLog.log("followTrajectory/speeds.vy", speeds.vyMetersPerSecond);
@@ -366,11 +367,13 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     DogLog.log("Swerve/RobotChassisSpeedsX(mps)", getCurrentRobotChassisSpeeds().vxMetersPerSecond);
     DogLog.log("Swerve/RobotChassisSpeedsY(mps)", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
     DogLog.log(
-        "Swerve/RobotChassisSpeedsTurning(radps)", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+        "Swerve/RobotChassisSpeedsTurning(radps)",
+        getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
     DogLog.log("Swerve/FieldChassisSpeedsX(mps)", getCurrentFieldChassisSpeeds().vxMetersPerSecond);
     DogLog.log("Swerve/FieldChassisSpeedsY(mps)", getCurrentFieldChassisSpeeds().vyMetersPerSecond);
     DogLog.log(
-        "Swerve/FieldChassisSpeedsTurning(radps)", getCurrentFieldChassisSpeeds().omegaRadiansPerSecond);
+        "Swerve/FieldChassisSpeedsTurning(radps)",
+        getCurrentFieldChassisSpeeds().omegaRadiansPerSecond);
     DogLog.log(
         "Swerve/CurrentCommand",
         (getCurrentCommand() == null) ? "nothing" : getCurrentCommand().getName());

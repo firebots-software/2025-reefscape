@@ -5,6 +5,7 @@ import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Transform2d;
 import frc.robot.subsystems.SwerveSubsystem;
 
+
 public class GyroStabilizer {
   private static SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   private static Pigeon2 pigeon = driveTrain.getPigeon2();
