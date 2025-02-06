@@ -7,6 +7,7 @@ package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralPosition;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 
 // import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -18,9 +19,12 @@ import frc.robot.subsystems.FunnelSubsystem;
  */
 public class RunFunnelUntilDetection extends Command {
   private FunnelSubsystem funnelSubsystem;
+  private ElevatorSubsystem elevator;
 
-  public RunFunnelUntilDetection(FunnelSubsystem funnelSubsystem) {
+  public RunFunnelUntilDetection(FunnelSubsystem funnelSubsystem, ElevatorSubsystem elevator) {
     this.funnelSubsystem = funnelSubsystem;
+    this.elevator = elevator;
+    addRequirements(elevator);
     addRequirements(funnelSubsystem);
   }
 
@@ -28,13 +32,18 @@ public class RunFunnelUntilDetection extends Command {
   @Override
   public void initialize() {
     // Store the position of the coral when it was first checked out.
-    funnelSubsystem.spinFunnel();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    funnelSubsystem.spinFunnel();
+    if(elevator.isAtPosition()){
+      funnelSubsystem.spinFunnel();
+    }
+    else{
+      funnelSubsystem.maintainCurrentPosition();
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
