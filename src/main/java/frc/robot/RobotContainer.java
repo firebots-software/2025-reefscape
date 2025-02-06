@@ -73,7 +73,8 @@ public class RobotContainer {
   private void configureBindings() {
     // Joystick suppliers,
     funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
-    elevatorSubsystem.setDefaultCommand(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    elevatorSubsystem.setDefaultCommand(
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
     funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem));
 
