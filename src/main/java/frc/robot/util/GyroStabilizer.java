@@ -2,6 +2,8 @@ package frc.robot.util;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import dev.doglog.DogLog;
+import edu.wpi.first.math.geometry.Transform2d;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class GyroStabilizer {
@@ -25,5 +27,23 @@ public class GyroStabilizer {
       * 
       *   robotCentricDrive.withVelocityX(x).withVelocityY(y).withRotationalRate(turn);
       */
+
+      /*
+       * For Auto, I don't think we can use the RobotCentric Swerve Request to move the robot, since Choreo is already using the
+       * followTrajectory() method in SwerveSubsystem to apply a ChassisSpeeds to the robot. That's why we need to use the
+       * "tip vector" calculated in this class to adjust the ChassisSpeeds in followTrajectory() in  order to implement tip prevention
+       * during Auto.
+       */
+
+    public static Transform2d getTipVector(){
+        double roll = pigeon.getRotation3d().getX();
+        double pitch = pigeon.getRotation3d().getY();
+
+        DogLog.log("gyroStabilizer/roll", roll);
+        DogLog.log("gyroStabilizer/pitch", pitch);
+
+
+        return new Transform2d();
+    }
     
 }

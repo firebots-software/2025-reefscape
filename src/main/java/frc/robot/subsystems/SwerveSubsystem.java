@@ -34,6 +34,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.util.GyroStabilizer;
+
 import java.util.function.Supplier;
 
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
@@ -400,5 +402,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // DogLog.log("chassis/speed_x", robotChassisSpeeds);
     // DogLog.log("chassis/speed_y", robotChassisSpeeds.vyMetersPerSecond);
     // DogLog.log("chassis/rotation_speed_radps", robotChassisSpeeds.omegaRadiansPerSecond);
+
+    GyroStabilizer.getTipVector();
   }
 }
