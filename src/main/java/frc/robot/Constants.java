@@ -613,6 +613,7 @@ public final class Constants {
   public static class ElevatorConstants {
     public static final int MOTOR1_PORT = 0; // TODO: change port
     public static final int MOTOR2_PORT = 0; // TODO: change port
+    public static final int CANRANGE_PORT = 0; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
@@ -655,9 +656,13 @@ public final class Constants {
       }
 
       public double getPosition() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
+        return this.position;
       }
+      
+      public double getHeight() {
+        return this.height;
+      }
+      
     }
   }
 
