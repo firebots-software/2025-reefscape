@@ -83,7 +83,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void resetPosition() {
     // TODO: add constant to convert distance to encoder values
     if (distance.isConnected()) {
-      master.setPosition(this.getDistance() * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+      master.setPosition(
+          this.getDistance() * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
     }
   }
 
@@ -101,7 +102,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void setPosition(double position) {
-    motor1.setControl(new MotionMagicVoltage(position * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS));
+    motor1.setControl(
+        new MotionMagicVoltage(
+            position * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS));
   }
 
   public boolean isAtPosition() {
@@ -136,7 +139,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Update simulated position based on speed (simplified example)
     double newPosition = currentPosition + simulatedSpeed * 0.02; // Assuming a 20ms loop
-    master.setPosition(newPosition); //Alarming to have this since running this on the robot will lead to  
+    master.setPosition(
+        newPosition); // Alarming to have this since running this on the robot will lead to
 
     // Log simulation data for debugging
     SmartDashboard.putNumber("Simulated Position", newPosition);
