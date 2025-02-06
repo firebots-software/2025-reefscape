@@ -6,10 +6,6 @@ package frc.robot.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
-import frc.robot.commands.ElevatorCommands.ElevatorIntakeLevel;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilDetection;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
@@ -19,7 +15,11 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class LoadAndPutUpWithSafety extends SequentialCommandGroup {
   /** Creates a new LoadAndPutUpWithSafety. */
-  public LoadAndPutUpWithSafety( ElevatorSubsystem elevator, FunnelSubsystem funnel, TootsieSlideSubsystem tootsieSlideSubsystem, ElevatorPositions level) {
+  public LoadAndPutUpWithSafety(
+      ElevatorSubsystem elevator,
+      FunnelSubsystem funnel,
+      TootsieSlideSubsystem tootsieSlideSubsystem,
+      ElevatorPositions level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand())
   }
