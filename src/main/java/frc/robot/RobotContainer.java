@@ -76,7 +76,7 @@ public class RobotContainer {
     // Joystick suppliers,
     funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem,elevatorSubsystem));
+    funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
 
     Trigger extraCoral =
         new Trigger(() -> testerTootsie.coralPresent() && funnelSubsystem.isCoralCheckedIn());
