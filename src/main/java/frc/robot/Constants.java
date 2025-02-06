@@ -633,7 +633,7 @@ public final class Constants {
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
       Intake(0, 0.0),
-      pos(0,0.0),
+      safePos(0,0.0),
       L1(1, 0.0),
       L2(2, 0.0),
       L3(3, 0.0),
