@@ -9,6 +9,8 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -129,8 +131,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     master.setPosition(newPosition);
 
     // Log simulation data for debugging
-    SmartDashboard.putNumber("Simulated Position", newPosition);
-    SmartDashboard.putNumber("Simulated Speed", simulatedSpeed);
+    DogLog.log("Elevator/Simulated Position", newPosition);
+    DogLog.log("Elevator/Simulated Speed", simulatedSpeed);
   }
 
   public boolean atTargetPosition() {
@@ -192,6 +194,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 //         };
 
 //     holdPosition(targetPosition);
-//     SmartDashboard.putString("Elevator Error", "Level: " + level + ", Error: " + getPIDError());
+//     DogLog.log("Elevator Error", "Level: " + level + ", Error: " + getPIDError());
 //   }
 // }
