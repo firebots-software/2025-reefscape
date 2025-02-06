@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANrange;
+
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -160,3 +161,60 @@ public class ElevatorSubsystem extends SubsystemBase {
     return master.getClosedLoopError().getValueAsDouble() <= tolerance;
   }
 }
+
+//   public double getSpeed() {
+//     return master.getVelocity().getValueAsDouble();
+//   }
+
+//   public boolean getStopped() {
+//     return getSpeed() == 0;
+//   }
+
+//   public void holdPosition() {
+//     holdPosition(holdPosValue);
+//   }
+
+//   public void holdPosition(double pos) {
+//     master.setControl(new MotionMagicVoltage(pos));
+//   }
+
+//   public double getPIDError() {
+//     return master.getClosedLoopError().getValueAsDouble();
+//   }
+
+//   public void setHoldPos() {
+//     holdPosValue = master.getPosition().getValueAsDouble();
+//   }
+
+//   public void resetEncoderPos() {
+//     master.setPosition(0);
+//   }
+
+//   public boolean isAtSetpoint() {
+//     return Math.abs(getPIDError()) < Constants.ElevatorConstants.SETPOINT_TOLERANCE;
+//   }
+
+//   public boolean getBottomLimits() {
+//     return master.getSupplyCurrent().getValueAsDouble()
+//         > Constants.ElevatorConstants.STATOR_CURRENT_LIMIT;
+//   }
+
+//   public double getEncoderPos() {
+//     return master.getPosition().getValueAsDouble();
+//   }
+
+//   public void setLevelOfElevator(int level) {
+//     double targetPosition =
+//         switch (level) {  // writing 1 here would be intake level and etc.
+//           case 1 -> Constants.ElevatorConstants.INTAKE_LEVEL;
+//           case 2 -> Constants.ElevatorConstants.LEVEL_1;
+//           case 3 -> Constants.ElevatorConstants.LEVEL_2;
+//           case 4 -> Constants.ElevatorConstants.LEVEL_3;
+//           case 5 -> Constants.ElevatorConstants.LEVEL_4;
+//           default -> throw new IllegalArgumentException("Invalid level: " + level);
+//         };
+
+//     holdPosition(targetPosition);
+//     DogLog.log("Elevator Error", "Level: " + level + ", Error: " + getPIDError());
+//   }
+// }
