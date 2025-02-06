@@ -9,6 +9,8 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+
+import dev.doglog.DogLog;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -16,7 +18,6 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.DigitalInput;
 // Simulation imports
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TootsieSlide;
@@ -71,9 +72,9 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   }
 
   private void runTootsieAtRPS(double speed) {
-    SmartDashboard.putBoolean("is it running", true);
+    DogLog.log("is it running", true);
     master.setControl(m_velocity.withVelocity(speed));
-    SmartDashboard.putNumber("VelocityVoltage", master.getMotorVoltage().getValueAsDouble());
+    DogLog.log("VelocityVoltage", master.getMotorVoltage().getValueAsDouble());
     m_flywheelSim.setInputVoltage(master.getSupplyVoltage().getValueAsDouble());
   }
 
@@ -114,11 +115,11 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
     // This method will be called once per scheduler run
     m_flywheelSim.update(0.02);
-    SmartDashboard.putNumber("voltage", master.getMotorVoltage().getValue().magnitude());
-    SmartDashboard.putNumber("SIMvoltage", m_flywheelSim.getInputVoltage());
+    DogLog.log("voltage", master.getMotorVoltage().getValue().magnitude());
+    DogLog.log("SIMvoltage", m_flywheelSim.getInputVoltage());
 
-    SmartDashboard.putNumber("Shooter Speed at RPM", m_flywheelSim.getAngularVelocityRPM());
-    SmartDashboard.putNumber("Flywheel Current", m_flywheelSim.getCurrentDrawAmps());
+    DogLog.log("Shooter Speed at RPM", m_flywheelSim.getAngularVelocityRPM());
+    DogLog.log("Flywheel Current", m_flywheelSim.getCurrentDrawAmps());
   }
 
   @Override

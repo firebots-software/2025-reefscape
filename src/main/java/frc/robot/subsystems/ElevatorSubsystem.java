@@ -152,8 +152,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         newPosition); // Alarming to have this since running this on the robot will lead to
 
     // Log simulation data for debugging
-    SmartDashboard.putNumber("Simulated Position", newPosition);
-    SmartDashboard.putNumber("Simulated Speed", simulatedSpeed);
+    DogLog.log("Simulated Position", newPosition);
+    DogLog.log("Simulated Speed", simulatedSpeed);
   }
 
   public boolean atTargetPosition() {
