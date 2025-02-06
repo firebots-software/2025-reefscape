@@ -22,6 +22,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -44,6 +45,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   private ProfiledPIDController xPidController, yPidController, driverRotationPidController;
   private PIDController choreoX_pid, choreoY_pid, choreoRotation_pid;
   private SwerveDriveState currentState;
+  private GyroStabilizer stabilizer;
 
   public SwerveSubsystem(
       SwerveDrivetrainConstants drivetrainConstants,
@@ -62,6 +64,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         modules);
 
     instance = this;
+    stabilizer = new GyroStabilizer();
 
     if (Utils.isSimulation()) {
       startSimThread();
@@ -284,6 +287,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   public void followTrajectory(SwerveSample sample) {
     // Get the current pose of the robot
     Pose2d pose = getCurrentState().Pose;
+    Translation2d tipVector = stabilizer.getTipVector();
     // Generate the next speeds for the robot
     ChassisSpeeds speeds =
         new ChassisSpeeds(
@@ -378,6 +382,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         "Swerve/CurrentCommand",
         (getCurrentCommand() == null) ? "nothing" : getCurrentCommand().getName());
 
-    GyroStabilizer.getTipVector();
+    stabilizer.getTipVector();
   }
 }
