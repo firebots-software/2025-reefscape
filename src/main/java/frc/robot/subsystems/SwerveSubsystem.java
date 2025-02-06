@@ -34,11 +34,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.util.GyroStabilizer;
+
 import java.util.function.Supplier;
 
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
     implements Subsystem {
 
+  private static SwerveSubsystem instance;
   private ProfiledPIDController xPidController, yPidController, driverRotationPidController;
   private PIDController choreoX_pid, choreoY_pid, choreoRotation_pid;
   private SwerveDriveState currentState;
@@ -58,6 +61,9 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         odometryStandardDeviation,
         visionStandardDeviation,
         modules);
+
+    instance = this;
+
     if (Utils.isSimulation()) {
       startSimThread();
     }
@@ -93,6 +99,13 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND));
     driverRotationPidController.enableContinuousInput(-Math.PI, Math.PI);
     configureAutoBuilder();
+  }
+
+  public static SwerveSubsystem getInstance() {
+    if(instance == null) {
+      throw new Error("Please create one instance of SwerveSubsystem first.");
+    }
+    return instance;
   }
 
   // Values relevant for the simulation
@@ -361,5 +374,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     DogLog.log(
         "Swerve/CurrentCommand",
         (getCurrentCommand() == null) ? "nothing" : getCurrentCommand().getName());
+
+    GyroStabilizer.getTipVector();
   }
 }
