@@ -34,8 +34,7 @@ public class RunFunnelUntilDetection extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    funnelSubsystem.stopFunnel();
-    funnelSubsystem.moveBackFlywheel();
+    // funnelSubsystem.moveBackFlywheel();
     funnelSubsystem.setCoralInFunnel(true);
     funnelSubsystem.maintainCurrentPosition();
   }
