@@ -10,7 +10,6 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANrange;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,8 +36,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     distance = new CANrange(ElevatorConstants.CANRANGE_PORT);
 
-    motor1 = new LoggedTalonFX("subsystems/Elevator/motor1",ElevatorConstants.MOTOR1_PORT);
-    motor2 = new LoggedTalonFX("subsystems/Elevator/motor2",ElevatorConstants.MOTOR2_PORT);
+    motor1 = new LoggedTalonFX("subsystems/Elevator/motor1", ElevatorConstants.MOTOR1_PORT);
+    motor2 = new LoggedTalonFX("subsystems/Elevator/motor2", ElevatorConstants.MOTOR2_PORT);
 
     currentLevel = ElevatorPositions.Intake;
 
@@ -87,12 +86,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     if (distance.isConnected()) {
       master.setPosition(
           this.getToFDistance() * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
-      DogLog.log("subsystems/Elevator/resetElevatorPosition", this.getToFDistance() * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+      DogLog.log(
+          "subsystems/Elevator/resetElevatorPosition",
+          this.getToFDistance() * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
     }
   }
 
   public double getError() {
-    return currentLevel.height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS - master.getPosition().getValueAsDouble();
+    return currentLevel.height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
+        - master.getPosition().getValueAsDouble();
   }
 
   public ElevatorPositions getLevel() {
@@ -107,8 +109,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   private void setPosition(double height) {
     master.setControl(
         new MotionMagicVoltage(
-          height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS));
-    DogLog.log("subsystems/Elevator/elevatorSetpoint(rot)", height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+            height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS));
+    DogLog.log(
+        "subsystems/Elevator/elevatorSetpoint(rot)",
+        height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
 
   public boolean isAtPosition() {
@@ -126,13 +130,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //Time of Flight Sensor
-    DogLog.log("subsystems/Elevator/ToF/Distance",getToFDistance());
-    DogLog.log("subsystems/Elevator/ToF/Connected",distance.isConnected());
+    // Time of Flight Sensor
+    DogLog.log("subsystems/Elevator/ToF/Distance", getToFDistance());
+    DogLog.log("subsystems/Elevator/ToF/Connected", distance.isConnected());
 
     DogLog.log("subsystems/Elevator/isAtPosition", this.isAtPosition());
-    DogLog.log("subsystems/Elevator/currentPosition",currentLevel.getPosition());
-    DogLog.log("subsystems/Elevator/currentHeight",currentLevel.getHeight());
+    DogLog.log("subsystems/Elevator/currentPosition", currentLevel.getPosition());
+    DogLog.log("subsystems/Elevator/currentHeight", currentLevel.getHeight());
     // This method will be called once per scheduler run
   }
 

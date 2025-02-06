@@ -658,11 +658,10 @@ public final class Constants {
       public double getPosition() {
         return this.position;
       }
-      
+
       public double getHeight() {
         return this.height;
       }
-      
     }
   }
 
