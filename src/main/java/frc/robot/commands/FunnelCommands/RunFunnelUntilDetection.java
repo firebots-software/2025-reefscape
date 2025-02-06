@@ -1,6 +1,12 @@
+/*
+This Command spins the Funnel motors until the Coral is detected by the Checkout sensor. At That
+point, the funnel maintains its current position (if the Coral moves the Funnel motors due to
+momentum, then this moves the funnel motors backwards)
+*/
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.FunnelSubsystem;
 
 // import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -34,10 +40,8 @@ public class RunFunnelUntilDetection extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    funnelSubsystem.stopFunnel();
-    funnelSubsystem.moveBackFlywheel();
-    funnelSubsystem.setCoralInFunnel(true);
     funnelSubsystem.maintainCurrentPosition();
+    CoralPosition.setCoralInFunnel(true);
   }
 
   // Returns true when the command should end.

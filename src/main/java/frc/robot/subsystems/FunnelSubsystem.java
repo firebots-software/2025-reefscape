@@ -11,7 +11,6 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -31,7 +30,6 @@ public class FunnelSubsystem extends SubsystemBase {
   private DigitalInput drake;
   private double coralCheckedOutPosition;
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
-  private boolean coralInFunnel;
 
   private FunnelSubsystem() {
     rightMotor = new LoggedTalonFX(FunnelConstants.RIGHT_MOTOR_PORT); // Unique ID for motor1
@@ -79,7 +77,6 @@ public class FunnelSubsystem extends SubsystemBase {
     m2Config.apply(mmc);
 
     coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble();
-    coralInFunnel = true;
   }
 
   public static FunnelSubsystem getInstance() {
@@ -111,12 +108,6 @@ public class FunnelSubsystem extends SubsystemBase {
     rightMotor.stopMotor();
   }
 
-  public void moveBackFlywheel() {
-    // TODO: Fix this bro lmao l bozo lol rofl haha hee hee hee haw
-    double randomAngleTBD = 0.0d;
-    rightMotor.setControl(new PositionVoltage(randomAngleTBD));
-  }
-
   public void reAdjustMotor() {
     rightMotor.setControl(controlRequest.withPosition(coralCheckedOutPosition).withSlot(0));
   }
@@ -146,14 +137,6 @@ public class FunnelSubsystem extends SubsystemBase {
 
   public boolean drakeTripped() {
     return drake.get();
-  }
-
-  public void setCoralInFunnel(boolean coralInFunnel) {
-    this.coralInFunnel = coralInFunnel;
-  }
-
-  public boolean isCoralInFunnel() {
-    return coralInFunnel;
   }
 
   @Override
