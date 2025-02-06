@@ -79,7 +79,7 @@ public class RobotContainer {
     funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
 
     Trigger extraCoral =
-        new Trigger(() -> testerTootsie.coralPresent() && funnelSubsystem.isCoralCheckedIn());
+        new Trigger(() -> tootsieSlideSubsystem.coralPresent() && funnelSubsystem.isCoralCheckedIn());
     extraCoral.onTrue(
         new PullInToControl(funnelSubsystem).andThen(new EjectCoral(funnelSubsystem)));
 
