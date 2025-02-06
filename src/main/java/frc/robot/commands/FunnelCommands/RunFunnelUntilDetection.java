@@ -18,7 +18,6 @@ public class RunFunnelUntilDetection extends Command {
   public RunFunnelUntilDetection(FunnelSubsystem funnelSubsystem, ElevatorSubsystem elevator) {
     this.funnelSubsystem = funnelSubsystem;
     this.elevator = elevator;
-    addRequirements(elevator);
     addRequirements(funnelSubsystem);
   }
 
