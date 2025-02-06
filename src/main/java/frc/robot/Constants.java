@@ -626,12 +626,17 @@ public final class Constants {
     public static final double ACCELERATION = 0.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0; // To-do
     public static final double MAX_POSITIONAL_ERROR = 0.05;
-    public static final double SPROCKET_CIRCUM = 1.751 * Math.PI; // TODO: change 0 to radius/diameter
-    public static final double SPROCKET_GEAR_RATIO = 4 / 1; // TODO
-    public static final double CARRAIGE_UPDUCTION = 5 / 1; // TODO
-    public static final double CONVERSION_FACTOR = SPROCKET_GEAR_RATIO/SPROCKET_CIRCUM * 0.0254; //This is converted to meters
-    public static final double CONVERSION_FACTOR_UP = SPROCKET_GEAR_RATIO/SPROCKET_CIRCUM * 0.0254; //This is converted to meters
-
+    public static final double SPROCKET_CIRCUM_INCHES =
+        1.751 * Math.PI; // TODO: change 0 to radius/diameter
+    public static final double SPROCKET_GEAR_RATIO = 12 / 1; // TODO
+    public static final double CARRAIGE_UPDUCTION = 3 / 1; // TODO
+    // public static final double CONVERSION_FACTOR = SPROCKET_GEAR_RATIO/(SPROCKET_CIRCUM_INCHES *
+    // 0.0254); //This is converted to meters
+    public static final double CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS =
+        (SPROCKET_GEAR_RATIO / CARRAIGE_UPDUCTION)
+            / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
+    public static final double CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE =
+        1 / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on

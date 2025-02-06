@@ -18,12 +18,10 @@ public class ZeroElevator extends Command {
   public void initialize() {
 
     elevatorSubsystem.resetPosition();
-    
   }
 
   @Override
-  public void execute() {
-  }
+  public void execute() {}
 
   @Override
   public void end(boolean interrupted) {}

@@ -10,7 +10,6 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANrange;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -82,10 +81,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void resetPosition() {
-    //TODO: add constant to convert distance to encoder values
+    // TODO: add constant to convert distance to encoder values
     if (distance.isConnected()) {
-      master.setPosition(
-          (getDistance()) * ElevatorConstants.CONVERSION_FACTOR);
+      master.setPosition(this.getDistance() * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
     }
   }
 
@@ -103,7 +101,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void setPosition(double position) {
-    motor1.setControl(new MotionMagicVoltage(position * ElevatorConstants.CONVERSION_FACTOR));
+    motor1.setControl(new MotionMagicVoltage(position * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS));
   }
 
   public boolean isAtPosition() {
@@ -121,7 +119,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     return false;
   }
 
-  public double getDistance(){
+  public double getDistance() {
     return distance.getDistance().getValueAsDouble();
   }
 
@@ -138,7 +136,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Update simulated position based on speed (simplified example)
     double newPosition = currentPosition + simulatedSpeed * 0.02; // Assuming a 20ms loop
-    master.setPosition(newPosition);
+    master.setPosition(newPosition); //Alarming to have this since running this on the robot will lead to  
 
     // Log simulation data for debugging
     SmartDashboard.putNumber("Simulated Position", newPosition);
