@@ -113,11 +113,6 @@ public class FunnelSubsystem extends SubsystemBase {
     rightMotor.stopMotor();
   }
 
-  public void moveBackFlywheel(double degrees) {
-    // TODO: Fix this bro lmao l bozo lol rofl haha hee hee hee haw
-    rightMotor.setControl(controlRequest.withPosition(degrees));
-  }
-
   public void reAdjustMotor() {
     rightMotor.setControl(controlRequest.withPosition(coralCheckedOutPosition).withSlot(0));
   }

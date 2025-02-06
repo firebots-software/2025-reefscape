@@ -43,7 +43,6 @@ public class TransferPieceBetweenFunnelAndElevator extends Command {
   @Override
   public void end(boolean interrupted) {
     CoralPosition.setCoralInFunnel(false);
-    CoralPosition.setCoralInTootsieSlide(true);
     funnelSubsystem.stopFunnel();
     tootsieSlideSubsystem.stopTootsie();
   }
