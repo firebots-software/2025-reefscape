@@ -16,6 +16,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,7 +38,9 @@ import java.util.function.Supplier;
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
     implements Subsystem {
 
-  private ProfiledPIDController xPidController, yPidController, driverRotationPidController;
+  private ProfiledPIDController xProfiledPIDController, yProfiledPIDController, headingProfiledPIDController;
+  private PIDController xPIDController, yPIDController, headingPIDController;
+
   private SwerveDriveState currentState;
 
   public SwerveSubsystem(
@@ -61,14 +64,19 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     currentState = getCurrentState();
 
-    xPidController =
+    xPIDController = new PIDController(8, 0, 0);
+    yPIDController = new PIDController(8, 0, 0);
+    headingPIDController = new PIDController(2.5, 0, 0);
+    headingPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+    xProfiledPIDController =
         new ProfiledPIDController(
             5.5,
             0,
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
-    yPidController =
+    yProfiledPIDController =
         new ProfiledPIDController(
             5.5,
             0,
@@ -76,7 +84,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
 
-    driverRotationPidController =
+    headingProfiledPIDController =
         new ProfiledPIDController(
             2.5,
             0,
@@ -84,7 +92,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE,
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND));
-    driverRotationPidController.enableContinuousInput(-Math.PI, Math.PI);
+    headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     configureAutoBuilder();
   }
 
@@ -121,6 +129,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   /** Swerve request to apply during robot-centric path following */
   private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds =
       new SwerveRequest.ApplyRobotSpeeds();
+  private final SwerveRequest.ApplyFieldSpeeds m_pathApplyFieldSpeeds =
+      new SwerveRequest.ApplyFieldSpeeds();
 
   private void configureAutoBuilder() {
     try {
@@ -153,10 +163,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   }
 
   // Resets PID controllers
-  public void resetPIDs() {
-    xPidController.reset(currentState.Pose.getX());
-    yPidController.reset(currentState.Pose.getY());
-    driverRotationPidController.reset(currentState.Pose.getRotation().getRadians());
+  public void resetProfiledPIDs() {
+    xProfiledPIDController.reset(currentState.Pose.getX());
+    yProfiledPIDController.reset(currentState.Pose.getY());
+    headingProfiledPIDController.reset(currentState.Pose.getRotation().getRadians());
   }
 
   /* Swerve requests to apply during SysId characterization */
@@ -235,19 +245,27 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     return currentState.Speeds;
   }
 
-  public void setChassisSpeeds(ChassisSpeeds speeds) {
+  public void setRobotSpeeds(ChassisSpeeds speeds) {
     setControl(m_pathApplyRobotSpeeds.withSpeeds(speeds));
   }
 
+  public void setFieldSpeeds(ChassisSpeeds speeds) {
+    setControl(m_pathApplyFieldSpeeds.withSpeeds(speeds));
+  }
+
+  public ChassisSpeeds getCurrentFieldSpeeds() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(getCurrentRobotChassisSpeeds(), currentState.Pose.getRotation());
+  }
+
   public ChassisSpeeds calculateRequiredChassisSpeeds(Pose2d targetPose) {
-    double xFeedback = xPidController.calculate(currentState.Pose.getX(), targetPose.getX());
-    double yFeedback = yPidController.calculate(currentState.Pose.getY(), targetPose.getY());
+    double xFeedback = xProfiledPIDController.calculate(currentState.Pose.getX(), targetPose.getX());
+    double yFeedback = yProfiledPIDController.calculate(currentState.Pose.getY(), targetPose.getY());
     double thetaFeedback =
-        driverRotationPidController.calculate(
+        headingProfiledPIDController.calculate(
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-    return ChassisSpeeds.fromFieldRelativeSpeeds(
-        xFeedback, yFeedback, thetaFeedback, currentState.Pose.getRotation());
+    return new ChassisSpeeds(
+        xFeedback, yFeedback, thetaFeedback);
   }
 
   /**
