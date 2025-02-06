@@ -5,6 +5,8 @@
 package frc.robot.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.ElevatorIntakeLevel;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -27,9 +29,8 @@ public class LoadAndPutUp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    addCommands(new RunFunnelUntilDetection(funnel));
-    addCommands(new ElevatorIntakeLevel(elevator, funnel));
+    addCommands(new ParallelCommandGroup(new RunFunnelUntilDetection(funnel), new ElevatorIntakeLevel(elevator, funnel)));
     addCommands(new TransferPieceBetweenFunnelAndElevator(elevator, funnel, tootsieSlideSubsystem));
     addCommands(new SetElevatorLevel(elevator, level));
-  }
+    }
 }

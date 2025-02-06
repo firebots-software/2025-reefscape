@@ -40,7 +40,7 @@ public class RobotContainer {
 
   TootsieSlideSubsystem testerTootsie = TootsieSlideSubsystem.getInstance();
   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
+  ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
   private BooleanSupplier redside = () -> redAlliance;
@@ -73,6 +73,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Joystick suppliers,
     funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    elevatorSubsystem.setDefaultCommand(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
     funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem));
 
@@ -146,10 +147,10 @@ public class RobotContainer {
     rightBumper.onFalse(new ArmToAngleCmd(() -> 45d, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
-    joystick.povUp().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L1));
-    joystick.povRight().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L2));
-    joystick.povDown().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L3));
-    joystick.povLeft().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L4));
+    joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
