@@ -26,7 +26,8 @@ public class LoadAndPutUp extends SequentialCommandGroup {
       ElevatorPositions level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ElevatorIntakeLevel(elevator, funnel).andThen(new RunFunnelUntilDetection(funnel)));
+    addCommands(
+        new ElevatorIntakeLevel(elevator, funnel).andThen(new RunFunnelUntilDetection(funnel)));
     addCommands(new TransferPieceBetweenFunnelAndElevator(elevator, funnel, tootsieSlideSubsystem));
     addCommands(new SetElevatorLevel(elevator, level));
   }
