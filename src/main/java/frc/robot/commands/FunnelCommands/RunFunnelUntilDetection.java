@@ -19,11 +19,11 @@ import frc.robot.subsystems.FunnelSubsystem;
  */
 public class RunFunnelUntilDetection extends Command {
   private FunnelSubsystem funnelSubsystem;
-  private ElevatorSubsystem elevator;
+  private ElevatorSubsystem elevatorSubsystem;
 
   public RunFunnelUntilDetection(FunnelSubsystem funnelSubsystem, ElevatorSubsystem elevator) {
     this.funnelSubsystem = funnelSubsystem;
-    this.elevator = elevator;
+    this.elevatorSubsystem = elevator;
     addRequirements(funnelSubsystem);
   }
 
@@ -36,7 +36,7 @@ public class RunFunnelUntilDetection extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (elevator.isAtPosition()) {
+    if (elevatorSubsystem.isAtPosition()) {
       funnelSubsystem.spinFunnel();
     } else {
       funnelSubsystem.maintainCurrentPosition();
