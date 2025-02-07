@@ -8,7 +8,6 @@ package frc.robot.commands.FunnelCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.CoralPosition;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 
 // import edu.wpi.first.wpilibj2.command.CommandBase;
