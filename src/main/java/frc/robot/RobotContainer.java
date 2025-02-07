@@ -27,6 +27,7 @@ import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
 import frc.robot.commands.FunnelCommands.EjectCoral;
 import frc.robot.commands.FunnelCommands.PullInToControl;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetection;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
