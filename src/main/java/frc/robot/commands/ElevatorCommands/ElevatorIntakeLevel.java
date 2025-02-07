@@ -12,9 +12,9 @@ import frc.robot.subsystems.FunnelSubsystem;
 /** An example command that uses an example subsystem. */
 public class ElevatorIntakeLevel extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ElevatorSubsystem m_subsystem;
+  private final ElevatorSubsystem elevatorSubsystem;
 
-  private final FunnelSubsystem funnel;
+  private final FunnelSubsystem funnelSubsystem;
 
   /**
    * Creates a new ExampleCommand.
@@ -22,10 +22,10 @@ public class ElevatorIntakeLevel extends Command {
    * @param subsystem The subsystem used by this command.
    */
   public ElevatorIntakeLevel(ElevatorSubsystem subsystem, FunnelSubsystem funnel) {
-    m_subsystem = subsystem;
-    this.funnel = funnel;
+    elevatorSubsystem = subsystem;
+    this.funnelSubsystem = funnel;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_subsystem, funnel);
+    addRequirements(elevatorSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -35,10 +35,10 @@ public class ElevatorIntakeLevel extends Command {
   // Called every time the scheduler runs while the command is scheduled.
 
   public void execute() {
-    if (!funnel.isCoralCheckedOut()) {
-      m_subsystem.elevateTo(ElevatorPositions.Intake);
+    if (!funnelSubsystem.isCoralCheckedOut()) {
+      elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
     } else {
-      m_subsystem.elevateTo(ElevatorPositions.L1);
+      elevatorSubsystem.elevateTo(ElevatorPositions.L1);
     }
   }
 
@@ -49,6 +49,6 @@ public class ElevatorIntakeLevel extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_subsystem.atTargetPosition();
+    return elevatorSubsystem.atTargetPosition();
   }
 }
