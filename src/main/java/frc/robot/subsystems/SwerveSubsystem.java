@@ -38,7 +38,9 @@ import java.util.function.Supplier;
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
     implements Subsystem {
 
-  private ProfiledPIDController xProfiledPIDController, yProfiledPIDController, headingProfiledPIDController;
+  private ProfiledPIDController xProfiledPIDController,
+      yProfiledPIDController,
+      headingProfiledPIDController;
   private PIDController xRegularPIDController, yRegularPIDController, headingRegularPIDController;
 
   private SwerveDriveState currentState;
@@ -263,14 +265,15 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   }
 
   public ChassisSpeeds calculateRequiredChassisSpeeds(Pose2d targetPose) {
-    double xFeedback = xProfiledPIDController.calculate(currentState.Pose.getX(), targetPose.getX());
-    double yFeedback = yProfiledPIDController.calculate(currentState.Pose.getY(), targetPose.getY());
+    double xFeedback =
+        xProfiledPIDController.calculate(currentState.Pose.getX(), targetPose.getX());
+    double yFeedback =
+        yProfiledPIDController.calculate(currentState.Pose.getY(), targetPose.getY());
     double thetaFeedback =
         headingProfiledPIDController.calculate(
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-    return new ChassisSpeeds(
-        xFeedback, yFeedback, thetaFeedback);
+    return new ChassisSpeeds(xFeedback, yFeedback, thetaFeedback);
   }
 
   /**
