@@ -287,7 +287,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   public void followTrajectory(SwerveSample sample) {
     // Get the current pose of the robot
     Pose2d pose = getCurrentState().Pose;
-    Translation2d tipVector = stabilizer.getTipVector();
+    
     // Generate the next speeds for the robot
     ChassisSpeeds speeds =
         new ChassisSpeeds(

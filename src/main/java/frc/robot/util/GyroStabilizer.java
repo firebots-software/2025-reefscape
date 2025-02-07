@@ -44,8 +44,21 @@ public class GyroStabilizer {
    * followTrajectory() method in SwerveSubsystem to apply a ChassisSpeeds to the robot. That's why we need to use the
    * "tip vector" calculated in this class to adjust the ChassisSpeeds in followTrajectory() in  order to implement tip prevention
    * during Auto.
+   * 
+   * UPDATE: We should NOT implement Gyro Stabilization into Auto, because:
+   * 1. It will interfere with Choreo's timed Auto and could negatively impact the Auto performance
+   * 2. We will be testing Auto a lot, and if we see that the robot keeps tipping, we should tune the paths, instead of relying
+   *    on the Gyro Stabilization
    */
 
+   /**
+    * This method looks at the robot's current roll and pitch, and calculates a robot-relative 2D "tipping vector"
+    * representing the robot's direction of tipping. If the robot is completely flat, the tipping vector
+    * will be <0, 0>. If the robot is tipping 30 degrees forwards, it will be <0.5, 0>. If the robot is
+    * tipping 45 derees to the south-west, it will be <-0.7, -0.7>. So, a tipping vector's positive X direction
+    * corresponds to the front of the robot, and its positive Y direction corresponds to the left of the robot.
+    * @return A Translation2d, which is the "tipping vector" described above.
+    */
   public Translation2d getTipVector() {
     double roll = pigeon.getRotation3d().getX() - rollOffset;
     double pitch = pigeon.getRotation3d().getY() - pitchOffset;
