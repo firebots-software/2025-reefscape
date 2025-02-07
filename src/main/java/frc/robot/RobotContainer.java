@@ -29,6 +29,8 @@ import frc.robot.commands.FunnelCommands.PullInToControl;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetection;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
