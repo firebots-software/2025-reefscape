@@ -25,6 +25,8 @@ import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -155,7 +157,7 @@ public class RobotContainer {
         .a()
         .whileTrue(
             new SetElevatorLevel(
-                m_ElevatorSubsystem,
+                ElevatorSubsystem.getInstance(),
                 ElevatorPositions.safePosition)); // change safepos in constants
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
