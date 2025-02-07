@@ -21,8 +21,8 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 public class LoadAndPutUp extends SequentialCommandGroup {
 
   public LoadAndPutUp(
-      ElevatorSubsystem elevator,
-      FunnelSubsystem funnel,
+      ElevatorSubsystem elevatorSubsystem,
+      FunnelSubsystem funnelSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       ElevatorPositions level) {
     // Add your commands in the addCommands() call, e.g.
@@ -30,8 +30,8 @@ public class LoadAndPutUp extends SequentialCommandGroup {
 
     addCommands(
         new ParallelCommandGroup(
-            new RunFunnelUntilDetection(funnel), new ElevatorIntakeLevel(elevator, funnel)));
-    addCommands(new TransferPieceBetweenFunnelAndElevator(elevator, funnel, tootsieSlideSubsystem));
-    addCommands(new SetElevatorLevel(elevator, level));
+            new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem), new ElevatorIntakeLevel(elevatorSubsystem, funnelSubsystem)));
+    addCommands(new TransferPieceBetweenFunnelAndElevator(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
+    addCommands(new SetElevatorLevel(elevatorSubsystem, level));
   }
 }
