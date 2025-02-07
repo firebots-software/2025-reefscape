@@ -87,7 +87,7 @@ public class FunnelSubsystem extends SubsystemBase {
   }
 
   public double getAbsolutePositionalError() {
-    if (rightMotor.getControlMode().getValue().equals(ControlModeValue.PositionVoltage)) {
+    if (rightMotor.getControlMode().getValue().equals(ControlModeValue.MotionMagicVoltage)) {
       return Math.abs(rightMotor.getPosition().getValueAsDouble() - coralCheckedOutPosition);
     } else {
       return 0.0;
