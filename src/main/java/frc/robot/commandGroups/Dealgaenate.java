@@ -22,7 +22,8 @@ public class Dealgaenate extends ParallelCommandGroup {
     // TODO: To whomever reads this, have fun finding actual numbers;
     // Fe fi fo fum, i proclaim that ritvik's a bum
     addCommands(new ArmToAngleCmd(Constants.Arm.EXTENDED_ANGLE, arm));
-    addCommands(new SpinFlywheel(arm, Constants.Arm.DEALGAENATE_SPEED_ZOOM_ZOOM));
-    addCommands(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, arm));
+    addCommands(
+        new SpinFlywheel(arm, Constants.Arm.DEALGAENATE_SPEED_ZOOM_ZOOM)
+            .andThen(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, arm)));
   }
 }
