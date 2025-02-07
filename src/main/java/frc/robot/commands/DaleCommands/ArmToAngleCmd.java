@@ -3,7 +3,6 @@ package frc.robot.commands.DaleCommands;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
-import java.util.function.DoubleSupplier;
 
 public class ArmToAngleCmd extends Command {
   public ArmToAngleCmd(double angle, ArmSubsystem arm) {
