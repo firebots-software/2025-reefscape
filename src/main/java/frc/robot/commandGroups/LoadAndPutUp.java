@@ -30,8 +30,11 @@ public class LoadAndPutUp extends SequentialCommandGroup {
 
     addCommands(
         new ParallelCommandGroup(
-            new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem), new ElevatorIntakeLevel(elevatorSubsystem, funnelSubsystem)));
-    addCommands(new TransferPieceBetweenFunnelAndElevator(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
+            new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem),
+            new ElevatorIntakeLevel(elevatorSubsystem, funnelSubsystem)));
+    addCommands(
+        new TransferPieceBetweenFunnelAndElevator(
+            elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     addCommands(new SetElevatorLevel(elevatorSubsystem, level));
   }
 }
