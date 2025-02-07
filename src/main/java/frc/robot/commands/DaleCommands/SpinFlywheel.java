@@ -19,7 +19,6 @@ public class SpinFlywheel extends Command {
     armPlusFlywheel.spinFlywheel(flywheelSpeed); // Spin the flywheel at desired speed
   }
 
-
   @Override
   public void execute() {
     armPlusFlywheel.spinFlywheel(flywheelSpeed); // Spin the flywheel at desired speed

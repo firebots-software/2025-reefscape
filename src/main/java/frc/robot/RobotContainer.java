@@ -149,8 +149,8 @@ public class RobotContainer {
                             new Rotation2d(
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
     Trigger rightBumper = joystick.rightBumper();
-    // rightBumper.onTrue(new ArmToAngleCmd(90d, ArmSubsystem.getInstance()));
-    // rightBumper.onFalse(new ArmToAngleCmd(45d, ArmSubsystem.getInstance()));
+    // rightBumper.onTrue(new ArmToAngleCmd(90d, armSubsystem));
+    // rightBumper.onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, armSubsystem));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
