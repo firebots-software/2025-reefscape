@@ -160,8 +160,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean checkCurrent() {
     double current = armMotor.getTorqueCurrent().getValue().magnitude();
-
-    if (current < -10) {
+    //TODO: Fix the zeroing current possibly, nah scratch that, most likely we will need to change ts
+    if (current < Constants.Arm.ZERO_CURRENT) {
       armMotor.disable();
       return true;
     }
