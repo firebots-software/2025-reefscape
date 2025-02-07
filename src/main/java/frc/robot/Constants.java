@@ -613,6 +613,7 @@ public final class Constants {
   public static class ElevatorConstants {
     public static final int MOTOR1_PORT = 0; // TODO: change port
     public static final int MOTOR2_PORT = 0; // TODO: change port
+    public static final int CANRANGE_PORT = 0; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
@@ -626,9 +627,17 @@ public final class Constants {
     public static final double ACCELERATION = 0.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0; // To-do
     public static final double MAX_POSITIONAL_ERROR = 0.05;
-    public static final double PULLEY_CIRCUM = 2 * Math.PI * 0; // TODO: change 0 to radius/diameter
-    public static final double PULLEY_GEAR_RATIO = 1 / 5; // TODO
-    public static final double CONVERSION_FACTOR = PULLEY_CIRCUM * PULLEY_GEAR_RATIO;
+    public static final double SPROCKET_CIRCUM_INCHES =
+        1.751 * Math.PI; // TODO: change 0 to radius/diameter
+    public static final double SPROCKET_GEAR_RATIO = 12 / 1; // TODO
+    public static final double CARRAIGE_UPDUCTION = 3 / 1; // TODO
+    // public static final double CONVERSION_FACTOR = SPROCKET_GEAR_RATIO/(SPROCKET_CIRCUM_INCHES *
+    // 0.0254); //This is converted to meters
+    public static final double CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS =
+        (SPROCKET_GEAR_RATIO / CARRAIGE_UPDUCTION)
+            / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
+    public static final double CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE =
+        1 / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
@@ -648,8 +657,11 @@ public final class Constants {
       }
 
       public double getPosition() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
+        return this.position;
+      }
+
+      public double getHeight() {
+        return this.height;
       }
     }
   }

@@ -38,9 +38,9 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  TootsieSlideSubsystem testerTootsie = TootsieSlideSubsystem.getInstance();
+  TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
+  ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
   private BooleanSupplier redside = () -> redAlliance;
@@ -74,7 +74,7 @@ public class RobotContainer {
     // Joystick suppliers,
     funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem));
+    funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
@@ -146,10 +146,10 @@ public class RobotContainer {
     rightBumper.onFalse(new ArmToAngleCmd(() -> 45d, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
-    joystick.povUp().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L1));
-    joystick.povRight().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L2));
-    joystick.povDown().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L3));
-    joystick.povLeft().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L4));
+    joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
     joystick
         .a()
