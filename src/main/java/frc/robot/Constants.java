@@ -119,7 +119,7 @@ public final class Constants {
     public static final double MOTIONMAGIC_KV = 36; // MotionMagic Cruise Velocity in RPS of the arm
     public static final double MOTIONMAGIC_KA =
         2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
-    public static final double ZERO_CURRENT = -10;
+    public static final double ZERO_CURRENT = 10;
     public static final double DEALGAENATE_SPEED_ZOOM_ZOOM = 0;
     public static final double EXTENDED_ANGLE = 0;
     public static final double RETRACTED_ANGLE = 0;
