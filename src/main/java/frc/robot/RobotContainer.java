@@ -23,7 +23,7 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilDetection;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -74,7 +74,7 @@ public class RobotContainer {
     // Joystick suppliers,
     funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
+    funnelCheckin.onTrue(new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
