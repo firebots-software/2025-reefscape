@@ -17,10 +17,10 @@ import frc.robot.subsystems.FunnelSubsystem;
  *
  * @param subsystem The subsystem used by this command.
  */
-public class RunFunnelUntilDetection extends Command {
+public class RunFunnelUntilDetectionQuick extends Command {
   private FunnelSubsystem funnelSubsystem;
 
-  public RunFunnelUntilDetection(FunnelSubsystem funnelSubsystem) {
+  public RunFunnelUntilDetectionQuick(FunnelSubsystem funnelSubsystem) {
     this.funnelSubsystem = funnelSubsystem;
     addRequirements(funnelSubsystem);
   }
