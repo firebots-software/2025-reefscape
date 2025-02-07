@@ -6,14 +6,14 @@ import frc.robot.subsystems.ArmSubsystem;
 import java.util.function.DoubleSupplier;
 
 public class ArmToAngleCmd extends Command {
-  public ArmToAngleCmd(DoubleSupplier angle, ArmSubsystem arm) {
+  public ArmToAngleCmd(double angle, ArmSubsystem arm) {
     this.angle = angle;
     this.arm = arm;
     addRequirements(arm);
   }
 
   private final ArmSubsystem arm;
-  private final DoubleSupplier angle;
+  private final double angle;
   private double tolerance = 5;
 
   @Override
@@ -21,8 +21,8 @@ public class ArmToAngleCmd extends Command {
 
   @Override
   public void execute() {
-    DogLog.log("Running to target angle: ", angle.getAsDouble());
-    arm.setPosition(angle.getAsDouble());
+    DogLog.log("Running to target angle: ", angle);
+    arm.setPosition(angle);
   }
 
   @Override
