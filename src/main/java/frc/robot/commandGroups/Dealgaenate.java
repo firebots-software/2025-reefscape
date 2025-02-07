@@ -18,12 +18,11 @@ public class Dealgaenate extends ParallelCommandGroup {
   public Dealgaenate(ArmSubsystem arm) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    
-    // TODO: To whomever reads this, have fun finding actual numbers; 
-    //Fe fi fo fum, i proclaim that ritvik's a bum
+
+    // TODO: To whomever reads this, have fun finding actual numbers;
+    // Fe fi fo fum, i proclaim that ritvik's a bum
     addCommands(new ArmToAngleCmd(Constants.Arm.EXTENDED_ANGLE, arm));
     addCommands(new SpinFlywheel(arm, Constants.Arm.DEALGAENATE_SPEED_ZOOM_ZOOM));
     addCommands(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, arm));
-
   }
 }

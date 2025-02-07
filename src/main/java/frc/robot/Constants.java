@@ -109,7 +109,7 @@ public final class Constants {
     public static final int LT_PORT = 1; // Left Top motor
     public static final int LB_PORT = 11; // Left Bottom motor
     public static final int ENCODER_PORT = 0; // subject to change
-    //public static final int ENCODER_PORT = 0; // subject to change
+    // public static final int ENCODER_PORT = 0; // subject to change
 
     public static final double CURRENT_LIMIT = 8.0;
     public static final double S0C_KP = 1.0;
