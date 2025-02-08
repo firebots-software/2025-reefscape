@@ -23,16 +23,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import frc.robot.subsystems.VisionSystem;
 import java.util.function.Supplier;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -65,6 +65,8 @@ public class RobotContainer {
     configureBindings();
   }
 
+
+  // TODO: Uncomment when mechanisms arrive on the robot:
   //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
   //   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
   //   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -90,6 +92,7 @@ public class RobotContainer {
 
 
   private void configureBindings() {
+    // TODO: Uncomment when mechanisms arrive on the robot:
     // Joystick suppliers,
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
@@ -116,6 +119,7 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
+    // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.rightBumper().whileTrue(new
     // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
 
@@ -169,20 +173,18 @@ public class RobotContainer {
         new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
+    // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
     // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
-    joystick
-        .a()
-        .whileTrue(
-            new SetElevatorLevel(
-                ElevatorSubsystem.getInstance(),
-                ElevatorPositions.safePosition)); // change safepos in constants
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+    // joystick
+    //     .a()
+    //     .whileTrue(
+    //         new SetElevatorLevel(
+    //             elevatorSubsystem,
+    //             ElevatorPositions.safePosition)); // change safepos in constants
   }
 
   public static void setAlliance() {
