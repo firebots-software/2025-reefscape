@@ -9,9 +9,8 @@ import static edu.wpi.first.units.Units.*;
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
-import dev.doglog.DogLog;
-
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,7 +22,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -169,21 +167,21 @@ public class RobotContainer {
 
     // rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
 
-    rightBumper.onFalse(
-        new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
-    joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
+    // rightBumper.onFalse(
+    //     new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
+    // joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
     // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
-    joystick
-        .a()
-        .whileTrue(
-            new SetElevatorLevel(
-                ElevatorSubsystem.getInstance(),
-                ElevatorPositions.safePosition)); // change safepos in constants
+    // joystick
+    //     .a()
+    //     .whileTrue(
+    //         new SetElevatorLevel(
+    //             ElevatorSubsystem.getInstance(),
+    //             ElevatorPositions.safePosition)); // change safepos in constants
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
@@ -203,10 +201,8 @@ public class RobotContainer {
     routine
         .active()
         .onTrue(
-            (new SmartDashboardCmd("auto routine started", "yes")).andThen(
-            routine
-                .trajectory("BSTART-L2")
-                .resetOdometry())
+            (new SmartDashboardCmd("auto routine started", "yes"))
+                .andThen(routine.trajectory("BSTART-L2").resetOdometry())
                 .andThen(routine.trajectory("BSTART-L2").cmd())
                 .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
                 .andThen(routine.trajectory("L2-BHPS").cmd())
