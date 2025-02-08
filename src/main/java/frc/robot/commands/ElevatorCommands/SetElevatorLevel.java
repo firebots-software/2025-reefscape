@@ -20,7 +20,7 @@ public class SetElevatorLevel extends Command {
 
   @Override
   public void execute() {
-    elevatorSubsystem.elevate(pos);
+    elevatorSubsystem.elevateTo(pos);
 
     // so depending on height of the elvator acceleration is less (im sorry code gods i made a
     // constant not actaully constant please forgive me)
