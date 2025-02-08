@@ -107,14 +107,19 @@ public class FunnelSubsystem extends SubsystemBase {
     runFunnelAtRPS(Constants.FunnelConstants.SPEED_RPS);
   }
 
+  public void spinBackFast(){
+    rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
+  }
+
   public void stopFunnel() {
     rightMotor.stopMotor();
   }
 
-  public void moveBackFlywheel() {
+
+  public void moveBackFlywheel(double degrees) {
     // TODO: Fix this bro lmao l bozo lol rofl haha hee hee hee haw
-    double randomAngleTBD = 0.0d;
-    rightMotor.setControl(new PositionVoltage(randomAngleTBD));
+   
+    rightMotor.setControl(controlRequest.withPosition(degrees));
   }
 
   public void reAdjustMotor() {
@@ -135,7 +140,6 @@ public class FunnelSubsystem extends SubsystemBase {
   public void spinBackSlowly() {
     rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
-
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
   }
@@ -151,6 +155,8 @@ public class FunnelSubsystem extends SubsystemBase {
   public void setCoralInFunnel(boolean coralInFunnel) {
     this.coralInFunnel = coralInFunnel;
   }
+
+
 
   public boolean isCoralInFunnel() {
     return coralInFunnel;

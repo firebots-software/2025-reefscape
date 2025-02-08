@@ -1,7 +1,9 @@
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
 
 // import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -34,10 +36,14 @@ public class RunFunnelUntilDetection extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+ 
+
     funnelSubsystem.stopFunnel();
-    funnelSubsystem.moveBackFlywheel();
+    funnelSubsystem.moveBackFlywheel(Constants.FunnelConstants.PULL_IN_CORAL_SLIGHTLY_ROTATIONS);
     funnelSubsystem.setCoralInFunnel(true);
     funnelSubsystem.maintainCurrentPosition();
+
+
   }
 
   // Returns true when the command should end.

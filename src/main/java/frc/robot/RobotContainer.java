@@ -23,6 +23,8 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
+import frc.robot.commands.FunnelCommands.EjectCoral;
+import frc.robot.commands.FunnelCommands.PullInToControl;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetection;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
@@ -75,6 +77,9 @@ public class RobotContainer {
     funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
     funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem));
+
+    Trigger extraCoral = new Trigger(() -> testerTootsie.coralPresent() && funnelSubsystem.isCoralCheckedIn());
+    extraCoral.onTrue(new PullInToControl(funnelSubsystem).andThen(new EjectCoral(funnelSubsystem)));
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
