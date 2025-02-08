@@ -6,42 +6,32 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-
-import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-import frc.robot.subsystems.VisionSystem;
-import java.util.function.Supplier;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
-
-
 
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
@@ -54,17 +44,14 @@ public class RobotContainer {
     logger.telemeterize(driveTrain.getState());
     Pose2d camPose = visionFront.getPose2d();
     Pose2d camPose2 = visionBack.getPose2d();
-    if(camPose != null || camPose2 != null){
+    if (camPose != null || camPose2 != null) {
       logger.logVisionPose(VisionSystem.getAverageForOffBotTesting(camPose, camPose2));
     }
-    
-    
   }
 
   public RobotContainer() {
     configureBindings();
   }
-
 
   // TODO: Uncomment when mechanisms arrive on the robot:
   //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
@@ -89,8 +76,6 @@ public class RobotContainer {
           Constants.Swerve.BackLeft,
           Constants.Swerve.BackRight);
 
-
-
   private void configureBindings() {
     // TODO: Uncomment when mechanisms arrive on the robot:
     // Joystick suppliers,
@@ -108,7 +93,6 @@ public class RobotContainer {
                     ? 0d
                     : 1d; // slowmode when left shoulder is pressed, otherwise fast
 
-                    
     SwerveJoystickCommand swerveJoystickCommand =
         new SwerveJoystickCommand(
             frontBackFunction,

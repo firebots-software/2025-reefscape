@@ -134,7 +134,7 @@ public class Telemetry {
       m_moduleTargetsArray[i * 2 + 1] = state.ModuleTargets[i].speedMetersPerSecond;
     }
 
-   //SignalLogger.writeDoubleArray("DriveState/Pose", state.Pose);
+    // SignalLogger.writeDoubleArray("DriveState/Pose", state.Pose);
     SignalLogger.writeDoubleArray("DriveState/ModuleStates", m_moduleStatesArray);
     SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
     SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
@@ -172,15 +172,15 @@ public class Telemetry {
 
   public void logVisionPose(Pose2d visionPose) {
 
-      m_visionPoseArray[0] = visionPose.getX();
-      m_visionPoseArray[1] = visionPose.getY();
-      m_visionPoseArray[2] = visionPose.getRotation().getDegrees();
+    m_visionPoseArray[0] = visionPose.getX();
+    m_visionPoseArray[1] = visionPose.getY();
+    m_visionPoseArray[2] = visionPose.getRotation().getDegrees();
 
-      wizonPose.set(visionPose);
+    wizonPose.set(visionPose);
 
-      SignalLogger.writeDoubleArray("VisionData/Pose", m_visionPoseArray);
-      fieldTypePub.set("Field2d");
-      fieldPub.set(m_visionPoseArray);
+    SignalLogger.writeDoubleArray("VisionData/Pose", m_visionPoseArray);
+    fieldTypePub.set("Field2d");
+    fieldPub.set(m_visionPoseArray);
   }
 
   public void logVisionPose(Pose3d visionPose) {
