@@ -37,7 +37,8 @@ import java.util.function.DoubleSupplier;
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
-
+  
+  //TODO: Uncomment when mechanisms arrive on the robot:
   //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
   //   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
   //   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -74,6 +75,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    //TODO: Uncomment when mechanisms arrive on the robot:
     // Joystick suppliers,
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
@@ -102,7 +104,8 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
-
+    
+    //TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.rightBumper().whileTrue(new
     // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
 
@@ -154,6 +157,7 @@ public class RobotContainer {
     // rightBumper.onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, armSubsystem));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
+    //TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
@@ -165,9 +169,6 @@ public class RobotContainer {
     //         new SetElevatorLevel(
     //             elevatorSubsystem,
     //             ElevatorPositions.SafePos)); // change safepos in constants
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
   }
 
   public static void setAlliance() {
