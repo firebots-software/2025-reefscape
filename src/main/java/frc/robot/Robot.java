@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
     double backdistToAprilTag =
     visionBack.gAprilTagFieldLayout().getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
         .get()
-        .getTranslation()
+        .getTranslation() 
         .getDistance(
             new Translation3d(
                 driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
