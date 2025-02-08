@@ -9,6 +9,8 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -22,6 +24,108 @@ import edu.wpi.first.units.measure.*;
 public final class Constants {
   public static class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
+  }
+
+  public static class Landmarks {
+    // midline constant
+    public static final double MIDLINE_X = 8.774;
+
+    // blude side
+    public static final Translation2d[] leftBranchesBlue = {
+      new Translation2d(3.7084, 4.191),
+      new Translation2d(3.95732, 3.4328608),
+      new Translation2d(4.736846, 3.2685736),
+      new Translation2d(5.2689506, 3.861562),
+      new Translation2d(5.0214276, 4.6188884),
+      new Translation2d(4.2418254, 4.783201)
+    };
+
+    // blue side
+    public static final Translation2d[] rightBranchesBlue = {
+      new Translation2d(3.7085778, 3.861562),
+      new Translation2d(4.2412666, 3.267583),
+      new Translation2d(5.0220118, 3.4318702),
+      new Translation2d(5.2700936, 4.1901872),
+      new Translation2d(4.7374048, 4.7841916),
+      new Translation2d(3.9566596, 4.619879)
+    };
+
+    public static final Translation2d[] rightBranchesRed = {
+      new Translation2d(13.839825, 4.191),
+      new Translation2d(13.590905, 3.4328608),
+      new Translation2d(12.811379, 3.2685736),
+      new Translation2d(12.2792744, 3.861562),
+      new Translation2d(12.5267974, 4.6188884),
+      new Translation2d(13.3063996, 4.783201)
+    };
+
+    // blue side
+    public static final Translation2d[] leftBranchesRed = {
+      new Translation2d(13.8396472, 3.861562),
+      new Translation2d(13.3069584, 3.267583),
+      new Translation2d(12.5262132, 3.4318702),
+      new Translation2d(12.2781314, 4.1901872),
+      new Translation2d(12.8108202, 4.7841916),
+      new Translation2d(13.5915654, 4.619879)
+    };
+
+    public static final Rotation2d[] reefFacingAngleBlue = {
+      new Rotation2d(Degrees.of(0)),
+      new Rotation2d(Degrees.of(60)),
+      new Rotation2d(Degrees.of(120)),
+      new Rotation2d(Degrees.of(180)),
+      new Rotation2d(Degrees.of(-120)),
+      new Rotation2d(Degrees.of(-60))
+    };
+
+    public static final Rotation2d[] reefFacingAngleRed = {
+      new Rotation2d(Degrees.of(180)),
+      new Rotation2d(Degrees.of(120)),
+      new Rotation2d(Degrees.of(60)),
+      new Rotation2d(Degrees.of(0)),
+      new Rotation2d(Degrees.of(-60)),
+      new Rotation2d(Degrees.of(-120))
+    };
+  }
+
+  public static final class Arm {
+    public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double DEFAULT_ARM_ANGLE = 250.0;
+    public static final double INTAKE_ANGLE = 3; // subject to change
+    public static final double AMP_ANGLE = 95; // subject to change
+
+    public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
+      double conversionFactor =
+          0.159344d; // TODO: Find for actual bot. Will change with gear ratios.
+      double zeroOffset =
+          0.088; // TODO: For some reason when zeroing arm, zeros to 0.088. Fix on actual bot
+      return (conversionFactor * angle) + zeroOffset;
+    }
+
+    public static final int RT_PORT = 14; // Right Top motor
+    public static final int RB_PORT = 13; // Right Bottom motor
+    public static final int LT_PORT = 1; // Left Top motor
+    public static final int LB_PORT = 11; // Left Bottom motor
+    public static final int ENCODER_PORT = 0; // subject to change
+
+    public static final double CURRENT_LIMIT = 8.0;
+    public static final double S0C_KP = 1.0;
+    public static final double ARMFF_KS = 0.16969;
+    public static final double ARMFF_KG = 0.34;
+    public static final double ARMFF_KV = 2.49;
+    public static final double MOTIONMAGIC_KV = 36; // MotionMagic Cruise Velocity in RPS of the arm
+    public static final double MOTIONMAGIC_KA =
+        2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
+
+    // Lmao this is useless, but it has my name on it
+    public static double GET_YAJWINS_EQUATION(double distance) {
+      double a = -6.02207;
+      double b = -8.6529 * Math.pow(10, 15);
+      double c = 252.816;
+      double d = 35.7582;
+      return b * Math.pow((distance + c), a) + d;
+    }
   }
 
   public static class OI {
@@ -41,6 +145,143 @@ public final class Constants {
   }
 
   public static class Swerve {
+    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.PROTO;
+
+    public static enum SwerveLevel {
+      L2(6.75, 21.428571428571427),
+      L3(6.12, 21.428571428571427);
+      public final double DRIVE_GEAR_RATIO, STEER_GEAR_RATIO;
+
+      SwerveLevel(double drive, double steer) {
+        DRIVE_GEAR_RATIO = drive;
+        STEER_GEAR_RATIO = steer;
+      }
+    }
+
+    public static enum SwerveDrivePIDValues {
+      SERRANO(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
+      PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619),
+      JAMES_HARDEN(0.034816, 0d, 0d, 0.15396, 0.12145, 0.0029718);
+      public final double KP, KI, KD, KS, KV, KA;
+
+      SwerveDrivePIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
+        this.KP = KP;
+        this.KI = KI;
+        this.KD = KD;
+        this.KS = KS;
+        this.KV = KV;
+        this.KA = KA;
+      }
+    }
+
+    public static enum SwerveSteerPIDValues {
+      SERRANO(50d, 0d, 0.2, 0d, 1.5, 0d),
+      PROTO(20d, 0d, 0d, 0d, 0d, 0d),
+      JAMES_HARDEN(50d, 0d, 0d, 0d, 0d, 0d);
+      public final double KP, KI, KD, KS, KV, KA;
+
+      SwerveSteerPIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
+        this.KP = KP;
+        this.KI = KI;
+        this.KD = KD;
+        this.KS = KS;
+        this.KV = KV;
+        this.KA = KA;
+      }
+    }
+
+    public static enum RobotDimensions {
+      SERRANO(Inches.of(22.52), Inches.of(22.834)), // length, width
+      PROTO(Inches.of(22.52), Inches.of(22.834)), // length, width
+      JAMES_HARDEN(Inches.of(26.749), Inches.of(22.74)); // length, width
+      public final Distance length, width;
+
+      RobotDimensions(Distance length, Distance width) {
+        this.length = length;
+        this.width = width;
+      }
+    }
+
+    public static enum BumperThickness {
+      SERRANO(Inches.of(2.625)), // thickness
+      PROTO(Inches.of(2.625)), // thickness
+      JAMES_HARDEN(Inches.of(3.313)); // thickness
+      public final Distance thickness;
+
+      BumperThickness(Distance thickness) {
+        this.thickness = thickness;
+      }
+    }
+
+    public static enum SwerveType {
+      SERRANO(
+          Rotations.of(-0.466552734375), // front left
+          Rotations.of(-0.436767578125), // front right
+          Rotations.of(-0.165283203125), // back left
+          Rotations.of(-0.336181640625), // back right
+          SwerveLevel.L3, // what level the swerve drive is
+          SwerveDrivePIDValues.SERRANO,
+          SwerveSteerPIDValues.SERRANO,
+          RobotDimensions.SERRANO,
+          "Patrice the Pineapple",
+          BumperThickness.SERRANO),
+      PROTO(
+          Rotations.of(0.3876953125), // front left
+          Rotations.of(0.159912109375), // front right
+          Rotations.of(0.213134765625), // back left
+          Rotations.of(-0.3818359375), // back right
+          SwerveLevel.L2, // what level the swerve drive is
+          SwerveDrivePIDValues.PROTO,
+          SwerveSteerPIDValues.PROTO,
+          RobotDimensions.PROTO,
+          "rio",
+          BumperThickness.PROTO),
+      JAMES_HARDEN(
+          Rotations.of(-0.158447265625), // front left
+          Rotations.of(-0.310791015625), // front right
+          Rotations.of(-0.48681640625), // back left
+          Rotations.of(0.4248046875), // back right
+          SwerveLevel.L3,
+          SwerveDrivePIDValues.JAMES_HARDEN,
+          SwerveSteerPIDValues.JAMES_HARDEN,
+          RobotDimensions.JAMES_HARDEN,
+          "FireBot",
+          BumperThickness.JAMES_HARDEN);
+      public final Angle FRONT_LEFT_ENCODER_OFFSET,
+          FRONT_RIGHT_ENCODER_OFFSET,
+          BACK_LEFT_ENCODER_OFFSET,
+          BACK_RIGHT_ENCODER_OFFSET;
+      public final SwerveLevel SWERVE_LEVEL;
+      public final SwerveDrivePIDValues SWERVE_DRIVE_PID_VALUES;
+      public final SwerveSteerPIDValues SWERVE_STEER_PID_VALUES;
+      public final RobotDimensions ROBOT_DIMENSIONS;
+      public final String CANBUS_NAME;
+      public final BumperThickness BUMPER_THICKNESS;
+
+      SwerveType(
+          Angle fl,
+          Angle fr,
+          Angle bl,
+          Angle br,
+          SwerveLevel swerveLevel,
+          SwerveDrivePIDValues swerveDrivePIDValues,
+          SwerveSteerPIDValues swerveSteerPIDValues,
+          RobotDimensions robotDimensions,
+          String canbus_name,
+          BumperThickness thickness) {
+        FRONT_LEFT_ENCODER_OFFSET = fl;
+        FRONT_RIGHT_ENCODER_OFFSET = fr;
+        BACK_LEFT_ENCODER_OFFSET = bl;
+        BACK_RIGHT_ENCODER_OFFSET = br;
+        SWERVE_LEVEL = swerveLevel;
+        SWERVE_DRIVE_PID_VALUES = swerveDrivePIDValues;
+        SWERVE_STEER_PID_VALUES = swerveSteerPIDValues;
+        ROBOT_DIMENSIONS = robotDimensions;
+        CANBUS_NAME = canbus_name;
+        BUMPER_THICKNESS = thickness;
+      }
+    }
+
     public static class Simulation {
       // These are only used for simulation
       private static final MomentOfInertia STEER_INERTIA = KilogramSquareMeters.of(0.01);
@@ -54,17 +295,23 @@ public final class Constants {
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs STEER_GAINS =
-        new Slot0Configs().withKP(25).withKI(0).withKD(0).withKS(0).withKV(0).withKA(0);
+        new Slot0Configs()
+            .withKP(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KP)
+            .withKI(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KI)
+            .withKD(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KD)
+            .withKS(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KS)
+            .withKV(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KV)
+            .withKA(WHICH_SWERVE_ROBOT.SWERVE_STEER_PID_VALUES.KA);
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs DRIVE_GAINS =
         new Slot0Configs()
-            .withKP(0.18)
-            .withKI(0)
-            .withKD(0)
-            .withKS(-0.023265)
-            .withKV(0.12681)
-            .withKA(0.058864);
+            .withKP(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KP)
+            .withKI(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KI)
+            .withKD(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KD)
+            .withKS(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KS)
+            .withKV(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KV)
+            .withKA(WHICH_SWERVE_ROBOT.SWERVE_DRIVE_PID_VALUES.KA);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -83,7 +330,8 @@ public final class Constants {
         SteerMotorArrangement.TalonFX_Integrated;
 
     // The remote sensor feedback type to use for the steer motors;
-    // When not Pro-licensed, FusedCANcoder/SyncCANcoder automatically fall back to RemoteCANcoder
+    // When not Pro-licensed, FusedCANcoder/SyncCANcoder automatically fall back to
+    //  RemoteCANcoder
     private static final SteerFeedbackType STEER_FEEDBACK_TYPE = SteerFeedbackType.FusedCANcoder;
 
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
@@ -101,6 +349,8 @@ public final class Constants {
         new TalonFXConfiguration()
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
+                    .withStatorCurrentLimitEnable(true)
+                    .withStatorCurrentLimit(40)
                     .withSupplyCurrentLimitEnable(true)
                     .withSupplyCurrentLimit(Amps.of(30)));
 
@@ -113,7 +363,7 @@ public final class Constants {
     // TODO: CHANGE FOR NEW ROBOT
     // CAN bus that the devices are located on;
     // All swerve devices must share the same CAN bus
-    public static final CANBus CANBUS_NAME = new CANBus("");
+    public static final CANBus CANBUS_NAME = new CANBus(WHICH_SWERVE_ROBOT.CANBUS_NAME);
 
     // TODO: VERIFY FOR NEW ROBOT
     // The stator current at which the wheels start to slip;
@@ -133,8 +383,10 @@ public final class Constants {
 
     private static final double COUPLE_RATIO = 3.5714285714285716;
 
-    private static final double DRIVE_GEAR_RATIO = 6.75; // TODO: VERIFY FOR NEW ROBOT
-    private static final double STEER_GEAR_RATIO = 21.428571428571427; // TODO: VERIFY FOR NEW ROBOT
+    private static final double DRIVE_GEAR_RATIO =
+        WHICH_SWERVE_ROBOT.SWERVE_LEVEL.DRIVE_GEAR_RATIO; // TODO: VERIFY FOR NEW ROBOT
+    private static final double STEER_GEAR_RATIO =
+        WHICH_SWERVE_ROBOT.SWERVE_LEVEL.STEER_GEAR_RATIO; // TODO: VERIFY FOR NEW ROBOT
     private static final Distance WHEEL_RADIUS_INCHES = Inches.of(2); // TODO: VERIFY FOR NEW ROBOT
 
     private static final boolean STEER_MOTOR_REVERSED = true; // TODO: CHANGE FOR NEW ROBOT
@@ -145,7 +397,7 @@ public final class Constants {
 
     public static final SwerveDrivetrainConstants DrivetrainConstants =
         new SwerveDrivetrainConstants()
-            // .withCANBusName(CANBUS_NAME.getName())
+            .withCANBusName(CANBUS_NAME.getName())
             .withPigeon2Id(kPigeonId)
             .withPigeon2Configs(PIGEON2_CONFIGS);
 
@@ -182,44 +434,56 @@ public final class Constants {
     private static final int FRONT_LEFT_STEER_MOTOR_ID = 3;
     private static final int FRONT_LEFT_DRIVE_MOTOR_ID = 4;
     private static final int FRONT_LEFT_ENCODER_ID = 21;
-    private static final Angle FRONT_LEFT_ENCODER_OFFSET_ROT = Rotations.of(0.3876953125);
+    private static final Angle FRONT_LEFT_ENCODER_OFFSET_ROT =
+        WHICH_SWERVE_ROBOT.FRONT_LEFT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance FRONT_LEFT_X_POS = Inches.of(11.26);
-    private static final Distance FRONT_LEFT_Y_POS = Inches.of(11.417);
+    private static final Distance FRONT_LEFT_X_POS =
+        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(2);
+    private static final Distance FRONT_LEFT_Y_POS =
+        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(2);
 
     // Front Right
     // TODO: CHANGE FOR NEW ROBOT
     private static final int FRONT_RIGHT_STEER_MOTOR_ID = 5;
     private static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 6;
     private static final int FRONT_RIGHT_ENCODER_ID = 22;
-    private static final Angle FRONT_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(0.159912109375);
+    private static final Angle FRONT_RIGHT_ENCODER_OFFSET_ROT =
+        WHICH_SWERVE_ROBOT.FRONT_RIGHT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance FRONT_RIGHT_X_POS = Inches.of(11.26);
-    private static final Distance FRONT_RIGHT_Y_POS = Inches.of(-11.417);
+    private static final Distance FRONT_RIGHT_X_POS =
+        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(2);
+    private static final Distance FRONT_RIGHT_Y_POS =
+        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(-2);
 
     // Back Left
     // TODO: CHANGE FOR NEW ROBOT
     private static final int BACK_LEFT_STEER_MOTOR_ID = 1;
     private static final int BACK_LEFT_DRIVE_MOTOR_ID = 2;
     private static final int BACK_LEFT_ENCODER_ID = 20;
-    private static final Angle BACK_LEFT_ENCODER_OFFSET_ROT = Rotations.of(0.213134765625);
+    private static final Angle BACK_LEFT_ENCODER_OFFSET_ROT =
+        WHICH_SWERVE_ROBOT.BACK_LEFT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance BACK_LEFT_X_POS = Inches.of(-11.26);
-    private static final Distance BACK_LEFT_Y_POS = Inches.of(11.417);
+    private static final Distance BACK_LEFT_X_POS =
+        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(-2);
+    private static final Distance BACK_LEFT_Y_POS =
+        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(2);
 
     // Back Right
     // TODO: CHANGE FOR NEW ROBOT
     private static final int BACK_RIGHT_STEER_MOTOR_ID = 7;
     private static final int BACK_RIGHT_DRIVE_MOTOR_ID = 8;
     private static final int BACK_RIGHT_ENCODER_ID = 23;
-    private static final Angle BACK_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(-0.3818359375);
+    private static final Angle BACK_RIGHT_ENCODER_OFFSET_ROT =
+        WHICH_SWERVE_ROBOT.BACK_RIGHT_ENCODER_OFFSET;
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance BACK_RIGHT_X_POS = Inches.of(-11.26);
-    private static final Distance BACK_RIGHT_Y_POS = Inches.of(-11.417);
+    private static final Distance BACK_RIGHT_X_POS =
+        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(-2);
+    private static final Distance BACK_RIGHT_Y_POS =
+        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(-2);
 
     // Set the constants per module (constants defined above)
     public static final SwerveModuleConstants<
@@ -288,12 +552,13 @@ public final class Constants {
     public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND =
         5.944; // before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s,
     public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
-
     public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.75;
     public static final double TELE_DRIVE_SLOW_MODE_SPEED_PERCENT = 0.3;
+    public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420;
     public static final double TELE_DRIVE_PERCENT_SPEED_RANGE =
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
-    public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420;
-    public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
+    public static final double TELE_DRIVE_MAX_ANGULAR_RATE = Math.PI * 1.5;
+    public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND =
+        TELE_DRIVE_MAX_ANGULAR_RATE * 8;
   }
 }

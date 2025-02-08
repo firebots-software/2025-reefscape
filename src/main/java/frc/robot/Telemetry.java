@@ -41,8 +41,11 @@ public class Telemetry {
 
   /* Robot swerve drive state */
   private final NetworkTable driveStateTable = inst.getTable("DriveState");
+<<<<<<< HEAD
   private final NetworkTable visionStateTable = inst.getTable("VisionData");
 
+=======
+>>>>>>> origin/main
   private final StructPublisher<Pose2d> drivePose =
       driveStateTable.getStructTopic("Pose", Pose2d.struct).publish();
   private final StructPublisher<ChassisSpeeds> driveSpeeds =
@@ -58,14 +61,23 @@ public class Telemetry {
   private final DoublePublisher driveOdometryFrequency =
       driveStateTable.getDoubleTopic("OdometryFrequency").publish();
 
+<<<<<<< HEAD
   private final StructPublisher<Pose2d> wizonPose =
       visionStateTable.getStructTopic("Pose", Pose2d.struct).publish();
 
+=======
+>>>>>>> origin/main
   /* Robot pose for field positioning */
   private final NetworkTable table = inst.getTable("Pose");
   private final DoubleArrayPublisher fieldPub = table.getDoubleArrayTopic("robotPose").publish();
   private final StringPublisher fieldTypePub = table.getStringTopic(".type").publish();
 
+<<<<<<< HEAD
+=======
+  StructPublisher<Pose2d> publisher =
+      NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose2d.struct).publish();
+
+>>>>>>> origin/main
   /* Mechanisms to represent the swerve module states */
   private final Mechanism2d[] m_moduleMechanisms =
       new Mechanism2d[] {
@@ -107,7 +119,10 @@ public class Telemetry {
   private final double[] m_poseArray = new double[3];
   private final double[] m_moduleStatesArray = new double[8];
   private final double[] m_moduleTargetsArray = new double[8];
+<<<<<<< HEAD
   private final double[] m_visionPoseArray = new double[3];
+=======
+>>>>>>> origin/main
 
   /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
   public void telemeterize(SwerveDriveState state) {
@@ -131,6 +146,7 @@ public class Telemetry {
       m_moduleTargetsArray[i * 2 + 1] = state.ModuleTargets[i].speedMetersPerSecond;
     }
 
+<<<<<<< HEAD
     SignalLogger.writeDoubleArray("DriveState/Pose", m_poseArray);
     SignalLogger.writeDoubleArray("DriveState/ModuleStates", m_moduleStatesArray);
     SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
@@ -192,4 +208,24 @@ public class Telemetry {
     fieldTypePub.set("Field2d");
     fieldPub.set(m_visionPoseArray);
   }
+=======
+    // SignalLogger.writeDoubleArray("DriveState/Pose", state.Pose);
+    SignalLogger.writeDoubleArray("DriveState/ModuleStates", m_moduleStatesArray);
+    SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
+    SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
+    publisher.set(state.Pose);
+    /* Telemeterize the pose to a Field2d */
+    fieldTypePub.set("Field2d");
+    fieldPub.set(m_poseArray);
+
+    /* Telemeterize the module states to a Mechanism2d */
+    for (int i = 0; i < 4; ++i) {
+      m_moduleSpeeds[i].setAngle(state.ModuleStates[i].angle);
+      m_moduleDirections[i].setAngle(state.ModuleStates[i].angle);
+      m_moduleSpeeds[i].setLength(state.ModuleStates[i].speedMetersPerSecond / (2 * MaxSpeed));
+
+      SmartDashboard.putData("Module " + i, m_moduleMechanisms[i]);
+    }
+  }
+>>>>>>> origin/main
 }
