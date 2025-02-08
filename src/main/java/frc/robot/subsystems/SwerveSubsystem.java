@@ -292,6 +292,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     setControl(m_pathApplyFieldSpeeds.withSpeeds(speeds));
   }
 
+  public Pose2d getPose() {
+    return currentState.Pose;
+  }
+
   public ChassisSpeeds calculateRequiredChassisSpeeds(Pose2d targetPose) {
     double xFeedback =
         xProfiledPIDController.calculate(currentState.Pose.getX(), targetPose.getX());
