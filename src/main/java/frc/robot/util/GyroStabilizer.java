@@ -67,8 +67,8 @@ public class GyroStabilizer extends Command {
     double roll = pigeon.getRotation3d().getX();
     double pitch = pigeon.getRotation3d().getY();
 
-    DogLog.log("gyroStabilizer/xComponent", Math.sin(roll));
-    DogLog.log("gyroStabilizer/yComponent", Math.sin(pitch));
+    DogLog.log("gyroStabilizer/xComponent", Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.baseUnitMagnitude() * Math.sin(roll));
+    DogLog.log("gyroStabilizer/yComponent", Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.baseUnitMagnitude() * Math.sin(pitch));
 
     return new Transform2d(Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.baseUnitMagnitude() * Math.sin(roll),
                            Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.baseUnitMagnitude() * Math.sin(pitch), Rotation2d.kZero); //may width length may be switched
