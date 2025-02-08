@@ -168,7 +168,8 @@ public class RobotContainer {
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
     Trigger rightBumper = joystick.rightBumper();
 
-    rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+    // rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+
     rightBumper.onFalse(
         new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
