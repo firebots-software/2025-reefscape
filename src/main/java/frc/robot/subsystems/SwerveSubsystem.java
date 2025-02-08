@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import choreo.trajectory.SwerveSample;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -15,8 +16,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
-import choreo.trajectory.SwerveSample;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
@@ -184,7 +183,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     DogLog.log("followTrajectory/sample.y", sample.y);
     DogLog.log("followTrajectory/sample.heading", sample.heading);
 
-    DogLog.log("followTrajectory/pidOutputX", xRegularPIDController.calculate(pose.getX(), sample.x));
+    DogLog.log(
+        "followTrajectory/pidOutputX", xRegularPIDController.calculate(pose.getX(), sample.x));
     DogLog.log("followTrajectory/sample.vx", sample.vx);
     DogLog.log("followTrajectory/sample.vy", sample.vy);
     DogLog.log("followTrajectory/sample.omega", sample.omega);
@@ -193,7 +193,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // Apply the generated speed
     setFieldSpeeds(speeds);
   }
-  
+
   // Resets PID controllers
   public void resetProfiledPIDs() {
     xProfiledPIDController.reset(currentState.Pose.getX());

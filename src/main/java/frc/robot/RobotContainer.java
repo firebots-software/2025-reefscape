@@ -6,6 +6,10 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,11 +21,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
@@ -31,12 +33,6 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import com.ctre.phoenix6.swerve.SwerveRequest;
-
-import choreo.auto.AutoChooser;
-import choreo.auto.AutoFactory;
-import choreo.auto.AutoRoutine;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -77,7 +73,7 @@ public class RobotContainer {
   private final AutoChooser autoChooser;
 
   public RobotContainer() {
-     autoFactory =
+    autoFactory =
         new AutoFactory(
             driveTrain::getPose, // A function that returns the current robot pose
             driveTrain
@@ -196,7 +192,7 @@ public class RobotContainer {
             ? false
             : (DriverStation.getAlliance().get() == Alliance.Red);
   }
-    
+
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
   private AutoRoutine onlyRoutine() {
@@ -208,17 +204,17 @@ public class RobotContainer {
                 .trajectory("BSTART-L2")
                 .resetOdometry()
                 .andThen(routine.trajectory("BSTART-L2").cmd())
-                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
                 .andThen(routine.trajectory("L2-BHPS").cmd())
-                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
                 .andThen(routine.trajectory("BHPS-R1").cmd())
-                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
                 .andThen(routine.trajectory("R1-BHPS").cmd())
-                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
                 .andThen(routine.trajectory("BHPS-L1").cmd())
-                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
                 .andThen(routine.trajectory("L1-BHPS").cmd())
-                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
                 .andThen(routine.trajectory("BHPS-R0").cmd()));
     return routine;
   }
