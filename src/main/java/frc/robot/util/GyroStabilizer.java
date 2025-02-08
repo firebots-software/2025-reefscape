@@ -14,7 +14,7 @@ import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class GyroStabilizer extends Command {
-  public static final double TIP_THRESHOLD = .5;  
+  public static final double TIP_THRESHOLD = 0;  
 
   private SwerveSubsystem swerveSubsystem;
   private Pigeon2 pigeon;
@@ -37,9 +37,9 @@ public class GyroStabilizer extends Command {
   public void execute() {
     Transform2d currentTipVectorXY = getTipVectorXY(pigeon);
     Transform2d currentTipVectorRP = getTipVectorRP(pigeon);
-    SwerveRequest drive = robotCentricDrive.withVelocityX(currentTipVectorRP.getX() > 0 ? -currentTipVectorXY.getX() : currentTipVectorXY.getX())
-                                           .withVelocityY(currentTipVectorRP.getY() > 0 ? -currentTipVectorXY.getY() : currentTipVectorXY.getY());
-    swerveSubsystem.setControl(drive);
+    // SwerveRequest drive = robotCentricDrive.withVelocityX(currentTipVectorRP.getX() > 0 ? -currentTipVectorXY.getX() : currentTipVectorXY.getX())
+    //                                        .withVelocityY(currentTipVectorRP.getY() > 0 ? -currentTipVectorXY.getY() : currentTipVectorXY.getY());
+    //swerveSubsystem.setControl(drive);
   }
 
   // Called once the command ends or is interrupted.
@@ -70,7 +70,8 @@ public class GyroStabilizer extends Command {
     DogLog.log("gyroStabilizer/xComponent", Math.sin(roll));
     DogLog.log("gyroStabilizer/yComponent", Math.sin(pitch));
 
-    return new Transform2d(Math.sin(roll), Math.sin(pitch), Rotation2d.kZero);
+    return new Transform2d(Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.baseUnitMagnitude() * Math.sin(roll),
+                           Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.baseUnitMagnitude() * Math.sin(pitch), Rotation2d.kZero); //may width length may be switched
   }
 
   public static double magnitudeTipVector(Transform2d tipVector) {
