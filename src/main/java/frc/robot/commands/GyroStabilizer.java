@@ -33,8 +33,8 @@ public class GyroStabilizer extends Command {
   @Override
   public void execute() {
     Transform2d currentTipVectorRP = getTipVectorRP(pigeon);
-    SwerveRequest drive = robotCentricDrive.withVelocityX(currentTipVectorRP.getX())
-                                           .withVelocityY(currentTipVectorRP.getY());
+    SwerveRequest drive = robotCentricDrive.withVelocityX(-currentTipVectorRP.getY())
+                                           .withVelocityY(currentTipVectorRP.getX());
     swerveSubsystem.setControl(drive);
   }
 
