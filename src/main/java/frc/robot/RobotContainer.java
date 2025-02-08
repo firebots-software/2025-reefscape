@@ -61,6 +61,7 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
+    driveTrain.getPigeon2().reset();
     configureBindings();
     autoFactory =
         new AutoFactory(
