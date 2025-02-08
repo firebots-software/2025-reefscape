@@ -114,7 +114,6 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     DogLog.log("subsystems/tootsieslide/tootsieVelocity", master.getVelocity().getValueAsDouble());
     DogLog.log("subsystems/tootsieslide/coralPresent", coralPresent());
-    
   }
 
   @Override
