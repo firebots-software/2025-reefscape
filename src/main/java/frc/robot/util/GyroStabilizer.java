@@ -71,7 +71,7 @@ public class GyroStabilizer extends Command {
     DogLog.log("gyroStabilizer/yComponent", Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.baseUnitMagnitude() * Math.sin(pitch));
 
     return new Transform2d(Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.baseUnitMagnitude() * Math.sin(roll),
-                           Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.baseUnitMagnitude() * Math.sin(pitch), Rotation2d.kZero); //may width length may be switched
+                           Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.baseUnitMagnitude() * Math.sin(pitch), Rotation2d.kZero); //width length may be switched
   }
 
   public static double magnitudeTipVector(Transform2d tipVector) {
