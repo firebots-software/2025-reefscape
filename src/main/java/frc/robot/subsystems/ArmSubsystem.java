@@ -186,6 +186,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
     encoderDegrees = calculateDegrees();
     // This method will be called once per scheduler run
+    DogLog.log("Ritvik is very gay", true);
     DogLog.log("Arm at target", atTarget(5));
     DogLog.log("Arm Degrees", encoderDegrees);
     DogLog.log("Arm Target Degrees", targetDegrees);
