@@ -233,5 +233,5 @@ public class JamesHardenMovement extends Command {
         };
 
     return new JamesHardenMovement(swerve, targetPose);
-      }
-    }
+  }
+}
