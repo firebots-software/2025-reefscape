@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,6 +16,8 @@ public class GyroStabilizer extends Command {
 
   private SwerveSubsystem swerveSubsystem;
   private Pigeon2 pigeon;
+
+  private static PIDController pidController = new PIDController(1, 0.0, 0.0); //TODO: values
 
   private final SwerveRequest.RobotCentric robotCentricDrive =
       new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
@@ -34,13 +37,17 @@ public class GyroStabilizer extends Command {
   public void execute() {
     Transform2d currentTipVectorRP = getTipVectorRP(pigeon);
 
-    double x = currentTipVectorRP.getY();
-    double y = -currentTipVectorRP.getX();
-    SwerveRequest drive = robotCentricDrive.withVelocityX(x)
-                                           .withVelocityY(y);
+    double dirToGoX = currentTipVectorRP.getY();
+    double dirToGoY = -currentTipVectorRP.getX();
 
-    DogLog.log("gyroStabilizer/xSpeed", x);
-    DogLog.log("gyroStabilizer/ySpeed", y);
+    double xSpeed = pidController.calculate(dirToGoX, 0);
+    double ySpeed = pidController.calculate(dirToGoY, 0);
+
+    SwerveRequest drive = robotCentricDrive.withVelocityX(xSpeed)
+                                           .withVelocityY(ySpeed);
+
+    DogLog.log("gyroStabilizer/xSpeed", xSpeed);
+    DogLog.log("gyroStabilizer/ySpeed", ySpeed);
 
     swerveSubsystem.setControl(drive);
   }
