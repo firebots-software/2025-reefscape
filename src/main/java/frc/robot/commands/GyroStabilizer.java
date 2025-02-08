@@ -1,78 +1,65 @@
-package frc.robot.util;
+package frc.robot.commands;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 
+public class GyroStabilizer extends Command {
+  public static final double TIP_THRESHOLD = 0;
 
-public class GyroStabilizer {
-  private static SwerveSubsystem driveTrain;
-  private static Pigeon2 pigeon;
-  private double rollOffset; // The number of radians the roll reads when the robot is flat. Used to zero the gyro
-  private double pitchOffset; // The number of radians the pitch reads when the robot is flat. Used to zero the gyro
+  private SwerveSubsystem swerveSubsystem;
+  private Pigeon2 pigeon;
 
-  public GyroStabilizer(){
-    driveTrain = SwerveSubsystem.getInstance();
-    pigeon = driveTrain.getPigeon2();
-    
-    rollOffset = pigeon.getRotation3d().getX();
-    pitchOffset = pigeon.getRotation3d().getY();
+  private final SwerveRequest.RobotCentric robotCentricDrive =
+      new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
+
+  public GyroStabilizer(SwerveSubsystem swerveSubsystem) {
+    this.swerveSubsystem = swerveSubsystem;
+    pigeon = swerveSubsystem.getPigeon2();
+    addRequirements(swerveSubsystem);
   }
-  //  getRotation3d() returns a Rotation3d object, which contains the roll, pitch, and yaw of the
-  // robot
-  /*  Rotation3d important methods
-     double    getX():
-         Returns the counterclockwise rotation angle around the X axis (roll) in radians.
-     double    getY():
-         Returns the counterclockwise rotation angle around the Y axis (pitch) in radians.
-     double    getZ():
-         Returns the counterclockwise rotation angle around the Z axis (yaw) in radians.
-  */
 
-  /* ideas
-   *   private final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
-   *
-   *   and
-   *
-   *   robotCentricDrive.withVelocityX(x).withVelocityY(y).withRotationalRate(turn);
-   */
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
 
-  /*
-   * For Auto, I don't think we can use the RobotCentric Swerve Request to move the robot, since Choreo is already using the
-   * followTrajectory() method in SwerveSubsystem to apply a ChassisSpeeds to the robot. That's why we need to use the
-   * "tip vector" calculated in this class to adjust the ChassisSpeeds in followTrajectory() in  order to implement tip prevention
-   * during Auto.
-   * 
-   * UPDATE: We should NOT implement Gyro Stabilization into Auto, because:
-   * 1. It will interfere with Choreo's timed Auto and could negatively impact the Auto performance
-   * 2. We will be testing Auto a lot, and if we see that the robot keeps tipping, we should tune the paths, instead of relying
-   *    on the Gyro Stabilization
-   */
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    Transform2d currentTipVectorRP = getTipVectorRP(pigeon);
+    SwerveRequest drive = robotCentricDrive.withVelocityX(-currentTipVectorRP.getY())
+                                           .withVelocityY(currentTipVectorRP.getX());
+    swerveSubsystem.setControl(drive);
+  }
 
-   /**
-    * This method looks at the robot's current roll and pitch, and calculates a robot-relative 2D "tipping vector"
-    * representing the robot's direction of tipping. If the robot is completely flat, the tipping vector
-    * will be <0, 0>. If the robot is tipping 30 degrees forwards, it will be <0.5, 0>. If the robot is
-    * tipping 45 derees to the south-west, it will be <-0.7, -0.7>. So, a tipping vector's positive X direction
-    * corresponds to the front of the robot, and its positive Y direction corresponds to the left of the robot.
-    * @return A Translation2d, which is the "tipping vector" described above.
-    */
-  public Translation2d getTipVector() {
-    double roll = pigeon.getRotation3d().getX() - rollOffset;
-    double pitch = pigeon.getRotation3d().getY() - pitchOffset;
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
 
-    double xComponent = Math.sin(roll);
-    double yComponent = Math.sin(pitch);
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return magnitudeTipVector(getTipVectorRP(pigeon)) < TIP_THRESHOLD;
+  }
 
-    Translation2d tipVector = new Translation2d(xComponent, yComponent);
+  public static Transform2d getTipVectorRP(Pigeon2 pigeon) {
+    double roll = pigeon.getRotation3d().getX();
+    double pitch = pigeon.getRotation3d().getY();
 
     DogLog.log("gyroStabilizer/roll", roll);
     DogLog.log("gyroStabilizer/pitch", pitch);
-    DogLog.log("gyroStabilizer/xComponent", tipVector.getX());
-    DogLog.log("gyroStabilizer/yComponent", tipVector.getY());
 
-    return tipVector;
+    return new Transform2d(roll, pitch, Rotation2d.kZero);
+  }
+
+
+  public static double magnitudeTipVector(Transform2d tipVector) {
+    return Math.sqrt(tipVector.getX() * tipVector.getX() + tipVector.getY() * tipVector.getY());
   }
 }

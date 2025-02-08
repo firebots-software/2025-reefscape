@@ -35,7 +35,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import frc.robot.util.GyroStabilizer;
 import java.util.function.Supplier;
 
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
@@ -45,7 +44,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   private ProfiledPIDController xPidController, yPidController, driverRotationPidController;
   private PIDController choreoX_pid, choreoY_pid, choreoRotation_pid;
   private SwerveDriveState currentState;
-  private GyroStabilizer stabilizer;
   
 
   public SwerveSubsystem(
@@ -65,7 +63,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         modules);
 
     instance = this;
-    stabilizer = new GyroStabilizer();
 
     if (Utils.isSimulation()) {
       startSimThread();
@@ -382,7 +379,5 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     DogLog.log(
         "Swerve/CurrentCommand",
         (getCurrentCommand() == null) ? "nothing" : getCurrentCommand().getName());
-
-    stabilizer.getTipVector();
   }
 }
