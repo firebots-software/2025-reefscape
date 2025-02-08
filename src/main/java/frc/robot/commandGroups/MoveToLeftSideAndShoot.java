@@ -16,10 +16,10 @@ public class MoveToLeftSideAndShoot extends SequentialCommandGroup {
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
       ElevatorPositions height,
-      BooleanSupplier redSide) {  
+      BooleanSupplier redSide) {
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, height)
-            .alongWith(JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide)), 
+            .alongWith(JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide)),
         new ShootTootsieSlide(tootsieSlideSubsystem));
   }
 }
