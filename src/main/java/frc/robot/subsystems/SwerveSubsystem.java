@@ -403,7 +403,5 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // DogLog.log("chassis/speed_x", robotChassisSpeeds);
     // DogLog.log("chassis/speed_y", robotChassisSpeeds.vyMetersPerSecond);
     // DogLog.log("chassis/rotation_speed_radps", robotChassisSpeeds.omegaRadiansPerSecond);
-
-    GyroStabilizer.getTipVector();
   }
 }

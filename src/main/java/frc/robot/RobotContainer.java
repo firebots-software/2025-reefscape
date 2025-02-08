@@ -39,6 +39,8 @@ import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.subsystems.VisionSystem;
+import frc.robot.util.GyroStabilizer;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -123,6 +125,8 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
+    Trigger tipping = new Trigger(() -> GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorXY(driveTrain.getPigeon2())) > GyroStabilizer.TIP_THRESHOLD);
+    tipping.onTrue(new GyroStabilizer(driveTrain));
 
     // joystick.rightBumper().whileTrue(new
     // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
