@@ -323,29 +323,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 m_hasAppliedOperatorPerspective = true;
               });
     }
-    // DogLog.log("chassisspeedX", robotChassisSpeeds.vxMetersPerSecond);
-    // DogLog.log("chassisspeedY", robotChassisSpeeds.vyMetersPerSecond);
-    // DogLog.log("chassisspeedOMEGA", robotChassisSpeeds.omegaRadiansPerSecond);
 
-    DogLog.log("subsystems/swerve/fl_speed", getState().ModuleStates[0].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/fl_angle", getState().ModuleStates[0].angle.getDegrees());
-    DogLog.log("subsystems/swerve/fr_speed", getState().ModuleStates[1].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/fr_angle", getState().ModuleStates[1].angle.getDegrees());
-    DogLog.log("subsystems/swerve/bl_speed", getState().ModuleStates[2].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/bl_angle", getState().ModuleStates[2].angle.getDegrees());
-    DogLog.log("subsystems/swerve/br_speed", getState().ModuleStates[3].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/br_angle", getState().ModuleStates[3].angle.getDegrees());
-    // DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
-    // DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
-    // DogLog.log("chassis/rotation_speed_radps",
-    // getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
-
-    /*
-    DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
-    DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
-    DogLog.log(
-        "chassis/rotation_speed_radps", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
-    */
     var drivetrainState = getState();
     DogLog.log("subsystems/swerve/fl_speed", drivetrainState.ModuleStates[0].speedMetersPerSecond);
     DogLog.log("subsystems/swerve/fl_angle", drivetrainState.ModuleStates[0].angle.getDegrees());
@@ -355,8 +333,5 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     DogLog.log("subsystems/swerve/bl_angle", drivetrainState.ModuleStates[2].angle.getDegrees());
     DogLog.log("subsystems/swerve/br_speed", drivetrainState.ModuleStates[3].speedMetersPerSecond);
     DogLog.log("subsystems/swerve/br_angle", drivetrainState.ModuleStates[3].angle.getDegrees());
-    // DogLog.log("chassis/speed_x", robotChassisSpeeds);
-    // DogLog.log("chassis/speed_y", robotChassisSpeeds.vyMetersPerSecond);
-    // DogLog.log("chassis/rotation_speed_radps", robotChassisSpeeds.omegaRadiansPerSecond);
   }
 }
