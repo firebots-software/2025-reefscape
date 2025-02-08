@@ -5,25 +5,32 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class DebugDale extends Command{
-    public DebugDale(){
-        
+  private ArmSubsystem dale;
+  private double angle;
+    public DebugDale(ArmSubsystem dale){
+        this.dale = dale;
+        this.angle = 90;
+        addRequirements(dale);
     }
 
-  @Override
-  public void initialize() {
-
-  }
-
-  @Override
-  public void execute() {
-  }
-
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
-
-  @Override
-  public void end(boolean interrupted) {}
+    @Override
+    public void initialize() {
+  
+    }
+  
+    @Override
+    public void execute() {
+        dale.setPosition(angle);
+    }
+    
+     @Override
+    public void end(boolean interrupted) {
+        dale.setPosition(0);
+    }
+  
+    @Override
+    public boolean isFinished() {
+      return false;
+    }
     
 }
