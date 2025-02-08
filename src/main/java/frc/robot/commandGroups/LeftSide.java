@@ -1,6 +1,5 @@
 package frc.robot.commandGroups;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -15,10 +14,10 @@ public class LeftSide extends SequentialCommandGroup {
       ElevatorSubsystem elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
-      ElevatorPositions height,
-      Pose2d leftPose) { 
+      ElevatorPositions height) {
     addCommands(
-        new SetElevatorLevel(elevatorSubsystem, height).alongWith(new JamesHardenMovement(swerveSubsystem, leftPose)),  
-        new ShootTootsieSlide(tootsieSlideSubsystem));   
+        new SetElevatorLevel(elevatorSubsystem, height)
+            .alongWith(JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, null)),
+        new ShootTootsieSlide(tootsieSlideSubsystem));
   }
 }
