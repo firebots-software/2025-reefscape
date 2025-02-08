@@ -17,6 +17,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.*;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -48,11 +50,14 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  TootsieSlideSubsystem testerTootsie = TootsieSlideSubsystem.getInstance();
+  TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  ElevatorSubsystem m_ElevatorSubsystem = ElevatorSubsystem.getInstance();
+  ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
+  Boolean coralInFunnel = Boolean.valueOf(false);
+  Boolean coralInElevator = Boolean.valueOf(false);
+
   private BooleanSupplier redside = () -> redAlliance;
   private static boolean redAlliance;
 
@@ -101,10 +106,9 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // Joystick suppliers,
-    // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
-    // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    // funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem));
+    funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
+    funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
     Supplier<Double>
@@ -177,14 +181,23 @@ public class RobotContainer {
 
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
     Trigger rightBumper = joystick.rightBumper();
-    rightBumper.onTrue(new ArmToAngleCmd(() -> 90d, ArmSubsystem.getInstance()));
-    rightBumper.onFalse(new ArmToAngleCmd(() -> 45d, ArmSubsystem.getInstance()));
+
+    rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+    rightBumper.onFalse(
+        new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
-    joystick.povUp().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L1));
-    joystick.povRight().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L2));
-    joystick.povDown().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L3));
-    joystick.povLeft().onTrue(new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L4));
+    joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+
+    joystick
+        .a()
+        .whileTrue(
+            new SetElevatorLevel(
+                ElevatorSubsystem.getInstance(),
+                ElevatorPositions.safePosition)); // change safepos in constants
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
@@ -279,15 +292,15 @@ public class RobotContainer {
     return Commands.parallel(
             routine.trajectory(baseCommandName).cmd(),
             ((pathGoesToHPS.getAsBoolean())
-                ? new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.Intake)
-                : new SetElevatorLevel(m_ElevatorSubsystem, ElevatorPositions.L4)))
+                ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
+                : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)))
         .andThen(
             (pathGoesToHPS.getAsBoolean())
-                ? new RunFunnelUntilDetection(funnelSubsystem)
-                : new ShootTootsieSlide(testerTootsie))
+                ? new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem)
+                : new ShootTootsieSlide(tootsieSlideSubsystem))
         .andThen(
             new TransferPieceBetweenFunnelAndElevator(
-                m_ElevatorSubsystem, funnelSubsystem, testerTootsie))
+                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem))
         .onlyIf(pathGoesToHPS); // transfers piece to elevator only if path doesnt go to hps
   }
 }

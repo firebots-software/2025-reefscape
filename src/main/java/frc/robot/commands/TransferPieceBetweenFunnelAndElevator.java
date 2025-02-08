@@ -1,11 +1,8 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
@@ -25,13 +22,13 @@ public class TransferPieceBetweenFunnelAndElevator extends Command {
     this.funnelSubsystem = funnelSubsystem;
     this.tootsieSlideSubsystem = tootsieSlideSubsystem;
 
-    addRequirements(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem);
+    addRequirements(funnelSubsystem, tootsieSlideSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevatorSubsystem.elevate(ElevatorPositions.Intake);
+    elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,7 +45,7 @@ public class TransferPieceBetweenFunnelAndElevator extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    funnelSubsystem.setCoralInFunnel(false);
+    CoralPosition.setCoralInFunnel(false);
     funnelSubsystem.stopFunnel();
     tootsieSlideSubsystem.stopTootsie();
   }
