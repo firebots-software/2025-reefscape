@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
+import frc.robot.util.LoggedTalonFX;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -27,6 +30,11 @@ import frc.robot.subsystems.VisionSystem;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  // Commented this out because arm is not on bot and this is activiating
+  // something that doesn't physically exist
+  // TODO: uncomment when arm is on real bot
+
+  // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
   private final RobotContainer m_robotContainer;
 
@@ -113,18 +121,24 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    m_robotContainer.doTelemetry();
     CommandScheduler.getInstance().run();
+    m_robotContainer.doTelemetry();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    absoluteInit();
+  }
 
   @Override
   public void robotInit() {
-    // DogLog.setOptions(
-    // new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
+    DogLog.setOptions(
+        new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
+    // Commented this code that logs the electric data because it crashed the robot code
+    // there is an error related to the usage of this
+    // DogLog.setPdh(new PowerDistribution());
+    absoluteInit();
   }
 
   @Override
@@ -134,7 +148,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.setAlliance();
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -143,7 +157,7 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
-  @Override
+  // @Override
   public void autonomousPeriodic() {}
 
   @Override
@@ -152,20 +166,25 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    RobotContainer.setAlliance();
+    absoluteInit();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    // CommandScheduler.getInstance();
+    // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    LoggedTalonFX.periodic_static();
+  }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    RobotContainer.setAlliance();
+    // RobotContainer.setAlliance();
     CommandScheduler.getInstance().cancelAll();
   }
 
@@ -175,9 +194,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    absoluteInit();
+  }
 
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {}
+  public void absoluteInit() {
+    RobotContainer.setAlliance();
+  }
 }
