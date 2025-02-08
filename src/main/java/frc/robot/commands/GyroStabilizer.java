@@ -41,7 +41,7 @@ public class GyroStabilizer extends Command {
     double dirToGoY = -currentTipVectorRP.getX();
 
     double xSpeed = pidController.calculate(dirToGoX, 0);
-    double ySpeed = pidController.calculate(dirToGoX, 0);
+    double ySpeed = pidController.calculate(dirToGoY, 0);
 
     SwerveRequest drive = robotCentricDrive.withVelocityX(xSpeed)
                                            .withVelocityY(ySpeed);
