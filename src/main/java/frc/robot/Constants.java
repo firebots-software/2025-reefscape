@@ -160,8 +160,8 @@ public final class Constants {
   public static class Vision {
 
     public static enum Cameras {
-      FRONT_CAM,
-      BACK_CAM;
+      RIGHT_CAM,
+      LEFT_CAM;
     }
   }
 

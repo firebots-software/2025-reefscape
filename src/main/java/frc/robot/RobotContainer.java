@@ -35,15 +35,15 @@ public class RobotContainer {
 
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
-  private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
-  private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
+  private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
   private final CommandXboxController joystick = new CommandXboxController(0);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
     logger.telemeterize(driveTrain.getState());
-    Pose2d camPose = visionFront.getPose2d();
-    Pose2d camPose2 = visionBack.getPose2d();
+    Pose2d camPose = visionRight.getPose2d();
+    Pose2d camPose2 = visionLeft.getPose2d();
     if (camPose != null || camPose2 != null) {
       logger.logVisionPose(VisionSystem.getAverageForOffBotTesting(camPose, camPose2));
     }

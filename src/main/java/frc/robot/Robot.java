@@ -43,8 +43,8 @@ public class Robot extends TimedRobot {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
 
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
-  private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
-  private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
+  private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
   private final SwerveSubsystem driveTrain =
       new SwerveSubsystem(
           Constants.Swerve.DrivetrainConstants,
@@ -63,39 +63,35 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     m_robotContainer.doTelemetry();
     CommandScheduler.getInstance().run();
-    Optional<EstimatedRobotPose> frontRobotPose =
-        visionFront.getMultiTagPose3d(driveTrain.getState().Pose);
-    Optional<EstimatedRobotPose> backRobotPose =
-        visionBack.getMultiTagPose3d(driveTrain.getState().Pose);
-    if (frontRobotPose.isPresent() || backRobotPose.isPresent()) {
+    Optional<EstimatedRobotPose> rightRobotPose =
+        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+    Optional<EstimatedRobotPose> leftRobotPose =
+        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+    if (rightRobotPose.isPresent() || leftRobotPose.isPresent()) {
 
-      double frontdistToAprilTag =
-          visionFront
+      double rightdistToAprilTag =
+          visionRight
               .gAprilTagFieldLayout()
-              .getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
+              .getTagPose(visionRight.gPipelineResult().getBestTarget().getFiducialId())
               .get()
               .getTranslation()
               .getDistance(
                   new Translation3d(
                       driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
 
-      double backdistToAprilTag =
-          visionBack
+      double leftdistToAprilTag =
+          visionLeft
               .gAprilTagFieldLayout()
-              .getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
+              .getTagPose(visionLeft.gPipelineResult().getBestTarget().getFiducialId())
               .get()
               .getTranslation()
               .getDistance(
                   new Translation3d(
                       driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
 
-      if (frontdistToAprilTag <= backdistToAprilTag) {
-        leastDist = frontdistToAprilTag;
-      } else {
-        leastDist = backdistToAprilTag;
-      }
-
-      double xKalman = 0.01 * Math.pow(1.15, leastDist);
+      if (rightdistToAprilTag <= leftdistToAprilTag) {
+        leastDist = rightdistToAprilTag;
+        double xKalman = 0.01 * Math.pow(1.15, leastDist);
 
       double yKalman = 0.01 * Math.pow(1.4, leastDist);
 
@@ -103,11 +99,30 @@ public class Robot extends TimedRobot {
       visionMatrix.set(1, 0, yKalman);
 
       driveTrain.addVisionMeasurement(
-          frontRobotPose.get().estimatedPose.toPose2d(),
+          rightRobotPose.get().estimatedPose.toPose2d(),
           Timer.getFPGATimestamp() - 0.02,
           visionMatrix);
     }
-  }
+      else {
+        leastDist = leftdistToAprilTag;
+        double xKalman = 0.01 * Math.pow(1.15, leastDist);
+
+        double yKalman = 0.01 * Math.pow(1.4, leastDist);
+  
+        visionMatrix.set(0, 0, xKalman);
+        visionMatrix.set(1, 0, yKalman);
+  
+        driveTrain.addVisionMeasurement(
+            leftRobotPose.get().estimatedPose.toPose2d(),
+            Timer.getFPGATimestamp() - 0.02,
+            visionMatrix);
+      }
+
+      }
+    }
+
+      
+  
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics

@@ -23,7 +23,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 /** Creates a new VisionSystem. */
 public class VisionSystem extends SubsystemBase {
-
+ 
   Pose2d savedResult = new Pose2d(0, 0, new Rotation2d(0.01, 0.01));
   private static VisionSystem[] systemList =
       new VisionSystem[Constants.Vision.Cameras.values().length];
@@ -55,12 +55,12 @@ public class VisionSystem extends SubsystemBase {
     if (systemList[name.ordinal()] == null) {
       systemList[0] =
           new VisionSystem(
-              Constants.Vision.Cameras.FRONT_CAM.toString(),
-              Constants.Vision.Cameras.FRONT_CAM.ordinal());
+              Constants.Vision.Cameras.RIGHT_CAM.toString(),
+              Constants.Vision.Cameras.RIGHT_CAM.ordinal());
       systemList[1] =
           new VisionSystem(
-              Constants.Vision.Cameras.FRONT_CAM.toString(),
-              Constants.Vision.Cameras.FRONT_CAM.ordinal());
+              Constants.Vision.Cameras.LEFT_CAM.toString(),
+              Constants.Vision.Cameras.LEFT_CAM.ordinal());
     }
 
     return systemList[name.ordinal()];
