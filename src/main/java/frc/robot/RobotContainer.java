@@ -9,6 +9,8 @@ import static edu.wpi.first.units.Units.*;
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
+import dev.doglog.DogLog;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -21,10 +23,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
+import frc.robot.commands.DebugCommands.SmartDashboardCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
@@ -87,7 +91,6 @@ public class RobotContainer {
 
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("autochooser", autoChooser);
-    SmartDashboard.putNumber("random number", 1);
     configureBindings();
   }
 
@@ -200,9 +203,10 @@ public class RobotContainer {
     routine
         .active()
         .onTrue(
+            (new SmartDashboardCmd("auto routine started", "yes")).andThen(
             routine
                 .trajectory("BSTART-L2")
-                .resetOdometry()
+                .resetOdometry())
                 .andThen(routine.trajectory("BSTART-L2").cmd())
                 .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
                 .andThen(routine.trajectory("L2-BHPS").cmd())
@@ -221,6 +225,8 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
+    DogLog.log("name of selected auto command", autoChooser.selectedCommandScheduler().getName());
+
     return autoChooser.selectedCommandScheduler();
   }
 }
