@@ -130,7 +130,7 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
-    Trigger tipping = new Trigger(() -> GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorXY(driveTrain.getPigeon2())) > GyroStabilizer.TIP_THRESHOLD);
+    Trigger tipping = new Trigger(() -> GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2())) > GyroStabilizer.TIP_THRESHOLD);
     tipping.onTrue(new GyroStabilizer(driveTrain));
 
     // joystick.rightBumper().whileTrue(new
