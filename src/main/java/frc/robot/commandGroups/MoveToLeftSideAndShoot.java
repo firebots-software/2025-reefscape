@@ -8,16 +8,18 @@ import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
+import java.util.function.BooleanSupplier;
 
-public class RightSide extends SequentialCommandGroup {
-  public RightSide(
+public class MoveToLeftSideAndShoot extends SequentialCommandGroup {
+  public MoveToLeftSideAndShoot(
       ElevatorSubsystem elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
-      ElevatorPositions height) {
+      ElevatorPositions height,
+      BooleanSupplier redSide) {  
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, height)
-            .alongWith(JamesHardenMovement.toClosestRightBranch(swerveSubsystem, null)),
+            .alongWith(JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide)), 
         new ShootTootsieSlide(tootsieSlideSubsystem));
   }
 }
