@@ -11,7 +11,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class GyroStabilizer extends Command {
-  public static final double TIP_THRESHOLD = 0;
+  public static final double TIP_THRESHOLD = 0.1;
 
   private SwerveSubsystem swerveSubsystem;
   private Pigeon2 pigeon;
@@ -33,8 +33,15 @@ public class GyroStabilizer extends Command {
   @Override
   public void execute() {
     Transform2d currentTipVectorRP = getTipVectorRP(pigeon);
-    SwerveRequest drive = robotCentricDrive.withVelocityX(-currentTipVectorRP.getY())
-                                           .withVelocityY(currentTipVectorRP.getX());
+
+    double x = currentTipVectorRP.getY();
+    double y = -currentTipVectorRP.getX();
+    SwerveRequest drive = robotCentricDrive.withVelocityX(x)
+                                           .withVelocityY(y);
+
+    DogLog.log("gyroStabilizer/xSpeed", x);
+    DogLog.log("gyroStabilizer/ySpeed", y);
+
     swerveSubsystem.setControl(drive);
   }
 
@@ -61,5 +68,9 @@ public class GyroStabilizer extends Command {
 
   public static double magnitudeTipVector(Transform2d tipVector) {
     return Math.sqrt(tipVector.getX() * tipVector.getX() + tipVector.getY() * tipVector.getY());
+  }
+
+  public static boolean tipping(SwerveSubsystem swerveSubsystem) {
+    return GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(swerveSubsystem.getPigeon2())) > TIP_THRESHOLD;
   }
 }
