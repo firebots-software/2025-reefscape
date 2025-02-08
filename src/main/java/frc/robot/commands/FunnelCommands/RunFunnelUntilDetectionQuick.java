@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.FunnelSubsystem;
 
-// import edu.wpi.first.wpilibj2.command.CommandBase;
-
 /**
  * Runs the intake and preshooter until IR sensor detects note
  *
