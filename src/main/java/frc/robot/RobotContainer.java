@@ -15,6 +15,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,6 +31,12 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -66,7 +73,25 @@ public class RobotContainer {
     logger.telemeterize(driveTrain.getCurrentState());
   }
 
+  private final AutoFactory autoFactory;
+  private final AutoChooser autoChooser;
+
   public RobotContainer() {
+     autoFactory =
+        new AutoFactory(
+            driveTrain::getPose, // A function that returns the current robot pose
+            driveTrain
+                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            driveTrain::followTrajectory, // The drive subsystem trajectory follower
+            true, // If alliance flipping should be enabled
+            driveTrain);
+    autoChooser = new AutoChooser();
+    // Add options to the chooser
+    autoChooser.addRoutine("Example Routine", this::onlyRoutine);
+
+    // Put the auto chooser on the dashboard
+    SmartDashboard.putData("autochooser", autoChooser);
+    SmartDashboard.putNumber("random number", 1);
     configureBindings();
   }
 
@@ -170,9 +195,35 @@ public class RobotContainer {
             ? false
             : (DriverStation.getAlliance().get() == Alliance.Red);
   }
+    
+  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+
+  private AutoRoutine onlyRoutine() {
+    AutoRoutine routine = autoFactory.newRoutine("routine");
+    routine
+        .active()
+        .onTrue(
+            routine
+                .trajectory("BSTART-L2")
+                .resetOdometry()
+                .andThen(routine.trajectory("BSTART-L2").cmd())
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(routine.trajectory("L2-BHPS").cmd())
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(routine.trajectory("BHPS-R1").cmd())
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(routine.trajectory("R1-BHPS").cmd())
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(routine.trajectory("BHPS-L1").cmd())
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(routine.trajectory("L1-BHPS").cmd())
+                .andThen(driveTrain.applyRequest(()->brake).withTimeout(0.5))
+                .andThen(routine.trajectory("BHPS-R0").cmd()));
+    return routine;
+  }
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    return new WaitCommand(10);
+    return autoChooser.selectedCommandScheduler();
   }
 }
