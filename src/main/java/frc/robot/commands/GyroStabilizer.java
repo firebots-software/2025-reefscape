@@ -52,7 +52,7 @@ public class GyroStabilizer extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return magnitudeTipVector(getTipVectorRP(pigeon)) < TIP_THRESHOLD;
+    return !tipping(swerveSubsystem);
   }
 
   public static Transform2d getTipVectorRP(Pigeon2 pigeon) {
