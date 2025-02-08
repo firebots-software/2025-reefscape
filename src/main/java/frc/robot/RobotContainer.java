@@ -101,8 +101,8 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
-    Trigger tipping = new Trigger(() -> GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2())) > GyroStabilizer.TIP_THRESHOLD);
-    tipping.onTrue(new GyroStabilizer(driveTrain));
+    Trigger tipping = new Trigger(() -> (GyroStabilizer.tipping(driveTrain)));
+    tipping.whileTrue(new GyroStabilizer(driveTrain));
     /*
 
     Sysid button commands, commented out (I like keeping this commented because
