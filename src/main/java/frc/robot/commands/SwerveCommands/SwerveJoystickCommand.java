@@ -145,10 +145,6 @@ public class SwerveJoystickCommand extends Command {
     final double y = ySpeed;
     final double turn = turningSpeed;
 
-    DogLog.log("xSpeed", xSpeed);
-    DogLog.log("ySpeed", ySpeed);
-    DogLog.log("turningSpeed", turningSpeed);
-
     DogLog.log("joystickCommand/xSpeed", xSpeed);
     DogLog.log("joystickCommand/ySpeed", ySpeed);
     DogLog.log("joystickCommand/turningSpeed", turningSpeed);
