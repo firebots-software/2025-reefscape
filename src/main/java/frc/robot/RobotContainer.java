@@ -129,9 +129,9 @@ public class RobotContainer {
             speedFunction, // slowmode when left shoulder is pressed, otherwise fast
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
-    driveTrain.setDefaultCommand(swerveJoystickCommand);
-    Trigger tipping = new Trigger(() -> GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2())) > GyroStabilizer.TIP_THRESHOLD);
-    tipping.onTrue(new GyroStabilizer(driveTrain));
+        driveTrain.setDefaultCommand(swerveJoystickCommand);
+        Trigger tipping = new Trigger(() -> (GyroStabilizer.tipping(driveTrain)));
+        tipping.whileTrue(new GyroStabilizer(driveTrain));
 
     // joystick.rightBumper().whileTrue(new
     // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
