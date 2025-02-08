@@ -15,6 +15,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
+import choreo.trajectory.SwerveSample;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
@@ -166,6 +168,32 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     }
   }
 
+  public void followTrajectory(SwerveSample sample) {
+    // Get the current pose of the robot
+    Pose2d pose = getCurrentState().Pose;
+    // Generate the next speeds for the robot
+    ChassisSpeeds speeds =
+        new ChassisSpeeds(
+            sample.vx + xRegularPIDController.calculate(pose.getX(), sample.x),
+            sample.vy + yRegularPIDController.calculate(pose.getY(), sample.y),
+            sample.omega
+                + headingRegularPIDController.calculate(
+                    pose.getRotation().getRadians(), sample.heading));
+
+    DogLog.log("followTrajectory/sample.x", sample.x);
+    DogLog.log("followTrajectory/sample.y", sample.y);
+    DogLog.log("followTrajectory/sample.heading", sample.heading);
+
+    DogLog.log("followTrajectory/pidOutputX", xRegularPIDController.calculate(pose.getX(), sample.x));
+    DogLog.log("followTrajectory/sample.vx", sample.vx);
+    DogLog.log("followTrajectory/sample.vy", sample.vy);
+    DogLog.log("followTrajectory/sample.omega", sample.omega);
+
+    DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
+    // Apply the generated speed
+    setFieldSpeeds(speeds);
+  }
+  
   // Resets PID controllers
   public void resetProfiledPIDs() {
     xProfiledPIDController.reset(currentState.Pose.getX());
