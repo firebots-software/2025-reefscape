@@ -4,8 +4,6 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -29,7 +27,6 @@ public class AutoRoutines {
     final AutoTrajectory blueHumanPlayerStationToL1 = routine.trajectory("BHPS-L1");
     final AutoTrajectory l1ToBlueHumanPlayerStation = routine.trajectory("L1-BHPS");
     final AutoTrajectory blueHumanPlayerStationToR0 = routine.trajectory("BHPS-R0");
-    final Command brakeCommand = driveTrain.applyRequest(() -> brake).withTimeout(0.5);
 
     routine
         .active()
@@ -37,17 +34,17 @@ public class AutoRoutines {
             new SequentialCommandGroup(
                 blueStartToL2.resetOdometry(),
                 blueStartToL2.cmd(),
-                brakeCommand,
+                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
                 l2ToBlueHumanPlayerStation.cmd(),
-                brakeCommand,
+                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
                 blueHumanPlayerStationToR1.cmd(),
-                brakeCommand,
+                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
                 r1ToBlueHumanPlayerStation.cmd(),
-                brakeCommand,
+                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
                 blueHumanPlayerStationToL1.cmd(),
-                brakeCommand,
+                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
                 l1ToBlueHumanPlayerStation.cmd(),
-                brakeCommand,
+                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
                 blueHumanPlayerStationToR0.cmd()));
 
     return routine;
