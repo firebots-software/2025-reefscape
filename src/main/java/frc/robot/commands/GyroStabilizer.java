@@ -46,10 +46,10 @@ public class GyroStabilizer extends Command {
     SwerveRequest drive = robotCentricDrive.withVelocityX(xSpeed)
                                            .withVelocityY(ySpeed);
 
+    swerveSubsystem.setControl(drive);
+
     DogLog.log("gyroStabilizer/xSpeed", xSpeed);
     DogLog.log("gyroStabilizer/ySpeed", ySpeed);
-
-    swerveSubsystem.setControl(drive);
   }
 
   // Called once the command ends or is interrupted.
