@@ -713,10 +713,10 @@ public final class Constants {
       SPEED_RPS = speed;
       AMP_SPEED_RPS = ampSpeed;
       SPEED_VOLTAGE = voltage;
-      }
-      
+    }
+
     public static final class Odometry {
-        public final static double ODOMETRY_UPDATE_CONSTANT = 250.0;
+      public static final double ODOMETRY_UPDATE_CONSTANT = 250.0;
     }
   }
 }

@@ -20,7 +20,6 @@ import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
-import frc.robot.util.LoggedTalonFX;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in

@@ -6,10 +6,6 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import choreo.auto.AutoFactory;
-import choreo.auto.AutoRoutine;
-import com.ctre.phoenix6.SignalLogger;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.math.Matrix;
@@ -26,17 +22,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.GyroStabilizer;
-import frc.robot.commands.DaleCommands.ArmToAngleCmd;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.subsystems.VisionSystem;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -66,7 +56,6 @@ public class RobotContainer {
   private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
   private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
   private final CommandXboxController joystick = new CommandXboxController(0);
-
 
   private final AutoFactory autoFactory;
   private final AutoChooser autoChooser;
@@ -103,7 +92,8 @@ public class RobotContainer {
     // funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    Supplier<Double> frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
+    Supplier<Double>
+        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
         leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
         rotationFunction = () -> -joystick.getRightX(),
         speedFunction =
@@ -119,9 +109,9 @@ public class RobotContainer {
             speedFunction, // slowmode when left shoulder is pressed, otherwise fast
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
-        driveTrain.setDefaultCommand(swerveJoystickCommand);
-        Trigger tipping = new Trigger(() -> (GyroStabilizer.tipping(driveTrain)));
-        tipping.whileTrue(new GyroStabilizer(driveTrain));
+    driveTrain.setDefaultCommand(swerveJoystickCommand);
+    Trigger tipping = new Trigger(() -> (GyroStabilizer.tipping(driveTrain)));
+    tipping.whileTrue(new GyroStabilizer(driveTrain));
 
     // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.rightBumper().whileTrue(new
@@ -196,9 +186,10 @@ public class RobotContainer {
   }
 
   public static void setAlliance() {
-    redAlliance = (DriverStation.getAlliance().isEmpty())
-        ? false
-        : (DriverStation.getAlliance().get() == Alliance.Red);
+    redAlliance =
+        (DriverStation.getAlliance().isEmpty())
+            ? false
+            : (DriverStation.getAlliance().get() == Alliance.Red);
   }
 
   public Command getAutonomousCommand() {

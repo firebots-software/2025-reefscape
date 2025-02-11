@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class GyroStabilizer extends Command {
@@ -17,7 +16,7 @@ public class GyroStabilizer extends Command {
   private SwerveSubsystem swerveSubsystem;
   private Pigeon2 pigeon;
 
-  private static PIDController pidController = new PIDController(1, 0.0, 0.0); //TODO: values
+  private static PIDController pidController = new PIDController(1, 0.0, 0.0); // TODO: values
 
   private final SwerveRequest.RobotCentric robotCentricDrive =
       new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
@@ -43,8 +42,7 @@ public class GyroStabilizer extends Command {
     double xSpeed = pidController.calculate(dirToGoX, 0);
     double ySpeed = pidController.calculate(dirToGoY, 0);
 
-    SwerveRequest drive = robotCentricDrive.withVelocityX(xSpeed)
-                                           .withVelocityY(ySpeed);
+    SwerveRequest drive = robotCentricDrive.withVelocityX(xSpeed).withVelocityY(ySpeed);
 
     DogLog.log("gyroStabilizer/xSpeed", xSpeed);
     DogLog.log("gyroStabilizer/ySpeed", ySpeed);
@@ -72,12 +70,12 @@ public class GyroStabilizer extends Command {
     return new Transform2d(roll, pitch, Rotation2d.kZero);
   }
 
-
   public static double magnitudeTipVector(Transform2d tipVector) {
     return Math.sqrt(tipVector.getX() * tipVector.getX() + tipVector.getY() * tipVector.getY());
   }
 
   public static boolean tipping(SwerveSubsystem driveTrain) {
-    return GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2())) > TIP_THRESHOLD;
+    return GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2()))
+        > TIP_THRESHOLD;
   }
 }
