@@ -25,9 +25,15 @@ import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
+import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
+import frc.robot.commands.DebugCommands.DebugArm;
+import frc.robot.commands.DebugCommands.DebugElevator;
+import frc.robot.commands.DebugCommands.DebugFlywheel;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -35,10 +41,11 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
-  //   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  //   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-  //   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
+    FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
+    ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+    ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    
   // Alliance color
   Boolean coralInFunnel = Boolean.valueOf(false);
   Boolean coralInElevator = Boolean.valueOf(false);
@@ -60,6 +67,7 @@ public class RobotContainer {
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
+  private final CommandXboxController debugJoystick = new CommandXboxController(3);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
@@ -97,6 +105,9 @@ public class RobotContainer {
 
     // joystick.rightBumper().whileTrue(new
     // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
+
+    // Debugging
+    debugJoystick.rightTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
 
     /*
 
@@ -148,10 +159,18 @@ public class RobotContainer {
         new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
+    // Debugging
+    debugJoystick.leftTrigger().whileTrue(new DebugFlywheel(armSubsystem));
+    debugJoystick.b().onTrue(new DebugArm(armSubsystem));
+
+
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
     // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+
+    // Debugging
+    debugJoystick.a().onTrue(new DebugElevator(elevatorSubsystem));
 
     joystick
         .a()
