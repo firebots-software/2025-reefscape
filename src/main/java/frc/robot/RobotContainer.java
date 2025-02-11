@@ -19,17 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commandGroups.Dealgaenate;
-import frc.robot.commands.DaleCommands.ArmToAngleCmd;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
-import frc.robot.commands.FunnelCommands.EjectCoral;
-import frc.robot.commands.FunnelCommands.PullInToControl;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionQuick;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -82,7 +73,8 @@ public class RobotContainer {
     // funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
 
     // Trigger extraCoral =
-    //     new Trigger(() -> tootsieSlideSubsystem.coralPresent() && funnelSubsystem.isCoralCheckedIn());
+    //     new Trigger(() -> tootsieSlideSubsystem.coralPresent() &&
+    // funnelSubsystem.isCoralCheckedIn());
     // extraCoral.onTrue(
     //     new PullInToControl(funnelSubsystem).andThen(new EjectCoral(funnelSubsystem)));
 
