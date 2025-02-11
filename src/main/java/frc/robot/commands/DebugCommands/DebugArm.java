@@ -1,17 +1,18 @@
+
 package frc.robot.commands.DebugCommands;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 
-public class DebugElevator extends Command{
+public class DebugArm extends Command{
 
-  private final ElevatorSubsystem elevatorSubsystem;
+  private final ArmSubsystem arm;
+  private final int tolerance = 5;
 
-    public DebugElevator(ElevatorSubsystem subsystem){
-      this.elevatorSubsystem = subsystem;
-      addRequirements(elevatorSubsystem);
+    public DebugArm(ArmSubsystem arm){
+        this.arm = arm;
+        addRequirements(arm);
     }
 
   @Override
@@ -19,7 +20,7 @@ public class DebugElevator extends Command{
 
   @Override
   public void execute() {
-    elevatorSubsystem.testElevator(50);
+    arm.setPosition(30);
   }
 
   @Override
@@ -27,6 +28,6 @@ public class DebugElevator extends Command{
 
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.atTargetPosition();
+    return arm.atTarget(tolerance);
   }
 }

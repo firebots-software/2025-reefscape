@@ -19,15 +19,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
+import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
+import frc.robot.commands.DebugCommands.DebugArm;
+import frc.robot.commands.DebugCommands.DebugElevator;
+import frc.robot.commands.DebugCommands.DebugFlywheel;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -35,6 +39,7 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
+  // TODO: Uncomment when mechanisms arrive on the robot:
   //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
   //   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
   //   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -60,6 +65,7 @@ public class RobotContainer {
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
+  private final CommandXboxController debugJoystick = new CommandXboxController(3);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
@@ -71,6 +77,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    // TODO: Uncomment when mechanisms arrive on the robot:
     // Joystick suppliers,
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
@@ -95,8 +102,12 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
+    // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.rightBumper().whileTrue(new
     // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
+
+    // Debugging
+    debugJoystick.rightTrigger().whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
 
     /*
 
@@ -148,20 +159,34 @@ public class RobotContainer {
         new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
+    // Debugging
+    debugJoystick.leftTrigger().whileTrue(new DebugFlywheel(ArmSubsystem.getInstance()));
+    debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
+
+
+    // Debugging
+    debugJoystick.leftTrigger().whileTrue(new DebugFlywheel(ArmSubsystem.getInstance()));
+    debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
+
+
+    // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
     // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
-    joystick
-        .a()
-        .whileTrue(
-            new SetElevatorLevel(
-                ElevatorSubsystem.getInstance(),
-                ElevatorPositions.safePosition)); // change safepos in constants
+    // Debugging
+    debugJoystick.a().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+    // Debugging
+    debugJoystick.a().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
+
+    // joystick
+    //     .a()
+    //     .whileTrue(
+    //         new SetElevatorLevel(
+    //             elevatorSubsystem,
+    //             ElevatorPositions.safePosition)); // change safepos in constants
   }
 
   public static void setAlliance() {

@@ -5,6 +5,7 @@
 package frc.robot.commands.TootsieSlideCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
 /** An example command that uses an example subsystem. */
@@ -30,6 +31,7 @@ public class ShootTootsieSlide extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    CoralPosition.setCoralInTootsieSlide(false);
     tootsieSlideSubsystem.stopTootsie();
   }
 

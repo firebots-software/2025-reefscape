@@ -7,23 +7,18 @@ package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralPosition;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
-
-// import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
  * Runs the intake and preshooter until IR sensor detects note
  *
  * @param subsystem The subsystem used by this command.
  */
-public class RunFunnelUntilDetection extends Command {
+public class RunFunnelUntilDetectionQuick extends Command {
   private FunnelSubsystem funnelSubsystem;
-  private ElevatorSubsystem elevatorSubsystem;
 
-  public RunFunnelUntilDetection(FunnelSubsystem funnelSubsystem, ElevatorSubsystem elevator) {
+  public RunFunnelUntilDetectionQuick(FunnelSubsystem funnelSubsystem) {
     this.funnelSubsystem = funnelSubsystem;
-    this.elevatorSubsystem = elevator;
     addRequirements(funnelSubsystem);
   }
 
@@ -36,11 +31,7 @@ public class RunFunnelUntilDetection extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (elevatorSubsystem.isAtPosition()) {
-      funnelSubsystem.spinFunnel();
-    } else {
-      funnelSubsystem.maintainCurrentPosition();
-    }
+    funnelSubsystem.spinFunnel();
   }
 
   // Called once the command ends or is interrupted.
