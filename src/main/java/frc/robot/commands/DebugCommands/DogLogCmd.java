@@ -1,15 +1,14 @@
 package frc.robot.commands.DebugCommands;
 
 import dev.doglog.DogLog;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.util.struct.StructSerializable;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
  * A command that logs a key-value pair using DogLog.
  *
- * <p>This command supports a wide variety of types through overloaded constructors.
- * When scheduled, it immediately logs the provided value using the corresponding
- * DogLog.log overload and then ends.
+ * <p>This command supports a wide variety of types through overloaded constructors. When scheduled,
+ * it immediately logs the provided value using the corresponding DogLog.log overload and then ends.
  */
 public class DogLogCmd extends InstantCommand {
 
