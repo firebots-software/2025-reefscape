@@ -46,10 +46,10 @@ public class GyroStabilizer extends Command {
     SwerveRequest drive = robotCentricDrive.withVelocityX(xSpeed)
                                            .withVelocityY(ySpeed);
 
-    swerveSubsystem.setControl(drive);
-
     DogLog.log("gyroStabilizer/xSpeed", xSpeed);
     DogLog.log("gyroStabilizer/ySpeed", ySpeed);
+
+    swerveSubsystem.setControl(drive);
   }
 
   // Called once the command ends or is interrupted.
@@ -77,7 +77,7 @@ public class GyroStabilizer extends Command {
     return Math.sqrt(tipVector.getX() * tipVector.getX() + tipVector.getY() * tipVector.getY());
   }
 
-  public static boolean tipping(SwerveSubsystem swerveSubsystem) {
-    return GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(swerveSubsystem.getPigeon2())) > TIP_THRESHOLD;
+  public static boolean tipping(SwerveSubsystem driveTrain) {
+    return GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2())) > TIP_THRESHOLD;
   }
 }
