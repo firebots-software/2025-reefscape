@@ -160,8 +160,9 @@ public class RobotContainer {
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
     Trigger rightBumper = joystick.rightBumper();
 
+    // TODO: Uncomment when mechanisms arrive on the robot:
+    // Currently this code uses commands that we can't call or else it will throw errors
     // rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-
     // rightBumper.onFalse(
     //     new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     // joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
