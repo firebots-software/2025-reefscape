@@ -19,10 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
@@ -41,11 +39,11 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-    TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
-    FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-    ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-    ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-    
+  // TODO: Uncomment when mechanisms arrive on the robot:
+  //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
+  //   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
+  //   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+  //   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
   Boolean coralInFunnel = Boolean.valueOf(false);
   Boolean coralInElevator = Boolean.valueOf(false);
@@ -79,6 +77,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    // TODO: Uncomment when mechanisms arrive on the robot:
     // Joystick suppliers,
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
@@ -103,11 +102,12 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
+    // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.rightBumper().whileTrue(new
     // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
 
     // Debugging
-    debugJoystick.rightTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
+    debugJoystick.rightTrigger().whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
 
     /*
 
@@ -160,27 +160,33 @@ public class RobotContainer {
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     // Debugging
-    debugJoystick.leftTrigger().whileTrue(new DebugFlywheel(armSubsystem));
-    debugJoystick.b().onTrue(new DebugArm(armSubsystem));
+    debugJoystick.leftTrigger().whileTrue(new DebugFlywheel(ArmSubsystem.getInstance()));
+    debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
 
 
+    // Debugging
+    debugJoystick.leftTrigger().whileTrue(new DebugFlywheel(ArmSubsystem.getInstance()));
+    debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
+
+
+    // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
     // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
     // Debugging
-    debugJoystick.a().onTrue(new DebugElevator(elevatorSubsystem));
+    debugJoystick.a().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
 
-    joystick
-        .a()
-        .whileTrue(
-            new SetElevatorLevel(
-                ElevatorSubsystem.getInstance(),
-                ElevatorPositions.safePosition)); // change safepos in constants
+    // Debugging
+    debugJoystick.a().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+    // joystick
+    //     .a()
+    //     .whileTrue(
+    //         new SetElevatorLevel(
+    //             elevatorSubsystem,
+    //             ElevatorPositions.safePosition)); // change safepos in constants
   }
 
   public static void setAlliance() {
