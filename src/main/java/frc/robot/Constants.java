@@ -108,8 +108,8 @@ public final class Constants {
     public static final int RB_PORT = 13; // Right Bottom motor
     public static final int LT_PORT = 1; // Left Top motor
     public static final int LB_PORT = 11; // Left Bottom motor
-    public static final int ENCODER_PORT =
-        0; // subject to changepublic static final int ENCODER_PORT = 0; // subject to change
+    public static final int ENCODER_PORT = 0; // subject to change
+    // public static final int ENCODER_PORT = 0; // subject to change
 
     public static final double CURRENT_LIMIT = 8.0;
     public static final double S0C_KP = 1.0;
@@ -119,6 +119,10 @@ public final class Constants {
     public static final double MOTIONMAGIC_KV = 36; // MotionMagic Cruise Velocity in RPS of the arm
     public static final double MOTIONMAGIC_KA =
         2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
+    public static final double ZERO_CURRENT = 10;
+    public static final double DEALGAENATE_SPEED_ZOOM_ZOOM = 0;
+    public static final double EXTENDED_ANGLE = 0;
+    public static final double RETRACTED_ANGLE = 0;
 
     // Lmao this is useless, but it has my name on it
     public static double GET_YAJWINS_EQUATION(double distance) {
@@ -642,10 +646,11 @@ public final class Constants {
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
       Intake(0, 0.0),
-      L1(1, 0.657),
-      L2(2, 0.8636),
-      L3(3, 1.27),
-      L4(4, 1.905);
+      safePosition(0, 0.0),
+      L1(1, 0.0),
+      L2(2, 0.0),
+      L3(3, 0.0),
+      L4(4, 0.0);
 
       public final int position;
       public final double height;

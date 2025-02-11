@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.ElevatorIntakeLevel;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilDetection;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionQuick;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -30,7 +31,7 @@ public class LoadAndPutUp extends SequentialCommandGroup {
 
     addCommands(
         new ParallelCommandGroup(
-            new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem),
+            new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem),
             new ElevatorIntakeLevel(elevatorSubsystem, funnelSubsystem)));
     addCommands(
         new TransferPieceBetweenFunnelAndElevator(

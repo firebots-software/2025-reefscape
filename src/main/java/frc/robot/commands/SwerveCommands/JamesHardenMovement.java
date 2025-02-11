@@ -36,7 +36,7 @@ public class JamesHardenMovement extends Command {
     if (targetPoseSupplier != null) {
       targetPose = targetPoseSupplier.get();
     }
-    swerve.resetPIDs();
+    swerve.resetProfiledPIDs();
   }
 
   @Override
@@ -51,7 +51,7 @@ public class JamesHardenMovement extends Command {
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(radps)", speeds.omegaRadiansPerSecond);
 
-    swerve.setChassisSpeeds(speeds);
+    swerve.setFieldSpeeds(speeds);
   }
 
   @Override
@@ -70,7 +70,7 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    swerve.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
+    swerve.setRobotSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
   public static JamesHardenMovement toClosestLeftBranch(
