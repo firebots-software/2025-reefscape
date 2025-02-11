@@ -98,15 +98,13 @@ public class Robot extends TimedRobot {
                       driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
                 
       leastDist = Math.min(rightdistToAprilTag, leftdistToAprilTag);
-      double xKalman = 0.01 * Math.pow(1.15, leastDist);
+      double xKalman = 0.01 * Math.pow(1.15, leastDist); //makes it so that we trust it less the more far away we are (keep constant for now)
 
-      double yKalman = 0.01 * Math.pow(1.4, leastDist);
+      double yKalman = 0.01 * Math.pow(1.4, leastDist); //makes it so that we trust it less the more far away we are (keep constant for now)
 
       visionMatrix.set(0, 0, xKalman);
       visionMatrix.set(1, 0, yKalman);
       if (rightdistToAprilTag <= leftdistToAprilTag) {
-
-
         driveTrain.addVisionMeasurement(
             rightRobotPose.get().estimatedPose.toPose2d(),
             Timer.getFPGATimestamp() - 0.02,
