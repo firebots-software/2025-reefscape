@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
 import choreo.trajectory.SwerveSample;
+import dev.doglog.DogLog;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -16,7 +18,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -372,15 +373,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // DogLog.log("chassisspeedX", robotChassisSpeeds.vxMetersPerSecond);
     // DogLog.log("chassisspeedY", robotChassisSpeeds.vyMetersPerSecond);
     // DogLog.log("chassisspeedOMEGA", robotChassisSpeeds.omegaRadiansPerSecond);
-
-    DogLog.log("fl_speed", getState().ModuleStates[0].speedMetersPerSecond);
-    DogLog.log("fl_angle", getState().ModuleStates[0].angle.getDegrees());
-    DogLog.log("fr_speed", getState().ModuleStates[1].speedMetersPerSecond);
-    DogLog.log("fr_angle", getState().ModuleStates[1].angle.getDegrees());
-    DogLog.log("bl_speed", getState().ModuleStates[2].speedMetersPerSecond);
-    DogLog.log("bl_angle", getState().ModuleStates[2].angle.getDegrees());
-    DogLog.log("br_speed", getState().ModuleStates[3].speedMetersPerSecond);
-    DogLog.log("br_angle", getState().ModuleStates[3].angle.getDegrees());
     // DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
     // DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
     // DogLog.log("chassis/rotation_speed_radps",

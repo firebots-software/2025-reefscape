@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.*;
 
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
+import com.ctre.phoenix6.SignalLogger;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -39,6 +41,9 @@ import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.subsystems.VisionSystem;
@@ -112,8 +117,7 @@ public class RobotContainer {
     funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    Supplier<Double>
-        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
+    Supplier<Double> frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
         leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
         rotationFunction = () -> -joystick.getRightX(),
         speedFunction =
@@ -205,10 +209,9 @@ public class RobotContainer {
   }
 
   public static void setAlliance() {
-    redAlliance =
-        (DriverStation.getAlliance().isEmpty())
-            ? false
-            : (DriverStation.getAlliance().get() == Alliance.Red);
+    redAlliance = (DriverStation.getAlliance().isEmpty())
+        ? false
+        : (DriverStation.getAlliance().get() == Alliance.Red);
   }
 
   public Command getAutonomousCommand() {

@@ -166,7 +166,7 @@ public final class Constants {
   }
 
   public static class Swerve {
-    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.JAMES_HARDEN;
+    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.PROTO;
 
     public static enum SwerveLevel {
       L2(6.75, 21.428571428571427),
@@ -713,6 +713,10 @@ public final class Constants {
       SPEED_RPS = speed;
       AMP_SPEED_RPS = ampSpeed;
       SPEED_VOLTAGE = voltage;
+      }
+      
+    public static final class Odometry {
+        public final static double ODOMETRY_UPDATE_CONSTANT = 250.0;
     }
   }
 }

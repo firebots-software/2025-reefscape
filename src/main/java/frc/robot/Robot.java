@@ -20,6 +20,7 @@ import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
+import frc.robot.util.LoggedTalonFX;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -107,6 +108,8 @@ public class Robot extends TimedRobot {
           Timer.getFPGATimestamp() - 0.02,
           visionMatrix);
     }
+    // DogLog.setOptions(
+    //    new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
   }
 
   /**
@@ -124,6 +127,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
+    LoggedTalonFX.periodic_static();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
