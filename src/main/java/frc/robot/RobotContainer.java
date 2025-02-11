@@ -10,6 +10,8 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,31 +21,18 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
+import frc.robot.commands.GyroStabilizer;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
-import frc.robot.commands.ElevatorCommands.*;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilDetection;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
-import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
-import frc.robot.commands.GyroStabilizer;
-import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.FunnelSubsystem;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.subsystems.VisionSystem;
@@ -55,10 +44,11 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
-  FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-  ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+  // TODO: Uncomment when mechanisms arrive on the robot:
+  //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
+  //   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
+  //   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+  //   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
   Boolean coralInFunnel = Boolean.valueOf(false);
   Boolean coralInElevator = Boolean.valueOf(false);
@@ -77,18 +67,16 @@ public class RobotContainer {
   private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
   private final CommandXboxController joystick = new CommandXboxController(0);
 
+
   private final AutoFactory autoFactory;
+  private final AutoChooser autoChooser;
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
+  public void doTelemetry() {
+    logger.telemeterize(driveTrain.getCurrentState());
+  }
 
   public RobotContainer() {
-    // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
-    startPosChooser.setDefaultOption("Top (Next to Blue Barge Zone)", "top");
-    startPosChooser.addOption("Middle (In between to Barge Zones)", "middle");
-    startPosChooser.addOption("Bottom (Next to Red Barge Zone)", "bottom");
-    SmartDashboard.putData("Auto Start Position", startPosChooser);
-
-    configureBindings();
     autoFactory =
         new AutoFactory(
             driveTrain::getPose, // A function that returns the current robot pose
@@ -97,24 +85,22 @@ public class RobotContainer {
             driveTrain::followTrajectory, // The drive subsystem trajectory follower
             true, // If alliance flipping should be enabled
             driveTrain);
-  }
+    autoChooser = new AutoChooser();
+    AutoRoutines autoRoutines = new AutoRoutines(autoFactory, driveTrain);
+    // Add options to the chooser
+    autoChooser.addRoutine("Basic Four Coral Auto", autoRoutines::basicFourCoralAuto);
 
-  // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
-  public void doTelemetry() {
-    // logger.telemeterize(driveTrain.getState()); idk
-    // logger.telemeterize(driveTrain.getCurrentState());
-    Pose2d camPose = visionFront.getPose2d();
-    Pose2d camPose2 = visionBack.getPose2d();
-    if (camPose != null || camPose2 != null) {
-      logger.logVisionPose(VisionSystem.getAverageForOffBotTesting(camPose, camPose2));
-    }
+    // Put the auto chooser on the dashboard
+    SmartDashboard.putData("autochooser", autoChooser);
+    configureBindings();
   }
 
   private void configureBindings() {
-    //Joystick suppliers,
-    funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
-    Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
+    // TODO: Uncomment when mechanisms arrive on the robot:
+    // Joystick suppliers,
+    // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
+    // funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
     Supplier<Double> frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
@@ -137,6 +123,7 @@ public class RobotContainer {
         Trigger tipping = new Trigger(() -> (GyroStabilizer.tipping(driveTrain)));
         tipping.whileTrue(new GyroStabilizer(driveTrain));
 
+    // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.rightBumper().whileTrue(new
     // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
 
@@ -187,25 +174,25 @@ public class RobotContainer {
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
     Trigger rightBumper = joystick.rightBumper();
 
-    rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-    rightBumper.onFalse(
-        new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
-    joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
+    // TODO: Uncomment when mechanisms arrive on the robot:
+    // Currently this code uses commands that we can't call or else it will throw errors
+    // rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+    // rightBumper.onFalse(
+    //     new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
+    // joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
-    joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
-    joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
-    joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    // TODO: Uncomment when mechanisms arrive on the robot:
+    // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
-    joystick
-        .a()
-        .whileTrue(
-            new SetElevatorLevel(
-                ElevatorSubsystem.getInstance(),
-                ElevatorPositions.safePosition)); // change safepos in constants
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+    // joystick
+    //     .a()
+    //     .whileTrue(
+    //         new SetElevatorLevel(
+    //             elevatorSubsystem,
+    //             ElevatorPositions.safePosition)); // change safepos in constants
   }
 
   public static void setAlliance() {
@@ -215,96 +202,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
-
-    /*
-    Field Diagram
-
-              BLUE                        RED
-    ___________________________________________________
-    |THPS                 TSTART                  THPS|
-    |                       | |                       |
-    |        5    4         | |         4    5        |
-    |     0          3    MSTART     3          0     |
-    |        1    2         | |         2    1        |
-    |                       | |                       |
-    |BHPS_________________BSTART__________________BHPS|
-
-    L and R branches are on the left and right of the robot when it is at the reef in between the two branches
-
-    a path name consists of a start and a destination
-    a start and a destinantion can be on any one of those marked areas
-    the format for a path is start-destination
-    ex. 2L-BHPS
-    this path starts from the left branch on the second part of the reef (2L), and goes to the bottom human player station (BHPS)
-    */
-    String chosenPath = startPosChooser.getSelected();
-
-    AutoRoutine routine = autoFactory.newRoutine("routine");
-    switch (chosenPath) {
-      case "top":
-        routine
-            .active()
-            .onTrue(
-                routine
-                    .trajectory("TSTART-4R")
-                    .resetOdometry()
-                    .andThen(autoSubCommand(routine, "TSTART-4R"))
-                    .andThen(autoSubCommand(routine, "4R-THPS"))
-                    .andThen(autoSubCommand(routine, "THPS-5L"))
-                    .andThen(autoSubCommand(routine, "5L-THPS"))
-                    .andThen(autoSubCommand(routine, "THPS-5R"))
-                    .andThen(autoSubCommand(routine, "5R-THPS"))
-                    .andThen(autoSubCommand(routine, "THPS-0L")));
-        break;
-
-      case "middle":
-        routine
-            .active()
-            .onTrue(
-                routine
-                    .trajectory("MSTART-3R")
-                    .resetOdometry()
-                    .andThen(autoSubCommand(routine, "MSTART-3R")));
-        break;
-
-      case "bottom":
-        routine
-            .active()
-            .onTrue(
-                routine
-                    .trajectory("BSTART-2L")
-                    .resetOdometry()
-                    .andThen(autoSubCommand(routine, "BSTART-2L"))
-                    .andThen(autoSubCommand(routine, "2L-BHPS"))
-                    .andThen(autoSubCommand(routine, "BHPS-1R"))
-                    .andThen(autoSubCommand(routine, "1R-BHPS"))
-                    .andThen(autoSubCommand(routine, "BHPS-1L"))
-                    .andThen(autoSubCommand(routine, "1L-BHPS"))
-                    .andThen(autoSubCommand(routine, "BHPS-0R")));
-        break;
-    }
-
-    return routine.cmd();
-  }
-
-  public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // for actual robot
-    BooleanSupplier pathGoesToHPS =
-        () -> !(baseCommandName.contains("HPS-") || baseCommandName.contains("START-"));
-    // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator
-    // and shoot, else lower elevator and intake
-    return Commands.parallel(
-            routine.trajectory(baseCommandName).cmd(),
-            ((pathGoesToHPS.getAsBoolean())
-                ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
-                : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)))
-        .andThen(
-            (pathGoesToHPS.getAsBoolean())
-                ? new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem)
-                : new ShootTootsieSlide(tootsieSlideSubsystem))
-        .andThen(
-            new TransferPieceBetweenFunnelAndElevator(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem))
-        .onlyIf(pathGoesToHPS); // transfers piece to elevator only if path doesnt go to hps
+    /* Run the path selected from the auto chooser */
+    return autoChooser.selectedCommandScheduler();
   }
 }
