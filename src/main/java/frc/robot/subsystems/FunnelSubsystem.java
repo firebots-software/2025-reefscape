@@ -14,6 +14,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -142,6 +143,11 @@ public class FunnelSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    DogLog.log("subsystems/Funnel/CheckedInStatus", isCoralCheckedIn());
+    DogLog.log("subsystems/Funnel/CheckedOutStatus", isCoralCheckedOut());
+    DogLog.log("subsystems/Funnel/DrakeStatus", drakeTripped());
+    DogLog.log("subsystems/Funnel/FunnelVelocity", rightMotor.getVelocity().getValueAsDouble());
+    DogLog.log("subsystems/Funnel/AbsPositionalError", getAbsolutePositionalError());
   }
 
   @Override

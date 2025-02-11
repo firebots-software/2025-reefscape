@@ -177,7 +177,9 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
 
     // This method will be called once per scheduler run
-    DogLog.log("Arm at target", atTarget(5));
+    DogLog.log("subsystems/Dale/Arm at target", atTarget(5));
+    DogLog.log("subsystems/Dale/Arm Degrees", encoderDegrees);
+    DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
   }
 
   public void spinFlywheel(double flywheelSpeed) {
