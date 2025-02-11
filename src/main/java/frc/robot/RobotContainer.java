@@ -8,8 +8,6 @@ import static edu.wpi.first.units.Units.*;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
-import choreo.auto.AutoRoutine;
-import com.ctre.phoenix6.swerve.SwerveRequest;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -78,8 +76,9 @@ public class RobotContainer {
             true, // If alliance flipping should be enabled
             driveTrain);
     autoChooser = new AutoChooser();
+    AutoRoutines autoRoutines = new AutoRoutines(autoFactory, driveTrain);
     // Add options to the chooser
-    autoChooser.addRoutine("Example Routine", this::onlyRoutine);
+    autoChooser.addRoutine("Basic Four Coral Auto", autoRoutines::basicFourCoralAuto);
 
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("autochooser", autoChooser);
@@ -188,36 +187,8 @@ public class RobotContainer {
             : (DriverStation.getAlliance().get() == Alliance.Red);
   }
 
-  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-
-  private AutoRoutine onlyRoutine() {
-    AutoRoutine routine = autoFactory.newRoutine("routine");
-    routine
-        .active()
-        .onTrue(
-            routine
-                .trajectory("BSTART-L2")
-                .resetOdometry()
-                .andThen(routine.trajectory("BSTART-L2").cmd())
-                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
-                .andThen(routine.trajectory("L2-BHPS").cmd())
-                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
-                .andThen(routine.trajectory("BHPS-R1").cmd())
-                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
-                .andThen(routine.trajectory("R1-BHPS").cmd())
-                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
-                .andThen(routine.trajectory("BHPS-L1").cmd())
-                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
-                .andThen(routine.trajectory("L1-BHPS").cmd())
-                .andThen(driveTrain.applyRequest(() -> brake).withTimeout(0.5))
-                .andThen(routine.trajectory("BHPS-R0").cmd()));
-    return routine;
-  }
-
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    DogLog.log("name of selected auto command", autoChooser.selectedCommandScheduler().getName());
-
     return autoChooser.selectedCommandScheduler();
   }
 }
