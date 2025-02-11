@@ -61,6 +61,9 @@ public class RobotContainer {
 
   public RobotContainer() {
     driveTrain = SwerveSubsystem.getInstance();
+    // LEFT OFF 2/10/25: trying to fix initialization error in Telemetry that occurs when
+    // you run the code on the Proto robot. Looks like SwerveSubsystem doesn't get fully
+    // initialized before Telemtry tries to use it.
     logger = new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
     autoFactory =
         new AutoFactory(
@@ -180,7 +183,7 @@ public class RobotContainer {
     //             elevatorSubsystem,
     //             ElevatorPositions.safePosition)); // change safepos in constants
   }
-  
+
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
     logger.telemeterize(driveTrain.getCurrentState());
