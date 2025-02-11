@@ -51,8 +51,7 @@ public class RobotContainer {
 
   private final SwerveSubsystem driveTrain;
 
-  private final Telemetry logger =
-      new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
+  private final Telemetry logger;
   private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
   private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
   private final CommandXboxController joystick = new CommandXboxController(0);
@@ -67,6 +66,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     driveTrain = SwerveSubsystem.getInstance();
+    logger = new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
     autoFactory =
         new AutoFactory(
             driveTrain::getPose, // A function that returns the current robot pose
