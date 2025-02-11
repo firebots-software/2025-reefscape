@@ -59,11 +59,6 @@ public class RobotContainer {
   private final AutoFactory autoFactory;
   private final AutoChooser autoChooser;
 
-  // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
-  public void doTelemetry() {
-    logger.telemeterize(driveTrain.getCurrentState());
-  }
-
   public RobotContainer() {
     driveTrain = SwerveSubsystem.getInstance();
     logger = new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
@@ -184,6 +179,11 @@ public class RobotContainer {
     //         new SetElevatorLevel(
     //             elevatorSubsystem,
     //             ElevatorPositions.safePosition)); // change safepos in constants
+  }
+  
+  // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
+  public void doTelemetry() {
+    logger.telemeterize(driveTrain.getCurrentState());
   }
 
   public static void setAlliance() {
