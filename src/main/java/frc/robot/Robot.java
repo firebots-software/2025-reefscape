@@ -6,10 +6,20 @@ package frc.robot;
 
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
+import java.util.Optional;
+import org.photonvision.EstimatedRobotPose;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -30,11 +40,89 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
+
+  private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+  private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
+  private final SwerveSubsystem driveTrain =
+      new SwerveSubsystem(
+          Constants.Swerve.DrivetrainConstants,
+          250.0, // TODO: CHANGE ODOMETRY UPDATE FREQUENCY TO CONSTANT,
+          odometryMatrix,
+          visionMatrix,
+          Constants.Swerve.FrontLeft,
+          Constants.Swerve.FrontRight,
+          Constants.Swerve.BackLeft,
+          Constants.Swerve.BackRight);
+  private double leastDist;
+
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-  }
+    m_robotContainer.doTelemetry();
+    CommandScheduler.getInstance().run();
+    Optional<EstimatedRobotPose> rightRobotPose =
+        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+    Optional<EstimatedRobotPose> leftRobotPose =
+        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+    if (rightRobotPose.isPresent() || leftRobotPose.isPresent()) {
+
+      double rightdistToAprilTag =
+          visionRight
+              .gAprilTagFieldLayout()
+              .getTagPose(visionRight.gPipelineResult().getBestTarget().getFiducialId())
+              .get()
+              .getTranslation()
+              .getDistance(
+                  new Translation3d(
+                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+
+      double leftdistToAprilTag =
+          visionLeft
+              .gAprilTagFieldLayout()
+              .getTagPose(visionLeft.gPipelineResult().getBestTarget().getFiducialId())
+              .get()
+              .getTranslation()
+              .getDistance(
+                  new Translation3d(
+                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+
+      if (rightdistToAprilTag <= leftdistToAprilTag) {
+        leastDist = rightdistToAprilTag;
+        double xKalman = 0.01 * Math.pow(1.15, leastDist);
+
+      double yKalman = 0.01 * Math.pow(1.4, leastDist);
+
+      visionMatrix.set(0, 0, xKalman);
+      visionMatrix.set(1, 0, yKalman);
+
+      driveTrain.addVisionMeasurement(
+          rightRobotPose.get().estimatedPose.toPose2d(),
+          Timer.getFPGATimestamp() - 0.02,
+          visionMatrix);
+    }
+      else {
+        leastDist = leftdistToAprilTag;
+        double xKalman = 0.01 * Math.pow(1.15, leastDist);
+
+        double yKalman = 0.01 * Math.pow(1.4, leastDist);
+  
+        visionMatrix.set(0, 0, xKalman);
+        visionMatrix.set(1, 0, yKalman);
+  
+        driveTrain.addVisionMeasurement(
+            leftRobotPose.get().estimatedPose.toPose2d(),
+            Timer.getFPGATimestamp() - 0.02,
+            visionMatrix);
+      }
+
+      }
+    }
+
+      
+  
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics

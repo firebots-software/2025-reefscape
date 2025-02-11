@@ -25,12 +25,33 @@ import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+
+  private final Telemetry logger =
+      new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
+  private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
+  private final CommandXboxController joystick = new CommandXboxController(0);
+
+  // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
+  public void doTelemetry() {
+    logger.telemeterize(driveTrain.getState());
+    Pose2d camPose = visionRight.getPose2d();
+    Pose2d camPose2 = visionLeft.getPose2d();
+    if (camPose != null || camPose2 != null) {
+      logger.logVisionPose(VisionSystem.getAverageForOffBotTesting(camPose, camPose2));
+    }
+  }
+
+  public RobotContainer() {
+    configureBindings();
+  }
 
   // TODO: Uncomment when mechanisms arrive on the robot:
   //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
@@ -55,19 +76,6 @@ public class RobotContainer {
           Constants.Swerve.BackLeft,
           Constants.Swerve.BackRight);
 
-  private final Telemetry logger =
-      new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
-  private final CommandXboxController joystick = new CommandXboxController(0);
-
-  // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
-  public void doTelemetry() {
-    logger.telemeterize(driveTrain.getCurrentState());
-  }
-
-  public RobotContainer() {
-    configureBindings();
-  }
-
   private void configureBindings() {
     // TODO: Uncomment when mechanisms arrive on the robot:
     // Joystick suppliers,
@@ -84,6 +92,7 @@ public class RobotContainer {
                 leftShoulderTrigger.getAsBoolean()
                     ? 0d
                     : 1d; // slowmode when left shoulder is pressed, otherwise fast
+
     SwerveJoystickCommand swerveJoystickCommand =
         new SwerveJoystickCommand(
             frontBackFunction,
