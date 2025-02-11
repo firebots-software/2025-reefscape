@@ -49,7 +49,7 @@ public class RobotContainer {
   // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
   private final SendableChooser<String> startPosChooser = new SendableChooser<String>();
 
-  private final SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
+  private final SwerveSubsystem driveTrain;
 
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
@@ -66,6 +66,7 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
+    driveTrain = SwerveSubsystem.getInstance();
     autoFactory =
         new AutoFactory(
             driveTrain::getPose, // A function that returns the current robot pose
