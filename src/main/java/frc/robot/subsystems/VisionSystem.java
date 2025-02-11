@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import java.util.Optional;
@@ -23,19 +22,31 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 /** Creates a new VisionSystem. */
 public class VisionSystem extends SubsystemBase {
- 
+
   Pose2d savedResult = new Pose2d(0, 0, new Rotation2d(0.01, 0.01));
   private static VisionSystem[] systemList =
       new VisionSystem[Constants.Vision.Cameras.values().length];
   private Transform3d[] camToRobots = {
     // right Camera transform
     new Transform3d(
-        new Translation3d(Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_X, Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_Y, Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_Z),
-        new Rotation3d(Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_ROLL, Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_PITCH, Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_YAW)),
+        new Translation3d(
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_X,
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_Y,
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_Z),
+        new Rotation3d(
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_ROLL,
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_PITCH,
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_YAW)),
     // left Camera
     new Transform3d(
-      new Translation3d(Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_X, Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_Y, Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_Z),
-      new Rotation3d(Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_ROLL, Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_PITCH, Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_YAW)),
+        new Translation3d(
+            Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_X,
+            Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_Y,
+            Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_Z),
+        new Rotation3d(
+            Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_ROLL,
+            Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_PITCH,
+            Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_YAW)),
   };
   private PhotonCamera camera;
   private PhotonPipelineResult pipeline;

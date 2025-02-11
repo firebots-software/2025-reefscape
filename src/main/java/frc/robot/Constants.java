@@ -169,17 +169,16 @@ public final class Constants {
     public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(6.5);
     public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = 0;
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(25.37693353);
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW= Math.PI;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH =
+        Units.degreesToRadians(25.37693353);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Math.PI;
 
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(8);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(5.75);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW= 0;
-
-
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = 0;
   }
 
   public static class Swerve {
