@@ -75,6 +75,16 @@ public class DogLogCmd extends InstantCommand {
    * Log an int array.
    *
    * @param key the key to log to.
+   * @param value the int to log.
+   */
+  public DogLogCmd(String key, int value) {
+    super(() -> DogLog.log(key, value));
+  }
+
+  /**
+   * Log an int array.
+   *
+   * @param key the key to log to.
    * @param value the int array to log.
    */
   public DogLogCmd(String key, int[] value) {
