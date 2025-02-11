@@ -1,7 +1,6 @@
 package frc.robot.commands.DebugCommands;
 
 import dev.doglog.DogLog;
-import edu.wpi.first.util.struct.StructSerializable;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
@@ -120,58 +119,5 @@ public class DogLogCmd extends InstantCommand {
    */
   public DogLogCmd(String key, String[] value) {
     super(() -> DogLog.log(key, value));
-  }
-
-  /**
-   * Log an enum value. The enum's name is used as the logged string.
-   *
-   * @param key the key to log to.
-   * @param value the enum value to log.
-   */
-  public DogLogCmd(String key, Enum<?> value) {
-    super(() -> DogLog.log(key, value));
-  }
-
-  /**
-   * Log an array of enums. Each enum's name is used as the logged string.
-   *
-   * @param key the key to log to.
-   * @param value the enum array to log.
-   */
-  public DogLogCmd(String key, Enum<?>[] value) {
-    super(() -> DogLog.log(key, value));
-  }
-
-  /**
-   * Log a struct that implements {@link StructSerializable}.
-   *
-   * @param key the key to log to.
-   * @param value the struct value to log.
-   * @param <T> the type that extends StructSerializable.
-   */
-  public <T extends StructSerializable> DogLogCmd(String key, T value) {
-    super(() -> DogLog.log(key, value));
-  }
-
-  /**
-   * Log an array of structs that implement {@link StructSerializable}.
-   *
-   * @param key the key to log to.
-   * @param value the struct array to log.
-   * @param <T> the type that extends StructSerializable.
-   */
-  public <T extends StructSerializable> DogLogCmd(String key, T[] value) {
-    super(() -> DogLog.log(key, value));
-  }
-
-  /**
-   * Log a String value with a custom type string.
-   *
-   * @param key the key to log to.
-   * @param value the String value to log.
-   * @param customTypeString the custom type string to use.
-   */
-  public DogLogCmd(String key, String value, String customTypeString) {
-    super(() -> DogLog.log(key, value, customTypeString));
   }
 }
