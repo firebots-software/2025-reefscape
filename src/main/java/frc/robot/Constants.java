@@ -601,7 +601,7 @@ public final class Constants {
     public static final double ACCELERATION = 0.0; // TODO
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
-    public static final double FAST_BACKWARDS_VELOCITY = -5; 
+    public static final double FAST_BACKWARDS_VELOCITY = -5;
     public static final double SPEED_RPS = 0.0; // TODO
     public static final int GEAR_RATIO = 0; // TODO
 
@@ -609,7 +609,7 @@ public final class Constants {
     public static final int CHECK_OUT_PORT = 0;
     public static final int DRAKE_PORT = 0;
     public static final double MAX_POSITIONAL_ERROR = 0.05; // TODO
-    //TODO: Some negative value
+    // TODO: Some negative value
     public static final double REVERSE_PULL_IN_ROTATIONS = 0;
     public static final double PULL_IN_CORAL_SLIGHTLY_ROTATIONS = 0;
   }

@@ -78,8 +78,10 @@ public class RobotContainer {
     Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
     funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem));
 
-    Trigger extraCoral = new Trigger(() -> testerTootsie.coralPresent() && funnelSubsystem.isCoralCheckedIn());
-    extraCoral.onTrue(new PullInToControl(funnelSubsystem).andThen(new EjectCoral(funnelSubsystem)));
+    Trigger extraCoral =
+        new Trigger(() -> testerTootsie.coralPresent() && funnelSubsystem.isCoralCheckedIn());
+    extraCoral.onTrue(
+        new PullInToControl(funnelSubsystem).andThen(new EjectCoral(funnelSubsystem)));
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),

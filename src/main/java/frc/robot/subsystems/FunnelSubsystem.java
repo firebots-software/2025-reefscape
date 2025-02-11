@@ -11,7 +11,6 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -107,7 +106,7 @@ public class FunnelSubsystem extends SubsystemBase {
     runFunnelAtRPS(Constants.FunnelConstants.SPEED_RPS);
   }
 
-  public void spinBackFast(){
+  public void spinBackFast() {
     rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
 
@@ -115,10 +114,9 @@ public class FunnelSubsystem extends SubsystemBase {
     rightMotor.stopMotor();
   }
 
-
   public void moveBackFlywheel(double degrees) {
     // TODO: Fix this bro lmao l bozo lol rofl haha hee hee hee haw
-   
+
     rightMotor.setControl(controlRequest.withPosition(degrees));
   }
 
@@ -140,6 +138,7 @@ public class FunnelSubsystem extends SubsystemBase {
   public void spinBackSlowly() {
     rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
+
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
   }
@@ -155,8 +154,6 @@ public class FunnelSubsystem extends SubsystemBase {
   public void setCoralInFunnel(boolean coralInFunnel) {
     this.coralInFunnel = coralInFunnel;
   }
-
-
 
   public boolean isCoralInFunnel() {
     return coralInFunnel;

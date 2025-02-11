@@ -5,13 +5,13 @@
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.FunnelSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class EjectCoral extends Command {
   /** Creates a new EjectCoral. */
   FunnelSubsystem funnel;
+
   public EjectCoral(FunnelSubsystem funnel) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.funnel = funnel;
@@ -31,7 +31,8 @@ public class EjectCoral extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    funnel.stopFunnel();;
+    funnel.stopFunnel();
+    ;
   }
 
   // Returns true when the command should end.

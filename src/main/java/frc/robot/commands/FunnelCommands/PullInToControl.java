@@ -6,13 +6,13 @@ package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class PullInToControl extends Command {
   /** Creates a new PullInToControl. */
   FunnelSubsystem funnel;
+
   public PullInToControl(FunnelSubsystem funnel) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.funnel = funnel;
