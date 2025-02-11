@@ -42,10 +42,10 @@ public class RobotContainer {
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
     logger.telemeterize(driveTrain.getState());
-    Pose2d camPose = visionRight.getPose2d();
-    Pose2d camPose2 = visionLeft.getPose2d();
-    if (camPose != null || camPose2 != null) {
-      logger.logVisionPose(VisionSystem.getAverageForOffBotTesting(camPose, camPose2));
+    Pose2d camRightPose = visionRight.getPose2d();
+    Pose2d camLeftPose = visionLeft.getPose2d();
+    if (camRightPose != null || camLeftPose != null) {
+      logger.logVisionPose(VisionSystem.getAverageForOffBotTesting(camRightPose, camLeftPose));
     }
   }
 

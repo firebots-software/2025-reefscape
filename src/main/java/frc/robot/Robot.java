@@ -40,9 +40,9 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
+  private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d); //standard deviation for x (meters), y (meters) and rotation (radians) camera data errors will have to calculate on actual bot
 
-  private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+  private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1); //standard deviation for x (meters), y (meters) and rotation (radians) for odemtery 
   private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
   private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
   private final SwerveSubsystem driveTrain =
@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
     Optional<EstimatedRobotPose> rightRobotPose =
         visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
     Optional<EstimatedRobotPose> leftRobotPose =
-        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+        visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
     if (rightRobotPose.isPresent() || leftRobotPose.isPresent()) {
 
       double rightdistToAprilTag =
@@ -88,15 +88,14 @@ public class Robot extends TimedRobot {
               .getDistance(
                   new Translation3d(
                       driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
-
-      if (rightdistToAprilTag <= leftdistToAprilTag) {
-        leastDist = rightdistToAprilTag;
-        double xKalman = 0.01 * Math.pow(1.15, leastDist);
+      double xKalman = 0.01 * Math.pow(1.15, leastDist);
 
       double yKalman = 0.01 * Math.pow(1.4, leastDist);
 
       visionMatrix.set(0, 0, xKalman);
       visionMatrix.set(1, 0, yKalman);
+      if (rightdistToAprilTag <= leftdistToAprilTag) {
+        leastDist = rightdistToAprilTag;
 
       driveTrain.addVisionMeasurement(
           rightRobotPose.get().estimatedPose.toPose2d(),
@@ -104,14 +103,6 @@ public class Robot extends TimedRobot {
           visionMatrix);
     }
       else {
-        leastDist = leftdistToAprilTag;
-        double xKalman = 0.01 * Math.pow(1.15, leastDist);
-
-        double yKalman = 0.01 * Math.pow(1.4, leastDist);
-  
-        visionMatrix.set(0, 0, xKalman);
-        visionMatrix.set(1, 0, yKalman);
-  
         driveTrain.addVisionMeasurement(
             leftRobotPose.get().estimatedPose.toPose2d(),
             Timer.getFPGATimestamp() - 0.02,

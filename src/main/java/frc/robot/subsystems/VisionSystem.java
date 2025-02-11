@@ -28,14 +28,14 @@ public class VisionSystem extends SubsystemBase {
   private static VisionSystem[] systemList =
       new VisionSystem[Constants.Vision.Cameras.values().length];
   private Transform3d[] camToRobots = {
-    // Front Camera transform
+    // right Camera transform
     new Transform3d(
-        new Translation3d(Units.inchesToMeters(-9.5), Units.inchesToMeters(6.5), 0),
-        new Rotation3d(0, Units.degreesToRadians(25.37693353), Math.PI)),
-    // Back Camera
+        new Translation3d(Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_X, Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_Y, Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_Z),
+        new Rotation3d(Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_ROLL, Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_PITCH, Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_YAW)),
+    // left Camera
     new Transform3d(
-        new Translation3d(Units.inchesToMeters(8), Units.inchesToMeters(5.75), 0),
-        new Rotation3d(0, 0, 0))
+      new Translation3d(Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_X, Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_Y, Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_Z),
+      new Rotation3d(Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_ROLL, Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_PITCH, Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_YAW)),
   };
   private PhotonCamera camera;
   private PhotonPipelineResult pipeline;

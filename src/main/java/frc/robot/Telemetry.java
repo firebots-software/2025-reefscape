@@ -138,6 +138,7 @@ public class Telemetry {
     SignalLogger.writeDoubleArray("DriveState/ModuleStates", m_moduleStatesArray);
     SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
     SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
+    publisher.set(state.Pose);
 
     /* Telemeterize the pose to a Field2d */
     fieldTypePub.set("Field2d");
