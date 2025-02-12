@@ -35,7 +35,8 @@ public class LEDcommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_LEDsubsystem.getCandle().setLEDs(m_LEDsubsystem.rChannel(), m_LEDsubsystem.gChannel(), m_LEDsubsystem.bChannel());
+    //GRB system for setLeds
+    m_LEDsubsystem.getCandle().setLEDs(m_LEDsubsystem.gChannel(), m_LEDsubsystem.rChannel(), m_LEDsubsystem.bChannel(), 0, 8, 512);
   }
      
   // Called once the command ends or is interrupted.

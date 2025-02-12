@@ -53,6 +53,6 @@ public class LEDsubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+    setLEDcontrol(0, 0, 0);
   }
 }
