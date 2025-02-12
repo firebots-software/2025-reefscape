@@ -12,23 +12,30 @@ import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.CANdleFaults;
 import com.ctre.phoenix.led.RainbowAnimation;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class LEDsubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private CANdle candle;
   private CANdleConfiguration config;
 
+  private CommandXboxController controller;
+
   private int r, g, b;
 
-  public LEDsubsystem() {
+  public LEDsubsystem(CommandXboxController controller) {
     candle = new CANdle(5);
     config = new CANdleConfiguration();
 
     config.stripType = LEDStripType.RGB; // set the strip type to RGB
     config.brightnessScalar = 0.5; // dim the LEDs to half brightness
     candle.configAllSettings(config);
+
+    this.controller = controller;
   }
   
   public CANdle getCandle() {
@@ -53,6 +60,10 @@ public class LEDsubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    setLEDcontrol(0, 0, 0);
+    if (controller.x().getAsBoolean()) {
+      setLEDcontrol(255, 0, 0);
+    } else {
+      setLEDcontrol(0, 0, 0);
+    }
   }
 }
