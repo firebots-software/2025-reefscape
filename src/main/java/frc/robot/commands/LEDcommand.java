@@ -30,7 +30,7 @@ public class LEDcommand extends Command {
     config.brightnessScalar = 0.5; // dim the LEDs to half brightness
     candle.configAllSettings(config);
 
-    candle = new CANdle(0);
+    candle = new CANdle(5);
     config = new CANdleConfiguration();
     error = candle.getLastError();
     faults = new CANdleFaults();
