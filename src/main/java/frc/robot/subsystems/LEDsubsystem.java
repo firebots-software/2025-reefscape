@@ -20,7 +20,7 @@ public class LEDsubsystem extends SubsystemBase {
   private CANdle candle;
   private CANdleConfiguration config;
 
-  private Animation animation;
+  private int r, g, b;
 
   public LEDsubsystem() {
     candle = new CANdle(5);
@@ -35,13 +35,25 @@ public class LEDsubsystem extends SubsystemBase {
     return candle;
   }
 
-  public Animation getCurrentAnimation() {
-    return animation;
+  public void setLEDcontrol(int red, int green, int blue) {
+    r = red;
+    g = green;
+    b = blue;
+  }
+
+  public int rChannel() {
+    return r;
+  }
+  public int gChannel() {
+    return g;
+  }
+  public int bChannel() {
+    return b;
   }
 
   @Override
   public void periodic() {
-    animation = new RainbowAnimation(1,10,10,false, 1);
+    
   }
 
   @Override
