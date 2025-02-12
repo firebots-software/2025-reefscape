@@ -128,6 +128,10 @@ public class FunnelSubsystem extends SubsystemBase {
     rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
 
+  public void spinBackQuickly() {
+    rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.QUICK_BACKWARDS_VELOCITY));
+  }
+
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
   }

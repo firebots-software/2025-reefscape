@@ -21,8 +21,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.FunnelCommands.EjectCoral;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.CoralPosition;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -31,10 +38,10 @@ public class RobotContainer {
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
   // TODO: Uncomment when mechanisms arrive on the robot:
-  //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
-  //   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  //   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-  //   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
+    FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
+    ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+    ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
   Boolean coralInFunnel = Boolean.valueOf(false);
   Boolean coralInElevator = Boolean.valueOf(false);
@@ -91,11 +98,12 @@ public class RobotContainer {
     // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
     // funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
     
-    // Trigger extraCoral =
-    //     new Trigger(() -> tootsieSlideSubsystem.coralPresent() &&
-    // funnelSubsystem.isCoralCheckedIn());
-    // extraCoral.onTrue(
-    //     new PullInToControl(funnelSubsystem).andThen(new EjectCoral(funnelSubsystem)));
+    Trigger extraCoral =
+        new Trigger(() -> CoralPosition.isCoralInFunnel() &&
+        CoralPosition.isCoralInTootsieSlide());
+    extraCoral.onTrue(
+        new EjectCoral(funnelSubsystem));
+    
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
         leftRightFunction = () -> -joystick.getLeftX(),

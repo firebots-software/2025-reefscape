@@ -604,7 +604,8 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 0.0; // TODO
     public static final double ACCELERATION = 0.0; // TODO
 
-    public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
+    public static final double SLOW_BACKWARDS_VELOCITY = -0.1;//TODO
+    public static final double QUICK_BACKWARDS_VELOCITY = -1.0; // TODO
     public static final double SPEED_RPS = 0.0; // TODO
     public static final int GEAR_RATIO = 0; // TODO
 
