@@ -4,40 +4,44 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.led.Animation;
+import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.CANdle.LEDStripType;
+import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.CANdleFaults;
+import com.ctre.phoenix.led.RainbowAnimation;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDsubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  public LEDsubsystem() {}
+  private CANdle candle;
+  private CANdleConfiguration config;
 
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+  private Animation animation;
+
+  public LEDsubsystem() {
+    candle = new CANdle(5);
+    config = new CANdleConfiguration();
+
+    config.stripType = LEDStripType.RGB; // set the strip type to RGB
+    config.brightnessScalar = 0.5; // dim the LEDs to half brightness
+    candle.configAllSettings(config);
+  }
+  
+  public CANdle getCandle() {
+    return candle;
   }
 
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
+  public Animation getCurrentAnimation() {
+    return animation;
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    animation = new RainbowAnimation(1,10,10,false, 1);
   }
 
   @Override
