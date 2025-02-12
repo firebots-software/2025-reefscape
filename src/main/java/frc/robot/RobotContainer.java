@@ -17,12 +17,25 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commandGroups.Dealgaenate;
+import frc.robot.commands.DaleCommands.ArmToAngleCmd;
+import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionQuick;
+import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -30,11 +43,10 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  // TODO: Uncomment when mechanisms arrive on the robot:
-  //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
-  //   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  //   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-  //   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+  TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
+  FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
+  ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+  ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
   Boolean coralInFunnel = Boolean.valueOf(false);
   Boolean coralInElevator = Boolean.valueOf(false);
@@ -85,11 +97,10 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // TODO: Uncomment when mechanisms arrive on the robot:
-    // Joystick suppliers,
-    // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
-    // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    // funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
+    Joystick suppliers;
+    funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
+    funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
@@ -159,25 +170,22 @@ public class RobotContainer {
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
     Trigger rightBumper = joystick.rightBumper();
 
-    // TODO: Uncomment when mechanisms arrive on the robot:
     // Currently this code uses commands that we can't call or else it will throw errors
-    // rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-    // rightBumper.onFalse(
-    //     new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
-    // joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
+    rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+    rightBumper.onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
+    joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
-    // TODO: Uncomment when mechanisms arrive on the robot:
-    // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
-    // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
-    // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
-    // joystick
-    //     .a()
-    //     .whileTrue(
-    //         new SetElevatorLevel(
-    //             elevatorSubsystem,
-    //             ElevatorPositions.safePosition)); // change safepos in constants
+    joystick
+        .a()
+        .whileTrue(
+            new SetElevatorLevel(
+                elevatorSubsystem,
+                ElevatorPositions.safePosition)); // change safepos in constants
   }
 
   public static void setAlliance() {
