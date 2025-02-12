@@ -4,196 +4,58 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-
-import choreo.auto.AutoChooser;
-import choreo.auto.AutoFactory;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.LEDcommand;
+import frc.robot.subsystems.LEDsubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.GyroStabilizer;
-import frc.robot.commands.SwerveCommands.JamesHardenMovement;
-import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionSystem;
-import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
+/**
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * subsystems, commands, and trigger mappings) should be declared here.
+ */
 public class RobotContainer {
-  private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
-  private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+  // The robot's subsystems and commands are defined here...
+  private final LEDsubsystem m_LEDsubsystem = new LEDsubsystem();
 
-  // TODO: Uncomment when mechanisms arrive on the robot:
-  //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
-  //   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  //   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-  //   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-  // Alliance color
-  Boolean coralInFunnel = Boolean.valueOf(false);
-  Boolean coralInElevator = Boolean.valueOf(false);
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+  private final CommandXboxController m_driverController =
+      new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  private BooleanSupplier redside = () -> redAlliance;
-  private static boolean redAlliance;
-
-  // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
-  private final SendableChooser<String> startPosChooser = new SendableChooser<String>();
-
-  private final SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
-
-  private final Telemetry logger =
-      new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
-  private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
-  private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
-  private final CommandXboxController joystick = new CommandXboxController(0);
-
-  private final AutoFactory autoFactory;
-  private final AutoChooser autoChooser;
-
-  // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
-  public void doTelemetry() {
-    logger.telemeterize(driveTrain.getCurrentState());
-  }
-
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    autoFactory =
-        new AutoFactory(
-            driveTrain::getPose, // A function that returns the current robot pose
-            driveTrain
-                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
-            driveTrain::followTrajectory, // The drive subsystem trajectory follower
-            true, // If alliance flipping should be enabled
-            driveTrain);
-    autoChooser = new AutoChooser();
-    AutoRoutines autoRoutines = new AutoRoutines(autoFactory, driveTrain);
-    // Add options to the chooser
-    autoChooser.addRoutine("Basic Four Coral Auto", autoRoutines::basicFourCoralAuto);
-
-    // Put the auto chooser on the dashboard
-    SmartDashboard.putData("autochooser", autoChooser);
+    // Configure the trigger bindings
     configureBindings();
   }
 
+  /**
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
+   */
   private void configureBindings() {
-    // TODO: Uncomment when mechanisms arrive on the robot:
-    // Joystick suppliers,
-    // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
-    // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    // funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    m_LEDsubsystem.setDefaultCommand(new LEDcommand(m_LEDsubsystem));
 
-    Trigger leftShoulderTrigger = joystick.leftBumper();
-    Supplier<Double>
-        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
-        leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
-        rotationFunction = () -> -joystick.getRightX(),
-        speedFunction =
-            () ->
-                leftShoulderTrigger.getAsBoolean()
-                    ? 0d
-                    : 1d; // slowmode when left shoulder is pressed, otherwise fast
-    SwerveJoystickCommand swerveJoystickCommand =
-        new SwerveJoystickCommand(
-            frontBackFunction,
-            leftRightFunction,
-            rotationFunction,
-            speedFunction, // slowmode when left shoulder is pressed, otherwise fast
-            () -> joystick.leftTrigger().getAsBoolean(),
-            driveTrain);
-    driveTrain.setDefaultCommand(swerveJoystickCommand);
-    Trigger tipping = new Trigger(() -> (GyroStabilizer.tipping(driveTrain)));
-    tipping.whileTrue(new GyroStabilizer(driveTrain));
-
-    // TODO: Uncomment when mechanisms arrive on the robot:
-    // joystick.rightBumper().whileTrue(new
-    // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
-
-    /*
-
-    Sysid button commands, commented out (I like keeping this commented because
-    every branch will have access to the necessary commands to run SysID immediately)
-
-       joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
-       joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
-
-    * Joystick Y = quasistatic forward
-    * Joystick A = quasistatic reverse
-    * Joystick B = dynamic forward
-    * Joystick X = dyanmic reverse
-    *
-       joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-       joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-       joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-       joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    */
-
-    joystick
-        .a()
-        .onTrue(
-            driveTrain.runOnce(
-                () ->
-                    driveTrain.resetPose(
-                        new Pose2d(
-                            new Translation2d(
-                                Constants.Landmarks.leftBranchesRed[5].getX()
-                                    - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-                                                    .in(Meters)
-                                                / 2.0)
-                                            + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
-                                                .thickness.in(Meters)))
-                                        * Constants.Landmarks.reefFacingAngleRed[5].getCos(),
-                                Constants.Landmarks.leftBranchesRed[5].getY()
-                                    - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-                                                    .in(Meters)
-                                                / 2.0)
-                                            + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
-                                                .thickness.in(Meters)))
-                                        * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
-                            new Rotation2d(
-                                Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
-
-    joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
-    Trigger rightBumper = joystick.rightBumper();
-
-    // TODO: Uncomment when mechanisms arrive on the robot:
-    // Currently this code uses commands that we can't call or else it will throw errors
-    // rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-    // rightBumper.onFalse(
-    //     new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
-    // joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
-
-    // TODO: Uncomment when mechanisms arrive on the robot:
-    // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
-    // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
-    // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
-
-    // joystick
-    //     .a()
-    //     .whileTrue(
-    //         new SetElevatorLevel(
-    //             elevatorSubsystem,
-    //             ElevatorPositions.safePosition)); // change safepos in constants
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+    m_driverController.b().whileTrue(m_LEDsubsystem.getCurrentCommand());
   }
 
-  public static void setAlliance() {
-    redAlliance =
-        (DriverStation.getAlliance().isEmpty())
-            ? false
-            : (DriverStation.getAlliance().get() == Alliance.Red);
-  }
-
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
   public Command getAutonomousCommand() {
-    /* Run the path selected from the auto chooser */
-    return autoChooser.selectedCommandScheduler();
+    // An example command will be run in autonomous
+    return new Command() {};
   }
 }

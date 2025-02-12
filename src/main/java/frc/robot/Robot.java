@@ -4,22 +4,9 @@
 
 package frc.robot;
 
-import dev.doglog.DogLog;
-import dev.doglog.DogLogOptions;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionSystem;
-import frc.robot.util.LoggedTalonFX;
-import java.util.Optional;
-import org.photonvision.EstimatedRobotPose;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -28,11 +15,6 @@ import org.photonvision.EstimatedRobotPose;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  // Commented this out because arm is not on bot and this is activiating
-  // something that doesn't physically exist
-  // TODO: uncomment when arm is on real bot
-
-  // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
   private final RobotContainer m_robotContainer;
 
@@ -40,75 +22,10 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
-
-  private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
-  private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
-  private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
-  private final SwerveSubsystem driveTrain =
-      new SwerveSubsystem(
-          Constants.Swerve.DrivetrainConstants,
-          250.0, // TODO: CHANGE ODOMETRY UPDATE FREQUENCY TO CONSTANT,
-          odometryMatrix,
-          visionMatrix,
-          Constants.Swerve.FrontLeft,
-          Constants.Swerve.FrontRight,
-          Constants.Swerve.BackLeft,
-          Constants.Swerve.BackRight);
-  private double leastDist;
-
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_robotContainer.doTelemetry();
-    CommandScheduler.getInstance().run();
-    Optional<EstimatedRobotPose> frontRobotPose =
-        visionFront.getMultiTagPose3d(driveTrain.getState().Pose);
-    Optional<EstimatedRobotPose> backRobotPose =
-        visionBack.getMultiTagPose3d(driveTrain.getState().Pose);
-    if (frontRobotPose.isPresent() || backRobotPose.isPresent()) {
-
-      double frontdistToAprilTag =
-          visionFront
-              .gAprilTagFieldLayout()
-              .getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
-              .get()
-              .getTranslation()
-              .getDistance(
-                  new Translation3d(
-                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
-
-      double backdistToAprilTag =
-          visionBack
-              .gAprilTagFieldLayout()
-              .getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
-              .get()
-              .getTranslation()
-              .getDistance(
-                  new Translation3d(
-                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
-
-      if (frontdistToAprilTag <= backdistToAprilTag) {
-        leastDist = frontdistToAprilTag;
-      } else {
-        leastDist = backdistToAprilTag;
-      }
-
-      double xKalman = 0.01 * Math.pow(1.15, leastDist);
-
-      double yKalman = 0.01 * Math.pow(1.4, leastDist);
-
-      visionMatrix.set(0, 0, xKalman);
-      visionMatrix.set(1, 0, yKalman);
-
-      driveTrain.addVisionMeasurement(
-          frontRobotPose.get().estimatedPose.toPose2d(),
-          Timer.getFPGATimestamp() - 0.02,
-          visionMatrix);
-    }
-    // DogLog.setOptions(
-    //    new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
   }
 
   /**
@@ -125,25 +42,11 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    m_robotContainer.doTelemetry();
-    LoggedTalonFX.periodic_static();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {
-    absoluteInit();
-  }
-
-  @Override
-  public void robotInit() {
-    DogLog.setOptions(
-        new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
-    // Commented this code that logs the electric data because it crashed the robot code
-    // there is an error related to the usage of this
-    // DogLog.setPdh(new PowerDistribution());
-    absoluteInit();
-  }
+  public void disabledInit() {}
 
   @Override
   public void disabledPeriodic() {}
@@ -151,7 +54,6 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    RobotContainer.setAlliance();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -161,7 +63,7 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
-  // @Override
+  @Override
   public void autonomousPeriodic() {}
 
   @Override
@@ -170,25 +72,18 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    absoluteInit();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
-    // CommandScheduler.getInstance();
-    // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    LoggedTalonFX.periodic_static();
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    // RobotContainer.setAlliance();
     CommandScheduler.getInstance().cancelAll();
   }
 
@@ -198,11 +93,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {
-    absoluteInit();
-  }
+  public void simulationInit() {}
 
-  public void absoluteInit() {
-    RobotContainer.setAlliance();
-  }
+  /** This function is called periodically whilst in simulation. */
+  @Override
+  public void simulationPeriodic() {}
 }
