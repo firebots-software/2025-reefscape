@@ -21,17 +21,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
+import frc.robot.commands.DebugCommands.DebugArm;
+import frc.robot.commands.DebugCommands.DebugDaleSpin;
+import frc.robot.commands.DebugCommands.DebugElevator;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
-import frc.robot.commands.DebugCommands.DebugArm;
-import frc.robot.commands.DebugCommands.DebugElevator;
-import frc.robot.commands.DebugCommands.DebugFlywheel;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
-import frc.robot.subsystems.FunnelSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -107,7 +106,9 @@ public class RobotContainer {
     // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
 
     // Debugging
-    debugJoystick.rightTrigger().whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
+    debugJoystick
+        .rightTrigger()
+        .whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
 
     /*
 
@@ -160,14 +161,12 @@ public class RobotContainer {
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     // Debugging
-    debugJoystick.leftTrigger().whileTrue(new DebugFlywheel(ArmSubsystem.getInstance()));
+    debugJoystick.leftTrigger().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
     debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
-
 
     // Debugging
-    debugJoystick.leftTrigger().whileTrue(new DebugFlywheel(ArmSubsystem.getInstance()));
+    debugJoystick.leftTrigger().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
     debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
-
 
     // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));

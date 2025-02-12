@@ -3,14 +3,15 @@ package frc.robot.commands.DebugCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
-public class DebugTootsieSlide extends Command{
-    private TootsieSlideSubsystem tootsieSlideSubsystem;
-    public DebugTootsieSlide(TootsieSlideSubsystem tootsieSlideSubsystem){
-        this.tootsieSlideSubsystem = tootsieSlideSubsystem;
-        addRequirements(tootsieSlideSubsystem);
-    }
+public class DebugTootsieSlide extends Command {
+  private TootsieSlideSubsystem tootsieSlideSubsystem;
 
-    @Override
+  public DebugTootsieSlide(TootsieSlideSubsystem tootsieSlideSubsystem) {
+    this.tootsieSlideSubsystem = tootsieSlideSubsystem;
+    addRequirements(tootsieSlideSubsystem);
+  }
+
+  @Override
   public void initialize() {}
 
   @Override
@@ -27,5 +28,4 @@ public class DebugTootsieSlide extends Command{
   public boolean isFinished() {
     return false;
   }
-
 }

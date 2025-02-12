@@ -114,7 +114,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
 
-    // TODO: ONLY FOR DEBUGGING
+  // TODO: ONLY FOR DEBUGGING
   public void testElevator(double height) {
     this.setPosition(height);
   }
