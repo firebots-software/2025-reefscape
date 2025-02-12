@@ -13,6 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -165,20 +166,19 @@ public final class Constants {
       LEFT_CAM;
     }
 
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-9.5);
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(6.5);
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = 0;
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.499);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.358);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.011);
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH =
-        Units.degreesToRadians(25.37693353);
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Math.PI;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
 
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(8);
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(5.75);
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = 0;
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-11.927);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.357);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z =  Units.inchesToMeters(10.01);;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = 0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
   }
 
   public static class Swerve {
