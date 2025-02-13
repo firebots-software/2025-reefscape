@@ -21,7 +21,6 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -34,7 +33,6 @@ public class ArmSubsystem extends SubsystemBase {
   private LoggedTalonFX armMotor;
   private LoggedTalonFX flywheelMotor;
 
-  private DutyCycleEncoder revEncoder;
   private MotionMagicConfigs motionMagicConfigsArm;
   private MotionMagicConfigs motionMagicConfigsFlywheel;
 
@@ -120,9 +118,6 @@ public class ArmSubsystem extends SubsystemBase {
     motionMagicConfigsFlywheel.MotionMagicCruiseVelocity = Constants.Flywheel.MOTIONMAGIC_KV;
     motionMagicConfigsFlywheel.MotionMagicAcceleration = Constants.Flywheel.MOTIONMAGIC_KA;
     masterConfiguratorFlywheel.apply(motionMagicConfigsFlywheel);
-
-    // Initialize absolute encoder
-    revEncoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
   }
 
   public void setPosition(double angleDegrees) {
@@ -137,10 +132,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void stopEveryingONG() {
     flywheelMotor.stopMotor();
-  }
-
-  private double calculateDegrees() {
-    return revEncoder.get() * 360d;
   }
 
   public boolean atTarget(double endToleranceDegrees) {
@@ -184,11 +175,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    encoderDegrees = calculateDegrees();
+
     // This method will be called once per scheduler run
-    DogLog.log("Arm at target", atTarget(5));
-    DogLog.log("Arm Degrees", encoderDegrees);
-    DogLog.log("Arm Target Degrees", targetDegrees);
+    DogLog.log("subsystems/Dale/Arm at target", atTarget(5));
+    DogLog.log("subsystems/Dale/Arm Degrees", encoderDegrees);
+    DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
   }
 
   public void spinFlywheel(double flywheelSpeed) {

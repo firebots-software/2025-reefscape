@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import choreo.trajectory.SwerveSample;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -166,6 +167,33 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     }
   }
 
+  public void followTrajectory(SwerveSample sample) {
+    // Get the current pose of the robot
+    Pose2d pose = getCurrentState().Pose;
+    // Generate the next speeds for the robot
+    ChassisSpeeds speeds =
+        new ChassisSpeeds(
+            sample.vx + xRegularPIDController.calculate(pose.getX(), sample.x),
+            sample.vy + yRegularPIDController.calculate(pose.getY(), sample.y),
+            sample.omega
+                + headingRegularPIDController.calculate(
+                    pose.getRotation().getRadians(), sample.heading));
+
+    DogLog.log("followTrajectory/sample.x", sample.x);
+    DogLog.log("followTrajectory/sample.y", sample.y);
+    DogLog.log("followTrajectory/sample.heading", sample.heading);
+
+    DogLog.log(
+        "followTrajectory/pidOutputX", xRegularPIDController.calculate(pose.getX(), sample.x));
+    DogLog.log("followTrajectory/sample.vx", sample.vx);
+    DogLog.log("followTrajectory/sample.vy", sample.vy);
+    DogLog.log("followTrajectory/sample.omega", sample.omega);
+
+    DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
+    // Apply the generated speed
+    setFieldSpeeds(speeds);
+  }
+
   // Resets PID controllers
   public void resetProfiledPIDs() {
     xProfiledPIDController.reset(currentState.Pose.getX());
@@ -264,6 +292,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     setControl(m_pathApplyFieldSpeeds.withSpeeds(speeds));
   }
 
+  public Pose2d getPose() {
+    return currentState.Pose;
+  }
+
   public ChassisSpeeds calculateRequiredChassisSpeeds(Pose2d targetPose) {
     double xFeedback =
         xProfiledPIDController.calculate(currentState.Pose.getX(), targetPose.getX());
@@ -323,40 +355,15 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 m_hasAppliedOperatorPerspective = true;
               });
     }
-    // DogLog.log("chassisspeedX", robotChassisSpeeds.vxMetersPerSecond);
-    // DogLog.log("chassisspeedY", robotChassisSpeeds.vyMetersPerSecond);
-    // DogLog.log("chassisspeedOMEGA", robotChassisSpeeds.omegaRadiansPerSecond);
 
-    DogLog.log("fl_speed", getState().ModuleStates[0].speedMetersPerSecond);
-    DogLog.log("fl_angle", getState().ModuleStates[0].angle.getDegrees());
-    DogLog.log("fr_speed", getState().ModuleStates[1].speedMetersPerSecond);
-    DogLog.log("fr_angle", getState().ModuleStates[1].angle.getDegrees());
-    DogLog.log("bl_speed", getState().ModuleStates[2].speedMetersPerSecond);
-    DogLog.log("bl_angle", getState().ModuleStates[2].angle.getDegrees());
-    DogLog.log("br_speed", getState().ModuleStates[3].speedMetersPerSecond);
-    DogLog.log("br_angle", getState().ModuleStates[3].angle.getDegrees());
-    // DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
-    // DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
-    // DogLog.log("chassis/rotation_speed_radps",
-    // getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
-
-    /*
-    DogLog.log("chassis/speed_x", getCurrentRobotChassisSpeeds());
-    DogLog.log("chassis/speed_y", getCurrentRobotChassisSpeeds().vyMetersPerSecond);
-    DogLog.log(
-        "chassis/rotation_speed_radps", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
-    */
     var drivetrainState = getState();
-    DogLog.log("fl_speed", drivetrainState.ModuleStates[0].speedMetersPerSecond);
-    DogLog.log("fl_angle", drivetrainState.ModuleStates[0].angle.getDegrees());
-    DogLog.log("fr_speed", drivetrainState.ModuleStates[1].speedMetersPerSecond);
-    DogLog.log("fr_angle", drivetrainState.ModuleStates[1].angle.getDegrees());
-    DogLog.log("bl_speed", drivetrainState.ModuleStates[2].speedMetersPerSecond);
-    DogLog.log("bl_angle", drivetrainState.ModuleStates[2].angle.getDegrees());
-    DogLog.log("br_speed", drivetrainState.ModuleStates[3].speedMetersPerSecond);
-    DogLog.log("br_angle", drivetrainState.ModuleStates[3].angle.getDegrees());
-    // DogLog.log("chassis/speed_x", robotChassisSpeeds);
-    // DogLog.log("chassis/speed_y", robotChassisSpeeds.vyMetersPerSecond);
-    // DogLog.log("chassis/rotation_speed_radps", robotChassisSpeeds.omegaRadiansPerSecond);
+    DogLog.log("subsystems/swerve/fl_speed", drivetrainState.ModuleStates[0].speedMetersPerSecond);
+    DogLog.log("subsystems/swerve/fl_angle", drivetrainState.ModuleStates[0].angle.getDegrees());
+    DogLog.log("subsystems/swerve/fr_speed", drivetrainState.ModuleStates[1].speedMetersPerSecond);
+    DogLog.log("subsystems/swerve/fr_angle", drivetrainState.ModuleStates[1].angle.getDegrees());
+    DogLog.log("subsystems/swerve/bl_speed", drivetrainState.ModuleStates[2].speedMetersPerSecond);
+    DogLog.log("subsystems/swerve/bl_angle", drivetrainState.ModuleStates[2].angle.getDegrees());
+    DogLog.log("subsystems/swerve/br_speed", drivetrainState.ModuleStates[3].speedMetersPerSecond);
+    DogLog.log("subsystems/swerve/br_angle", drivetrainState.ModuleStates[3].angle.getDegrees());
   }
 }

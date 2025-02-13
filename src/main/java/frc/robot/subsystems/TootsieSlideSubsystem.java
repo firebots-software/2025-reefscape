@@ -111,18 +111,18 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
     // This method will be called once per scheduler run
-    m_flywheelSim.update(0.02);
-    DogLog.log("voltage", master.getMotorVoltage().getValue().magnitude());
-    DogLog.log("SIMvoltage", m_flywheelSim.getInputVoltage());
-
-    DogLog.log("Shooter Speed at RPM", m_flywheelSim.getAngularVelocityRPM());
-    DogLog.log("Flywheel Current", m_flywheelSim.getCurrentDrawAmps());
+    DogLog.log("subsystems/tootsieslide/tootsieVelocity", master.getVelocity().getValueAsDouble());
+    DogLog.log("subsystems/tootsieslide/coralPresent", coralPresent());
   }
 
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    m_flywheelSim.update(0.02);
+    DogLog.log("SIMvoltage", m_flywheelSim.getInputVoltage());
+    DogLog.log("Shooter Speed at RPM", m_flywheelSim.getAngularVelocityRPM());
+    DogLog.log("Flywheel Current", m_flywheelSim.getCurrentDrawAmps());
+  }
 
   public boolean coralPresent() {
     return drakeSensor.get();
