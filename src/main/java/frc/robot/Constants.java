@@ -90,7 +90,7 @@ public final class Constants {
   }
 
   public static final class Arm {
-    // this is new code 
+    // this is new code
     public static final double DALE_FLYWHEEL_GEAR_RATIO = 1 / 11.2593;
     public static final double DALE_PIVOT_GEAR_RATIO = 1; // TODO
     // end of new code
@@ -596,6 +596,7 @@ public final class Constants {
     public static final int GEAR_RATIO = 1 / 6; // TODO
     public static final double SPEED_RPS = 5; // TODO
   }
+
   public static class FunnelConstants {
     public static final int RIGHT_MOTOR_PORT = 0; // TODO
     public static final int LEFT_MOTOR_PORT = 0; // TODO
@@ -623,7 +624,7 @@ public final class Constants {
     public static final int CANRANGE_PORT = 0; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
-    public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match 
+    public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
     public static final int S0C_KP = 1;
     public static final int S0C_KI = 0;
     public static final int S0C_KD = 0;
