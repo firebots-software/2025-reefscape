@@ -28,7 +28,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
-  private CANrange distance;
+  private CANrange distance; // Time of Flight (ToF) sensor 
 
   private ElevatorSubsystem() {
     // Initialize motors
@@ -153,10 +153,5 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Log simulation data for debugging
     DogLog.log("Simulated Position", newPosition);
     DogLog.log("Simulated Speed", simulatedSpeed);
-  }
-
-  public boolean atTargetPosition() {
-    double tolerance = 0.5;
-    return master.getClosedLoopError().getValueAsDouble() <= tolerance;
   }
 }

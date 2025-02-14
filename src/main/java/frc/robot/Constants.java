@@ -633,7 +633,7 @@ public final class Constants {
     public static final double currentLimit = 0;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
-    public static final double SETPOINT_TOLERANCE = 0; // To-do
+    public static final double SETPOINT_TOLERANCE = 0.1; // To-do
     public static final double MAX_POSITIONAL_ERROR = 0.05;
     public static final double SPROCKET_CIRCUM_INCHES =
         1.751 * Math.PI; // TODO: change 0 to radius/diameter
