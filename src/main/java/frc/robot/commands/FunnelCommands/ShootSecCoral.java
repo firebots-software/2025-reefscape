@@ -1,4 +1,4 @@
-//TODO: Updated to spin Funnel Backwards
+// TODO: Updated to spin Funnel Backwards
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
