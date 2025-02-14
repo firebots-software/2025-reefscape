@@ -38,9 +38,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final MotionMagicVoltage controlRequestArm = new MotionMagicVoltage(0);
   private final MotionMagicVoltage controlRequestFlywheel = new MotionMagicVoltage(0);
-  private double encoderDegrees;
+  private double encoderDegrees; //
 
-  private double targetDegrees;
+  private double targetDegrees; //
+
+  private double flywheelSpeed;
 
   private final VoltageOut voltRequestArm = new VoltageOut(0.0);
 
@@ -175,19 +177,33 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
     // This method will be called once per scheduler run
     DogLog.log("subsystems/Dale/Arm at target", atTarget(5));
     DogLog.log("subsystems/Dale/Arm Degrees", encoderDegrees);
     DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
+    DogLog.log("subsystems/Dale/Arm Target Degrees", getFlywheelSpeed());
   }
 
   public void spinFlywheel(double flywheelSpeed) {
+    DogLog.log("subsystems/Dale/Flywheel Speed", flywheelSpeed);
     flywheelMotor.set(flywheelSpeed);
   }
 
   // Stops the flywheel
   public void stopFlywheel() {
     flywheelMotor.set(0);
+  }
+
+  public double getFlywheelSpeed() {
+    flywheelSpeed =  flywheelMotor.getVelocity().getValueAsDouble();
+    return flywheelSpeed;
+  }
+
+  public double getEncoderDegrees() {
+    return encoderDegrees;
+  }
+
+  public double getTargetDegrees() {
+    return targetDegrees;
   }
 }
