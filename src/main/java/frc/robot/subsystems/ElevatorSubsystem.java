@@ -28,7 +28,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
-  private CANrange distance; // Time of Flight (ToF) sensor 
+  private CANrange distance; // Time of Flight (ToF) sensor
 
   private ElevatorSubsystem() {
     // Initialize motors
