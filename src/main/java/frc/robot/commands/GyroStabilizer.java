@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class GyroStabilizer extends Command {
-  public static final double TIP_THRESHOLD = 0.1;
+  public static final double TIP_THRESHOLD = 5 * (Math.PI / 180); //to be in radians :)
 
   private SwerveSubsystem swerveSubsystem;
   private static Pigeon2 pigeon;
