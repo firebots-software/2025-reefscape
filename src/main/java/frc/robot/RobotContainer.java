@@ -36,7 +36,6 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -122,8 +121,7 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    joystick.rightBumper().whileTrue(new
-    ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
+    joystick.rightBumper().whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
 
     /*
 
@@ -172,7 +170,8 @@ public class RobotContainer {
 
     // Currently this code uses commands that we can't call or else it will throw errors
     rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-    rightBumper.onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
+    rightBumper.onFalse(
+        new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
@@ -184,8 +183,7 @@ public class RobotContainer {
         .a()
         .whileTrue(
             new SetElevatorLevel(
-                elevatorSubsystem,
-                ElevatorPositions.safePosition)); // change safepos in constants
+                elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in constants
   }
 
   public static void setAlliance() {
