@@ -28,16 +28,14 @@ import org.photonvision.EstimatedRobotPose;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  double rightdistToAprilTag = 0;
-  double leftdistToAprilTag = 0;
+  double rightdistToAprilTag = 999999;
+  double leftdistToAprilTag = 999999;
 
   // Commented this out because arm is not on bot and this is activiating
   // something that doesn't physically exist
   // TODO: uncomment when arm is on real bot
 
   // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
-
-  private final RobotContainer m_robotContainer;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -66,8 +64,8 @@ public class Robot extends TimedRobot {
           Constants.Swerve.FrontRight,
           Constants.Swerve.BackLeft,
           Constants.Swerve.BackRight);
-  private double leastDist;
-
+  private final RobotContainer m_robotContainer;
+ 
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -90,6 +88,12 @@ public class Robot extends TimedRobot {
                   new Translation3d(
                       driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
 
+
+      driveTrain.addVisionMeasurement(
+      rightRobotPose.get().estimatedPose.toPose2d(),
+      Timer.getFPGATimestamp() - 0.02,
+      visionMatrix);
+
       
     }
     if (visionLeft.hasTarget(visionRight.gPipelineResult()) && leftRobotPose.isPresent()) {
@@ -103,27 +107,13 @@ public class Robot extends TimedRobot {
               new Translation3d(
                   driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
 
-    }
-
-    leastDist = Math.min(rightdistToAprilTag, leftdistToAprilTag);
-      double xKalman =0 * Math.pow(1.15,leastDist); // makes it so that we trust it less the more far away we are (keep
-      // constant for now)
-      double yKalman = 0.01* Math.pow( 1.4,leastDist); // makes it so that we trust it less the more far away we are (keep
-      // constant for now)
-
-      visionMatrix.set(0, 0, xKalman);
-      visionMatrix.set(1, 0, yKalman);
-      if (rightdistToAprilTag <= leftdistToAprilTag) {
-        driveTrain.addVisionMeasurement(
-            rightRobotPose.get().estimatedPose.toPose2d(),
-            Timer.getFPGATimestamp() - 0.02,
-            visionMatrix);
-      } else {
-        driveTrain.addVisionMeasurement(
+          driveTrain.addVisionMeasurement(
             leftRobotPose.get().estimatedPose.toPose2d(),
             Timer.getFPGATimestamp() - 0.02,
             visionMatrix);
-      }
+
+    }
+
     
   }
 
@@ -140,6 +130,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
   }
@@ -152,6 +143,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+   
     DogLog.setOptions(
         new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
     // Commented this code that logs the electric data because it crashed the robot code
