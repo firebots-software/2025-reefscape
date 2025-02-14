@@ -181,11 +181,10 @@ public class ArmSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Dale/Arm at target", atTarget(5));
     DogLog.log("subsystems/Dale/Arm Degrees", encoderDegrees);
     DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
-    DogLog.log("subsystems/Dale/Arm Target Degrees", getFlywheelSpeed());
+    DogLog.log("subsystems/Dale/Flywheel Speed", getFlywheelSpeed());
   }
 
   public void spinFlywheel(double flywheelSpeed) {
-    DogLog.log("subsystems/Dale/Flywheel Speed", flywheelSpeed);
     flywheelMotor.set(flywheelSpeed);
   }
 
