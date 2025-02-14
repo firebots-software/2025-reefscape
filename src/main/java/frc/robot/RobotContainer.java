@@ -30,6 +30,7 @@ import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionQuick;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
+import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -121,9 +122,8 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    // TODO: Uncomment when mechanisms arrive on the robot:
-    // joystick.rightBumper().whileTrue(new
-    // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
+    joystick.rightBumper().whileTrue(new
+    ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
 
     /*
 
