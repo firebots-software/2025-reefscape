@@ -95,6 +95,10 @@ public class VisionSystem extends SubsystemBase {
     return savedResult;
   }
 
+  public boolean hasTarget(PhotonPipelineResult pipeline) {
+    return pipeline.hasTargets();
+  }
+
   public void setReference(Pose2d newPose) {
     if (newPose == null) {
       return;

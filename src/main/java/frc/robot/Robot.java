@@ -28,6 +28,9 @@ import org.photonvision.EstimatedRobotPose;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  double rightdistToAprilTag = 0;
+  double leftdistToAprilTag = 0;
+
   // Commented this out because arm is not on bot and this is activiating
   // something that doesn't physically exist
   // TODO: uncomment when arm is on real bot
@@ -69,7 +72,59 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    absoluteInit();
+    m_robotContainer.doTelemetry();
+    CommandScheduler.getInstance().run();
+    Optional<EstimatedRobotPose> rightRobotPose =
+        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+    Optional<EstimatedRobotPose> leftRobotPose =
+        visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
+    if (visionRight.hasTarget(visionRight.gPipelineResult()) && rightRobotPose.isPresent()) {
+
+       rightdistToAprilTag =
+          visionRight
+              .gAprilTagFieldLayout()
+              .getTagPose(visionRight.gPipelineResult().getBestTarget().getFiducialId())
+              .get()
+              .getTranslation()
+              .getDistance(
+                  new Translation3d(
+                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+
+      
+    }
+    if (visionLeft.hasTarget(visionRight.gPipelineResult()) && leftRobotPose.isPresent()) {
+      leftdistToAprilTag =
+      visionLeft
+          .gAprilTagFieldLayout()
+          .getTagPose(visionLeft.gPipelineResult().getBestTarget().getFiducialId())
+          .get()
+          .getTranslation()
+          .getDistance(
+              new Translation3d(
+                  driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+
+    }
+
+    leastDist = Math.min(rightdistToAprilTag, leftdistToAprilTag);
+      double xKalman =0 * Math.pow(1.15,leastDist); // makes it so that we trust it less the more far away we are (keep
+      // constant for now)
+      double yKalman = 0.01* Math.pow( 1.4,leastDist); // makes it so that we trust it less the more far away we are (keep
+      // constant for now)
+
+      visionMatrix.set(0, 0, xKalman);
+      visionMatrix.set(1, 0, yKalman);
+      if (rightdistToAprilTag <= leftdistToAprilTag) {
+        driveTrain.addVisionMeasurement(
+            rightRobotPose.get().estimatedPose.toPose2d(),
+            Timer.getFPGATimestamp() - 0.02,
+            visionMatrix);
+      } else {
+        driveTrain.addVisionMeasurement(
+            leftRobotPose.get().estimatedPose.toPose2d(),
+            Timer.getFPGATimestamp() - 0.02,
+            visionMatrix);
+      }
+    
   }
 
   /**
@@ -85,61 +140,8 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    m_robotContainer.doTelemetry();
-    Optional<EstimatedRobotPose> rightRobotPose =
-        visionRight.getMultiTagPose3d(driveTrain.getCurrentState().Pose);
-    Optional<EstimatedRobotPose> leftRobotPose =
-        visionLeft.getMultiTagPose3d(driveTrain.getCurrentState().Pose);
-    if ((rightRobotPose.isPresent() && visionRight.gPipelineResult().hasTargets()) || (leftRobotPose.isPresent() && visionLeft.gPipelineResult().hasTargets())) {
-      double leftdistToAprilTag = 10000000, rightdistToAprilTag = 10000000;
-      if (visionRight.gPipelineResult().hasTargets()) {
-        rightdistToAprilTag =
-          visionRight
-              .gAprilTagFieldLayout()
-              .getTagPose(visionRight.gPipelineResult().getBestTarget().getFiducialId())
-              .get()
-              .getTranslation()
-              .getDistance(
-                  new Translation3d(
-                      driveTrain.getCurrentState().Pose.getX(), driveTrain.getCurrentState().Pose.getY(), 0.0));
-      }
-      
-      if (visionLeft.gPipelineResult().hasTargets()) {
-        leftdistToAprilTag =
-          visionLeft
-              .gAprilTagFieldLayout()
-              .getTagPose(visionLeft.gPipelineResult().getBestTarget().getFiducialId())
-              .get()
-              .getTranslation()
-              .getDistance(
-                  new Translation3d(
-                      driveTrain.getCurrentState().Pose.getX(), driveTrain.getCurrentState().Pose.getY(), 0.0));
-      }
-
-      leastDist = Math.min(rightdistToAprilTag, leftdistToAprilTag);
-      double xKalman = 0.01 * Math.pow(1.15, leastDist); //makes it so that we trust it less the more far away we are (keep constant for now)
-
-      double yKalman = 0.01 * Math.pow(1.4, leastDist); //makes it so that we trust it less the more far away we are (keep constant for now)
-      
-      DogLog.log("least dist", leastDist);
-
-      visionMatrix.set(0, 0, xKalman);
-      visionMatrix.set(1, 0, yKalman);
-      if (rightdistToAprilTag <= leftdistToAprilTag) {
-        DogLog.log("right measurement", true);
-        driveTrain.addVisionMeasurement(
-            rightRobotPose.get().estimatedPose.toPose2d(),
-            Timer.getFPGATimestamp() - 0.02,
-            visionMatrix);
-      } else {
-        DogLog.log("left measurement", true);
-        driveTrain.addVisionMeasurement(
-            leftRobotPose.get().estimatedPose.toPose2d(),
-            Timer.getFPGATimestamp() - 0.02,
-            visionMatrix);
-      }
-    }
     CommandScheduler.getInstance().run();
+    m_robotContainer.doTelemetry();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -165,7 +167,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.setAlliance();
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
