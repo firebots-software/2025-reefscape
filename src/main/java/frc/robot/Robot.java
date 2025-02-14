@@ -87,14 +87,12 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     m_robotContainer.doTelemetry();
     Optional<EstimatedRobotPose> rightRobotPose =
-        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+        visionRight.getMultiTagPose3d(driveTrain.getCurrentState().Pose);
     Optional<EstimatedRobotPose> leftRobotPose =
-        visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
+        visionLeft.getMultiTagPose3d(driveTrain.getCurrentState().Pose);
     if ((rightRobotPose.isPresent() && visionRight.gPipelineResult().hasTargets()) || (leftRobotPose.isPresent() && visionLeft.gPipelineResult().hasTargets())) {
       double leftdistToAprilTag = 10000000, rightdistToAprilTag = 10000000;
       if (visionRight.gPipelineResult().hasTargets()) {
-        DogLog.log("vision right apriltag X", visionRight.gAprilTagFieldLayout().getTagPose(visionLeft.gPipelineResult().getBestTarget().getFiducialId()).get().getTranslation().getX());
-        DogLog.log("vision right apriltag Y", visionRight.gAprilTagFieldLayout().getTagPose(visionLeft.gPipelineResult().getBestTarget().getFiducialId()).get().getTranslation().getY());
         rightdistToAprilTag =
           visionRight
               .gAprilTagFieldLayout()
@@ -103,7 +101,7 @@ public class Robot extends TimedRobot {
               .getTranslation()
               .getDistance(
                   new Translation3d(
-                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+                      driveTrain.getCurrentState().Pose.getX(), driveTrain.getCurrentState().Pose.getY(), 0.0));
       }
       
       if (visionLeft.gPipelineResult().hasTargets()) {
@@ -115,7 +113,7 @@ public class Robot extends TimedRobot {
               .getTranslation()
               .getDistance(
                   new Translation3d(
-                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+                      driveTrain.getCurrentState().Pose.getX(), driveTrain.getCurrentState().Pose.getY(), 0.0));
       }
 
       leastDist = Math.min(rightdistToAprilTag, leftdistToAprilTag);
