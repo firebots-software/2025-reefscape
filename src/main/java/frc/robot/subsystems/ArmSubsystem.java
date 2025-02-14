@@ -195,7 +195,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getFlywheelSpeed() {
-    flywheelSpeed =  flywheelMotor.getVelocity().getValueAsDouble();
+    flywheelSpeed = flywheelMotor.getVelocity().getValueAsDouble();
     return flywheelSpeed;
   }
 
