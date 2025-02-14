@@ -33,6 +33,12 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import frc.robot.commands.DebugCommands.DebugTootsieSlide;
+import frc.robot.commands.DebugCommands.DebugElevator;
+import frc.robot.commands.DebugCommands.DebugFunnelIntake;
+import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
+import frc.robot.subsystems.FunnelSubsystem;
+
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -170,12 +176,16 @@ public class RobotContainer {
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     // Debugging
-    debugJoystick.leftTrigger().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
-    debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
+    debugJoystick.rightTrigger().whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
+    debugJoystick.y().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
 
     // Debugging
     debugJoystick.leftTrigger().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
     debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
+
+    debugJoystick.leftStick().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
+    debugJoystick.rightStick().whileTrue(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
+
 
     // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
