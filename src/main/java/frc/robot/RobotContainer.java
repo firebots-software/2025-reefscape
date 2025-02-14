@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,8 +17,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commandGroups.Dealgaenate;
@@ -81,7 +83,25 @@ public class RobotContainer {
     logger.telemeterize(driveTrain.getCurrentState());
   }
 
+  private final AutoFactory autoFactory;
+  private final AutoChooser autoChooser;
+
   public RobotContainer() {
+    autoFactory =
+        new AutoFactory(
+            driveTrain::getPose, // A function that returns the current robot pose
+            driveTrain
+                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            driveTrain::followTrajectory, // The drive subsystem trajectory follower
+            true, // If alliance flipping should be enabled
+            driveTrain);
+    autoChooser = new AutoChooser();
+    AutoRoutines autoRoutines = new AutoRoutines(autoFactory, driveTrain);
+    // Add options to the chooser
+    autoChooser.addRoutine("Basic Four Coral Auto", autoRoutines::basicFourCoralAuto);
+
+    // Put the auto chooser on the dashboard
+    SmartDashboard.putData("autochooser", autoChooser);
     configureBindings();
   }
 
@@ -177,10 +197,12 @@ public class RobotContainer {
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
     Trigger rightBumper = joystick.rightBumper();
 
-    rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-    rightBumper.onFalse(
-        new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
-    joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
+    // TODO: Uncomment when mechanisms arrive on the robot:
+    // Currently this code uses commands that we can't call or else it will throw errors
+    // rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+    // rightBumper.onFalse(
+    //     new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
+    // joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     // Debugging
     debugJoystick.rightTrigger().whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
@@ -219,6 +241,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    return new WaitCommand(10);
+    return autoChooser.selectedCommandScheduler();
   }
 }

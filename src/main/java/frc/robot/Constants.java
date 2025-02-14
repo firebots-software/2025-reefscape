@@ -90,6 +90,10 @@ public final class Constants {
   }
 
   public static final class Arm {
+    // this is new code
+    public static final double DALE_FLYWHEEL_GEAR_RATIO = 1 / 11.2593;
+    public static final double DALE_PIVOT_GEAR_RATIO = 1; // TODO
+    // end of new code
     public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
     public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
     public static final double DEFAULT_ARM_ANGLE = 250.0;
@@ -142,7 +146,7 @@ public final class Constants {
     public static final int FLYWHEEL_PORT = 0;
     public static final double MOTIONMAGIC_KV = 0;
     public static final double MOTIONMAGIC_KA = 0;
-    public static final double FLYWHEEL_S0C_KP = 0;
+    public static final double FLYWHEEL_S0C_KP = 1.0;
     public static final double FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
     public static final double FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS = 5.0;
 
@@ -587,16 +591,17 @@ public final class Constants {
     public static final int CHECKOUT_PORT = 1; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 90.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 90.0; // TODO
-    public static double S0C_KP = 1; // TODO
-    public static double S0C_KI = 0; // TODO
-    public static double S0C_KD = 0; // TODO
+
+    public static double S0C_KP = 1.0; // TODO
+    public static double S0C_KI = 0.0; // TODO
+    public static double S0C_KD = 0.0; // TODO
     public static double S0C_KS = 0.0; // TODO
     public static double S0C_KG = 0.0; // TODO
-    public static final double CRUISE_VELOCITY = 1000; // TODO
-    public static final double ACCELERATION = 1000; // TODO
+    public static final double CRUISE_VELOCITY = 10; // TODO
+    public static final double ACCELERATION = 10; // TODO
 
-    public static final int GEAR_RATIO = 12 / 15; // TODO
-    public static final double SPEED_RPS = 2000; // TODO
+    public static final int GEAR_RATIO = 1 / 6; // TODO
+    public static final double SPEED_RPS = 5; // TODO
   }
 
   public static class FunnelConstants {
@@ -604,14 +609,14 @@ public final class Constants {
     public static final int LEFT_MOTOR_PORT = 0; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO
-    public static final double S0C_KP = 0.0; // TODO
+    public static final double S0C_KP = 1.0; // TODO
     public static final double S0C_KI = 0.0; // TODO
     public static final double S0C_KD = 0.0; // TODO
-    public static final double CRUISE_VELOCITY = 0.0; // TODO
-    public static final double ACCELERATION = 0.0; // TODO
+    public static final double CRUISE_VELOCITY = 10.0; // TODO
+    public static final double ACCELERATION = 10.0; // TODO
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
-    public static final double SPEED_RPS = 0.0; // TODO
+    public static final double SPEED_RPS = 5.0; // TODO
     public static final int GEAR_RATIO = 0; // TODO
 
     public static final int CHECK_IN_PORT = 0;
@@ -627,20 +632,23 @@ public final class Constants {
     public static final int kDriverControllerPort = 0; // todo: change port
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
-    public static double S0C_KP = 0.0;
+
+    public static double S0C_KP = 1.0;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.0;
     public static double S0C_KS = 0.0;
     public static double S0C_KG = 0.0;
+
     public static final int MOTIONMAGIC_KV = 0;
     public static final int MOTIONMAGIC_KA = 0;
     public static final double currentLimit = 0;
-    public static final double CRUISE_VELOCITY = 0.0; // To-do
-    public static final double ACCELERATION = 0.0; // To-do
+    public static final double CRUISE_VELOCITY = 6.0; // To-do
+    public static final double ACCELERATION = 6.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0; // To-do
     public static final double MAX_POSITIONAL_ERROR = 0.05;
     public static final double SPROCKET_CIRCUM_INCHES =
         1.751 * Math.PI; // TODO: change 0 to radius/diameter
+    public static final double GEAR_RATIO = 1 / 12;
     public static final double SPROCKET_GEAR_RATIO = 12 / 1; // TODO
     public static final double CARRAIGE_UPDUCTION = 3 / 1; // TODO
     // public static final double CONVERSION_FACTOR = SPROCKET_GEAR_RATIO/(SPROCKET_CIRCUM_INCHES *
