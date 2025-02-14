@@ -624,8 +624,9 @@ public final class Constants {
     public static final int S0C_KP = 0;
     public static final int S0C_KI = 0;
     public static final int S0C_KD = 0;
-    public static final int MOTIONMAGIC_KV = 0;
-    public static final int MOTIONMAGIC_KA = 0;
+    public static final double MOTIONMAGIC_KV = 10.66;
+    public static final double MOTIONMAGIC_KA = 0.04;
+    public static final double MOTIONMAGIC_KG = 0.28;
     public static final double currentLimit = 0;
     public static final double CRUISE_VELOCITY = 0.0; // To-do
     public static final double ACCELERATION = 0.0; // To-do
