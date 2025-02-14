@@ -118,7 +118,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     return (Math.abs(getError()) <= ElevatorConstants.SETPOINT_TOLERANCE);
   }
 
-  public boolean canFunnelTransferCoralToDale() {
+  public boolean canFunnelTransferCoralToScoring() {
     return this.getLevel().equals(Constants.ElevatorConstants.ElevatorPositions.Intake)
         && this.getError() < Constants.ElevatorConstants.MAX_POSITIONAL_ERROR;
   }
