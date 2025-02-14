@@ -36,7 +36,7 @@ public class GyroStabilizer extends Command {
     public void execute() {
       Transform2d currentTipVectorRP = getTipVectorRP(pigeon);
   
-      double dirToGoX = currentTipVectorRP.getY();
+      double dirToGoX = currentTipVectorRP.getY(); //TODO: change for comp robot
       double dirToGoY = -currentTipVectorRP.getX();
   
       double xSpeed = pidController.calculate(dirToGoX, 0);
