@@ -68,6 +68,7 @@ public class RobotContainer {
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
   private final CommandXboxController debugJoystick = new CommandXboxController(3);
+  
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
@@ -103,6 +104,14 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
+
+    BooleanSupplier increaseFunction = () -> debugJoystick.rightBumper().getAsBoolean(),
+        decreaseFunction = () -> debugJoystick.leftBumper().getAsBoolean(),
+        pidChangeFunction = () -> debugJoystick.a().getAsBoolean(),
+        mechChangeFunction = () -> debugJoystick.b().getAsBoolean();
+    
+    
+
 
     // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.rightBumper().whileTrue(new
