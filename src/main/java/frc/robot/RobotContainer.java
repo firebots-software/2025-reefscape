@@ -24,11 +24,14 @@ import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DebugCommands.DebugArm;
 import frc.robot.commands.DebugCommands.DebugDaleSpin;
 import frc.robot.commands.DebugCommands.DebugElevator;
+import frc.robot.commands.DebugCommands.DebugFunnelIntake;
+import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
+import frc.robot.commands.DebugCommands.DebugTootsieSlide;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
-import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
@@ -108,7 +111,11 @@ public class RobotContainer {
     // Debugging
     debugJoystick
         .rightTrigger()
-        .whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
+        .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
+
+    debugJoystick.rightBumper().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
+
+    debugJoystick.leftBumper().whileFalse(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
 
     /*
 
@@ -162,11 +169,10 @@ public class RobotContainer {
 
     // Debugging
     debugJoystick.leftTrigger().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
+
     debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
 
-    // Debugging
-    debugJoystick.leftTrigger().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
-    debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
+    debugJoystick.a().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
 
     // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
@@ -174,11 +180,7 @@ public class RobotContainer {
     // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
     // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
-    // Debugging
-    debugJoystick.a().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
 
-    // Debugging
-    debugJoystick.a().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
 
     // joystick
     //     .a()
