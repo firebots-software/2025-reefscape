@@ -42,8 +42,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   private double targetDegrees;
 
-  private double flywheelSpeed;
-
   private final VoltageOut voltRequestArm = new VoltageOut(0.0);
 
   private final SysIdRoutine sysIdRoutineArm =
@@ -181,7 +179,7 @@ public class ArmSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Dale/Arm at target", atTarget(5));
     DogLog.log("subsystems/Dale/Arm Degrees", encoderDegrees);
     DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
-    DogLog.log("subsystems/Dale/Flywheel Speed", getFlywheelSpeed());
+    DogLog.log("subsystems/Dale/Flywheel Speed", flywheelMotor.getVelocity().getValueAsDouble());
   }
 
   public void spinFlywheel(double flywheelSpeed) {
@@ -191,11 +189,6 @@ public class ArmSubsystem extends SubsystemBase {
   // Stops the flywheel
   public void stopFlywheel() {
     flywheelMotor.set(0);
-  }
-
-  public double getFlywheelSpeed() {
-    flywheelSpeed = flywheelMotor.getVelocity().getValueAsDouble();
-    return flywheelSpeed;
   }
 
   public double getEncoderDegrees() {
