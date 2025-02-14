@@ -105,6 +105,10 @@ public class FunnelSubsystem extends SubsystemBase {
     runFunnelAtRPS(Constants.FunnelConstants.SPEED_RPS);
   }
 
+  public void spinFunnelBack(){
+    runFunnelAtRPS(Constants.FunnelConstants.BACKWARDS_RPS); 
+  }
+
   public void stopFunnel() {
     rightMotor.stopMotor();
   }

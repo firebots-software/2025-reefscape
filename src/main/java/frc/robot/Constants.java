@@ -605,6 +605,8 @@ public final class Constants {
     public static final double ACCELERATION = 0.0; // TODO
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
+    public static final double BACKWARDS_VELOCITY_SHOOT = -5.0;
+    public static final double BACKWARDS_RPS = 5.0;
     public static final double SPEED_RPS = 0.0; // TODO
     public static final int GEAR_RATIO = 0; // TODO
 
