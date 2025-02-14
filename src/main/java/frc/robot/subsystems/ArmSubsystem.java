@@ -38,9 +38,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final MotionMagicVoltage controlRequestArm = new MotionMagicVoltage(0);
   private final MotionMagicVoltage controlRequestFlywheel = new MotionMagicVoltage(0);
-  private double encoderDegrees; 
+  private double encoderDegrees;
 
-  private double targetDegrees; 
+  private double targetDegrees;
 
   private double flywheelSpeed;
 
