@@ -180,11 +180,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
     // This method will be called once per scheduler run
     DogLog.log("subsystems/Dale/Arm at target", atTarget(5));
     DogLog.log("subsystems/Dale/Arm Degrees", encoderDegrees);
     DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
+    DogLog.log(
+        "subsystems/Dale/Flywheel Speed", flywheelMotor.getVelocity(false).getValueAsDouble());
   }
 
   public void spinFlywheel(double flywheelSpeed) {
@@ -194,5 +195,13 @@ public class ArmSubsystem extends SubsystemBase {
   // Stops the flywheel
   public void stopFlywheel() {
     flywheelMotor.set(0);
+  }
+
+  public double getEncoderDegrees() {
+    return encoderDegrees;
+  }
+
+  public double getTargetDegrees() {
+    return targetDegrees;
   }
 }
