@@ -84,10 +84,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     // TODO: add constant to convert distance to encoder values
     if (distance.isConnected()) {
       master.setPosition(
-          this.getToFDistance() * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+          this.getToFDistance());
       DogLog.log(
           "subsystems/Elevator/resetElevatorPosition",
-          this.getToFDistance() * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+          this.getToFDistance());
     }
   }
 
