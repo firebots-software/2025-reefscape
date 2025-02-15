@@ -627,7 +627,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0; // todo: change port
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
-    
+
     public static double S0C_KP = 1.0;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.0;
