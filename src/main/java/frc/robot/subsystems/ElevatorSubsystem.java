@@ -140,7 +140,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double getToFDistance() {
     //0.11 is the sensor offset
-    return distance.getDistance().getValueAsDouble()- 0.11;
+    return distance.getDistance().getValueAsDouble()- Constants.ElevatorConstants.sensorOffset;
   }
 
   @Override

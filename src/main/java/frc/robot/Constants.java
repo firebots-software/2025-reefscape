@@ -634,6 +634,8 @@ public final class Constants {
     public static double S0C_KS = 0.0;
     public static double S0C_KG = 0.0;
 
+    public static double sensorOffset = 0.11;
+
     public static final double MOTIONMAGIC_KV = 10.66;
     public static final double MOTIONMAGIC_KA = 0.04;
     public static final double MOTIONMAGIC_KG = 0.28;
