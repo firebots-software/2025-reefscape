@@ -17,7 +17,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,6 +24,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
+import frc.robot.commands.DebugCommands.DebugArm;
+import frc.robot.commands.DebugCommands.DebugDaleSpin;
+import frc.robot.commands.DebugCommands.DebugElevator;
+import frc.robot.commands.DebugCommands.DebugFunnelIntake;
+import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
+import frc.robot.commands.DebugCommands.DebugTootsieSlide;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionQuick;
@@ -68,6 +73,7 @@ public class RobotContainer {
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
+  private final CommandXboxController debugJoystick = new CommandXboxController(3);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
@@ -97,11 +103,40 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    Joystick suppliers;
+    // Automatic
     funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
     funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
 
+    // Debugging
+    BooleanSupplier increaseFunction = () -> debugJoystick.rightBumper().getAsBoolean(),
+        decreaseFunction = () -> debugJoystick.leftBumper().getAsBoolean(),
+        pidChangeFunction = () -> debugJoystick.a().getAsBoolean(),
+        mechChangeFunction = () -> debugJoystick.b().getAsBoolean();
+    debugJoystick
+        .leftBumper()
+        .whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
+
+    debugJoystick
+        .rightTrigger()
+        .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
+
+    debugJoystick.rightBumper().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
+
+    debugJoystick.leftBumper().whileFalse(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
+
+    debugJoystick
+        .rightTrigger()
+        .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
+    debugJoystick.y().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
+
+    debugJoystick.leftTrigger().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
+    debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
+
+    debugJoystick.leftStick().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
+    debugJoystick.rightStick().whileTrue(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
+
+    // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
         leftRightFunction = () -> -joystick.getLeftX(),
@@ -120,27 +155,6 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
-
-    joystick.rightBumper().whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
-
-    /*
-
-    Sysid button commands, commented out (I like keeping this commented because
-    every branch will have access to the necessary commands to run SysID immediately)
-
-       joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
-       joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
-
-    * Joystick Y = quasistatic forward
-    * Joystick A = quasistatic reverse
-    * Joystick B = dynamic forward
-    * Joystick X = dyanmic reverse
-    *
-       joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-       joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-       joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-       joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    */
 
     joystick
         .a()
@@ -166,12 +180,12 @@ public class RobotContainer {
                                         * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
                             new Rotation2d(
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
-    Trigger rightBumper = joystick.rightBumper();
 
-    // Currently this code uses commands that we can't call or else it will throw errors
-    rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-    rightBumper.onFalse(
-        new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
+    // Mechanisms:
+    joystick.rightBumper().onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+    joystick
+        .rightBumper()
+        .onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
@@ -184,6 +198,24 @@ public class RobotContainer {
         .whileTrue(
             new SetElevatorLevel(
                 elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in constants
+
+    /*
+    Sysid button commands, commented out (I like keeping this commented because
+    every branch will have access to the necessary commands to run SysID immediately)
+
+       joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
+       joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
+
+    * Joystick Y = quasistatic forward
+    * Joystick A = quasistatic reverse
+    * Joystick B = dynamic forward
+    * Joystick X = dyanmic reverse
+    *
+       joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+       joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+       joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+       joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    */
   }
 
   public static void setAlliance() {

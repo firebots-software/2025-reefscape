@@ -107,6 +107,24 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     LoggedTalonFX.periodic_static();
+
+    DogLog.log("PIDArmKP", Constants.Arm.S0C_KP);
+    DogLog.log("PIDArmKI", Constants.Arm.S0C_KI);
+    DogLog.log("PIDArmKD", Constants.Arm.S0C_KD);
+    DogLog.log("PIDArmKS", Constants.Arm.S0C_KS);
+    DogLog.log("PIDArmKG", Constants.Arm.S0C_KG);
+
+    DogLog.log("PIDElevatorKP", Constants.ElevatorConstants.S0C_KP);
+    DogLog.log("PIDElevatorKI", Constants.ElevatorConstants.S0C_KI);
+    DogLog.log("PIDElevatorKD", Constants.ElevatorConstants.S0C_KD);
+    DogLog.log("PIDElevatorKS", Constants.ElevatorConstants.S0C_KS);
+    DogLog.log("PIDElevatorKG", Constants.ElevatorConstants.S0C_KG);
+
+    DogLog.log("PIDTootsieKP", Constants.TootsieSlide.S0C_KP);
+    DogLog.log("PIDTootsieKI", Constants.TootsieSlide.S0C_KI);
+    DogLog.log("PIDTootsieKD", Constants.TootsieSlide.S0C_KD);
+    DogLog.log("PIDTootsieKS", Constants.TootsieSlide.S0C_KS);
+    DogLog.log("PIDTootsieKG", Constants.TootsieSlide.S0C_KG);
   }
 
   @Override

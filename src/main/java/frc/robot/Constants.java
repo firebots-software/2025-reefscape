@@ -111,7 +111,11 @@ public final class Constants {
     public static final int PIVOT_MOTOR_PORT = 16;
 
     public static final double CURRENT_LIMIT = 8.0;
-    public static final double S0C_KP = 1.0;
+    public static double S0C_KP = 1.0;
+    public static double S0C_KI = 0.0;
+    public static double S0C_KD = 0.0;
+    public static double S0C_KS = 0.0;
+    public static double S0C_KG = 0.0;
     public static final double ARMFF_KS = 0.16969;
     public static final double ARMFF_KG = 0.34;
     public static final double ARMFF_KV = 2.49;
@@ -582,9 +586,12 @@ public final class Constants {
     public static final int CHECKOUT_PORT = 1; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 90.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 90.0; // TODO
-    public static final double S0C_KP = 1; // TODO
-    public static final double S0C_KI = 0; // TODO
-    public static final double S0C_KD = 0; // TODO
+
+    public static double S0C_KP = 1.0; // TODO
+    public static double S0C_KI = 0.0; // TODO
+    public static double S0C_KD = 0.0; // TODO
+    public static double S0C_KS = 0.0; // TODO
+    public static double S0C_KG = 0.0; // TODO
     public static final double CRUISE_VELOCITY = 10; // TODO
     public static final double ACCELERATION = 10; // TODO
 
@@ -620,9 +627,13 @@ public final class Constants {
     public static final int kDriverControllerPort = 0; // todo: change port
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
-    public static final int S0C_KP = 1;
-    public static final int S0C_KI = 0;
-    public static final int S0C_KD = 0;
+
+    public static double S0C_KP = 1.0;
+    public static double S0C_KI = 0.0;
+    public static double S0C_KD = 0.0;
+    public static double S0C_KS = 0.0;
+    public static double S0C_KG = 0.0;
+
     public static final double MOTIONMAGIC_KV = 10.66;
     public static final double MOTIONMAGIC_KA = 0.04;
     public static final double MOTIONMAGIC_KG = 0.28;
