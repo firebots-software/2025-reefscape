@@ -91,7 +91,7 @@ public class ArmSubsystem extends SubsystemBase {
         new Slot0Configs().withKP(Constants.Flywheel.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
 
     // Initialize master motor only
-    armMotor = new LoggedTalonFX(Constants.Arm.LT_PORT);
+    armMotor = new LoggedTalonFX(Constants.Arm.PIVOT_MOTOR_PORT);
     flywheelMotor = new LoggedTalonFX(Constants.Flywheel.FLYWHEEL_PORT);
 
     TalonFXConfigurator masterConfiguratorArm = armMotor.getConfigurator();
