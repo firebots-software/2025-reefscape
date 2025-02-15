@@ -33,10 +33,20 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ElevatorSubsystem() {
     // Initialize motors
 
-    distance = new CANrange(ElevatorConstants.CANRANGE_PORT);
+    distance =
+        new CANrange(
+            ElevatorConstants.CANRANGE_PORT, Constants.Swerve.WHICH_SWERVE_ROBOT.CANBUS_NAME);
 
-    motor1 = new LoggedTalonFX("subsystems/Elevator/motor1", ElevatorConstants.MOTOR1_PORT);
-    motor2 = new LoggedTalonFX("subsystems/Elevator/motor2", ElevatorConstants.MOTOR2_PORT);
+    motor1 =
+        new LoggedTalonFX(
+            "subsystems/Elevator/motor1",
+            ElevatorConstants.MOTOR1_PORT,
+            Constants.Swerve.WHICH_SWERVE_ROBOT.CANBUS_NAME);
+    motor2 =
+        new LoggedTalonFX(
+            "subsystems/Elevator/motor2",
+            ElevatorConstants.MOTOR2_PORT,
+            Constants.Swerve.WHICH_SWERVE_ROBOT.CANBUS_NAME);
 
     currentLevel = ElevatorPositions.Intake;
 

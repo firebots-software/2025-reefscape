@@ -34,9 +34,9 @@ public class FunnelSubsystem extends SubsystemBase {
 
   private FunnelSubsystem() {
     rightMotor = new LoggedTalonFX(FunnelConstants.RIGHT_MOTOR_PORT); // Unique ID for motor1
-    leftMotor = new LoggedTalonFX(2); // Unique ID for motor2\
+    leftMotor = new LoggedTalonFX(FunnelConstants.LEFT_MOTOR_PORT); // Unique ID for motor2\
 
-    drake = new DigitalInput(0);
+    drake = new DigitalInput(Constants.FunnelConstants.DRAKE_PORT);
 
     checkOutSensor = new DigitalInput(Constants.FunnelConstants.CHECK_OUT_PORT);
     checkInSensor = new DigitalInput(Constants.FunnelConstants.CHECK_IN_PORT);
