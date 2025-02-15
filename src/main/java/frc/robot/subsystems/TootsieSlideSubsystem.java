@@ -26,7 +26,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   private static TootsieSlideSubsystem instance;
 
   private DigitalInput drakeSensor;
-  private LoggedTalonFX master;
+  public LoggedTalonFX master;
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
 
   // FOR SIMULATION

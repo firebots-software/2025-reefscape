@@ -9,6 +9,7 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AbstractedPID.IncreasePArm;
 import frc.robot.util.LoggedTalonFX;
 
 /**
@@ -108,6 +109,10 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     LoggedTalonFX.periodic_static();
 
+    DogLog.log("PID Constant", IncreasePArm.broomIndex());
+    DogLog.log("Mechanism Type", IncreasePArm.mechIndex());
+
+
     DogLog.log("PIDArmKP", Constants.Arm.S0C_KP);
     DogLog.log("PIDArmKI", Constants.Arm.S0C_KI);
     DogLog.log("PIDArmKD", Constants.Arm.S0C_KD);
@@ -125,6 +130,9 @@ public class Robot extends TimedRobot {
     DogLog.log("PIDTootsieKD", Constants.TootsieSlide.S0C_KD);
     DogLog.log("PIDTootsieKS", Constants.TootsieSlide.S0C_KS);
     DogLog.log("PIDTootsieKG", Constants.TootsieSlide.S0C_KG);
+    
+
+
   }
 
   @Override

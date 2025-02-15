@@ -31,8 +31,8 @@ import frc.robot.util.LoggedTalonFX;
 public class ArmSubsystem extends SubsystemBase {
   private static ArmSubsystem instance;
 
-  private LoggedTalonFX armMotor;
-  private LoggedTalonFX flywheelMotor;
+  public LoggedTalonFX armMotor;
+  public LoggedTalonFX flywheelMotor;
 
   private DutyCycleEncoder revEncoder;
   private MotionMagicConfigs motionMagicConfigsArm;

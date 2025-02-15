@@ -24,7 +24,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private LoggedTalonFX motor1;
   private LoggedTalonFX motor2;
-  private LoggedTalonFX master;
+  public LoggedTalonFX master;
 
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
