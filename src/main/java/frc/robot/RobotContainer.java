@@ -43,10 +43,10 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
-  FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-  ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+//   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
+//   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
+//   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+//   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
   Boolean coralInFunnel = Boolean.valueOf(false);
   Boolean coralInElevator = Boolean.valueOf(false);
@@ -98,9 +98,9 @@ public class RobotContainer {
 
   private void configureBindings() {
     Joystick suppliers;
-    funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
-    Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
+    // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
+    // funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
 
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
@@ -121,7 +121,7 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    joystick.rightBumper().whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
+    // joystick.rightBumper().whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
 
     /*
 
@@ -169,21 +169,21 @@ public class RobotContainer {
     Trigger rightBumper = joystick.rightBumper();
 
     // Currently this code uses commands that we can't call or else it will throw errors
-    rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-    rightBumper.onFalse(
-        new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
+    // rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+    // rightBumper.onFalse(
+    //     new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
-    joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
-    joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
-    joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
-    joystick
-        .a()
-        .whileTrue(
-            new SetElevatorLevel(
-                elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in constants
+    // joystick
+    //     .a()
+    //     .whileTrue(
+    //         new SetElevatorLevel(
+    //             elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in constants
   }
 
   public static void setAlliance() {
