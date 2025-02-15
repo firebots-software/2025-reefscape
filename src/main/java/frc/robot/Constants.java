@@ -639,10 +639,9 @@ public final class Constants {
     public static double S0C_KA = 0.04;
     public static double S0C_KV = 10.66;
     
-
     public static final double MOTIONMAGIC_MAX_VELOCITY = 10;
     public static final double MOTIONMAGIC_MAX_ACCELERATION = 20;
-    // public static final double MOTIONMAGIC_KG = 0.28;
+    public static double sensorOffset = 0.11;
     public static final double currentLimit = 0;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
