@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DebugCommands.DebugArm;
@@ -30,9 +29,6 @@ import frc.robot.commands.DebugCommands.DebugElevator;
 import frc.robot.commands.DebugCommands.DebugFunnelIntake;
 import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
 import frc.robot.commands.DebugCommands.DebugTootsieSlide;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionQuick;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
@@ -104,9 +100,9 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Automatic
-    funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
-    Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
+    // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
+    // funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
 
     // Debugging
     BooleanSupplier increaseFunction = () -> debugJoystick.rightBumper().getAsBoolean(),
@@ -140,7 +136,7 @@ public class RobotContainer {
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
         leftRightFunction = () -> -joystick.getLeftX(),
-        rotationFunction = () -> -joystick.getRightX(),
+        rotationFunction = () -> joystick.getRightX(),
         speedFunction =
             () ->
                 leftShoulderTrigger.getAsBoolean()
@@ -188,16 +184,17 @@ public class RobotContainer {
         .onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
-    joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
-    joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
-    joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
-    joystick
-        .a()
-        .whileTrue(
-            new SetElevatorLevel(
-                elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in constants
+    // joystick
+    //     .a()
+    //     .whileTrue(
+    //         new SetElevatorLevel(
+    //             elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in
+    // constants
 
     /*
     Sysid button commands, commented out (I like keeping this commented because
