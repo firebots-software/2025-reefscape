@@ -112,7 +112,6 @@ public class Robot extends TimedRobot {
     DogLog.log("PID Constant", IncreasePArm.broomIndex());
     DogLog.log("Mechanism Type", IncreasePArm.mechIndex());
 
-
     DogLog.log("PIDArmKP", Constants.Arm.S0C_KP);
     DogLog.log("PIDArmKI", Constants.Arm.S0C_KI);
     DogLog.log("PIDArmKD", Constants.Arm.S0C_KD);
@@ -130,9 +129,6 @@ public class Robot extends TimedRobot {
     DogLog.log("PIDTootsieKD", Constants.TootsieSlide.S0C_KD);
     DogLog.log("PIDTootsieKS", Constants.TootsieSlide.S0C_KS);
     DogLog.log("PIDTootsieKG", Constants.TootsieSlide.S0C_KG);
-    
-
-
   }
 
   @Override
