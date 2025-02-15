@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.*;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
-import choreo.auto.AutoRoutine;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,16 +20,11 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.GyroStabilizer;
-import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
-import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import java.util.function.BooleanSupplier;
@@ -203,96 +197,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
-
-    /*
-    Field Diagram
-
-              BLUE                        RED
-    ___________________________________________________
-    |THPS                 TSTART                  THPS|
-    |                       | |                       |
-    |        5    4         | |         4    5        |
-    |     0          3    MSTART     3          0     |
-    |        1    2         | |         2    1        |
-    |                       | |                       |
-    |BHPS_________________BSTART__________________BHPS|
-
-    L and R branches are on the left and right of the robot when it is at the reef in between the two branches
-
-    a path name consists of a start and a destination
-    a start and a destinantion can be on any one of those marked areas
-    the format for a path is start-destination
-    ex. 2L-BHPS
-    this path starts from the left branch on the second part of the reef (2L), and goes to the bottom human player station (BHPS)
-    */
-    String chosenPath = startPosChooser.getSelected();
-
-    AutoRoutine routine = autoFactory.newRoutine("routine");
-    switch (chosenPath) {
-      case "top":
-        routine
-            .active()
-            .onTrue(
-                routine
-                    .trajectory("TSTART-4R")
-                    .resetOdometry()
-                    .andThen(autoSubCommand(routine, "TSTART-4R"))
-                    .andThen(autoSubCommand(routine, "4R-THPS"))
-                    .andThen(autoSubCommand(routine, "THPS-5L"))
-                    .andThen(autoSubCommand(routine, "5L-THPS"))
-                    .andThen(autoSubCommand(routine, "THPS-5R"))
-                    .andThen(autoSubCommand(routine, "5R-THPS"))
-                    .andThen(autoSubCommand(routine, "THPS-0L")));
-        break;
-
-      case "middle":
-        routine
-            .active()
-            .onTrue(
-                routine
-                    .trajectory("MSTART-3R")
-                    .resetOdometry()
-                    .andThen(autoSubCommand(routine, "MSTART-3R")));
-        break;
-
-      case "bottom":
-        routine
-            .active()
-            .onTrue(
-                routine
-                    .trajectory("BSTART-2L")
-                    .resetOdometry()
-                    .andThen(autoSubCommand(routine, "BSTART-2L"))
-                    .andThen(autoSubCommand(routine, "2L-BHPS"))
-                    .andThen(autoSubCommand(routine, "BHPS-1R"))
-                    .andThen(autoSubCommand(routine, "1R-BHPS"))
-                    .andThen(autoSubCommand(routine, "BHPS-1L"))
-                    .andThen(autoSubCommand(routine, "1L-BHPS"))
-                    .andThen(autoSubCommand(routine, "BHPS-0R")));
-        break;
-    }
-
-    return routine.cmd();
+    /* Run the path selected from the auto chooser */
+    return autoChooser.selectedCommandScheduler();
   }
-
-//   public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // for actual robot
-//     BooleanSupplier pathGoesToHPS =
-//         () -> !(baseCommandName.contains("HPS-") || baseCommandName.contains("START-"));
-//     // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator
-//     // and shoot, else lower elevator and intake
-//     return Commands.parallel(
-//             routine.trajectory(baseCommandName).cmd(),
-//             ((pathGoesToHPS.getAsBoolean())
-//                 ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
-//                 : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)))
-//         .andThen(
-//             (pathGoesToHPS.getAsBoolean())
-//                 ? new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem)
-//                 : new ShootTootsieSlide(tootsieSlideSubsystem))
-//         .andThen(
-//             new TransferPieceBetweenFunnelAndElevator(
-//                 elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem))
-//         .onlyIf(pathGoesToHPS); // transfers piece to elevator only if path doesnt go to hps
-//   }
 }
