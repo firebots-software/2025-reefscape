@@ -21,7 +21,6 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -34,7 +33,6 @@ public class ArmSubsystem extends SubsystemBase {
   public LoggedTalonFX armMotor;
   public LoggedTalonFX flywheelMotor;
 
-  private DutyCycleEncoder revEncoder;
   private MotionMagicConfigs motionMagicConfigsArm;
   private MotionMagicConfigs motionMagicConfigsFlywheel;
 
@@ -93,7 +91,7 @@ public class ArmSubsystem extends SubsystemBase {
         new Slot0Configs().withKP(Constants.Flywheel.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
 
     // Initialize master motor only
-    armMotor = new LoggedTalonFX(Constants.Arm.LT_PORT);
+    armMotor = new LoggedTalonFX(Constants.Arm.PIVOT_MOTOR_PORT);
     flywheelMotor = new LoggedTalonFX(Constants.Flywheel.FLYWHEEL_PORT);
 
     TalonFXConfigurator masterConfiguratorArm = armMotor.getConfigurator();
@@ -120,9 +118,6 @@ public class ArmSubsystem extends SubsystemBase {
     motionMagicConfigsFlywheel.MotionMagicCruiseVelocity = Constants.Flywheel.MOTIONMAGIC_KV;
     motionMagicConfigsFlywheel.MotionMagicAcceleration = Constants.Flywheel.MOTIONMAGIC_KA;
     masterConfiguratorFlywheel.apply(motionMagicConfigsFlywheel);
-
-    // Initialize absolute encoder
-    revEncoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
   }
 
   public void setPosition(double angleDegrees) {
@@ -137,10 +132,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void stopEveryingONG() {
     flywheelMotor.stopMotor();
-  }
-
-  private double calculateDegrees() {
-    return revEncoder.get() * 360d;
   }
 
   public boolean atTarget(double endToleranceDegrees) {
@@ -184,11 +175,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    encoderDegrees = calculateDegrees();
     // This method will be called once per scheduler run
     DogLog.log("subsystems/Dale/Arm at target", atTarget(5));
     DogLog.log("subsystems/Dale/Arm Degrees", encoderDegrees);
     DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
+    DogLog.log(
+        "subsystems/Dale/Flywheel Speed", flywheelMotor.getVelocity(false).getValueAsDouble());
   }
 
   public void spinFlywheel(double flywheelSpeed) {
@@ -198,5 +190,13 @@ public class ArmSubsystem extends SubsystemBase {
   // Stops the flywheel
   public void stopFlywheel() {
     flywheelMotor.set(0);
+  }
+
+  public double getEncoderDegrees() {
+    return encoderDegrees;
+  }
+
+  public double getTargetDegrees() {
+    return targetDegrees;
   }
 }

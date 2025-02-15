@@ -17,7 +17,7 @@ public class DebugElevator extends Command {
 
   @Override
   public void execute() {
-    elevatorSubsystem.testElevator(50);
+    elevatorSubsystem.testElevator(10);
   }
 
   @Override
@@ -25,6 +25,6 @@ public class DebugElevator extends Command {
 
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.atTargetPosition();
+    return elevatorSubsystem.isAtPosition();
   }
 }
