@@ -117,10 +117,6 @@ public class RobotContainer {
         .rightTrigger()
         .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
 
-    debugJoystick.rightBumper().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
-
-    debugJoystick.leftBumper().whileFalse(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
-
     debugJoystick
         .rightTrigger()
         .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
