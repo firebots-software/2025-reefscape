@@ -108,12 +108,7 @@ public final class Constants {
       return (conversionFactor * angle) + zeroOffset;
     }
 
-    public static final int RT_PORT = 14; // Right Top motor
-    public static final int RB_PORT = 13; // Right Bottom motor
-    public static final int LT_PORT = 1; // Left Top motor
-    public static final int LB_PORT = 11; // Left Bottom motor
-    public static final int ENCODER_PORT = 0; // subject to change
-    // public static final int ENCODER_PORT = 0; // subject to change
+    public static final int PIVOT_MOTOR_PORT = 16;
 
     public static final double CURRENT_LIMIT = 8.0;
     public static final double S0C_KP = 1.0;
@@ -139,7 +134,7 @@ public final class Constants {
   }
 
   public static class Flywheel {
-    public static final int FLYWHEEL_PORT = 0;
+    public static final int FLYWHEEL_PORT = 17;
     public static final double MOTIONMAGIC_KV = 0;
     public static final double MOTIONMAGIC_KA = 0;
     public static final double FLYWHEEL_S0C_KP = 1.0;
@@ -583,7 +578,7 @@ public final class Constants {
   }
 
   public static class TootsieSlide {
-    public static final int MOTOR_PORT = 1; // TODO
+    public static final int MOTOR_PORT = 15; // TODO
     public static final int CHECKOUT_PORT = 1; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 90.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 90.0; // TODO
@@ -598,8 +593,8 @@ public final class Constants {
   }
 
   public static class FunnelConstants {
-    public static final int RIGHT_MOTOR_PORT = 0; // TODO
-    public static final int LEFT_MOTOR_PORT = 0; // TODO
+    public static final int RIGHT_MOTOR_PORT = 14; // TODO
+    public static final int LEFT_MOTOR_PORT = 13; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO
     public static final double S0C_KP = 1.0; // TODO
@@ -619,9 +614,9 @@ public final class Constants {
   }
 
   public static class ElevatorConstants {
-    public static final int MOTOR1_PORT = 0; // TODO: change port
-    public static final int MOTOR2_PORT = 0; // TODO: change port
-    public static final int CANRANGE_PORT = 0; // TODO: change port
+    public static final int MOTOR1_PORT = 11; // TODO: change port
+    public static final int MOTOR2_PORT = 12; // TODO: change port
+    public static final int CANRANGE_PORT = 41; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
     public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
