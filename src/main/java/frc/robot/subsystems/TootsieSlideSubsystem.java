@@ -5,10 +5,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.signals.InvertedValue;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
@@ -38,7 +40,11 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
   private TootsieSlideSubsystem() {
     master = new LoggedTalonFX(1); // Unique ID for motor
+
     TalonFXConfigurator m1Config = master.getConfigurator();
+    MotorOutputConfigs moc =
+        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive);
+
     drakeSensor = new DigitalInput(TootsieSlide.CHECKOUT_PORT);
     CurrentLimitsConfigs clc =
         new CurrentLimitsConfigs()
@@ -57,6 +63,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     m1Config.apply(clc);
     master.getConfigurator().apply(s0c);
     master.getConfigurator().apply(clc);
+    m1Config.apply(moc);
   }
 
   public static TootsieSlideSubsystem getInstance() {
