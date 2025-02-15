@@ -18,6 +18,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -61,6 +62,8 @@ public class RobotContainer {
 
   private BooleanSupplier redside = () -> redAlliance;
   private static boolean redAlliance;
+
+  private final SendableChooser<String> startPosChooser = new SendableChooser<String>();
 
   private final SwerveSubsystem driveTrain =
       new SwerveSubsystem(
