@@ -104,9 +104,9 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Automatic
-    funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
-    Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
+    // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
+    // funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
 
     // Debugging
     BooleanSupplier increaseFunction = () -> debugJoystick.rightBumper().getAsBoolean(),
@@ -188,16 +188,16 @@ public class RobotContainer {
         .onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
-    joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
-    joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
-    joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
 
-    joystick
-        .a()
-        .whileTrue(
-            new SetElevatorLevel(
-                elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in constants
+    // joystick
+    //     .a()
+    //     .whileTrue(
+    //         new SetElevatorLevel(
+    //             elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in constants
 
     /*
     Sysid button commands, commented out (I like keeping this commented because

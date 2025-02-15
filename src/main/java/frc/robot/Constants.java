@@ -161,7 +161,7 @@ public final class Constants {
   }
 
   public static class Swerve {
-    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.PROTO;
+    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.JAMES_HARDEN;
 
     public static enum SwerveLevel {
       L2(6.75, 21.428571428571427),
@@ -261,7 +261,7 @@ public final class Constants {
           SwerveDrivePIDValues.JAMES_HARDEN,
           SwerveSteerPIDValues.JAMES_HARDEN,
           RobotDimensions.JAMES_HARDEN,
-          "FireBot",
+          "JamesHarden",
           BumperThickness.JAMES_HARDEN);
       public final Angle FRONT_LEFT_ENCODER_OFFSET,
           FRONT_RIGHT_ENCODER_OFFSET,
@@ -614,9 +614,9 @@ public final class Constants {
     public static final double SPEED_RPS = 5.0; // TODO
     public static final int GEAR_RATIO = 0; // TODO
 
-    public static final int CHECK_IN_PORT = 0;
+    public static final int CHECK_IN_PORT = 1;
     public static final int CHECK_OUT_PORT = 0;
-    public static final int DRAKE_PORT = 0;
+    public static final int DRAKE_PORT = 2;
     public static final double MAX_POSITIONAL_ERROR = 0.05; // TODO
   }
 
