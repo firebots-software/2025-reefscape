@@ -37,7 +37,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
       new FlywheelSim(tootsieSystem, m_tootsieSlideGearbox, 0);
 
   private TootsieSlideSubsystem() {
-    master = new LoggedTalonFX(1); // Unique ID for motor
+    master = new LoggedTalonFX(Constants.TootsieSlide.MOTOR_PORT); // Unique ID for motor
     TalonFXConfigurator m1Config = master.getConfigurator();
     //drakeSensor = new DigitalInput(TootsieSlide.CHECKOUT_PORT);
     CurrentLimitsConfigs clc =

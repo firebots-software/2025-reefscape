@@ -253,10 +253,10 @@ public final class Constants {
           "rio",
           BumperThickness.PROTO),
       JAMES_HARDEN(
-          Rotations.of(-0.158447265625), // front left
-          Rotations.of(-0.310791015625), // front right
-          Rotations.of(-0.48681640625), // back left
-          Rotations.of(0.4248046875), // back right
+          Rotations.of(-0.076171875), // front left
+          Rotations.of(-0.493896484375), // front right
+          Rotations.of(0.18798828125), // back left
+          Rotations.of(-0.1591796875), // back right
           SwerveLevel.L3,
           SwerveDrivePIDValues.JAMES_HARDEN,
           SwerveSteerPIDValues.JAMES_HARDEN,
@@ -410,7 +410,7 @@ public final class Constants {
 
     private static final boolean STEER_MOTOR_REVERSED = true; // TODO: CHANGE FOR NEW ROBOT
     private static final boolean INVERT_LEFT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
-    private static final boolean INVERT_RIGHT_SIDE = true; // TODO: CHANGE FOR NEW ROBOT
+    private static final boolean INVERT_RIGHT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
 
     private static final int kPigeonId = 40; // TODO: CHANGE FOR NEW ROBOT
 
