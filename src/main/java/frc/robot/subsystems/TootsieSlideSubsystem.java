@@ -14,18 +14,16 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.DigitalInput;
 // Simulation imports
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.TootsieSlide;
 import frc.robot.util.LoggedTalonFX;
 
 public class TootsieSlideSubsystem extends SubsystemBase {
   private static TootsieSlideSubsystem instance;
 
-  //private DigitalInput drakeSensor;
+  // private DigitalInput drakeSensor;
   private LoggedTalonFX master;
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
 
@@ -39,7 +37,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   private TootsieSlideSubsystem() {
     master = new LoggedTalonFX(Constants.TootsieSlide.MOTOR_PORT); // Unique ID for motor
     TalonFXConfigurator m1Config = master.getConfigurator();
-    //drakeSensor = new DigitalInput(TootsieSlide.CHECKOUT_PORT);
+    // drakeSensor = new DigitalInput(TootsieSlide.CHECKOUT_PORT);
     CurrentLimitsConfigs clc =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -113,7 +111,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     DogLog.log("subsystems/tootsieslide/tootsieVelocity", master.getVelocity().getValueAsDouble());
-    //DogLog.log("subsystems/tootsieslide/coralPresent", coralPresent());
+    // DogLog.log("subsystems/tootsieslide/coralPresent", coralPresent());
   }
 
   @Override

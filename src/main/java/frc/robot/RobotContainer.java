@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DebugCommands.DebugArm;
@@ -30,9 +29,6 @@ import frc.robot.commands.DebugCommands.DebugElevator;
 import frc.robot.commands.DebugCommands.DebugFunnelIntake;
 import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
 import frc.robot.commands.DebugCommands.DebugTootsieSlide;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionQuick;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
@@ -197,7 +193,8 @@ public class RobotContainer {
     //     .a()
     //     .whileTrue(
     //         new SetElevatorLevel(
-    //             elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in constants
+    //             elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in
+    // constants
 
     /*
     Sysid button commands, commented out (I like keeping this commented because
