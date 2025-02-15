@@ -449,60 +449,49 @@ public final class Constants {
                 .withDriveFrictionVoltage(Simulation.DRIVE_FRICTION_VOLTAGE);
 
     // Front Left
-    // TODO: CHANGE FOR NEW ROBOT
+    // TODO: CHANGE FOR NEW ROBOT done
     private static final int FRONT_LEFT_STEER_MOTOR_ID = 3;
     private static final int FRONT_LEFT_DRIVE_MOTOR_ID = 4;
     private static final int FRONT_LEFT_ENCODER_ID = 21;
-    private static final Angle FRONT_LEFT_ENCODER_OFFSET_ROT =
-        WHICH_SWERVE_ROBOT.FRONT_LEFT_ENCODER_OFFSET;
+    private static final Angle FRONT_LEFT_ENCODER_OFFSET_ROT = Rotations.of(-0.46337890625);
 
-    // TODO: CHANGE FOR NEW ROBOT
+    // TODO: CHANGE FOR NEW ROBOT done
     private static final Distance FRONT_LEFT_X_POS =
-        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(2);
-    private static final Distance FRONT_LEFT_Y_POS =
-        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(2);
+        Inches.of(11.26);
+    private static final Distance FRONT_LEFT_Y_POS = Inches.of(11.417);
 
     // Front Right
-    // TODO: CHANGE FOR NEW ROBOT
+    // TODO: CHANGE FOR NEW ROBOT (done)
     private static final int FRONT_RIGHT_STEER_MOTOR_ID = 5;
     private static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 6;
     private static final int FRONT_RIGHT_ENCODER_ID = 22;
-    private static final Angle FRONT_RIGHT_ENCODER_OFFSET_ROT =
-        WHICH_SWERVE_ROBOT.FRONT_RIGHT_ENCODER_OFFSET;
+    private static final Angle FRONT_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(-0.437744140625);
 
-    // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance FRONT_RIGHT_X_POS =
-        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(2);
-    private static final Distance FRONT_RIGHT_Y_POS =
-        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(-2);
+    // TODO: CHANGE FOR NEW ROBOT done
+    private static final Distance FRONT_RIGHT_X_POS = Inches.of(11.26);
+    private static final Distance FRONT_RIGHT_Y_POS = Inches.of(-11.417);
 
     // Back Left
     // TODO: CHANGE FOR NEW ROBOT
     private static final int BACK_LEFT_STEER_MOTOR_ID = 1;
     private static final int BACK_LEFT_DRIVE_MOTOR_ID = 2;
     private static final int BACK_LEFT_ENCODER_ID = 20;
-    private static final Angle BACK_LEFT_ENCODER_OFFSET_ROT =
-        WHICH_SWERVE_ROBOT.BACK_LEFT_ENCODER_OFFSET;
+    private static final Angle BACK_LEFT_ENCODER_OFFSET_ROT = Rotations.of(-0.1796875);
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance BACK_LEFT_X_POS =
-        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(-2);
-    private static final Distance BACK_LEFT_Y_POS =
-        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(2);
+    private static final Distance BACK_LEFT_X_POS = Inches.of(-11.26);
+    private static final Distance BACK_LEFT_Y_POS = Inches.of(11.417);
 
     // Back Right
     // TODO: CHANGE FOR NEW ROBOT
     private static final int BACK_RIGHT_STEER_MOTOR_ID = 7;
     private static final int BACK_RIGHT_DRIVE_MOTOR_ID = 8;
     private static final int BACK_RIGHT_ENCODER_ID = 23;
-    private static final Angle BACK_RIGHT_ENCODER_OFFSET_ROT =
-        WHICH_SWERVE_ROBOT.BACK_RIGHT_ENCODER_OFFSET;
+    private static final Angle BACK_RIGHT_ENCODER_OFFSET_ROT = Rotations.of(-0.345703125);
 
     // TODO: CHANGE FOR NEW ROBOT
-    private static final Distance BACK_RIGHT_X_POS =
-        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length.div(-2);
-    private static final Distance BACK_RIGHT_Y_POS =
-        WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.width.div(-2);
+    private static final Distance BACK_RIGHT_X_POS = Inches.of(-11.26);
+    private static final Distance BACK_RIGHT_Y_POS = Inches.of(-11.417);
 
     // Set the constants per module (constants defined above)
     public static final SwerveModuleConstants<
