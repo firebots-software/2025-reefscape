@@ -598,8 +598,7 @@ public final class Constants {
     public static double S0C_KG = 0.0; // TODO
     public static final double CRUISE_VELOCITY = 10; // TODO
     public static final double ACCELERATION = 10; // TODO
-
-    public static final int GEAR_RATIO = 1 / 6; // TODO
+    public static final double GEAR_RATIO = 1 / 6; // TODO
     public static final double SPEED_RPS = 5; // TODO
   }
 
@@ -629,18 +628,21 @@ public final class Constants {
     public static final int MOTOR2_PORT = 12; // TODO: change port
     public static final int CANRANGE_PORT = 41; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
-    public static final double STATOR_CURRENT_LIMIT = 12.0; // TODO: change for actual match
-    public static final double SUPPLY_CURRENT_LIMIT = 15.0; // TODO: change for actual match
+    public static final double STATOR_CURRENT_LIMIT = 45.0; // TODO: change for actual match
+    public static final double SUPPLY_CURRENT_LIMIT = 10.0; // TODO: change for actual match
 
     public static double S0C_KP = 1.0;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.0;
     public static double S0C_KS = 0.0;
-    public static double S0C_KG = 0.0;
+    public static double S0C_KG = 0.28/2;
+    public static double S0C_KA = 0.04;
+    public static double S0C_KV = 10.66;
+    
 
-    public static final double MOTIONMAGIC_KV = 10.66;
-    public static final double MOTIONMAGIC_KA = 0.04;
-    public static final double MOTIONMAGIC_KG = 0.28;
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 10;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 20;
+    // public static final double MOTIONMAGIC_KG = 0.28;
     public static final double currentLimit = 0;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do

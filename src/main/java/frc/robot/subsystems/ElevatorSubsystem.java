@@ -5,11 +5,15 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANrange;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -59,8 +63,10 @@ public class ElevatorSubsystem extends SubsystemBase {
             .withKP(ElevatorConstants.S0C_KP)
             .withKI(ElevatorConstants.S0C_KI)
             .withKD(ElevatorConstants.S0C_KD)
-            .withKS(0)
-            .withKG(0.);
+            .withKS(ElevatorConstants.S0C_KS)
+            .withKG(ElevatorConstants.S0C_KG)
+            .withKA(ElevatorConstants.S0C_KA)
+            .withKV(ElevatorConstants.S0C_KV);
 
     motor1.updateCurrentLimits(
         ElevatorConstants.STATOR_CURRENT_LIMIT, ElevatorConstants.SUPPLY_CURRENT_LIMIT);
@@ -72,14 +78,20 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     m1Config.apply(s0c);
     m2Config.apply(s0c);
+    
+    MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
 
     // Apply MotionMagic to motors
     mmc = new MotionMagicConfigs();
-    mmc.MotionMagicCruiseVelocity = ElevatorConstants.MOTIONMAGIC_KV;
-    mmc.MotionMagicAcceleration = ElevatorConstants.MOTIONMAGIC_KA;
+    mmc.MotionMagicCruiseVelocity = ElevatorConstants.MOTIONMAGIC_MAX_VELOCITY;
+    mmc.MotionMagicAcceleration = ElevatorConstants.MOTIONMAGIC_MAX_ACCELERATION;
 
     m1Config.apply(mmc);
     m2Config.apply(mmc);
+
+    m1Config.apply(moc);
+    m2Config.apply(moc);
+    
     master = motor1;
     resetPosition();
   }
