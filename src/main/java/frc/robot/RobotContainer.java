@@ -119,7 +119,7 @@ public class RobotContainer {
 
     debugJoystick.rightBumper().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
 
-    debugJoystick.leftBumper().whileFalse(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
+    // debugJoystick.leftBumper().whileFalse(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
 
     debugJoystick
         .rightTrigger()
@@ -129,8 +129,8 @@ public class RobotContainer {
     debugJoystick.leftTrigger().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
     debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
 
-    debugJoystick.leftStick().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
-    debugJoystick.rightStick().whileTrue(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
+    // debugJoystick.leftStick().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
+    // debugJoystick.rightStick().whileTrue(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
 
     // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
