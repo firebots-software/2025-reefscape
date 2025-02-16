@@ -27,6 +27,7 @@ import frc.robot.commands.DebugCommands.DebugArm;
 import frc.robot.commands.DebugCommands.DebugDaleSpin;
 import frc.robot.commands.DebugCommands.DebugElevator;
 import frc.robot.commands.DebugCommands.DebugFunnelIntake;
+import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
 import frc.robot.commands.DebugCommands.DebugTootsieSlide;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
@@ -109,7 +110,7 @@ public class RobotContainer {
         pidChangeFunction = () -> debugJoystick.a().getAsBoolean(),
         mechChangeFunction = () -> debugJoystick.b().getAsBoolean();
     debugJoystick
-        .leftBumper()
+        .leftTrigger()
         .whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
 
     debugJoystick
@@ -117,6 +118,7 @@ public class RobotContainer {
         .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
 
     debugJoystick.rightBumper().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
+    debugJoystick.leftBumper().whileTrue(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
 
     // debugJoystick.leftBumper().whileFalse(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
 
@@ -125,7 +127,7 @@ public class RobotContainer {
         .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
     debugJoystick.y().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
 
-    debugJoystick.leftTrigger().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
+    debugJoystick.a().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
     debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
 
     // debugJoystick.leftStick().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));

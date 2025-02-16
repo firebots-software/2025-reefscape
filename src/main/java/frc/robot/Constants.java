@@ -606,8 +606,8 @@ public final class Constants {
   public static class FunnelConstants {
     public static final int RIGHT_MOTOR_PORT = 14; // TODO
     public static final int LEFT_MOTOR_PORT = 13; // TODO
-    public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO
-    public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO
+    public static final double SUPPLY_CURRENT_LIMIT = 20.0; // TODO
+    public static final double STATOR_CURRENT_LIMIT = 15.0; // TODO
     public static final double S0C_KP = 1.0; // TODO
     public static final double S0C_KI = 0.0; // TODO
     public static final double S0C_KD = 0.0; // TODO
@@ -616,7 +616,7 @@ public final class Constants {
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
     public static final double SPEED_RPS = 5.0; // TODO
-    public static final int GEAR_RATIO = 0; // TODO
+    public static final int GEAR_RATIO = 9; // TODO
 
     public static final int CHECK_IN_PORT = 1;
     public static final int CHECK_OUT_PORT = 0;
@@ -629,8 +629,8 @@ public final class Constants {
     public static final int MOTOR2_PORT = 12; // TODO: change port
     public static final int CANRANGE_PORT = 41; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
-    public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
-    public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
+    public static final double STATOR_CURRENT_LIMIT = 12.0; // TODO: change for actual match
+    public static final double SUPPLY_CURRENT_LIMIT = 15.0; // TODO: change for actual match
 
     public static double S0C_KP = 1.0;
     public static double S0C_KI = 0.0;

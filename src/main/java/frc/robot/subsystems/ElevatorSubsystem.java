@@ -59,7 +59,8 @@ public class ElevatorSubsystem extends SubsystemBase {
             .withKP(ElevatorConstants.S0C_KP)
             .withKI(ElevatorConstants.S0C_KI)
             .withKD(ElevatorConstants.S0C_KD)
-            .withKS(0);
+            .withKS(0)
+            .withKG(0.);
 
     motor1.updateCurrentLimits(
         ElevatorConstants.STATOR_CURRENT_LIMIT, ElevatorConstants.SUPPLY_CURRENT_LIMIT);
@@ -80,6 +81,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     m1Config.apply(mmc);
     m2Config.apply(mmc);
     master = motor1;
+    resetPosition();
   }
 
   // instance for elevator subsystem
@@ -149,8 +151,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Elevator/ToF/Connected", distance.isConnected());
 
     DogLog.log("subsystems/Elevator/isAtPosition", this.isAtPosition());
-    DogLog.log("subsystems/Elevator/currentPosition", currentLevel.getPosition());
-    DogLog.log("subsystems/Elevator/currentHeight", currentLevel.getHeight());
+    DogLog.log("subsystems/Elevator/targetPosition", currentLevel.getPosition());
+    DogLog.log("subsystems/Elevator/targetHeight", currentLevel.getHeight());
+    DogLog.log("subsystems/Elevator/currentHeightDist", master.getPosition().getValueAsDouble() * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE/Constants.ElevatorConstants.CARRAIGE_UPDUCTION);
+    DogLog.log("subsystems/Elevator/currentHeightRot", master.getPosition().getValueAsDouble());
+
     // This method will be called once per scheduler run
   }
 

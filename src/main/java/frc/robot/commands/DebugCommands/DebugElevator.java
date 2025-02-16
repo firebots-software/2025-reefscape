@@ -17,7 +17,7 @@ public class DebugElevator extends Command {
 
   @Override
   public void execute() {
-    elevatorSubsystem.testElevator(0.5);
+    elevatorSubsystem.testElevator(0.2);
   }
 
   @Override

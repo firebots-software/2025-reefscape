@@ -28,26 +28,26 @@ public class LoggedTalonFX extends TalonFX {
 
   public LoggedTalonFX(String deviceName, int deviceId, String canbus) {
     super(deviceId, canbus);
-    init();
     name = deviceName;
+    init();
   }
 
   public LoggedTalonFX(String deviceName, int deviceId) {
     super(deviceId);
-    init();
     name = deviceName;
+    init();
   }
 
   public LoggedTalonFX(int deviceId, String canbus) {
     super(deviceId, canbus);
-    init();
     name = "motor " + deviceId;
+    init();
   }
 
   public LoggedTalonFX(int deviceId) {
     super(deviceId);
-    init();
     name = "motor " + deviceId;
+    init();
   }
 
   public void init() {
