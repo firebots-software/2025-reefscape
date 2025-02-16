@@ -38,7 +38,7 @@ import java.util.function.Supplier;
 
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
     implements Subsystem {
-
+  private static SwerveSubsystem instance;
   private ProfiledPIDController xProfiledPIDController,
       yProfiledPIDController,
       headingProfiledPIDController;
@@ -49,8 +49,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   public SwerveSubsystem(
       SwerveDrivetrainConstants drivetrainConstants,
       double OdometryUpdateFrequency,
-      Matrix<N3, N1> odometryStandardDeviation,
-      Matrix<N3, N1> visionStandardDeviation,
       SwerveModuleConstants<?, ?, ?>... modules) {
     super(
         TalonFX::new,
@@ -58,8 +56,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         CANcoder::new,
         drivetrainConstants,
         OdometryUpdateFrequency,
-        odometryStandardDeviation,
-        visionStandardDeviation,
         modules);
     if (Utils.isSimulation()) {
       startSimThread();
@@ -99,6 +95,15 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     configureAutoBuilder();
   }
 
+  public static SwerveSubsystem getInstance() {
+    if (instance == null) {
+      instance = new SwerveSubsystem(Constants.Swerve.DrivetrainConstants, 250, Constants.Swerve.FrontLeft,
+      Constants.Swerve.FrontRight,
+      Constants.Swerve.BackLeft,
+      Constants.Swerve.BackRight);
+    }
+    return instance;
+  }
   // Values relevant for the simulation
   private static final double kSimLoopPeriod = 0.005; // 5 ms
   private Notifier m_simNotifier = null;

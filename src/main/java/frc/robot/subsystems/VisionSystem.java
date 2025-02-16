@@ -22,7 +22,6 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 /** Creates a new VisionSystem. */
 public class VisionSystem extends SubsystemBase {
-
   Pose2d savedResult = new Pose2d(0, 0, new Rotation2d(0.01, 0.01));
   private static VisionSystem[] systemList =
       new VisionSystem[Constants.Vision.Cameras.values().length];
@@ -60,6 +59,10 @@ public class VisionSystem extends SubsystemBase {
     photonPoseEstimator =
         new PhotonPoseEstimator(
             aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camToRobots[index]);
+
+    for (var x : camera.getAllUnreadResults()) {
+      pipeline = x;
+    }
   }
 
   public static VisionSystem getInstance(Constants.Vision.Cameras name) {
@@ -79,7 +82,6 @@ public class VisionSystem extends SubsystemBase {
 
   // use this when feeding into drivetrain
   public Optional<EstimatedRobotPose> getMultiTagPose3d(Pose2d previousRobotPose) {
-    pipeline = camera.getLatestResult();
     photonPoseEstimator.setReferencePose(previousRobotPose);
     return photonPoseEstimator.update(pipeline);
   }
@@ -119,9 +121,13 @@ public class VisionSystem extends SubsystemBase {
   }
 
   public PhotonPipelineResult gPipelineResult() {
-    return camera.getLatestResult();
+    return pipeline;
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    for (var x : camera.getAllUnreadResults()) {
+      pipeline = x;
+    }
+  }
 }

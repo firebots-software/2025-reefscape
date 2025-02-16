@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.Swerve;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
@@ -48,34 +49,43 @@ public class Robot extends TimedRobot {
 
   // errors will have to calculate on actual bot
 
-  private static Matrix<N3, N1> odometryMatrix =
-      VecBuilder.fill(
-          0.1, 0.1,
-          0.1); // standard deviation for x (meters), y (meters) and rotation (radians) for odemtery
   private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
   private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
-  private final SwerveSubsystem driveTrain =
-      new SwerveSubsystem(
-          Constants.Swerve.DrivetrainConstants,
-          250.0, // TODO: CHANGE ODOMETRY UPDATE FREQUENCY TO CONSTANT,
-          odometryMatrix,
-          visionMatrix,
-          Constants.Swerve.FrontLeft,
-          Constants.Swerve.FrontRight,
-          Constants.Swerve.BackLeft,
-          Constants.Swerve.BackRight);
+  private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   private final RobotContainer m_robotContainer;
  
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    absoluteInit();
+  }
+
+  /**
+   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
+   * that you want ran during disabled, autonomous, teleoperated and test.
+   *
+   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+   * SmartDashboard integrated updating.
+   */
+  @Override
+  public void robotPeriodic() {
+    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+    // commands, running already-scheduled commands, removing finished or interrupted commands,
+    // and running subsystem periodic() methods.  This must be called from the robot's periodic
+    // block in order for anything in the Command-based framework to work.
+    
     m_robotContainer.doTelemetry();
-    CommandScheduler.getInstance().run();
+
     Optional<EstimatedRobotPose> rightRobotPose =
         visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
     Optional<EstimatedRobotPose> leftRobotPose =
         visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
+    
+    DogLog.log("KalmanDebug/right has target", visionRight.hasTarget(visionRight.gPipelineResult()));
+    DogLog.log("KalmanDebug/right robot pose is present", rightRobotPose.isPresent());
+    DogLog.log("KalmanDebug/left has target", visionRight.hasTarget(visionLeft.gPipelineResult()));
+    DogLog.log("KalmanDebug/left robot pose is present", leftRobotPose.isPresent());
     if (visionRight.hasTarget(visionRight.gPipelineResult()) && rightRobotPose.isPresent()) {
 
        rightdistToAprilTag =
@@ -94,7 +104,10 @@ public class Robot extends TimedRobot {
       Timer.getFPGATimestamp() - 0.02,
       visionMatrix);
 
-      
+      DogLog.log("KalmanDebug/rightDistToAprilTag", rightdistToAprilTag);
+      DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
+      DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
+      DogLog.log("KalmanDebug/rightRobotPoseTheta", rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
     }
     if (visionLeft.hasTarget(visionRight.gPipelineResult()) && leftRobotPose.isPresent()) {
       leftdistToAprilTag =
@@ -112,27 +125,12 @@ public class Robot extends TimedRobot {
             Timer.getFPGATimestamp() - 0.02,
             visionMatrix);
 
+      DogLog.log("KalmanDebug/leftDistToAprilTag", leftdistToAprilTag);
+      DogLog.log("KalmanDebug/leftRobotPoseX", leftRobotPose.get().estimatedPose.getX());
+      DogLog.log("KalmanDebug/leftRobotPoseY", leftRobotPose.get().estimatedPose.getY());
+      DogLog.log("KalmanDebug/leftRobotPoseTheta", leftRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
     }
-
-    
-  }
-
-  /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
-    
     CommandScheduler.getInstance().run();
-    m_robotContainer.doTelemetry();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
