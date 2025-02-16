@@ -25,7 +25,6 @@ import frc.robot.util.LoggedTalonFX;
 public class TootsieSlideSubsystem extends SubsystemBase {
   private static TootsieSlideSubsystem instance;
 
-  private DigitalInput drakeSensor;
   public LoggedTalonFX master;
 
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
@@ -38,7 +37,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
       new FlywheelSim(tootsieSystem, m_tootsieSlideGearbox, 0);
 
   private TootsieSlideSubsystem() {
-    
+
     master = new LoggedTalonFX(Constants.TootsieSlide.MOTOR_PORT); // Unique ID for motor
     TalonFXConfigurator m1Config = master.getConfigurator();
     MotorOutputConfigs moc =
@@ -128,8 +127,4 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     DogLog.log("Shooter Speed at RPM", m_flywheelSim.getAngularVelocityRPM());
     DogLog.log("Flywheel Current", m_flywheelSim.getCurrentDrawAmps());
   }
-
-  // public boolean coralPresent() {
-  //   return drakeSensor.get();
-  // }
 }

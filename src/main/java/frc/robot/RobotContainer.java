@@ -27,7 +27,6 @@ import frc.robot.commands.DebugCommands.DebugArm;
 import frc.robot.commands.DebugCommands.DebugDaleSpin;
 import frc.robot.commands.DebugCommands.DebugElevator;
 import frc.robot.commands.DebugCommands.DebugFunnelIntake;
-import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
 import frc.robot.commands.DebugCommands.DebugTootsieSlide;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
