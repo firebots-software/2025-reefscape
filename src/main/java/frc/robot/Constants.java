@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -36,6 +37,28 @@ public final class Constants {
     public static final Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
   }
 
+  public static class Vision {
+
+    public static enum Cameras {
+      RIGHT_CAM,
+      LEFT_CAM;
+    }
+
+    // TODO: CHANGE FOR NEW ROBOT
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.499);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.358);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.011);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
+
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-11.927);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.357);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z =  Units.inchesToMeters(10.01);;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
+  }
   public static class Landmarks {
     // midline constant
     public static final double MIDLINE_X = 8.774;
