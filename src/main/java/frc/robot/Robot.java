@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
 
       driveTrain.addVisionMeasurement(
       rightRobotPose.get().estimatedPose.toPose2d(),
-      Timer.getFPGATimestamp() - 0.02,
+      Timer.getFPGATimestamp() - Constants.Vision.CAMERA_LATENCY_SECONDS,
       visionMatrix);
 
       DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
@@ -135,7 +135,7 @@ public class Robot extends TimedRobot {
 
          driveTrain.addVisionMeasurement(
            leftRobotPose.get().estimatedPose.toPose2d(),
-           Timer.getFPGATimestamp() - 0.02,
+           Timer.getFPGATimestamp() - Constants.Vision.CAMERA_LATENCY_SECONDS,
            visionMatrix);
 
      DogLog.log("KalmanDebug/leftDistToAprilTag", leftDistToAprilTag);
