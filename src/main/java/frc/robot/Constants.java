@@ -54,14 +54,16 @@ public final class Constants {
 
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-11.927);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.357);
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z =  Units.inchesToMeters(10.01);;
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.01);
+    ;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
 
-    // TODO: determine if this latency is still true 
+    // TODO: determine if this latency is still true
     public static final double CAMERA_LATENCY_SECONDS = 0.02;
   }
+
   public static class Landmarks {
     // midline constant
     public static final double MIDLINE_X = 8.774;
