@@ -25,16 +25,12 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.LoadAndPutUp;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
-import frc.robot.commands.DebugCommands.DebugArm;
-import frc.robot.commands.DebugCommands.DebugDaleSpin;
-import frc.robot.commands.DebugCommands.DebugElevator;
 import frc.robot.commands.DebugCommands.DebugFunnelIntake;
 import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
 import frc.robot.commands.DebugCommands.DebugTootsieSlide;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
-import frc.robot.commands.TootsieSlideCommands.IntakeTootsieSlide;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -131,13 +127,25 @@ public class RobotContainer {
     debugJoystick
         .rightTrigger()
         .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
-    
-    debugJoystick.y().onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(),ElevatorPositions.Intake));
-    debugJoystick.x().onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(),ElevatorPositions.L4));
-    debugJoystick.a().onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(),ElevatorPositions.L2));
-    debugJoystick.b().onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(),ElevatorPositions.L3));
 
-    debugJoystick.rightTrigger().onTrue(new LoadAndPutUp(elevatorSubsystem,funnelSubsystem,tootsieSlideSubsystem,ElevatorPositions.L4));
+    debugJoystick
+        .y()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
+    debugJoystick
+        .x()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L4));
+    debugJoystick
+        .a()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L2));
+    debugJoystick
+        .b()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L3));
+
+    debugJoystick
+        .rightTrigger()
+        .onTrue(
+            new LoadAndPutUp(
+                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
 
     // debugJoystick.a().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
     // debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));

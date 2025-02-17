@@ -636,9 +636,8 @@ public final class Constants {
     public static double S0C_KD = 0.005;
     public static double S0C_KS = 0.0;
     public static double S0C_KG = 0.28;
-    public static double S0C_KA = 0.0004657452997;//0.04
+    public static double S0C_KA = 0.0004657452997; // 0.04
     public static double S0C_KV = 0.124; // 10.66
-    
 
     public static final double MOTIONMAGIC_MAX_VELOCITY = 20;
     public static final double MOTIONMAGIC_MAX_ACCELERATION = 40;
@@ -657,8 +656,7 @@ public final class Constants {
     // public static final double CONVERSION_FACTOR = SPROCKET_GEAR_RATIO/(SPROCKET_CIRCUM_INCHES *
     // 0.0254); //This is converted to meters
     public static final double CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS =
-        (SPROCKET_GEAR_RATIO)
-            / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
+        (SPROCKET_GEAR_RATIO) / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
     public static final double CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE =
         1 / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
 
@@ -666,7 +664,7 @@ public final class Constants {
       // TODO: Change the height values based on heights needed to score/intake coral on
       Intake(0, 0.070),
       safePosition(0, 0.0),
-      L1(1, 0.657-0.13),
+      L1(1, 0.657 - 0.13),
       L2(2, 0.8636),
       L3(3, 1.27),
       L4(4, 1.81);

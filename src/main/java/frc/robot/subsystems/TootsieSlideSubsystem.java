@@ -38,7 +38,10 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
   private TootsieSlideSubsystem() {
 
-    master = new LoggedTalonFX("subsystems/tootsieslide/motor",Constants.TootsieSlide.MOTOR_PORT); // Unique ID for motor
+    master =
+        new LoggedTalonFX(
+            "subsystems/tootsieslide/motor",
+            Constants.TootsieSlide.MOTOR_PORT); // Unique ID for motor
     TalonFXConfigurator m1Config = master.getConfigurator();
     MotorOutputConfigs moc =
         new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive);

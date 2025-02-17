@@ -11,12 +11,9 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANrange;
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType;
 import com.ctre.phoenix6.signals.GravityTypeValue;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -83,7 +80,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     m1Config.apply(s0c);
     m2Config.apply(s0c);
-    
+
     MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
 
     // Apply MotionMagic to motors
@@ -96,7 +93,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     m1Config.apply(moc);
     m2Config.apply(moc);
-    
+
     master = motor1;
     resetPosition();
   }
@@ -113,15 +110,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     // TODO: add constant to convert distance to encoder values
     if (distance.isConnected()) {
       master.setPosition(
-          this.getToFDistance() * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+          this.getToFDistance()
+              * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
       DogLog.log(
           "subsystems/Elevator/resetElevatorPosition",
-          this.getToFDistance() * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+          this.getToFDistance()
+              * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
     }
   }
 
   public double getError() {
-    return currentLevel.height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS / Constants.ElevatorConstants.CARRAIGE_UPDUCTION
+    return currentLevel.height
+            * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
+            / Constants.ElevatorConstants.CARRAIGE_UPDUCTION
         - master.getPosition().getValueAsDouble();
   }
 
@@ -137,10 +138,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   private void setPosition(double height) {
     master.setControl(
         new MotionMagicVoltage(
-            height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS / ElevatorConstants.CARRAIGE_UPDUCTION));
+            height
+                * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
+                / ElevatorConstants.CARRAIGE_UPDUCTION));
     DogLog.log(
         "subsystems/Elevator/elevatorSetpoint(rot)",
-        height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS / ElevatorConstants.CARRAIGE_UPDUCTION);
+        height
+            * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
+            / ElevatorConstants.CARRAIGE_UPDUCTION);
   }
 
   // TODO: ONLY FOR DEBUGGING
@@ -162,7 +167,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public double getToFDistance() {
-    //0.11 is the sensor offset
+    // 0.11 is the sensor offset
     return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
   }
 
@@ -176,7 +181,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Elevator/targetPosition", currentLevel.getPosition());
     DogLog.log("subsystems/Elevator/targetHeightDist", currentLevel.getHeight());
     DogLog.log("subsystems/Elevator/targetHeightRot", currentLevel.getHeight());
-    DogLog.log("subsystems/Elevator/currentHeightDist", master.getPosition().getValueAsDouble() * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE * Constants.ElevatorConstants.CARRAIGE_UPDUCTION);
+    DogLog.log(
+        "subsystems/Elevator/currentHeightDist",
+        master.getPosition().getValueAsDouble()
+            * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE
+            * Constants.ElevatorConstants.CARRAIGE_UPDUCTION);
     DogLog.log("subsystems/Elevator/currentHeightRot", master.getPosition().getValueAsDouble());
 
     // This method will be called once per scheduler run
