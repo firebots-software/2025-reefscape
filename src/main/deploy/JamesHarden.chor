@@ -1,5 +1,9 @@
 {
+<<<<<<<< HEAD:src/main/deploy/Comp.chor
  "name":"Comp",
+========
+ "name":"JamesHarden",
+>>>>>>>> 4a9b0ace70f2a3cee65f2da2ce16ad9c29132674:src/main/deploy/JamesHarden.chor
  "version":1,
  "type":"Swerve",
  "variables":{
@@ -9,22 +13,22 @@
  "config":{
   "frontLeft":{
    "x":{
-    "exp":"11.25984252 in",
-    "val":0.28600000000799997
+    "exp":"13.3745 in",
+    "val":0.33971229999999997
    },
    "y":{
-    "exp":"11.25984252 in",
-    "val":0.28600000000799997
+    "exp":"11.37 in",
+    "val":0.28879799999999994
    }
   },
   "backLeft":{
    "x":{
-    "exp":"-11.25984252 in",
-    "val":-0.28600000000799997
+    "exp":"-13.3745 in",
+    "val":-0.33971229999999997
    },
    "y":{
-    "exp":"11.25984252 in",
-    "val":0.28600000000799997
+    "exp":"11.37 in",
+    "val":0.28879799999999994
    }
   },
   "mass":{
@@ -36,16 +40,21 @@
    "val":9.2687
   },
   "gearing":{
-   "exp":"6.75",
-   "val":6.75
+   "exp":"6.12",
+   "val":6.12
   },
   "radius":{
    "exp":"2 in",
    "val":0.0508
   },
   "vmax":{
+<<<<<<<< HEAD:src/main/deploy/Comp.chor
    "exp":"5800 RPM",
    "val":607.3745796940267
+========
+   "exp":"5600 RPM",
+   "val":586.4306286700947
+>>>>>>>> 4a9b0ace70f2a3cee65f2da2ce16ad9c29132674:src/main/deploy/JamesHarden.chor
   },
   "tmax":{
    "exp":"1.3 N * m",
@@ -57,6 +66,7 @@
   },
   "bumper":{
    "front":{
+<<<<<<<< HEAD:src/main/deploy/Comp.chor
     "exp":"19.375 in",
     "val":0.492125
    },
@@ -67,6 +77,18 @@
    "back":{
     "exp":"19.375 in",
     "val":0.492125
+========
+    "exp":"19.5 in",
+    "val":0.4953
+   },
+   "side":{
+    "exp":"17.5 in",
+    "val":0.4445
+   },
+   "back":{
+    "exp":"19.5 in",
+    "val":0.4953
+>>>>>>>> 4a9b0ace70f2a3cee65f2da2ce16ad9c29132674:src/main/deploy/JamesHarden.chor
    }
   },
   "differentialTrackWidth":{

@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.ControlModeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -33,8 +34,9 @@ public class FunnelSubsystem extends SubsystemBase {
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
 
   private FunnelSubsystem() {
-    rightMotor = new LoggedTalonFX(FunnelConstants.RIGHT_MOTOR_PORT); // Unique ID for motor1
-    leftMotor = new LoggedTalonFX(FunnelConstants.LEFT_MOTOR_PORT); // Unique ID for motor2\
+    rightMotor =
+        new LoggedTalonFX("subsystems/Funnel/rightMotor", FunnelConstants.RIGHT_MOTOR_PORT);
+    leftMotor = new LoggedTalonFX("subsystems/Funnel/leftMotor", FunnelConstants.LEFT_MOTOR_PORT);
 
     drake = new DigitalInput(Constants.FunnelConstants.DRAKE_PORT);
 
@@ -54,7 +56,10 @@ public class FunnelSubsystem extends SubsystemBase {
             .withSupplyCurrentLimitEnable(true)
             .withSupplyCurrentLimit(Constants.FunnelConstants.SUPPLY_CURRENT_LIMIT);
 
-    MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
+    MotorOutputConfigs moc =
+        new MotorOutputConfigs()
+            .withNeutralMode(NeutralModeValue.Brake)
+            .withInverted(InvertedValue.Clockwise_Positive);
     Slot0Configs s0c =
         new Slot0Configs()
             .withKP(Constants.FunnelConstants.S0C_KP)
@@ -128,6 +133,10 @@ public class FunnelSubsystem extends SubsystemBase {
     rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
 
+  public void debugSpinBack() {
+    runFunnelAtRPS(-Constants.FunnelConstants.SPEED_RPS);
+  }
+
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();
   }
@@ -155,5 +164,3 @@ public class FunnelSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 }
-
-//

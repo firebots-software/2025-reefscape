@@ -16,7 +16,7 @@ public class DebugFunnelOuttake extends Command {
 
   @Override
   public void execute() {
-    funnelSubsystem.spinBackSlowly();
+    funnelSubsystem.debugSpinBack();
   }
 
   @Override
