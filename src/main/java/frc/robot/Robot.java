@@ -87,9 +87,9 @@ public class Robot extends TimedRobot {
 
     if (visionRight.hasTarget(visionRight.getPipelineResult()) && rightRobotPose.isPresent()) {
 
-       double rightdistToAprilTag =
+       rightDistToAprilTag =
           visionRight
-              .gAprilTagFieldLayout()
+              .getAprilTagFieldLayout()
               .getTagPose(visionRight.getPipelineResult().getBestTarget().getFiducialId())
               .get()
               .getTranslation()
@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
       Timer.getFPGATimestamp() - 0.02,
       visionMatrix);
 
-      DogLog.log("KalmanDebug/rightDistToAprilTag", rightdistToAprilTag);
+      DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
       DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
       DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
       DogLog.log("KalmanDebug/rightRobotPoseTheta", rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
    if (visionLeft.hasTarget(visionLeft.getPipelineResult()) && leftRobotPose.isPresent()) {
      leftDistToAprilTag =
      visionLeft
-         .gAprilTagFieldLayout()
+         .getAprilTagFieldLayout()
          .getTagPose(visionLeft.getPipelineResult().getBestTarget().getFiducialId())
          .get()
          .getTranslation()

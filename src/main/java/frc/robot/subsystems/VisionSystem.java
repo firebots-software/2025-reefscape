@@ -116,7 +116,7 @@ public class VisionSystem extends SubsystemBase {
         (one.getX() + two.getX()) / 2, (one.getY() + two.getY()) / 2, one.getRotation());
   }
 
-  public AprilTagFieldLayout gAprilTagFieldLayout() {
+  public AprilTagFieldLayout getAprilTagFieldLayout() {
     return this.aprilTagFieldLayout;
   }
 
