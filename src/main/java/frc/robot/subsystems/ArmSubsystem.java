@@ -30,8 +30,8 @@ import frc.robot.util.LoggedTalonFX;
 public class ArmSubsystem extends SubsystemBase {
   private static ArmSubsystem instance;
 
-  private LoggedTalonFX armMotor;
-  private LoggedTalonFX flywheelMotor;
+  public LoggedTalonFX armMotor;
+  public LoggedTalonFX flywheelMotor;
 
   private MotionMagicConfigs motionMagicConfigsArm;
   private MotionMagicConfigs motionMagicConfigsFlywheel;
@@ -96,12 +96,15 @@ public class ArmSubsystem extends SubsystemBase {
 
     TalonFXConfigurator masterConfiguratorArm = armMotor.getConfigurator();
     TalonFXConfigurator masterConfiguratorFlywheel = flywheelMotor.getConfigurator();
+    MotorOutputConfigs moc =
+        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive);
 
     masterConfiguratorArm.apply(mocArm);
     masterConfiguratorArm.apply(clcArm); // Apply current limits to the master motor
     masterConfiguratorArm.apply(s0cArm); // Apply PID settings to the master motor
     masterConfiguratorArm.apply(clgcArm);
     masterConfiguratorArm.apply(fcArm);
+    masterConfiguratorArm.apply(moc);
 
     masterConfiguratorFlywheel.apply(mocFlywheel);
     masterConfiguratorFlywheel.apply(clcFlywheel); // Apply current limits to the master motor

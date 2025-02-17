@@ -3,11 +3,11 @@ package frc.robot.commands.DebugCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class DebugElevator extends Command {
+public class DebugElevatorDoNothing extends Command {
 
   private final ElevatorSubsystem elevatorSubsystem;
 
-  public DebugElevator(ElevatorSubsystem subsystem) {
+  public DebugElevatorDoNothing(ElevatorSubsystem subsystem) {
     this.elevatorSubsystem = subsystem;
     addRequirements(elevatorSubsystem);
   }
