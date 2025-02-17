@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
+import frc.robot.commands.AbstractedPID.IncreasePArm;
 import frc.robot.util.LoggedTalonFX;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
@@ -202,6 +203,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     LoggedTalonFX.periodic_static();
+
+    DogLog.log("PID Constant", IncreasePArm.broomIndex());
+    DogLog.log("Mechanism Type", IncreasePArm.mechIndex());
 
     DogLog.log("PIDArmKP", Constants.Arm.S0C_KP);
     DogLog.log("PIDArmKI", Constants.Arm.S0C_KI);
