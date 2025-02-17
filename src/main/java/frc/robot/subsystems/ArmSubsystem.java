@@ -37,7 +37,7 @@ public class ArmSubsystem extends SubsystemBase {
   private MotionMagicConfigs motionMagicConfigsFlywheel;
 
   private final MotionMagicVoltage controlRequestArm = new MotionMagicVoltage(0);
-  private final MotionMagicVoltage controlRequestFlywheel = new MotionMagicVoltage(0);
+  private final VelocityVoltage controlRequestFlywheel = new VelocityVoltage(0);
   private double encoderDegrees;
 
   private double targetDegrees;
@@ -81,8 +81,10 @@ public class ArmSubsystem extends SubsystemBase {
     MotorOutputConfigs mocArm = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
     MotorOutputConfigs mocFlywheel =
         new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast);
+    
     mocArm.withInverted(InvertedValue.CounterClockwise_Positive);
     mocFlywheel.withInverted(InvertedValue.Clockwise_Positive);
+
     ClosedLoopGeneralConfigs clgcArm = new ClosedLoopGeneralConfigs();
     ClosedLoopGeneralConfigs clgcFlywheel = new ClosedLoopGeneralConfigs();
     Slot0Configs s0cArm =
@@ -123,6 +125,10 @@ public class ArmSubsystem extends SubsystemBase {
     masterConfiguratorFlywheel.apply(motionMagicConfigsFlywheel);
   }
 
+  public void deployArm(){
+    
+  }
+
   public void setPosition(double angleDegrees) {
     targetDegrees = angleDegrees;
     armMotor.setControl(
@@ -130,7 +136,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void startFlywheel(double angleDegrees) {
-    flywheelMotor.setControl(new VelocityVoltage(30));
+    flywheelMotor.setControl(controlRequestFlywheel.withVelocity(Constants.Flywheel.FLYWHEEL_SPEED_RPS));
   }
 
   public void stopEveryingONG() {

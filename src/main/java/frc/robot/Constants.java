@@ -133,9 +133,6 @@ public final class Constants {
     // end of new code
     public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
     public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
-    public static final double DEFAULT_ARM_ANGLE = 250.0;
-    public static final double INTAKE_ANGLE = 3; // subject to change
-    public static final double AMP_ANGLE = 95; // subject to change
 
     public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
       double conversionFactor =
@@ -175,16 +172,20 @@ public final class Constants {
   }
 
   public static class Flywheel {
+    public static final int FLYWHEEL_PORT = 17;
+
+    public static double FLYWHEEL_S0C_KP = 1.0;
     public static double FLYWHEEL_S0C_KI = 0.0;
     public static double FLYWHEEL_S0C_KD = 0.0;
     public static double FLYWHEEL_S0C_KS = 0.0;
     public static double FLYWHEEL_S0C_KG = 0.0;
-    public static final int FLYWHEEL_PORT = 17;
+    
     public static final double MOTIONMAGIC_KV = 0;
     public static final double MOTIONMAGIC_KA = 0;
-    public static double FLYWHEEL_S0C_KP = 1.0;
+
     public static final double FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
     public static final double FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double FLYWHEEL_SPEED_RPS = 30.0;
 
     public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
       double conversionFactor =
