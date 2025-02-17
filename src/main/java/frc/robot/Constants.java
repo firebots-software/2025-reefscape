@@ -10,8 +10,13 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -25,6 +30,38 @@ import edu.wpi.first.units.measure.*;
 public final class Constants {
   public static class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
+  }
+
+  public static class Kalman {
+    public static final Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
+    public static final Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+  }
+
+  public static class Vision {
+
+    public static enum Cameras {
+      RIGHT_CAM,
+      LEFT_CAM;
+    }
+
+    // TODO: CHANGE FOR NEW ROBOT
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.499);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.358);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.011);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
+
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-11.927);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.357);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.01);
+
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
+
+    // TODO: determine if this latency is still true
+    public static final double CAMERA_LATENCY_SECONDS = 0.02;
   }
 
   public static class Landmarks {

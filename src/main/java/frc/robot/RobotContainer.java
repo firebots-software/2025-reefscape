@@ -55,16 +55,7 @@ public class RobotContainer {
   private BooleanSupplier redside = () -> redAlliance;
   private static boolean redAlliance;
 
-  private final SwerveSubsystem driveTrain =
-      new SwerveSubsystem(
-          Constants.Swerve.DrivetrainConstants,
-          250.0, // TODO: CHANGE ODOMETRY UPDATE FREQUENCY TO CONSTANT,
-          odometryMatrix,
-          visionMatrix,
-          Constants.Swerve.FrontLeft,
-          Constants.Swerve.FrontRight,
-          Constants.Swerve.BackLeft,
-          Constants.Swerve.BackRight);
+  private final SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
 
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
