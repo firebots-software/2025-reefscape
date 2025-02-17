@@ -34,8 +34,9 @@ public class FunnelSubsystem extends SubsystemBase {
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
 
   private FunnelSubsystem() {
-    rightMotor = new LoggedTalonFX("subsystems/Funnel/rightMotor",FunnelConstants.RIGHT_MOTOR_PORT);
-    leftMotor = new LoggedTalonFX("subsystems/Funnel/leftMotor",FunnelConstants.LEFT_MOTOR_PORT);
+    rightMotor =
+        new LoggedTalonFX("subsystems/Funnel/rightMotor", FunnelConstants.RIGHT_MOTOR_PORT);
+    leftMotor = new LoggedTalonFX("subsystems/Funnel/leftMotor", FunnelConstants.LEFT_MOTOR_PORT);
 
     drake = new DigitalInput(Constants.FunnelConstants.DRAKE_PORT);
 
@@ -55,7 +56,10 @@ public class FunnelSubsystem extends SubsystemBase {
             .withSupplyCurrentLimitEnable(true)
             .withSupplyCurrentLimit(Constants.FunnelConstants.SUPPLY_CURRENT_LIMIT);
 
-    MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake).withInverted(InvertedValue.Clockwise_Positive);
+    MotorOutputConfigs moc =
+        new MotorOutputConfigs()
+            .withNeutralMode(NeutralModeValue.Brake)
+            .withInverted(InvertedValue.Clockwise_Positive);
     Slot0Configs s0c =
         new Slot0Configs()
             .withKP(Constants.FunnelConstants.S0C_KP)
@@ -128,11 +132,10 @@ public class FunnelSubsystem extends SubsystemBase {
   public void spinBackSlowly() {
     rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
-  
+
   public void debugSpinBack() {
     runFunnelAtRPS(-Constants.FunnelConstants.SPEED_RPS);
   }
-  
 
   public boolean isCoralCheckedIn() {
     return checkInSensor.get();

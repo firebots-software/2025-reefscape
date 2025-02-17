@@ -10,8 +10,13 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -25,6 +30,38 @@ import edu.wpi.first.units.measure.*;
 public final class Constants {
   public static class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
+  }
+
+  public static class Kalman {
+    public static final Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
+    public static final Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+  }
+
+  public static class Vision {
+
+    public static enum Cameras {
+      RIGHT_CAM,
+      LEFT_CAM;
+    }
+
+    // TODO: CHANGE FOR NEW ROBOT
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.499);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.358);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.011);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
+
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-11.927);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.357);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.01);
+
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
+
+    // TODO: determine if this latency is still true
+    public static final double CAMERA_LATENCY_SECONDS = 0.02;
   }
 
   public static class Landmarks {
@@ -628,20 +665,21 @@ public final class Constants {
     public static final int MOTOR2_PORT = 12; // TODO: change port
     public static final int CANRANGE_PORT = 41; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
-    public static final double STATOR_CURRENT_LIMIT = 45.0; // TODO: change for actual match
+    public static final double STATOR_CURRENT_LIMIT = 30.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 10.0; // TODO: change for actual match
 
-    public static double S0C_KP = 1.0;
+    public static double S0C_KP = 2.0;
     public static double S0C_KI = 0.0;
-    public static double S0C_KD = 0.0;
+    public static double S0C_KD = 0.005;
     public static double S0C_KS = 0.0;
-    public static double S0C_KG = 0.28/2;
-    public static double S0C_KA = 0.04;
-    public static double S0C_KV = 10.66;
-    
-    public static final double MOTIONMAGIC_MAX_VELOCITY = 10;
-    public static final double MOTIONMAGIC_MAX_ACCELERATION = 20;
-    public static double sensorOffset = 0.11;
+    public static double S0C_KG = 0.28;
+    public static double S0C_KA = 0.0004657452997; // 0.04
+    public static double S0C_KV = 0.124; // 10.66
+
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 20;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 40;
+    public static double SENSOR_OFFSET = 0.11;
+    // public static final double MOTIONMAGIC_KG = 0.28;
     public static final double currentLimit = 0;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
@@ -655,19 +693,18 @@ public final class Constants {
     // public static final double CONVERSION_FACTOR = SPROCKET_GEAR_RATIO/(SPROCKET_CIRCUM_INCHES *
     // 0.0254); //This is converted to meters
     public static final double CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS =
-        (SPROCKET_GEAR_RATIO / CARRAIGE_UPDUCTION)
-            / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
+        (SPROCKET_GEAR_RATIO) / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
     public static final double CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE =
         1 / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.0),
+      Intake(0, 0.070),
       safePosition(0, 0.0),
-      L1(1, 0.657),
+      L1(1, 0.657 - 0.13),
       L2(2, 0.8636),
       L3(3, 1.27),
-      L4(4, 1.905);
+      L4(4, 1.81);
 
       public final int position;
       public final double height;
