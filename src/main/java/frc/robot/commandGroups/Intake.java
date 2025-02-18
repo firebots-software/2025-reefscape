@@ -17,9 +17,9 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class LoadAndPutUp extends SequentialCommandGroup {
+public class Intake extends SequentialCommandGroup {
 
-  public LoadAndPutUp(
+  public Intake(
       ElevatorSubsystem elevatorSubsystem,
       FunnelSubsystem funnelSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
@@ -32,6 +32,5 @@ public class LoadAndPutUp extends SequentialCommandGroup {
     addCommands(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
-    addCommands(new SetElevatorLevel(elevatorSubsystem, level));
   }
 }
