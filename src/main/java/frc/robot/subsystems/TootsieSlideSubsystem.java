@@ -8,7 +8,6 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.InvertedValue;
 import dev.doglog.DogLog;
@@ -73,11 +72,11 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     }
     return instance;
   }
-  
+
   private void runTootsieAtRPS(double flywheelSpeed) {
     double motor_speed = flywheelSpeed / Constants.TootsieSlide.GEAR_RATIO;
-    motor_speed = MathUtil.clamp(motor_speed,-100,100);
-    DogLog.log("subsystems/tootsieslide/Target Motor Speed",motor_speed);
+    motor_speed = MathUtil.clamp(motor_speed, -100, 100);
+    DogLog.log("subsystems/tootsieslide/Target Motor Speed", motor_speed);
     master.setControl(m_velocity.withVelocity(motor_speed));
 
     m_flywheelSim.setInputVoltage(master.getSupplyVoltage().getValueAsDouble());
@@ -99,7 +98,6 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     DogLog.log("subsystems/tootsieslide/tootsieVelocity", master.getVelocity().getValueAsDouble());
-
   }
 
   @Override

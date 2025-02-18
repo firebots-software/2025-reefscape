@@ -156,7 +156,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     DogLog.setOptions(
         new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
-        DogLog.log("PIDArmKP", Constants.Arm.S0C_KP);
+    DogLog.log("PIDArmKP", Constants.Arm.S0C_KP);
     DogLog.log("PIDArmKI", Constants.Arm.S0C_KI);
     DogLog.log("PIDArmKD", Constants.Arm.S0C_KD);
     DogLog.log("PIDArmKS", Constants.Arm.S0C_KS);
@@ -236,7 +236,6 @@ public class Robot extends TimedRobot {
   public void simulationInit() {
     absoluteInit();
   }
-
 
   public void absoluteInit() {
     RobotContainer.setAlliance();

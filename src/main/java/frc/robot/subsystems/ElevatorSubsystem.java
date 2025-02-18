@@ -138,7 +138,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void setPosition(double height) {
-    master.setControl(controlRequest.withPosition(
+    master.setControl(
+        controlRequest.withPosition(
             height
                 * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
                 / ElevatorConstants.CARRAIGE_UPDUCTION));

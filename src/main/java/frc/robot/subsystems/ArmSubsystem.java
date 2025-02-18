@@ -8,9 +8,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -86,18 +84,20 @@ public class ArmSubsystem extends SubsystemBase {
     mocFlywheel.withInverted(InvertedValue.Clockwise_Positive);
 
     Slot0Configs s0cArm =
-        new Slot0Configs().withKP(Constants.Arm.S0C_KP)
-        .withKI(Constants.Arm.S0C_KI)
-        .withKD(Constants.Arm.S0C_KD)
-        .withKS(Constants.Arm.S0C_KS)
-        .withKG(Constants.Arm.S0C_KG);
-    
+        new Slot0Configs()
+            .withKP(Constants.Arm.S0C_KP)
+            .withKI(Constants.Arm.S0C_KI)
+            .withKD(Constants.Arm.S0C_KD)
+            .withKS(Constants.Arm.S0C_KS)
+            .withKG(Constants.Arm.S0C_KG);
+
     Slot0Configs s0cFlywheel =
-        new Slot0Configs().withKP(Constants.Flywheel.S0C_KP)
-        .withKI(Constants.Flywheel.S0C_KI)
-        .withKD(Constants.Flywheel.S0C_KD)
-        .withKS(Constants.Flywheel.S0C_KS)
-        .withKG(Constants.Flywheel.S0C_KG);
+        new Slot0Configs()
+            .withKP(Constants.Flywheel.S0C_KP)
+            .withKI(Constants.Flywheel.S0C_KI)
+            .withKD(Constants.Flywheel.S0C_KD)
+            .withKS(Constants.Flywheel.S0C_KS)
+            .withKG(Constants.Flywheel.S0C_KG);
 
     // Initialize master motor only
     armMotor = new LoggedTalonFX("subsystems/Dale/armMotor", Constants.Arm.PIVOT_MOTOR_PORT);
@@ -130,7 +130,7 @@ public class ArmSubsystem extends SubsystemBase {
     masterConfiguratorFlywheel.apply(motionMagicConfigsFlywheel);
   }
 
-  //ARM:
+  // ARM:
   public void setPosition(double angleDegrees) {
     targetDegrees = angleDegrees;
     armMotor.setControl(
@@ -164,11 +164,11 @@ public class ArmSubsystem extends SubsystemBase {
     return false;
   }
 
-  //FLYWHEEL:
+  // FLYWHEEL:
   private void runFlywheelAtRPS(double flywheelSpeed) {
     double motor_speed = flywheelSpeed / Constants.Flywheel.GEAR_RATIO;
-    motor_speed = MathUtil.clamp(motor_speed,-100,100);
-    DogLog.log("subsystems/Dale/Target Motor Speed",motor_speed);
+    motor_speed = MathUtil.clamp(motor_speed, -100, 100);
+    DogLog.log("subsystems/Dale/Target Motor Speed", motor_speed);
     flywheelMotor.setControl(controlRequestFlywheel.withVelocity(motor_speed));
   }
 
