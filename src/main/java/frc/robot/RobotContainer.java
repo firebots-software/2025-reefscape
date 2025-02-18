@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.LoadAndPutUp;
@@ -39,6 +41,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import com.ctre.phoenix6.SignalLogger;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -164,37 +168,37 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    joystick
-        .a()
-        .onTrue(
-            driveTrain.runOnce(
-                () ->
-                    driveTrain.resetPose(
-                        new Pose2d(
-                            new Translation2d(
-                                Constants.Landmarks.leftBranchesRed[5].getX()
-                                    - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-                                                    .in(Meters)
-                                                / 2.0)
-                                            + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
-                                                .thickness.in(Meters)))
-                                        * Constants.Landmarks.reefFacingAngleRed[5].getCos(),
-                                Constants.Landmarks.leftBranchesRed[5].getY()
-                                    - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-                                                    .in(Meters)
-                                                / 2.0)
-                                            + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
-                                                .thickness.in(Meters)))
-                                        * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
-                            new Rotation2d(
-                                Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
+    // joystick
+    //     .a()
+    //     .onTrue(
+    //         driveTrain.runOnce(
+    //             () ->
+    //                 driveTrain.resetPose(
+    //                     new Pose2d(
+    //                         new Translation2d(
+    //                             Constants.Landmarks.leftBranchesRed[5].getX()
+    //                                 - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
+    //                                                 .in(Meters)
+    //                                             / 2.0)
+    //                                         + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+    //                                             .thickness.in(Meters)))
+    //                                     * Constants.Landmarks.reefFacingAngleRed[5].getCos(),
+    //                             Constants.Landmarks.leftBranchesRed[5].getY()
+    //                                 - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
+    //                                                 .in(Meters)
+    //                                             / 2.0)
+    //                                         + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+    //                                             .thickness.in(Meters)))
+    //                                     * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
+    //                         new Rotation2d(
+    //                             Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
 
     // Mechanisms:
-    joystick.rightBumper().onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-    joystick
-        .rightBumper()
-        .onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
-    joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
+    // joystick.rightBumper().onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+    // joystick
+    //     .rightBumper()
+    //     .onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
+    // joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
@@ -208,23 +212,24 @@ public class RobotContainer {
     //             elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in
     // constants
 
-    /*
-    Sysid button commands, commented out (I like keeping this commented because
-    every branch will have access to the necessary commands to run SysID immediately)
+    // Sysid button commands, commented out (I like keeping this commented because
+    // every branch will have access to the necessary commands to run SysID immediately)
 
        joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
        joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
 
-    * Joystick Y = quasistatic forward
-    * Joystick A = quasistatic reverse
-    * Joystick B = dynamic forward
-    * Joystick X = dyanmic reverse
-    *
-       joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-       joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-       joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-       joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    */
+    // * Joystick Y = quasistatic forward
+    // * Joystick A = quasistatic reverse
+    // * Joystick B = dynamic forward
+    // * Joystick X = dyanmic reverse
+    // *
+
+       joystick.y().whileTrue(driveTrain.sysIdQuasistatic(Direction.kForward));
+       joystick.a().whileTrue(driveTrain.sysIdQuasistatic(Direction.kReverse));
+       joystick.b().whileTrue(driveTrain.sysIdDynamic(Direction.kForward));
+       joystick.x().whileTrue(driveTrain.sysIdDynamic(Direction.kReverse));
+
+    // */
   }
 
   public static void setAlliance() {
