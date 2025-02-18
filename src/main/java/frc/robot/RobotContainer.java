@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
-import frc.robot.commandGroups.LoadAndPutUp;
+import frc.robot.commandGroups.Intake;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DebugCommands.DebugFunnelIntake;
 import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
@@ -135,7 +135,7 @@ public class RobotContainer {
     debugJoystick
         .rightTrigger()
         .onTrue(
-            new LoadAndPutUp(
+            new Intake(
                 elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
 
     // debugJoystick.a().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));

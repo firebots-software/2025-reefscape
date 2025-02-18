@@ -11,8 +11,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 
-public class MoveToSideAndShoot extends SequentialCommandGroup {
-  public MoveToSideAndShoot(
+public class JamesHardenScore extends SequentialCommandGroup {
+  public JamesHardenScore(
       ElevatorSubsystem elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
