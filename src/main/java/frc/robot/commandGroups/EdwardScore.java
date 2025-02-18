@@ -20,16 +20,22 @@ public class EdwardScore extends SequentialCommandGroup {
       BooleanSupplier redSide,
       boolean moveRight) {
 
-    Command movementCommand;
+    Command outpostMovement;
     if (moveRight) {
-      movementCommand = JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide);
+      outpostMovement = JamesHardenMovement.toClosestRightOutpost(swerveSubsystem, redSide);
     } else {
-      movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide);
+      outpostMovement = JamesHardenMovement.toClosestLeftOutpost(swerveSubsystem, redSide);
     }
 
+    Command qDirectionalMovement;
+    if (moveRight) {
+      qDirectionalMovement = 
+    } else {
+      qDirectionalMovement = 
+
     addCommands(
-        new dodgingcmd() <-- extesnion of james harden movement but to outpost,
-        netElevatorLevel(elevatorSubsystem, height).alongWith(q direction command (edward mvmnt)),
+        outpostMovement,
+        setElevatorLevel(elevatorSubsystem, height).alongWith(q direction command (edward mvmnt)),
         new ShootTootsieSlide(tootsieSlideSubsystem));w Se
   }
 }
