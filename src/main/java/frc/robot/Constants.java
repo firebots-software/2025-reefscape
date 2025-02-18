@@ -635,7 +635,7 @@ public final class Constants {
     public static double S0C_KG = 0.0; // TODO
     public static final double CRUISE_VELOCITY = 10; // TODO
     public static final double ACCELERATION = 10; // TODO
-    public static final double GEAR_RATIO = 1d / 6d; 
+    public static final double GEAR_RATIO = 1d / 6d;
     public static final double SPEED_RPS = 5d; // TODO
   }
 
@@ -652,7 +652,7 @@ public final class Constants {
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
     public static final double SPEED_RPS = 5.0; // TODO
-    public static final double GEAR_RATIO = 1d / 9d; 
+    public static final double GEAR_RATIO = 1d / 9d;
 
     public static final int CHECK_IN_PORT = 1;
     public static final int CHECK_OUT_PORT = 0;
