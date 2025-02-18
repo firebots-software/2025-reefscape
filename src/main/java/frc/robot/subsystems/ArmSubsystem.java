@@ -69,16 +69,15 @@ public class ArmSubsystem extends SubsystemBase {
     CurrentLimitsConfigs clcArm =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(Constants.Arm.ARM_STATOR_CURRENT_LIMIT_AMPS)
+            .withStatorCurrentLimit(Constants.Arm.STATOR_CURRENT_LIMIT_AMPS)
             .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(Constants.Arm.ARM_SUPPLY_CURRENT_LIMIT_AMPS);
+            .withSupplyCurrentLimit(Constants.Arm.SUPPLY_CURRENT_LIMIT_AMPS);
     CurrentLimitsConfigs clcFlywheel =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(Constants.Flywheel.FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS)
+            .withStatorCurrentLimit(Constants.Flywheel.STATOR_CURRENT_LIMIT_AMPS)
             .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(Constants.Flywheel.FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS);
-    FeedbackConfigs fcArm = new FeedbackConfigs();
+            .withSupplyCurrentLimit(Constants.Flywheel.SUPPLY_CURRENT_LIMIT_AMPS);
     MotorOutputConfigs mocArm = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
     MotorOutputConfigs mocFlywheel =
         new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast);
@@ -86,12 +85,19 @@ public class ArmSubsystem extends SubsystemBase {
     mocArm.withInverted(InvertedValue.CounterClockwise_Positive);
     mocFlywheel.withInverted(InvertedValue.Clockwise_Positive);
 
-    ClosedLoopGeneralConfigs clgcArm = new ClosedLoopGeneralConfigs();
-    ClosedLoopGeneralConfigs clgcFlywheel = new ClosedLoopGeneralConfigs();
     Slot0Configs s0cArm =
-        new Slot0Configs().withKP(Constants.Arm.S0C_KP * 0.75).withKI(0).withKD(0);
+        new Slot0Configs().withKP(Constants.Arm.S0C_KP)
+        .withKI(Constants.Arm.S0C_KI)
+        .withKD(Constants.Arm.S0C_KD)
+        .withKS(Constants.Arm.S0C_KS)
+        .withKG(Constants.Arm.S0C_KG);
+    
     Slot0Configs s0cFlywheel =
-        new Slot0Configs().withKP(Constants.Flywheel.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
+        new Slot0Configs().withKP(Constants.Flywheel.S0C_KP)
+        .withKI(Constants.Flywheel.S0C_KI)
+        .withKD(Constants.Flywheel.S0C_KD)
+        .withKS(Constants.Flywheel.S0C_KS)
+        .withKG(Constants.Flywheel.S0C_KG);
 
     // Initialize master motor only
     armMotor = new LoggedTalonFX("subsystems/Dale/armMotor", Constants.Arm.PIVOT_MOTOR_PORT);
@@ -106,14 +112,11 @@ public class ArmSubsystem extends SubsystemBase {
     masterConfiguratorArm.apply(mocArm);
     masterConfiguratorArm.apply(clcArm); // Apply current limits to the master motor
     masterConfiguratorArm.apply(s0cArm); // Apply PID settings to the master motor
-    masterConfiguratorArm.apply(clgcArm);
-    masterConfiguratorArm.apply(fcArm);
     masterConfiguratorArm.apply(moc);
 
     masterConfiguratorFlywheel.apply(mocFlywheel);
     masterConfiguratorFlywheel.apply(clcFlywheel); // Apply current limits to the master motor
     masterConfiguratorFlywheel.apply(s0cFlywheel); // Apply PID settings to the master motor
-    masterConfiguratorFlywheel.apply(clgcFlywheel);
 
     // Apply MotionMagicConfigs to master motor
     motionMagicConfigsArm = new MotionMagicConfigs();
@@ -163,14 +166,14 @@ public class ArmSubsystem extends SubsystemBase {
 
   //FLYWHEEL:
   private void runFlywheelAtRPS(double flywheelSpeed) {
-    double motor_speed = flywheelSpeed / Constants.Arm.DALE_FLYWHEEL_GEAR_RATIO;
+    double motor_speed = flywheelSpeed / Constants.Flywheel.GEAR_RATIO;
     motor_speed = MathUtil.clamp(motor_speed,-100,100);
     DogLog.log("subsystems/Dale/Target Motor Speed",motor_speed);
     flywheelMotor.setControl(controlRequestFlywheel.withVelocity(motor_speed));
   }
 
   public void spinFlywheel() {
-    runFlywheelAtRPS(Constants.Flywheel.FLYWHEEL_SPEED_RPS);
+    runFlywheelAtRPS(Constants.Flywheel.SPEED_RPS);
   }
 
   // Stops the flywheel
