@@ -79,7 +79,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
   private void runTootsieAtRPS(double speed) {
     DogLog.log("is it running", true);
-    master.setControl(m_velocity.withVelocity(speed));
+    master.setControl(m_velocity.withVelocity(speed / Constants.TootsieSlide.GEAR_RATIO));
     DogLog.log("VelocityVoltage", master.getMotorVoltage().getValueAsDouble());
     m_flywheelSim.setInputVoltage(master.getSupplyVoltage().getValueAsDouble());
   }
