@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
+import frc.robot.commandGroups.LoadAndPutUp;
+import frc.robot.commandGroups.MoveToSideAndShoot;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DebugCommands.DebugArm;
 import frc.robot.commands.DebugCommands.DebugDaleSpin;
@@ -304,11 +306,17 @@ public class RobotContainer {
     return routine.cmd();
   }
 
-  public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // for actual robot
+  /**
+ * @param routine
+ * @param baseCommandName
+ * @return
+ */
+public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // for actual robot
     BooleanSupplier pathGoesToHPS =
         () -> !(baseCommandName.contains("HPS-") || baseCommandName.contains("START-"));
     // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator
     // and shoot, else lower elevator and intake
+    /*
     return Commands.parallel(
             routine.trajectory(baseCommandName).cmd(),
             ((pathGoesToHPS.getAsBoolean())
@@ -323,4 +331,16 @@ public class RobotContainer {
                 elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem))
         .onlyIf(pathGoesToHPS); // transfers piece to elevator only if path goes to hps
   }
+    */
+    return Commands.parallel(
+            routine.trajectory(baseCommandName).cmd(),
+            ((pathGoesToHPS.getAsBoolean())
+                ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
+                : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)))        
+            .andThen(
+            (pathGoesToHPS.getAsBoolean()) //may want to change it such that it goes around at intake lvl and only raises to score
+                ? new LoadAndPutUp(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.Intake)
+                : new MoveToSideAndShoot(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L4, redside, baseCommandName.substring(1, 2).equals("R")));
+
+    }
 }
