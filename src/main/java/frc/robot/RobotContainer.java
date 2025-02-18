@@ -136,7 +136,7 @@ public class RobotContainer {
         .rightTrigger()
         .onTrue(
             new Intake(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
+                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
 
     // debugJoystick.a().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
     // debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
@@ -169,25 +169,8 @@ public class RobotContainer {
         .onTrue(
             driveTrain.runOnce(
                 () ->
-                    driveTrain.resetPose(
-                        new Pose2d(
-                            new Translation2d(
-                                Constants.Landmarks.leftBranchesRed[5].getX()
-                                    - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-                                                    .in(Meters)
-                                                / 2.0)
-                                            + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
-                                                .thickness.in(Meters)))
-                                        * Constants.Landmarks.reefFacingAngleRed[5].getCos(),
-                                Constants.Landmarks.leftBranchesRed[5].getY()
-                                    - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-                                                    .in(Meters)
-                                                / 2.0)
-                                            + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
-                                                .thickness.in(Meters)))
-                                        * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
-                            new Rotation2d(
-                                Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
+                    driveTrain.resetPose(new Pose2d(
+                        Constants.Landmarks.LEFT_LINEUP_RED[5], Constants.Landmarks.reefFacingAngleRed[5]))));
 
     // Mechanisms:
     joystick.rightBumper().onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
