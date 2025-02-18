@@ -1,7 +1,5 @@
 package frc.robot.commands.SwerveCommands;
 
-import static edu.wpi.first.units.Units.Meters;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -89,7 +87,10 @@ public class JamesHardenMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.LEFT_LINEUP_RED[sideOfMinDist], Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
+            Pose2d target =
+                new Pose2d(
+                    Constants.Landmarks.LEFT_LINEUP_RED[sideOfMinDist],
+                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
@@ -105,7 +106,10 @@ public class JamesHardenMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.LEFT_LINEUP_BLUE[sideOfMinDist], Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
+            Pose2d target =
+                new Pose2d(
+                    Constants.Landmarks.LEFT_LINEUP_BLUE[sideOfMinDist],
+                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
@@ -132,7 +136,10 @@ public class JamesHardenMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.RIGHT_LINEUP_RED[sideOfMinDist], Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
+            Pose2d target =
+                new Pose2d(
+                    Constants.Landmarks.RIGHT_LINEUP_RED[sideOfMinDist],
+                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
@@ -148,7 +155,10 @@ public class JamesHardenMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.RIGHT_LINEUP_BLUE[sideOfMinDist], Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
+            Pose2d target =
+                new Pose2d(
+                    Constants.Landmarks.RIGHT_LINEUP_BLUE[sideOfMinDist],
+                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
@@ -159,7 +169,6 @@ public class JamesHardenMovement extends Command {
 
     return new JamesHardenMovement(swerve, targetPose);
   }
-
 
   public static JamesHardenMovement toClosestLeftOutpost(
       SwerveSubsystem swerve, BooleanSupplier redSide) {
@@ -177,7 +186,10 @@ public class JamesHardenMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.LEFT_OUTPOSTS_RED[sideOfMinDist], Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
+            Pose2d target =
+                new Pose2d(
+                    Constants.Landmarks.LEFT_OUTPOSTS_RED[sideOfMinDist],
+                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestLeftOutpost/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestLeftOutpost/minDist(m)", minDist);
@@ -193,7 +205,10 @@ public class JamesHardenMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.LEFT_OUTPOSTS_BLUE[sideOfMinDist], Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
+            Pose2d target =
+                new Pose2d(
+                    Constants.Landmarks.LEFT_OUTPOSTS_BLUE[sideOfMinDist],
+                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestLeftOutpost/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestLeftOutpost/minDist(m)", minDist);
@@ -220,7 +235,10 @@ public class JamesHardenMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.RIGHT_OUTPOSTS_RED[sideOfMinDist], Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
+            Pose2d target =
+                new Pose2d(
+                    Constants.Landmarks.RIGHT_OUTPOSTS_RED[sideOfMinDist],
+                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestRightOutpost/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestRightOutpost/minDist(m)", minDist);
@@ -236,7 +254,10 @@ public class JamesHardenMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.RIGHT_OUTPOSTS_BLUE[sideOfMinDist], Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
+            Pose2d target =
+                new Pose2d(
+                    Constants.Landmarks.RIGHT_OUTPOSTS_BLUE[sideOfMinDist],
+                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestRightOutpost/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestRightOutpost/minDist(m)", minDist);

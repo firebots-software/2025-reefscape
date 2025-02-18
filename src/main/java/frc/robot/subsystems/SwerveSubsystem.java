@@ -335,16 +335,18 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   public ChassisSpeeds calculateRequiredOneDirectionalChassisSpeeds(Pose2d targetPose) {
     double qFeedback =
-        qProfiledPIDController.calculate(0, getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation()));
+        qProfiledPIDController.calculate(
+            0, getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation()));
     double thetaFeedback =
         headingProfiledPIDController.calculate(
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-    double deltaX = targetPose.getX()-getCurrentState().Pose.getX();
-    double deltaY = targetPose.getY()-getCurrentState().Pose.getY();
+    double deltaX = targetPose.getX() - getCurrentState().Pose.getX();
+    double deltaY = targetPose.getY() - getCurrentState().Pose.getY();
     double travelAngleRad = Math.atan2(deltaY, deltaX);
-    
-    return new ChassisSpeeds(qFeedback*Math.cos(travelAngleRad), qFeedback*Math.sin(travelAngleRad), thetaFeedback);
+
+    return new ChassisSpeeds(
+        qFeedback * Math.cos(travelAngleRad), qFeedback * Math.sin(travelAngleRad), thetaFeedback);
   }
 
   /**

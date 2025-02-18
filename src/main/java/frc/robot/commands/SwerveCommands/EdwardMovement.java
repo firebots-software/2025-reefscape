@@ -1,8 +1,5 @@
 package frc.robot.commands.SwerveCommands;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -10,6 +7,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 public class EdwardMovement extends Command {
   private final SwerveSubsystem swerve;
@@ -120,7 +119,7 @@ public class EdwardMovement extends Command {
       SwerveSubsystem swerve, BooleanSupplier redSide) {
 
     Supplier<Translation2d> targetTranslation =
-      () -> {
+        () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
             double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[0]);

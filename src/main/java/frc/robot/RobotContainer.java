@@ -11,8 +11,6 @@ import choreo.auto.AutoFactory;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -134,9 +132,7 @@ public class RobotContainer {
 
     debugJoystick
         .rightTrigger()
-        .onTrue(
-            new Intake(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
+        .onTrue(new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
 
     // debugJoystick.a().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
     // debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
@@ -169,8 +165,10 @@ public class RobotContainer {
         .onTrue(
             driveTrain.runOnce(
                 () ->
-                    driveTrain.resetPose(new Pose2d(
-                        Constants.Landmarks.LEFT_LINEUP_RED[5], Constants.Landmarks.reefFacingAngleRed[5]))));
+                    driveTrain.resetPose(
+                        new Pose2d(
+                            Constants.Landmarks.LEFT_LINEUP_RED[5],
+                            Constants.Landmarks.reefFacingAngleRed[5]))));
 
     // Mechanisms:
     joystick.rightBumper().onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
