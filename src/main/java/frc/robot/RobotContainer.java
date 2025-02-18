@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.LoadAndPutUp;
+import frc.robot.commands.DaleCommands.ArmDefault;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DebugCommands.DebugFunnelIntake;
 import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
@@ -111,14 +112,28 @@ public class RobotContainer {
     debugJoystick.rightBumper().whileTrue(new DebugFunnelIntake(funnelSubsystem));
     debugJoystick.leftBumper().whileTrue(new DebugFunnelOuttake(funnelSubsystem));
 
+    // debugJoystick.leftStick().onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+
     // debugJoystick.leftBumper().whileFalse(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
 
     debugJoystick.rightTrigger().whileTrue(new DebugTootsieSlide(tootsieSlideSubsystem));
 
-    debugJoystick.y().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
+    debugJoystick
+        .y()
+        .onTrue(
+            new Dealgaenate(
+                armSubsystem,
+                elevatorSubsystem,
+                Constants.ElevatorConstants.ElevatorPositions.L2DALE));
     debugJoystick.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
     debugJoystick.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    debugJoystick.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    debugJoystick
+        .b()
+        .onTrue(
+            new Dealgaenate(
+                armSubsystem,
+                elevatorSubsystem,
+                Constants.ElevatorConstants.ElevatorPositions.L3DALE));
 
     debugJoystick
         .rightTrigger()
@@ -151,6 +166,7 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
+    armSubsystem.setDefaultCommand(new ArmDefault(ArmSubsystem.getInstance()));
 
     joystick
         .a()
@@ -178,7 +194,10 @@ public class RobotContainer {
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
 
     // Mechanisms:
-    joystick.rightBumper().onTrue(new Dealgaenate(armSubsystem));
+
+    joystick
+        .rightBumper()
+        .onTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
     joystick.rightBumper().onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, armSubsystem));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
