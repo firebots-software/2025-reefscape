@@ -339,8 +339,8 @@ public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // 
                 : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)))        
             .andThen(
             (pathGoesToHPS.getAsBoolean()) //may want to change it such that it goes around at intake lvl and only raises to score
-                ? new LoadAndPutUp(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.Intake)
-                : new MoveToSideAndShoot(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L4, redside, baseCommandName.substring(1, 2).equals("R")));
+                ? new LoadAndPutUp(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.Intake) //may want to make it such that it doesn't set the elevator pose at all because it is redundant
+                : new MoveToSideAndShoot(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L4, redside, baseCommandName.substring(1, 2).equals("R"))); //may want to make it such that it doesnt move extra at all or move elevator because it is redundant
 
     }
 }
