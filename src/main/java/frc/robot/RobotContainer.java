@@ -24,8 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.LoadAndPutUp;
-import frc.robot.commands.DaleCommands.ArmDefault;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
+import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.DebugCommands.DebugFunnelIntake;
 import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
 import frc.robot.commands.DebugCommands.DebugTootsieSlide;
@@ -124,7 +124,7 @@ public class RobotContainer {
 
     debugJoystick
         .y()
-        .onTrue(
+        .whileTrue(
             new Dealgaenate(
                 ArmSubsystem.getInstance(),
                 ElevatorSubsystem.getInstance(),
@@ -132,12 +132,10 @@ public class RobotContainer {
     debugJoystick
         .x()
         .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L4));
-    debugJoystick
-        .a()
-        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L2));
+    debugJoystick.a().onTrue(new ZeroArm(armSubsystem));
     debugJoystick
         .b()
-        .onTrue(
+        .whileTrue(
             new Dealgaenate(
                 ArmSubsystem.getInstance(),
                 ElevatorSubsystem.getInstance(),
@@ -174,7 +172,7 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
-    armSubsystem.setDefaultCommand(new ArmDefault(ArmSubsystem.getInstance()));
+    armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, ArmSubsystem.getInstance()));
 
     joystick
         .a()
