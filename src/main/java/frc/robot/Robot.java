@@ -79,11 +79,6 @@ public class Robot extends TimedRobot {
     Optional<EstimatedRobotPose> leftRobotPose =
         visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
 
-    DogLog.log(
-        "KalmanDebug/right has target", visionRight.hasTarget(visionRight.getPipelineResult()));
-    DogLog.log("KalmanDebug/right robot pose is present", rightRobotPose.isPresent());
-    DogLog.log("KalmanDebug/left has target", visionLeft.hasTarget(visionLeft.getPipelineResult()));
-    DogLog.log("KalmanDebug/left robot pose is present", leftRobotPose.isPresent());
 
     if (visionRight.hasTarget(visionRight.getPipelineResult()) && rightRobotPose.isPresent()) {
 
