@@ -100,9 +100,7 @@ public class RobotContainer {
         decreaseFunction = () -> debugJoystick.leftBumper().getAsBoolean(),
         pidChangeFunction = () -> debugJoystick.a().getAsBoolean(),
         mechChangeFunction = () -> debugJoystick.b().getAsBoolean();
-    debugJoystick
-        .leftTrigger()
-        .whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
+    debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
 
     // debugJoystick
     //     .rightTrigger()
@@ -115,22 +113,12 @@ public class RobotContainer {
 
     // debugJoystick.leftBumper().whileFalse(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
 
-    debugJoystick
-        .rightTrigger()
-        .whileTrue(new DebugTootsieSlide(tootsieSlideSubsystem));
+    debugJoystick.rightTrigger().whileTrue(new DebugTootsieSlide(tootsieSlideSubsystem));
 
-    debugJoystick
-        .y()
-        .onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
-    debugJoystick
-        .x()
-        .onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
-    debugJoystick
-        .a()
-        .onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    debugJoystick
-        .b()
-        .onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    debugJoystick.y().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
+    debugJoystick.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    debugJoystick.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    debugJoystick.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
 
     debugJoystick
         .rightTrigger()
@@ -191,9 +179,7 @@ public class RobotContainer {
 
     // Mechanisms:
     joystick.rightBumper().onTrue(new Dealgaenate(armSubsystem));
-    joystick
-        .rightBumper()
-        .onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, armSubsystem));
+    joystick.rightBumper().onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, armSubsystem));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
