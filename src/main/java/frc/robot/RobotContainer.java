@@ -321,6 +321,6 @@ public class RobotContainer {
         .andThen(
             new TransferPieceBetweenFunnelAndElevator(
                 elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem))
-        .onlyIf(pathGoesToHPS); // transfers piece to elevator only if path doesnt go to hps
+        .onlyIf(pathGoesToHPS); // transfers piece to elevator only if path goes to hps
   }
 }
