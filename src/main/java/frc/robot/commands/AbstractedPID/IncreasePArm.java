@@ -84,7 +84,8 @@ public class IncreasePArm extends Command {
             .withKI(ElevatorConstants.S0C_KI)
             .withKD(ElevatorConstants.S0C_KD)
             .withKS(0);
-    TalonFXConfigurator masterConfig = ElevatorSubsystem.getInstance().master.getConfigurator();
+    TalonFXConfigurator masterConfig =
+        ElevatorSubsystem.getInstance().getMasterMotor().getConfigurator();
     masterConfig.apply(s0c);
 
     Slot0Configs s0cArm =

@@ -37,7 +37,6 @@ public class Robot extends TimedRobot {
 
   private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
   private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
-  private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   private final RobotContainer m_robotContainer;
 
   private static Matrix<N3, N1> visionMatrix =
@@ -51,11 +50,8 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
-
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
-  private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
-  private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
+
   private final SwerveSubsystem driveTrain =
       new SwerveSubsystem(
           Constants.Swerve.DrivetrainConstants,

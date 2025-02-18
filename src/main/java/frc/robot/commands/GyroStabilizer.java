@@ -36,7 +36,7 @@ public class GyroStabilizer extends Command {
   public void execute() {
     Transform2d currentTipVectorRP = getTipVectorRP(pigeon);
 
-    double dirToGoX = currentTipVectorRP.getY(); //TODO: change for comp robot
+    double dirToGoX = currentTipVectorRP.getY(); // TODO: change for comp robot
     double dirToGoY = -currentTipVectorRP.getX();
 
     double xSpeed = pidController.calculate(dirToGoX, 0);
@@ -76,9 +76,11 @@ public class GyroStabilizer extends Command {
 
   public static boolean tipping(SwerveSubsystem driveTrain) {
     // Old version checks if the magnitude of the vector is greater than a TIP_THRESHOLD of 0.1.
-    // return GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2()))
+    // return
+    // GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2()))
     //     > TIP_THRESHOLD;
-    
-    return GyroStabilizer.getTipVectorRP(pigeon).getX() > TIP_THRESHOLD || GyroStabilizer.getTipVectorRP(pigeon).getY() > TIP_THRESHOLD;
+
+    return GyroStabilizer.getTipVectorRP(pigeon).getX() > TIP_THRESHOLD
+        || GyroStabilizer.getTipVectorRP(pigeon).getY() > TIP_THRESHOLD;
   }
 }

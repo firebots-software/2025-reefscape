@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.GyroStabilizer;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.LoadAndPutUp;
@@ -31,6 +30,7 @@ import frc.robot.commands.DebugCommands.DebugFunnelIntake;
 import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
 import frc.robot.commands.DebugCommands.DebugTootsieSlide;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.GyroStabilizer;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
@@ -38,8 +38,8 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionSystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
+import frc.robot.subsystems.VisionSystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -60,19 +60,15 @@ public class RobotContainer {
 
   // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
   private final SendableChooser<String> startPosChooser = new SendableChooser<String>();
-  private final SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
 
-  private final Telemetry logger =
-      new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
   private final CommandXboxController debugJoystick = new CommandXboxController(3);
 
   private final SwerveSubsystem driveTrain;
 
   private final Telemetry logger;
-  private VisionSystem visionBack = VisionSystem.getInstance(Constants.Vision.Cameras.BACK_CAM);
-  private VisionSystem visionFront = VisionSystem.getInstance(Constants.Vision.Cameras.FRONT_CAM);
-  private final CommandXboxController joystick = new CommandXboxController(0);
+  private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
 
   private final AutoFactory autoFactory;
   private final AutoChooser autoChooser;
@@ -158,7 +154,7 @@ public class RobotContainer {
 
     // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
+    Supplier<Double> frontBackFunction = () -> -joystick.getLeftY(),
         leftRightFunction = () -> -joystick.getLeftX(),
         rotationFunction = () -> joystick.getRightX(),
         speedFunction =
@@ -201,7 +197,7 @@ public class RobotContainer {
                                                 .thickness.in(Meters)))
                                         * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
                             new Rotation2d(
-                                Constants.Landmarks.reefFacingAngleRed[5].getRadians())))))
+                                Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
     Trigger rightBumper = joystick.rightBumper();
 

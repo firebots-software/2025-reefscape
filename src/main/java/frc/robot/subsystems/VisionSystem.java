@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import java.util.Optional;
@@ -97,6 +96,7 @@ public class VisionSystem extends SubsystemBase {
   public Pose2d getSaved() {
     return savedResult;
   }
+
   public boolean hasTarget(PhotonPipelineResult pipeline) {
     return pipeline.hasTargets();
   }
@@ -115,6 +115,7 @@ public class VisionSystem extends SubsystemBase {
     return new Pose2d(
         (one.getX() + two.getX()) / 2, (one.getY() + two.getY()) / 2, one.getRotation());
   }
+
   public AprilTagFieldLayout getAprilTagFieldLayout() {
     return this.aprilTagFieldLayout;
   }

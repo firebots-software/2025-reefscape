@@ -38,7 +38,6 @@ import java.util.function.Supplier;
 
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
     implements Subsystem {
-  private static SwerveSubsystem instance;
 
   private static SwerveSubsystem instance;
   private ProfiledPIDController xPidController, yPidController, driverRotationPidController;
@@ -101,13 +100,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND));
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     configureAutoBuilder();
-  }
-
-  public static SwerveSubsystem getInstance() {
-    if (instance == null) {
-      throw new Error("Please create one instance of SwerveSubsystem first.");
-    }
-    return instance;
   }
 
   // Values relevant for the simulation
@@ -370,6 +362,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return m_sysIdRoutineToApply.dynamic(direction);
   }
+
   /**
    * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
    * while still accounting for measurement noise.

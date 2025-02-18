@@ -176,6 +176,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     this.setPosition(height);
   }
 
+  public LoggedTalonFX getMasterMotor() {
+    return this.master;
+  }
+
   // public void stopElevator(){
   //   master.setControl()
   // }
