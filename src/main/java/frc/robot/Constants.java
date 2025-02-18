@@ -176,8 +176,8 @@ public final class Constants {
     public static final double MOTIONMAGIC_KV = 0;
     public static final double MOTIONMAGIC_KA = 0;
 
-    public static final double FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
-    public static final double FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS = 15.0;
+    public static final double FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS = 15.0;
     public static final double FLYWHEEL_SPEED_RPS = 30.0;
 
     public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
