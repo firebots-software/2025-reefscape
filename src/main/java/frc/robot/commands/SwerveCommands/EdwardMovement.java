@@ -1,5 +1,6 @@
 package frc.robot.commands.SwerveCommands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import dev.doglog.DogLog;
@@ -7,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class EdwardMovement extends Command {
@@ -68,6 +70,93 @@ public class EdwardMovement extends Command {
   @Override
   public void end(boolean interrupted) {
     swerve.setRobotSpeeds(new ChassisSpeeds(0, 0, 0));
+  }
+
+  public static EdwardMovement toClosestLeftBranch(
+      SwerveSubsystem swerve, BooleanSupplier redSide) {
+
+    Supplier<Pose2d> targetPose =
+        () -> {
+          Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
+          if (redSide.getAsBoolean()) {
+            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[0]);
+            int sideOfMinDist = 0;
+            for (int i = 1; i < 6; i++) {
+              if (currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[i]);
+                sideOfMinDist = i;
+              }
+            }
+
+            Pose2d target = new Pose2d(Constants.Landmarks.LEFT_LINEUP_RED[sideOfMinDist], Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
+
+            DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
+            DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
+
+            return target;
+          } else {
+            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[0]);
+            int sideOfMinDist = 0;
+            for (int i = 1; i < 6; i++) {
+              if (currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[i]);
+                sideOfMinDist = i;
+              }
+            }
+
+            Pose2d target = new Pose2d(Constants.Landmarks.LEFT_LINEUP_BLUE[sideOfMinDist], Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
+
+            DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
+            DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
+
+            return target;
+          }
+        };
+
+    return new EdwardMovement(swerve, targetPose);
+  }
+
+  public static EdwardMovement toClosestRightBranch(
+      SwerveSubsystem swerve, BooleanSupplier redSide) {
+    Supplier<Pose2d> targetPose =
+        () -> {
+          Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
+          if (redSide.getAsBoolean()) {
+            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[0]);
+            int sideOfMinDist = 0;
+            for (int i = 1; i < 6; i++) {
+              if (currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[i]);
+                sideOfMinDist = i;
+              }
+            }
+
+            Pose2d target = new Pose2d(Constants.Landmarks.RIGHT_LINEUP_RED[sideOfMinDist], Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
+
+            DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
+            DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
+
+            return target;
+          } else {
+            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[0]);
+            int sideOfMinDist = 0;
+            for (int i = 1; i < 6; i++) {
+              if (currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[i]);
+                sideOfMinDist = i;
+              }
+            }
+
+            Pose2d target = new Pose2d(Constants.Landmarks.RIGHT_LINEUP_BLUE[sideOfMinDist], Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
+
+            DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
+            DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
+
+            return target;
+          }
+        };
+
+    return new EdwardMovement(swerve, targetPose);
   }
 
 }
