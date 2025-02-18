@@ -118,7 +118,6 @@ public class RobotContainer {
 
     debugJoystick.rightTrigger().whileTrue(new DebugTootsieSlide(tootsieSlideSubsystem));
 
-
     debugJoystick
         .y()
         .onTrue(
@@ -126,12 +125,8 @@ public class RobotContainer {
                 armSubsystem,
                 elevatorSubsystem,
                 Constants.ElevatorConstants.ElevatorPositions.L2DALE));
-    debugJoystick
-        .x()
-        .onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
-    debugJoystick
-        .a()
-        .onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    debugJoystick.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    debugJoystick.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     debugJoystick
         .b()
         .onTrue(
@@ -139,7 +134,6 @@ public class RobotContainer {
                 armSubsystem,
                 elevatorSubsystem,
                 Constants.ElevatorConstants.ElevatorPositions.L3DALE));
-
 
     debugJoystick
         .rightTrigger()
@@ -201,7 +195,9 @@ public class RobotContainer {
 
     // Mechanisms:
 
-    joystick.rightBumper().onTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
+    joystick
+        .rightBumper()
+        .onTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
     joystick.rightBumper().onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, armSubsystem));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 

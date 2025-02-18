@@ -672,7 +672,6 @@ public final class Constants {
     public static double S0C_KA = 0.0004657452997; // 0.04
     public static double S0C_KV = 0.124; // 10.66
 
-
     public static final double MOTIONMAGIC_MAX_VELOCITY = 50;
     public static final double MOTIONMAGIC_MAX_ACCELERATION = 100;
 
