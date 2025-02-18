@@ -47,6 +47,6 @@ public class SetElevatorLevel extends Command {
 
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.atTargetPosition();
+    return elevatorSubsystem.isAtPosition();
   }
 }

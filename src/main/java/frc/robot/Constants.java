@@ -10,8 +10,13 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -25,6 +30,38 @@ import edu.wpi.first.units.measure.*;
 public final class Constants {
   public static class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
+  }
+
+  public static class Kalman {
+    public static final Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
+    public static final Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+  }
+
+  public static class Vision {
+
+    public static enum Cameras {
+      RIGHT_CAM,
+      LEFT_CAM;
+    }
+
+    // TODO: CHANGE FOR NEW ROBOT
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.499);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.358);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.011);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
+
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-11.927);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.357);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.01);
+
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
+
+    // TODO: determine if this latency is still true
+    public static final double CAMERA_LATENCY_SECONDS = 0.02;
   }
 
   public static class Landmarks {
@@ -108,15 +145,14 @@ public final class Constants {
       return (conversionFactor * angle) + zeroOffset;
     }
 
-    public static final int RT_PORT = 14; // Right Top motor
-    public static final int RB_PORT = 13; // Right Bottom motor
-    public static final int LT_PORT = 1; // Left Top motor
-    public static final int LB_PORT = 11; // Left Bottom motor
-    public static final int ENCODER_PORT = 0; // subject to change
-    // public static final int ENCODER_PORT = 0; // subject to change
+    public static final int PIVOT_MOTOR_PORT = 16;
 
     public static final double CURRENT_LIMIT = 8.0;
-    public static final double S0C_KP = 1.0;
+    public static double S0C_KP = 1.0;
+    public static double S0C_KI = 0.0;
+    public static double S0C_KD = 0.0;
+    public static double S0C_KS = 0.0;
+    public static double S0C_KG = 0.0;
     public static final double ARMFF_KS = 0.16969;
     public static final double ARMFF_KG = 0.34;
     public static final double ARMFF_KV = 2.49;
@@ -139,10 +175,14 @@ public final class Constants {
   }
 
   public static class Flywheel {
-    public static final int FLYWHEEL_PORT = 0;
+    public static double FLYWHEEL_S0C_KI = 0.0;
+    public static double FLYWHEEL_S0C_KD = 0.0;
+    public static double FLYWHEEL_S0C_KS = 0.0;
+    public static double FLYWHEEL_S0C_KG = 0.0;
+    public static final int FLYWHEEL_PORT = 17;
     public static final double MOTIONMAGIC_KV = 0;
     public static final double MOTIONMAGIC_KA = 0;
-    public static final double FLYWHEEL_S0C_KP = 1.0;
+    public static double FLYWHEEL_S0C_KP = 1.0;
     public static final double FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
     public static final double FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS = 5.0;
 
@@ -170,7 +210,7 @@ public final class Constants {
   }
 
   public static class Swerve {
-    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.PROTO;
+    public static final SwerveType WHICH_SWERVE_ROBOT = SwerveType.JAMES_HARDEN;
 
     public static enum SwerveLevel {
       L2(6.75, 21.428571428571427),
@@ -262,15 +302,15 @@ public final class Constants {
           "rio",
           BumperThickness.PROTO),
       JAMES_HARDEN(
-          Rotations.of(-0.158447265625), // front left
-          Rotations.of(-0.310791015625), // front right
-          Rotations.of(-0.48681640625), // back left
-          Rotations.of(0.4248046875), // back right
+          Rotations.of(-0.076171875), // front left
+          Rotations.of(-0.493896484375), // front right
+          Rotations.of(0.18798828125), // back left
+          Rotations.of(-0.1591796875), // back right
           SwerveLevel.L3,
           SwerveDrivePIDValues.JAMES_HARDEN,
           SwerveSteerPIDValues.JAMES_HARDEN,
           RobotDimensions.JAMES_HARDEN,
-          "FireBot",
+          "JamesHarden",
           BumperThickness.JAMES_HARDEN);
       public final Angle FRONT_LEFT_ENCODER_OFFSET,
           FRONT_RIGHT_ENCODER_OFFSET,
@@ -419,7 +459,7 @@ public final class Constants {
 
     private static final boolean STEER_MOTOR_REVERSED = true; // TODO: CHANGE FOR NEW ROBOT
     private static final boolean INVERT_LEFT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
-    private static final boolean INVERT_RIGHT_SIDE = true; // TODO: CHANGE FOR NEW ROBOT
+    private static final boolean INVERT_RIGHT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
 
     private static final int kPigeonId = 40; // TODO: CHANGE FOR NEW ROBOT
 
@@ -602,25 +642,27 @@ public final class Constants {
   }
 
   public static class TootsieSlide {
-    public static final int MOTOR_PORT = 1; // TODO
+    public static final int MOTOR_PORT = 15; // TODO
     public static final int CHECKOUT_PORT = 1; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 90.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 90.0; // TODO
-    public static final double S0C_KP = 1; // TODO
-    public static final double S0C_KI = 0; // TODO
-    public static final double S0C_KD = 0; // TODO
+
+    public static double S0C_KP = 1.0; // TODO
+    public static double S0C_KI = 0.0; // TODO
+    public static double S0C_KD = 0.0; // TODO
+    public static double S0C_KS = 0.0; // TODO
+    public static double S0C_KG = 0.0; // TODO
     public static final double CRUISE_VELOCITY = 10; // TODO
     public static final double ACCELERATION = 10; // TODO
-
-    public static final int GEAR_RATIO = 1 / 6; // TODO
+    public static final double GEAR_RATIO = 1 / 6; // TODO
     public static final double SPEED_RPS = 5; // TODO
   }
 
   public static class FunnelConstants {
-    public static final int RIGHT_MOTOR_PORT = 0; // TODO
-    public static final int LEFT_MOTOR_PORT = 0; // TODO
-    public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO
-    public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO
+    public static final int RIGHT_MOTOR_PORT = 14; // TODO
+    public static final int LEFT_MOTOR_PORT = 13; // TODO
+    public static final double SUPPLY_CURRENT_LIMIT = 20.0; // TODO
+    public static final double STATOR_CURRENT_LIMIT = 15.0; // TODO
     public static final double S0C_KP = 1.0; // TODO
     public static final double S0C_KI = 0.0; // TODO
     public static final double S0C_KD = 0.0; // TODO
@@ -629,30 +671,38 @@ public final class Constants {
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
     public static final double SPEED_RPS = 5.0; // TODO
-    public static final int GEAR_RATIO = 0; // TODO
+    public static final int GEAR_RATIO = 9; // TODO
 
-    public static final int CHECK_IN_PORT = 0;
+    public static final int CHECK_IN_PORT = 1;
     public static final int CHECK_OUT_PORT = 0;
-    public static final int DRAKE_PORT = 0;
+    public static final int DRAKE_PORT = 2;
     public static final double MAX_POSITIONAL_ERROR = 0.05; // TODO
   }
 
   public static class ElevatorConstants {
-    public static final int MOTOR1_PORT = 0; // TODO: change port
-    public static final int MOTOR2_PORT = 0; // TODO: change port
-    public static final int CANRANGE_PORT = 0; // TODO: change port
+    public static final int MOTOR1_PORT = 11; // TODO: change port
+    public static final int MOTOR2_PORT = 12; // TODO: change port
+    public static final int CANRANGE_PORT = 41; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
-    public static final double STATOR_CURRENT_LIMIT = 5.0; // TODO: change for actual match
-    public static final double SUPPLY_CURRENT_LIMIT = 5.0; // TODO: change for actual match
-    public static final int S0C_KP = 1;
-    public static final int S0C_KI = 0;
-    public static final int S0C_KD = 0;
-    public static final int MOTIONMAGIC_KV = 0;
-    public static final int MOTIONMAGIC_KA = 0;
+    public static final double STATOR_CURRENT_LIMIT = 30.0; // TODO: change for actual match
+    public static final double SUPPLY_CURRENT_LIMIT = 10.0; // TODO: change for actual match
+
+    public static double S0C_KP = 2.0;
+    public static double S0C_KI = 0.0;
+    public static double S0C_KD = 0.005;
+    public static double S0C_KS = 0.0;
+    public static double S0C_KG = 0.28;
+    public static double S0C_KA = 0.0004657452997; // 0.04
+    public static double S0C_KV = 0.124; // 10.66
+
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 20;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 40;
+    public static double SENSOR_OFFSET = 0.11;
+    // public static final double MOTIONMAGIC_KG = 0.28;
     public static final double currentLimit = 0;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
-    public static final double SETPOINT_TOLERANCE = 0; // To-do
+    public static final double SETPOINT_TOLERANCE = 0.1; // To-do
     public static final double MAX_POSITIONAL_ERROR = 0.05;
     public static final double SPROCKET_CIRCUM_INCHES =
         1.751 * Math.PI; // TODO: change 0 to radius/diameter
@@ -662,19 +712,18 @@ public final class Constants {
     // public static final double CONVERSION_FACTOR = SPROCKET_GEAR_RATIO/(SPROCKET_CIRCUM_INCHES *
     // 0.0254); //This is converted to meters
     public static final double CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS =
-        (SPROCKET_GEAR_RATIO / CARRAIGE_UPDUCTION)
-            / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
+        (SPROCKET_GEAR_RATIO) / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
     public static final double CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE =
         1 / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.0),
+      Intake(0, 0.070),
       safePosition(0, 0.0),
-      L1(1, 0.0),
-      L2(2, 0.0),
-      L3(3, 0.0),
-      L4(4, 0.0);
+      L1(1, 0.657 - 0.13),
+      L2(2, 0.8636),
+      L3(3, 1.27),
+      L4(4, 1.81);
 
       public final int position;
       public final double height;

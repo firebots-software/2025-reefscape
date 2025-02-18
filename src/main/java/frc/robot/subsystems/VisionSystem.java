@@ -23,19 +23,30 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 /** Creates a new VisionSystem. */
 public class VisionSystem extends SubsystemBase {
-
   Pose2d savedResult = new Pose2d(0, 0, new Rotation2d(0.01, 0.01));
   private static VisionSystem[] systemList =
       new VisionSystem[Constants.Vision.Cameras.values().length];
   private Transform3d[] camToRobots = {
-    // Front Camera transform
+    // right Camera transform
     new Transform3d(
-        new Translation3d(Units.inchesToMeters(-9.5), Units.inchesToMeters(6.5), 0),
-        new Rotation3d(0, Units.degreesToRadians(25.37693353), Math.PI)),
-    // Back Camera
+        new Translation3d(
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_X,
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_Y,
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_Z),
+        new Rotation3d(
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_ROLL,
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_PITCH,
+            Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_YAW)),
+    // left Camera
     new Transform3d(
-        new Translation3d(Units.inchesToMeters(8), Units.inchesToMeters(5.75), 0),
-        new Rotation3d(0, 0, 0))
+        new Translation3d(
+            Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_X,
+            Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_Y,
+            Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_Z),
+        new Rotation3d(
+            Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_ROLL,
+            Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_PITCH,
+            Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_YAW)),
   };
   private PhotonCamera camera;
   private PhotonPipelineResult pipeline;
@@ -49,18 +60,21 @@ public class VisionSystem extends SubsystemBase {
     photonPoseEstimator =
         new PhotonPoseEstimator(
             aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camToRobots[index]);
+    for (var x : camera.getAllUnreadResults()) {
+      pipeline = x;
+    }
   }
 
   public static VisionSystem getInstance(Constants.Vision.Cameras name) {
     if (systemList[name.ordinal()] == null) {
       systemList[0] =
           new VisionSystem(
-              Constants.Vision.Cameras.FRONT_CAM.toString(),
-              Constants.Vision.Cameras.FRONT_CAM.ordinal());
+              Constants.Vision.Cameras.RIGHT_CAM.toString(),
+              Constants.Vision.Cameras.RIGHT_CAM.ordinal());
       systemList[1] =
           new VisionSystem(
-              Constants.Vision.Cameras.FRONT_CAM.toString(),
-              Constants.Vision.Cameras.FRONT_CAM.ordinal());
+              Constants.Vision.Cameras.LEFT_CAM.toString(),
+              Constants.Vision.Cameras.LEFT_CAM.ordinal());
     }
 
     return systemList[name.ordinal()];
@@ -83,6 +97,9 @@ public class VisionSystem extends SubsystemBase {
   public Pose2d getSaved() {
     return savedResult;
   }
+  public boolean hasTarget(PhotonPipelineResult pipeline) {
+    return pipeline.hasTargets();
+  }
 
   public void setReference(Pose2d newPose) {
     if (newPose == null) {
@@ -98,15 +115,18 @@ public class VisionSystem extends SubsystemBase {
     return new Pose2d(
         (one.getX() + two.getX()) / 2, (one.getY() + two.getY()) / 2, one.getRotation());
   }
-
-  public AprilTagFieldLayout gAprilTagFieldLayout() {
+  public AprilTagFieldLayout getAprilTagFieldLayout() {
     return this.aprilTagFieldLayout;
   }
 
-  public PhotonPipelineResult gPipelineResult() {
-    return camera.getLatestResult();
+  public PhotonPipelineResult getPipelineResult() {
+    return pipeline;
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    for (var x : camera.getAllUnreadResults()) {
+      pipeline = x;
+    }
+  }
 }

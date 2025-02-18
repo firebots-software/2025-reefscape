@@ -38,6 +38,7 @@ import java.util.function.Supplier;
 
 public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
     implements Subsystem {
+  private static SwerveSubsystem instance;
 
   private static SwerveSubsystem instance;
   private ProfiledPIDController xPidController, yPidController, driverRotationPidController;
@@ -70,7 +71,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       startSimThread();
     }
     currentState = getCurrentState();
-
     xRegularPIDController = new PIDController(8, 0, 0);
     yRegularPIDController = new PIDController(8, 0, 0);
     headingRegularPIDController = new PIDController(8, 0, 0);
@@ -176,6 +176,49 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       DriverStation.reportError(
           "Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
     }
+  }
+
+  public static SwerveSubsystem getInstance() {
+    if (instance == null) {
+      instance =
+          new SwerveSubsystem(
+              Constants.Swerve.DrivetrainConstants,
+              250,
+              Constants.Kalman.odometryMatrix,
+              Constants.Kalman.visionMatrix,
+              Constants.Swerve.FrontLeft,
+              Constants.Swerve.FrontRight,
+              Constants.Swerve.BackLeft,
+              Constants.Swerve.BackRight);
+    }
+    return instance;
+  }
+
+  public void followTrajectory(SwerveSample sample) {
+    // Get the current pose of the robot
+    Pose2d pose = getCurrentState().Pose;
+    // Generate the next speeds for the robot
+    ChassisSpeeds speeds =
+        new ChassisSpeeds(
+            sample.vx + xRegularPIDController.calculate(pose.getX(), sample.x),
+            sample.vy + yRegularPIDController.calculate(pose.getY(), sample.y),
+            sample.omega
+                + headingRegularPIDController.calculate(
+                    pose.getRotation().getRadians(), sample.heading));
+
+    DogLog.log("followTrajectory/sample.x", sample.x);
+    DogLog.log("followTrajectory/sample.y", sample.y);
+    DogLog.log("followTrajectory/sample.heading", sample.heading);
+
+    DogLog.log(
+        "followTrajectory/pidOutputX", xRegularPIDController.calculate(pose.getX(), sample.x));
+    DogLog.log("followTrajectory/sample.vx", sample.vx);
+    DogLog.log("followTrajectory/sample.vy", sample.vy);
+    DogLog.log("followTrajectory/sample.omega", sample.omega);
+
+    DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
+    // Apply the generated speed
+    setFieldSpeeds(speeds);
   }
 
   // Resets PID controllers
@@ -327,32 +370,38 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return m_sysIdRoutineToApply.dynamic(direction);
   }
+  /**
+   * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
+   * while still accounting for measurement noise.
+   *
+   * @param visionRobotPoseMeters The pose of the robot as measured by the vision camera.
+   * @param timestampSeconds The timestamp of the vision measurement in seconds.
+   */
+  @Override
+  public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
+    super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
+  }
 
-  public void followTrajectory(SwerveSample sample) {
-    // Get the current pose of the robot
-    Pose2d pose = getCurrentState().Pose;
-
-    // Generate the next speeds for the robot
-    ChassisSpeeds speeds =
-        new ChassisSpeeds(
-            sample.vx + xPidController.calculate(pose.getX(), sample.x),
-            sample.vy + yPidController.calculate(pose.getY(), sample.y),
-            sample.omega
-                + driverRotationPidController.calculate(
-                    pose.getRotation().getRadians(), sample.heading));
-
-    // Apply the generated speeds
-    DogLog.log("followTrajectory/sample.x", sample.x);
-    DogLog.log("followTrajectory/sample.y", sample.y);
-    DogLog.log("followTrajectory/sample.heading", sample.heading);
-
-    DogLog.log("followTrajectory/pidOutputX", xPidController.calculate(pose.getX(), sample.x));
-    DogLog.log("followTrajectory/sample.vx", sample.vx);
-    DogLog.log("followTrajectory/sample.vy", sample.vy);
-    DogLog.log("followTrajectory/sample.omega", sample.omega);
-
-    DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
-    setChassisSpeeds(speeds);
+  /**
+   * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
+   * while still accounting for measurement noise.
+   *
+   * <p>Note that the vision measurement standard deviations passed into this method will continue
+   * to apply to future measurements until a subsequent call to {@link
+   * #setVisionMeasurementStdDevs(Matrix)} or this method.
+   *
+   * @param visionRobotPoseMeters The pose of the robot as measured by the vision camera.
+   * @param timestampSeconds The timestamp of the vision measurement in seconds.
+   * @param visionMeasurementStdDevs Standard deviations of the vision pose measurement in the form
+   *     [x, y, theta]ᵀ, with units in meters and radians.
+   */
+  @Override
+  public void addVisionMeasurement(
+      Pose2d visionRobotPoseMeters,
+      double timestampSeconds,
+      Matrix<N3, N1> visionMeasurementStdDevs) {
+    super.addVisionMeasurement(
+        visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
   }
 
   @Override

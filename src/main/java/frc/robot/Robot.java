@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AbstractedPID.IncreasePArm;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
@@ -30,11 +31,21 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   // Commented this out because arm is not on bot and this is activiating
   // something that doesn't physically exist
-  // TODO: uncomment when arm is on real bot
 
+  // TODO: uncomment when arm is on real bot
   // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
+  private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
+  private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   private final RobotContainer m_robotContainer;
+
+  private static Matrix<N3, N1> visionMatrix =
+      VecBuilder.fill(
+          0.01, 0.03d,
+          100d); // standard deviation for x (meters), y (meters) and rotation (radians) camera data
+
+  double rightDistToAprilTag, leftDistToAprilTag;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -61,54 +72,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_robotContainer.doTelemetry();
-    CommandScheduler.getInstance().run();
-    Optional<EstimatedRobotPose> frontRobotPose =
-        visionFront.getMultiTagPose3d(driveTrain.getState().Pose);
-    Optional<EstimatedRobotPose> backRobotPose =
-        visionBack.getMultiTagPose3d(driveTrain.getState().Pose);
-    if (frontRobotPose.isPresent() || backRobotPose.isPresent()) {
 
-      double frontdistToAprilTag =
-          visionFront
-              .gAprilTagFieldLayout()
-              .getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
-              .get()
-              .getTranslation()
-              .getDistance(
-                  new Translation3d(
-                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
-
-      double backdistToAprilTag =
-          visionBack
-              .gAprilTagFieldLayout()
-              .getTagPose(visionFront.gPipelineResult().getBestTarget().getFiducialId())
-              .get()
-              .getTranslation()
-              .getDistance(
-                  new Translation3d(
-                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
-
-      if (frontdistToAprilTag <= backdistToAprilTag) {
-        leastDist = frontdistToAprilTag;
-      } else {
-        leastDist = backdistToAprilTag;
-      }
-
-      double xKalman = 0.01 * Math.pow(1.15, leastDist);
-
-      double yKalman = 0.01 * Math.pow(1.4, leastDist);
-
-      visionMatrix.set(0, 0, xKalman);
-      visionMatrix.set(1, 0, yKalman);
-
-      driveTrain.addVisionMeasurement(
-          frontRobotPose.get().estimatedPose.toPose2d(),
-          Timer.getFPGATimestamp() - 0.02,
-          visionMatrix);
-    }
-    // DogLog.setOptions(
-    //    new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
+    absoluteInit();
   }
 
   /**
@@ -127,6 +92,80 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
     LoggedTalonFX.periodic_static();
+
+    Optional<EstimatedRobotPose> rightRobotPose =
+        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+    Optional<EstimatedRobotPose> leftRobotPose =
+        visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
+
+    DogLog.log(
+        "KalmanDebug/right has target", visionRight.hasTarget(visionRight.getPipelineResult()));
+    DogLog.log("KalmanDebug/right robot pose is present", rightRobotPose.isPresent());
+    DogLog.log("KalmanDebug/left has target", visionLeft.hasTarget(visionLeft.getPipelineResult()));
+    DogLog.log("KalmanDebug/left robot pose is present", leftRobotPose.isPresent());
+
+    if (visionRight.hasTarget(visionRight.getPipelineResult()) && rightRobotPose.isPresent()) {
+
+      rightDistToAprilTag =
+          visionRight
+              .getAprilTagFieldLayout()
+              .getTagPose(visionRight.getPipelineResult().getBestTarget().getFiducialId())
+              .get()
+              .getTranslation()
+              .getDistance(
+                  new Translation3d(
+                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+
+      // TODO: determine if these exponentials correctly model our vision's performance
+      double xKalman = 0.01 * Math.pow(1.15, rightDistToAprilTag);
+      double yKalman = 0.01 * Math.pow(1.4, rightDistToAprilTag);
+
+      visionMatrix.set(0, 0, xKalman);
+      visionMatrix.set(1, 0, yKalman);
+
+      driveTrain.addVisionMeasurement(
+          rightRobotPose.get().estimatedPose.toPose2d(),
+          Timer.getFPGATimestamp() - Constants.Vision.CAMERA_LATENCY_SECONDS,
+          visionMatrix);
+
+      DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
+      DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
+      DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
+      DogLog.log(
+          "KalmanDebug/rightRobotPoseTheta",
+          rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
+    }
+
+    if (visionLeft.hasTarget(visionLeft.getPipelineResult()) && leftRobotPose.isPresent()) {
+      leftDistToAprilTag =
+          visionLeft
+              .getAprilTagFieldLayout()
+              .getTagPose(visionLeft.getPipelineResult().getBestTarget().getFiducialId())
+              .get()
+              .getTranslation()
+              .getDistance(
+                  new Translation3d(
+                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+
+      // TODO: determine if these exponentials correctly model our vision's performance
+      double xKalman = 0.01 * Math.pow(1.15, leftDistToAprilTag);
+      double yKalman = 0.01 * Math.pow(1.4, leftDistToAprilTag);
+
+      visionMatrix.set(0, 0, xKalman);
+      visionMatrix.set(1, 0, yKalman);
+
+      driveTrain.addVisionMeasurement(
+          leftRobotPose.get().estimatedPose.toPose2d(),
+          Timer.getFPGATimestamp() - Constants.Vision.CAMERA_LATENCY_SECONDS,
+          visionMatrix);
+
+      DogLog.log("KalmanDebug/leftDistToAprilTag", leftDistToAprilTag);
+      DogLog.log("KalmanDebug/leftRobotPoseX", leftRobotPose.get().estimatedPose.getX());
+      DogLog.log("KalmanDebug/leftRobotPoseY", leftRobotPose.get().estimatedPose.getY());
+      DogLog.log(
+          "KalmanDebug/leftRobotPoseTheta",
+          leftRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
+    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -183,6 +222,27 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     LoggedTalonFX.periodic_static();
+
+    DogLog.log("PID Constant", IncreasePArm.broomIndex());
+    DogLog.log("Mechanism Type", IncreasePArm.mechIndex());
+
+    DogLog.log("PIDArmKP", Constants.Arm.S0C_KP);
+    DogLog.log("PIDArmKI", Constants.Arm.S0C_KI);
+    DogLog.log("PIDArmKD", Constants.Arm.S0C_KD);
+    DogLog.log("PIDArmKS", Constants.Arm.S0C_KS);
+    DogLog.log("PIDArmKG", Constants.Arm.S0C_KG);
+
+    DogLog.log("PIDElevatorKP", Constants.ElevatorConstants.S0C_KP);
+    DogLog.log("PIDElevatorKI", Constants.ElevatorConstants.S0C_KI);
+    DogLog.log("PIDElevatorKD", Constants.ElevatorConstants.S0C_KD);
+    DogLog.log("PIDElevatorKS", Constants.ElevatorConstants.S0C_KS);
+    DogLog.log("PIDElevatorKG", Constants.ElevatorConstants.S0C_KG);
+
+    DogLog.log("PIDTootsieKP", Constants.TootsieSlide.S0C_KP);
+    DogLog.log("PIDTootsieKI", Constants.TootsieSlide.S0C_KI);
+    DogLog.log("PIDTootsieKD", Constants.TootsieSlide.S0C_KD);
+    DogLog.log("PIDTootsieKS", Constants.TootsieSlide.S0C_KS);
+    DogLog.log("PIDTootsieKG", Constants.TootsieSlide.S0C_KG);
   }
 
   @Override

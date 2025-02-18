@@ -23,10 +23,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.GyroStabilizer;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commandGroups.Dealgaenate;
+import frc.robot.commandGroups.LoadAndPutUp;
+import frc.robot.commands.DaleCommands.ArmToAngleCmd;
+import frc.robot.commands.DebugCommands.DebugFunnelIntake;
+import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
+import frc.robot.commands.DebugCommands.DebugTootsieSlide;
+import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
+import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -34,11 +47,10 @@ public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  // TODO: Uncomment when mechanisms arrive on the robot:
-  //   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
-  //   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  //   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-  //   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+  TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
+  FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
+  ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+  ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   // Alliance color
   Boolean coralInFunnel = Boolean.valueOf(false);
   Boolean coralInElevator = Boolean.valueOf(false);
@@ -48,6 +60,12 @@ public class RobotContainer {
 
   // SmartDashboard Auto Chooser: Returns "B", "T", or "M"
   private final SendableChooser<String> startPosChooser = new SendableChooser<String>();
+  private final SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
+
+  private final Telemetry logger =
+      new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
+  private final CommandXboxController joystick = new CommandXboxController(0);
+  private final CommandXboxController debugJoystick = new CommandXboxController(3);
 
   private final SwerveSubsystem driveTrain;
 
@@ -84,17 +102,65 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // TODO: Uncomment when mechanisms arrive on the robot:
-    // Joystick suppliers,
+    // Automatic
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    // funnelCheckin.onTrue(new RunFunnelUntilDetection(funnelSubsystem, elevatorSubsystem));
+    // funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
 
+    // Debugging
+    BooleanSupplier increaseFunction = () -> debugJoystick.rightBumper().getAsBoolean(),
+        decreaseFunction = () -> debugJoystick.leftBumper().getAsBoolean(),
+        pidChangeFunction = () -> debugJoystick.a().getAsBoolean(),
+        mechChangeFunction = () -> debugJoystick.b().getAsBoolean();
+    debugJoystick
+        .leftTrigger()
+        .whileTrue(new ShootTootsieSlide(TootsieSlideSubsystem.getInstance()));
+
+    // debugJoystick
+    //     .rightTrigger()
+    //     .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
+
+    debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
+
+    debugJoystick.rightBumper().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
+    debugJoystick.leftBumper().whileTrue(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
+
+    // debugJoystick.leftBumper().whileFalse(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
+
+    debugJoystick
+        .rightTrigger()
+        .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
+
+    debugJoystick
+        .y()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
+    debugJoystick
+        .x()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L4));
+    debugJoystick
+        .a()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L2));
+    debugJoystick
+        .b()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L3));
+
+    debugJoystick
+        .rightTrigger()
+        .onTrue(
+            new LoadAndPutUp(
+                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
+
+    // debugJoystick.a().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
+    // debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
+
+    // debugJoystick.leftStick().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
+    // debugJoystick.rightStick().whileTrue(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
+
+    // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
-    Supplier<Double>
-        frontBackFunction = () -> ((redAlliance) ? joystick.getLeftY() : -joystick.getLeftY()),
-        leftRightFunction = () -> ((redAlliance) ? joystick.getLeftX() : -joystick.getLeftX()),
-        rotationFunction = () -> -joystick.getRightX(),
+    DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
+        leftRightFunction = () -> -joystick.getLeftX(),
+        rotationFunction = () -> joystick.getRightX(),
         speedFunction =
             () ->
                 leftShoulderTrigger.getAsBoolean()
@@ -111,29 +177,6 @@ public class RobotContainer {
     driveTrain.setDefaultCommand(swerveJoystickCommand);
     Trigger tipping = new Trigger(() -> (GyroStabilizer.tipping(driveTrain)));
     tipping.whileTrue(new GyroStabilizer(driveTrain));
-
-    // TODO: Uncomment when mechanisms arrive on the robot:
-    // joystick.rightBumper().whileTrue(new
-    // TootsieSlideShooting(TootsieSlideSubsystem.getInstance()));
-
-    /*
-
-    Sysid button commands, commented out (I like keeping this commented because
-    every branch will have access to the necessary commands to run SysID immediately)
-
-       joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
-       joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
-
-    * Joystick Y = quasistatic forward
-    * Joystick A = quasistatic reverse
-    * Joystick B = dynamic forward
-    * Joystick X = dyanmic reverse
-    *
-       joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-       joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-       joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-       joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    */
 
     joystick
         .a()
@@ -158,19 +201,17 @@ public class RobotContainer {
                                                 .thickness.in(Meters)))
                                         * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
                             new Rotation2d(
-                                Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
-
+                                Constants.Landmarks.reefFacingAngleRed[5].getRadians())))))
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
     Trigger rightBumper = joystick.rightBumper();
 
-    // TODO: Uncomment when mechanisms arrive on the robot:
-    // Currently this code uses commands that we can't call or else it will throw errors
-    // rightBumper.onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-    // rightBumper.onFalse(
-    //     new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
-    // joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
+    // Mechanisms:
+    joystick.rightBumper().onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
+    joystick
+        .rightBumper()
+        .onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, ArmSubsystem.getInstance()));
+    joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
-    // TODO: Uncomment when mechanisms arrive on the robot:
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
@@ -180,8 +221,26 @@ public class RobotContainer {
     //     .a()
     //     .whileTrue(
     //         new SetElevatorLevel(
-    //             elevatorSubsystem,
-    //             ElevatorPositions.safePosition)); // change safepos in constants
+    //             elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in
+    // constants
+
+    /*
+    Sysid button commands, commented out (I like keeping this commented because
+    every branch will have access to the necessary commands to run SysID immediately)
+
+       joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
+       joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
+
+    * Joystick Y = quasistatic forward
+    * Joystick A = quasistatic reverse
+    * Joystick B = dynamic forward
+    * Joystick X = dyanmic reverse
+    *
+       joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+       joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+       joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+       joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    */
   }
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)

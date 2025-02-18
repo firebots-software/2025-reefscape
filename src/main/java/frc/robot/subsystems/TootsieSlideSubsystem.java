@@ -5,28 +5,28 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.signals.InvertedValue;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.DigitalInput;
 // Simulation imports
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.TootsieSlide;
 import frc.robot.util.LoggedTalonFX;
 
 public class TootsieSlideSubsystem extends SubsystemBase {
   private static TootsieSlideSubsystem instance;
 
-  private DigitalInput drakeSensor;
-  private LoggedTalonFX master;
+  public LoggedTalonFX master;
+
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
 
   // FOR SIMULATION
@@ -37,9 +37,15 @@ public class TootsieSlideSubsystem extends SubsystemBase {
       new FlywheelSim(tootsieSystem, m_tootsieSlideGearbox, 0);
 
   private TootsieSlideSubsystem() {
-    master = new LoggedTalonFX(1); // Unique ID for motor
+
+    master =
+        new LoggedTalonFX(
+            "subsystems/tootsieslide/motor",
+            Constants.TootsieSlide.MOTOR_PORT); // Unique ID for motor
     TalonFXConfigurator m1Config = master.getConfigurator();
-    drakeSensor = new DigitalInput(TootsieSlide.CHECKOUT_PORT);
+    MotorOutputConfigs moc =
+        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive);
+
     CurrentLimitsConfigs clc =
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -57,6 +63,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     m1Config.apply(clc);
     master.getConfigurator().apply(s0c);
     master.getConfigurator().apply(clc);
+    m1Config.apply(moc);
   }
 
   public static TootsieSlideSubsystem getInstance() {
@@ -78,17 +85,17 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   }
 
   public void intakeCoral() {
-    runTootsieAtRPS(1); // TODO: Change based on speed to intake Coral at
+    runTootsieAtRPS(30); // TODO: Change based on speed to intake Coral at
   }
 
-  public void spinTootsie(boolean thing) {
-    if (!thing && coralPresent()) {
-      runTootsieAtRPS(30);
-    }
-  }
+  // public void spinTootsie(boolean thing) {
+  //   if (!thing) {
+  //     runTootsieAtRPS(30);
+  //   }
+  // }
 
   public void shootTootsie() {
-    runTootsieAtRPS(30);
+    runTootsieAtRPS(90);
   }
 
   public void stopTootsie() {
@@ -113,7 +120,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     DogLog.log("subsystems/tootsieslide/tootsieVelocity", master.getVelocity().getValueAsDouble());
-    DogLog.log("subsystems/tootsieslide/coralPresent", coralPresent());
+    // DogLog.log("subsystems/tootsieslide/coralPresent", coralPresent());
   }
 
   @Override
@@ -122,9 +129,5 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     DogLog.log("SIMvoltage", m_flywheelSim.getInputVoltage());
     DogLog.log("Shooter Speed at RPM", m_flywheelSim.getAngularVelocityRPM());
     DogLog.log("Flywheel Current", m_flywheelSim.getCurrentDrawAmps());
-  }
-
-  public boolean coralPresent() {
-    return drakeSensor.get();
   }
 }
