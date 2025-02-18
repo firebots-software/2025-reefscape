@@ -6,7 +6,6 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import edu.wpi.first.math.Matrix;
@@ -26,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
-import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DebugCommands.DebugArm;
 import frc.robot.commands.DebugCommands.DebugDaleSpin;
@@ -39,6 +37,7 @@ import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionQuick;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
+import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
@@ -97,7 +96,7 @@ public class RobotContainer {
             true, // If alliance flipping should be enabled
             driveTrain);
 
-    // Set up the Auto chooser in SmartDashboard, which allows you to 
+    // Set up the Auto chooser in SmartDashboard, which allows you to
     startPosChooser = new SendableChooser<String>();
     startPosChooser.setDefaultOption("Top (next to blue barge zone)", "top");
     startPosChooser.addOption("Middle (between blue and red barge zones)", "middle");
