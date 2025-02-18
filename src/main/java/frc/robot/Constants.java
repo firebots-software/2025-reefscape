@@ -128,8 +128,8 @@ public final class Constants {
 
   public static final class Arm {
     // this is new code
-    public static final double DALE_FLYWHEEL_GEAR_RATIO = 1 / 11.2593;
-    public static final double DALE_PIVOT_GEAR_RATIO = 1; // TODO
+    public static final double DALE_FLYWHEEL_GEAR_RATIO = 1 / 6.7556;
+    public static final double DALE_PIVOT_GEAR_RATIO = 1 / 36d; // TODO
     // end of new code
     public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
     public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
@@ -623,8 +623,8 @@ public final class Constants {
   }
 
   public static class TootsieSlide {
-    public static final int MOTOR_PORT = 15; // TODO
-    public static final int CHECKOUT_PORT = 1; // TODO
+    public static final int MOTOR_PORT = 15;
+    public static final int CHECKOUT_PORT = 1;
     public static final double SUPPLY_CURRENT_LIMIT = 90.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 90.0; // TODO
 
@@ -635,8 +635,8 @@ public final class Constants {
     public static double S0C_KG = 0.0; // TODO
     public static final double CRUISE_VELOCITY = 10; // TODO
     public static final double ACCELERATION = 10; // TODO
-    public static final double GEAR_RATIO = 1 / 6; // TODO
-    public static final double SPEED_RPS = 5; // TODO
+    public static final double GEAR_RATIO = 1d / 6d;
+    public static final double SPEED_RPS = 5d; // TODO
   }
 
   public static class FunnelConstants {
@@ -652,7 +652,7 @@ public final class Constants {
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
     public static final double SPEED_RPS = 5.0; // TODO
-    public static final int GEAR_RATIO = 9; // TODO
+    public static final double GEAR_RATIO = 1d / 9d;
 
     public static final int CHECK_IN_PORT = 1;
     public static final int CHECK_OUT_PORT = 0;
@@ -676,26 +676,25 @@ public final class Constants {
     public static double S0C_KA = 0.0004657452997; // 0.04
     public static double S0C_KV = 0.124; // 10.66
 
-    public static final double MOTIONMAGIC_MAX_VELOCITY = 20;
-    public static final double MOTIONMAGIC_MAX_ACCELERATION = 40;
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 20d;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 40d;
     public static double SENSOR_OFFSET = 0.11;
     // public static final double MOTIONMAGIC_KG = 0.28;
-    public static final double currentLimit = 0;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0.1; // To-do
     public static final double MAX_POSITIONAL_ERROR = 0.05;
     public static final double SPROCKET_CIRCUM_INCHES =
         1.751 * Math.PI; // TODO: change 0 to radius/diameter
-    public static final double GEAR_RATIO = 1 / 12;
-    public static final double SPROCKET_GEAR_RATIO = 12 / 1; // TODO
-    public static final double CARRAIGE_UPDUCTION = 3 / 1; // TODO
+    public static final double GEAR_RATIO = 1d / 12d;
+    public static final double SPROCKET_GEAR_RATIO = 12d / 1d; // TODO
+    public static final double CARRAIGE_UPDUCTION = 3d / 1d; // TODO
     // public static final double CONVERSION_FACTOR = SPROCKET_GEAR_RATIO/(SPROCKET_CIRCUM_INCHES *
     // 0.0254); //This is converted to meters
     public static final double CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS =
         (SPROCKET_GEAR_RATIO) / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
     public static final double CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE =
-        1 / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
+        1d / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
