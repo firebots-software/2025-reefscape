@@ -75,7 +75,7 @@ public class EdwardMovement extends Command {
   public static EdwardMovement toClosestLeftBranch(
       SwerveSubsystem swerve, BooleanSupplier redSide) {
 
-    Supplier<Pose2d> targetPose =
+    Supplier<Translation2d> targetTranslation =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
@@ -88,7 +88,7 @@ public class EdwardMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.LEFT_LINEUP_RED[sideOfMinDist], Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
+            Translation2d target = Constants.Landmarks.LEFT_LINEUP_RED[sideOfMinDist];
 
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
@@ -104,7 +104,7 @@ public class EdwardMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.LEFT_LINEUP_BLUE[sideOfMinDist], Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
+            Translation2d target = Constants.Landmarks.LEFT_LINEUP_BLUE[sideOfMinDist];
 
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
@@ -113,13 +113,14 @@ public class EdwardMovement extends Command {
           }
         };
 
-    return new EdwardMovement(swerve, targetPose);
+    return new EdwardMovement(swerve, targetTranslation);
   }
 
   public static EdwardMovement toClosestRightBranch(
       SwerveSubsystem swerve, BooleanSupplier redSide) {
-    Supplier<Pose2d> targetPose =
-        () -> {
+
+    Supplier<Translation2d> targetTranslation =
+      () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
             double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[0]);
@@ -131,7 +132,7 @@ public class EdwardMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.RIGHT_LINEUP_RED[sideOfMinDist], Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
+            Translation2d target = Constants.Landmarks.RIGHT_LINEUP_RED[sideOfMinDist];
 
             DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
@@ -147,7 +148,7 @@ public class EdwardMovement extends Command {
               }
             }
 
-            Pose2d target = new Pose2d(Constants.Landmarks.RIGHT_LINEUP_BLUE[sideOfMinDist], Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
+            Translation2d target = Constants.Landmarks.RIGHT_LINEUP_BLUE[sideOfMinDist];
 
             DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
@@ -156,7 +157,6 @@ public class EdwardMovement extends Command {
           }
         };
 
-    return new EdwardMovement(swerve, targetPose);
+    return new EdwardMovement(swerve, targetTranslation);
   }
-
 }
