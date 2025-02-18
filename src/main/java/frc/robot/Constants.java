@@ -128,8 +128,8 @@ public final class Constants {
 
   public static final class Arm {
     // this is new code
-    public static final double DALE_FLYWHEEL_GEAR_RATIO = 1 / 11.2593;
-    public static final double DALE_PIVOT_GEAR_RATIO = 1; // TODO
+    public static final double DALE_FLYWHEEL_GEAR_RATIO = 1 / 6.7556;
+    public static final double DALE_PIVOT_GEAR_RATIO = 1 / 36; // TODO
     // end of new code
     public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
     public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
@@ -623,8 +623,8 @@ public final class Constants {
   }
 
   public static class TootsieSlide {
-    public static final int MOTOR_PORT = 15; // TODO
-    public static final int CHECKOUT_PORT = 1; // TODO
+    public static final int MOTOR_PORT = 15;
+    public static final int CHECKOUT_PORT = 1;
     public static final double SUPPLY_CURRENT_LIMIT = 90.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 90.0; // TODO
 
@@ -635,7 +635,7 @@ public final class Constants {
     public static double S0C_KG = 0.0; // TODO
     public static final double CRUISE_VELOCITY = 10; // TODO
     public static final double ACCELERATION = 10; // TODO
-    public static final double GEAR_RATIO = 1 / 6; // TODO
+    public static final double GEAR_RATIO = 1 / 6; 
     public static final double SPEED_RPS = 5; // TODO
   }
 
@@ -652,7 +652,7 @@ public final class Constants {
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
     public static final double SPEED_RPS = 5.0; // TODO
-    public static final int GEAR_RATIO = 9; // TODO
+    public static final int GEAR_RATIO = 1 / 9; 
 
     public static final int CHECK_IN_PORT = 1;
     public static final int CHECK_OUT_PORT = 0;
