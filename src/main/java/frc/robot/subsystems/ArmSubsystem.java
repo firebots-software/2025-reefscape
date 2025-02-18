@@ -21,6 +21,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -126,21 +127,11 @@ public class ArmSubsystem extends SubsystemBase {
     masterConfiguratorFlywheel.apply(motionMagicConfigsFlywheel);
   }
 
-  public void deployArm() {}
-
+  //ARM:
   public void setPosition(double angleDegrees) {
     targetDegrees = angleDegrees;
     armMotor.setControl(
         controlRequestArm.withPosition(Constants.Arm.DEGREES_TO_ROTATIONS(angleDegrees)));
-  }
-
-  public void startFlywheel() {
-    flywheelMotor.setControl(
-        controlRequestFlywheel.withVelocity(Constants.Flywheel.FLYWHEEL_SPEED_RPS));
-  }
-
-  public void stopEveryingONG() {
-    flywheelMotor.stopMotor();
   }
 
   public boolean atTarget(double endToleranceDegrees) {
@@ -170,6 +161,23 @@ public class ArmSubsystem extends SubsystemBase {
     return false;
   }
 
+  //FLYWHEEL:
+  private void runFlywheelAtRPS(double flywheelSpeed) {
+    double motor_speed = flywheelSpeed / Constants.Arm.DALE_FLYWHEEL_GEAR_RATIO;
+    motor_speed = MathUtil.clamp(motor_speed,-100,100);
+    DogLog.log("subsystems/Dale/Target Motor Speed",motor_speed);
+    flywheelMotor.setControl(controlRequestFlywheel.withVelocity(motor_speed));
+  }
+
+  public void spinFlywheel() {
+    runFlywheelAtRPS(Constants.Flywheel.FLYWHEEL_SPEED_RPS);
+  }
+
+  // Stops the flywheel
+  public void stopFlywheel() {
+    runFlywheelAtRPS(0);
+  }
+
   public void zeroSensor() {
     armMotor.setPosition(0);
   }
@@ -194,15 +202,6 @@ public class ArmSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
     DogLog.log(
         "subsystems/Dale/Flywheel Speed", flywheelMotor.getVelocity(false).getValueAsDouble());
-  }
-
-  public void spinFlywheel(double flywheelSpeed) {
-    flywheelMotor.set(flywheelSpeed);
-  }
-
-  // Stops the flywheel
-  public void stopFlywheel() {
-    flywheelMotor.set(0);
   }
 
   public double getEncoderDegrees() {
