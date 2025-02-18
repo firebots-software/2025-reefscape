@@ -27,7 +27,6 @@ public class Dealgaenate extends SequentialCommandGroup {
     addCommands(new SetElevatorLevel(elevator, position));
     addCommands(new ArmToAngleCmd(Constants.Arm.EXTENDED_ANGLE, arm));
     addCommands(
-        new SpinFlywheel(arm)
-            .andThen(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, arm)));
+        new SpinFlywheel(arm).andThen(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, arm)));
   }
 }

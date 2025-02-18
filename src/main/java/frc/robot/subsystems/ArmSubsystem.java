@@ -93,8 +93,9 @@ public class ArmSubsystem extends SubsystemBase {
         new Slot0Configs().withKP(Constants.Flywheel.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
 
     // Initialize master motor only
-    armMotor = new LoggedTalonFX("subsystems/Dale/armMotor",Constants.Arm.PIVOT_MOTOR_PORT);
-    flywheelMotor = new LoggedTalonFX("subsystems/Dale/flywheelMotor",Constants.Flywheel.FLYWHEEL_PORT);
+    armMotor = new LoggedTalonFX("subsystems/Dale/armMotor", Constants.Arm.PIVOT_MOTOR_PORT);
+    flywheelMotor =
+        new LoggedTalonFX("subsystems/Dale/flywheelMotor", Constants.Flywheel.FLYWHEEL_PORT);
 
     TalonFXConfigurator masterConfiguratorArm = armMotor.getConfigurator();
     TalonFXConfigurator masterConfiguratorFlywheel = flywheelMotor.getConfigurator();
@@ -183,16 +184,17 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    encoderDegrees = Constants.Arm.ROTATIONS_TO_DEGEREES(armMotor.getPosition(false).getValueAsDouble()); 
+    encoderDegrees =
+        Constants.Arm.ROTATIONS_TO_DEGEREES(armMotor.getPosition(false).getValueAsDouble());
     // This method will be called once per scheduler run
     DogLog.log("subsystems/Dale/Arm at target", atTarget(5));
     DogLog.log("subsystems/Dale/Arm Degrees", encoderDegrees);
-    DogLog.log("subsystems/Dale/Arm Target Rotations", Constants.Arm.DEGREES_TO_ROTATIONS(targetDegrees));
+    DogLog.log(
+        "subsystems/Dale/Arm Target Rotations", Constants.Arm.DEGREES_TO_ROTATIONS(targetDegrees));
     DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
     DogLog.log(
         "subsystems/Dale/Flywheel Speed", flywheelMotor.getVelocity(false).getValueAsDouble());
-  
-      }
+  }
 
   public void spinFlywheel(double flywheelSpeed) {
     flywheelMotor.set(flywheelSpeed);

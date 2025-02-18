@@ -134,14 +134,14 @@ public final class Constants {
     public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
     public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
 
-    public static double DEGREES_TO_ROTATIONS(double degrees){
+    public static double DEGREES_TO_ROTATIONS(double degrees) {
       double conversionFactor = 360;
       return (degrees / conversionFactor) / DALE_PIVOT_GEAR_RATIO;
     }
 
-    public static double ROTATIONS_TO_DEGEREES(double rotations){
+    public static double ROTATIONS_TO_DEGEREES(double rotations) {
       double conversionFactor = 360;
-      return (rotations * conversionFactor* DALE_PIVOT_GEAR_RATIO);
+      return (rotations * conversionFactor * DALE_PIVOT_GEAR_RATIO);
     }
 
     public static final int PIVOT_MOTOR_PORT = 16;
@@ -696,9 +696,9 @@ public final class Constants {
       Intake(0, 0.070),
       safePosition(0, 0.0),
       L1(1, 0.657 - 0.13),
-      L2DALE(0,0.8636-0.279),
+      L2DALE(0, 0.8636 - 0.279),
       L2(2, 0.8636),
-      L3DALE(0,1.27-0.279),
+      L3DALE(0, 1.27 - 0.279),
       L3(3, 1.27),
       L4(4, 1.82);
 

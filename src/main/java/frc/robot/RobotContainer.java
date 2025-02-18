@@ -124,7 +124,11 @@ public class RobotContainer {
 
     debugJoystick
         .y()
-        .onTrue(new Dealgaenate(ArmSubsystem.getInstance(), ElevatorSubsystem.getInstance(), Constants.ElevatorConstants.ElevatorPositions.L2DALE));
+        .onTrue(
+            new Dealgaenate(
+                ArmSubsystem.getInstance(),
+                ElevatorSubsystem.getInstance(),
+                Constants.ElevatorConstants.ElevatorPositions.L2DALE));
     debugJoystick
         .x()
         .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L4));
@@ -133,7 +137,11 @@ public class RobotContainer {
         .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L2));
     debugJoystick
         .b()
-        .onTrue(new Dealgaenate(ArmSubsystem.getInstance(), ElevatorSubsystem.getInstance(), Constants.ElevatorConstants.ElevatorPositions.L3DALE));
+        .onTrue(
+            new Dealgaenate(
+                ArmSubsystem.getInstance(),
+                ElevatorSubsystem.getInstance(),
+                Constants.ElevatorConstants.ElevatorPositions.L3DALE));
 
     debugJoystick
         .rightTrigger()
