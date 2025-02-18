@@ -129,17 +129,19 @@ public final class Constants {
   public static final class Arm {
     // this is new code
     public static final double DALE_FLYWHEEL_GEAR_RATIO = 1 / 11.2593;
-    public static final double DALE_PIVOT_GEAR_RATIO = 1; // TODO
+    public static final double DALE_PIVOT_GEAR_RATIO = 1.0 / 36.0; // TODO
     // end of new code
     public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
     public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
 
-    public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
-      double conversionFactor =
-          0.159344d; // TODO: Find for actual bot. Will change with gear ratios.
-      double zeroOffset =
-          0.088; // TODO: For some reason when zeroing arm, zeros to 0.088. Fix on actual bot
-      return (conversionFactor * angle) + zeroOffset;
+    public static double DEGREES_TO_ROTATIONS(double degrees){
+      double conversionFactor = 360;
+      return (degrees / conversionFactor) / DALE_PIVOT_GEAR_RATIO;
+    }
+
+    public static double ROTATIONS_TO_DEGEREES(double rotations){
+      double conversionFactor = 360;
+      return (rotations * conversionFactor* DALE_PIVOT_GEAR_RATIO);
     }
 
     public static final int PIVOT_MOTOR_PORT = 16;
@@ -157,18 +159,9 @@ public final class Constants {
     public static final double MOTIONMAGIC_KA =
         2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
     public static final double ZERO_CURRENT = 10;
-    public static final double DEALGAENATE_SPEED_ZOOM_ZOOM = 0;
-    public static final double EXTENDED_ANGLE = 0;
+    public static final double DEALGAENATE_SPEED_ZOOM_ZOOM = 60;
+    public static final double EXTENDED_ANGLE = 120;
     public static final double RETRACTED_ANGLE = 0;
-
-    // Lmao this is useless, but it has my name on it
-    public static double GET_YAJWINS_EQUATION(double distance) {
-      double a = -6.02207;
-      double b = -8.6529 * Math.pow(10, 15);
-      double c = 252.816;
-      double d = 35.7582;
-      return b * Math.pow((distance + c), a) + d;
-    }
   }
 
   public static class Flywheel {
@@ -179,7 +172,7 @@ public final class Constants {
     public static double FLYWHEEL_S0C_KD = 0.0;
     public static double FLYWHEEL_S0C_KS = 0.0;
     public static double FLYWHEEL_S0C_KG = 0.0;
-    
+
     public static final double MOTIONMAGIC_KV = 0;
     public static final double MOTIONMAGIC_KA = 0;
 
@@ -677,8 +670,8 @@ public final class Constants {
     public static double S0C_KA = 0.0004657452997; // 0.04
     public static double S0C_KV = 0.124; // 10.66
 
-    public static final double MOTIONMAGIC_MAX_VELOCITY = 20;
-    public static final double MOTIONMAGIC_MAX_ACCELERATION = 40;
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 50;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 100;
     public static double SENSOR_OFFSET = 0.11;
     // public static final double MOTIONMAGIC_KG = 0.28;
     public static final double currentLimit = 0;
@@ -703,9 +696,11 @@ public final class Constants {
       Intake(0, 0.070),
       safePosition(0, 0.0),
       L1(1, 0.657 - 0.13),
+      L2DALE(0,0.8636-0.279),
       L2(2, 0.8636),
+      L3DALE(0,1.27-0.279),
       L3(3, 1.27),
-      L4(4, 1.81);
+      L4(4, 1.82);
 
       public final int position;
       public final double height;

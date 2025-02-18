@@ -6,22 +6,19 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class SpinFlywheel extends Command {
   private final ArmSubsystem armPlusFlywheel;
-  private final double flywheelSpeed; // Desired flywheel speed in RPM or appropriate units
 
-  public SpinFlywheel(ArmSubsystem armSub, double speed) {
+  public SpinFlywheel(ArmSubsystem armSub) {
     armPlusFlywheel = armSub;
-    flywheelSpeed = speed;
     addRequirements(armPlusFlywheel);
   }
 
   @Override
   public void initialize() {
-    armPlusFlywheel.spinFlywheel(flywheelSpeed); // Spin the flywheel at desired speed
   }
 
   @Override
   public void execute() {
-    armPlusFlywheel.spinFlywheel(flywheelSpeed); // Spin the flywheel at desired speed
+    armPlusFlywheel.startFlywheel(); // Spin the flywheel at desired speed
   }
 
   @Override

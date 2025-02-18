@@ -18,7 +18,7 @@ public class DebugArm extends Command {
 
   @Override
   public void execute() {
-    arm.setPosition(30);
+    arm.setPosition(90);
   }
 
   @Override
