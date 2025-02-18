@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.SwerveCommands.EdwardMovement;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -29,13 +30,14 @@ public class EdwardScore extends SequentialCommandGroup {
 
     Command qDirectionalMovement;
     if (moveRight) {
-      qDirectionalMovement = 
+      qDirectionalMovement = EdwardMovement.toClosestRightBranch(swerveSubsystem, redSide);
     } else {
-      qDirectionalMovement = 
+      qDirectionalMovement = EdwardMovement.toClosestLeftBranch(swerveSubsystem, redSide);
+    }
 
     addCommands(
         outpostMovement,
-        setElevatorLevel(elevatorSubsystem, height).alongWith(q direction command (edward mvmnt)),
-        new ShootTootsieSlide(tootsieSlideSubsystem));w Se
+        new SetElevatorLevel(elevatorSubsystem, height).alongWith(qDirectionalMovement),
+        new ShootTootsieSlide(tootsieSlideSubsystem));
   }
 }
