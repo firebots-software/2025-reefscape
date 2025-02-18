@@ -42,6 +42,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   private ProfiledPIDController xProfiledPIDController,
       yProfiledPIDController,
+      qProfiledPIDController,
       headingProfiledPIDController;
   private PIDController xRegularPIDController, yRegularPIDController, headingRegularPIDController;
 
@@ -80,6 +81,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
     yProfiledPIDController =
+        new ProfiledPIDController(
+            5.5,
+            0,
+            0,
+            new TrapezoidProfile.Constraints(
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
+
+    qProfiledPIDController =
         new ProfiledPIDController(
             5.5,
             0,
@@ -312,7 +321,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     return currentState.Pose;
   }
 
-  public ChassisSpeeds calculateRequiredChassisSpeeds(Pose2d targetPose) {
+  public ChassisSpeeds calculateRequiredComponentChassisSpeeds(Pose2d targetPose) {
     double xFeedback =
         xProfiledPIDController.calculate(currentState.Pose.getX(), targetPose.getX());
     double yFeedback =
@@ -322,6 +331,20 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
     return new ChassisSpeeds(xFeedback, yFeedback, thetaFeedback);
+  }
+
+  public ChassisSpeeds calculateRequiredOneDirectionalChassisSpeeds(Pose2d targetPose) {
+    double qFeedback =
+        qProfiledPIDController.calculate(0, getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation()));
+    double thetaFeedback =
+        headingProfiledPIDController.calculate(
+            currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
+
+    double deltaX = targetPose.getX()-getCurrentState().Pose.getX();
+    double deltaY = targetPose.getY()-getCurrentState().Pose.getY();
+    double travelAngleRad = Math.atan2(deltaY, deltaX);
+    
+    return new ChassisSpeeds(qFeedback*Math.cos(travelAngleRad), qFeedback*Math.sin(travelAngleRad), thetaFeedback);
   }
 
   /**
