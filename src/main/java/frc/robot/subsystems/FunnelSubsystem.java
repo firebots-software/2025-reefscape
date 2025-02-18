@@ -102,7 +102,7 @@ public class FunnelSubsystem extends SubsystemBase {
 
   private void runFunnelAtRPS(double speed) {
     VelocityVoltage m_velocityControlTop =
-        new VelocityVoltage(speed * Constants.FunnelConstants.GEAR_RATIO);
+        new VelocityVoltage(speed / Constants.FunnelConstants.GEAR_RATIO);
     rightMotor.setControl(m_velocityControlTop);
   }
 
