@@ -12,6 +12,7 @@ import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -123,6 +124,42 @@ public final class Constants {
       new Rotation2d(Degrees.of(0)),
       new Rotation2d(Degrees.of(-60)),
       new Rotation2d(Degrees.of(-120))
+    };
+
+    public static final Translation2d[] LEFT_OUTPOSTS_BLUE = {
+      new Translation2d(3.7084, 4.94358),
+      new Translation2d(3.30557, 3.80915),
+      new Translation2d(4.08509, 2.89229),
+      new Translation2d(5.26895, 3.10899),
+      new Translation2d(5.67318, 4.2426),
+      new Translation2d(4.89358, 5.15949)
+    };
+
+    public static final Translation2d[] RIGHT_OUTPOSTS_BLUE = {
+        new Translation2d(3.70858, 3.10899),
+        new Translation2d(4.89302, 2.8913),
+        new Translation2d(5.67376, 3.80816),
+        new Translation2d(5.27009, 4.94276),
+        new Translation2d(4.08565, 5.16048),
+        new Translation2d(3.30491, 4.24359)
+    };
+
+    public static final Translation2d[] LEFT_OUTPOSTS_RED = {
+      new Translation2d(12.8316, 4.94358),
+      new Translation2d(13.23443, 3.80915),
+      new Translation2d(12.45491, 2.89229),
+      new Translation2d(11.27105, 3.10899),
+      new Translation2d(10.86682, 4.2426),
+      new Translation2d(11.64642, 5.15949)
+    };
+
+    public static final Translation2d[] RIGHT_OUTPOSTS_RED = {
+        new Translation2d(12.83142, 3.10899),
+        new Translation2d(11.64698, 2.8913),
+        new Translation2d(10.86624, 3.80816),
+        new Translation2d(11.26991, 4.94276),
+        new Translation2d(12.45435, 5.16048),
+        new Translation2d(13.23509, 4.24359)
     };
   }
 
