@@ -201,7 +201,7 @@ public class RobotContainer {
 
     // Mechanisms:
 
-    joystick.rightBumper().onTrue(new Dealgaenate(armSubsystem));
+    joystick.rightBumper().onTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
     joystick.rightBumper().onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, armSubsystem));
     joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
 
