@@ -3,50 +3,108 @@ package frc.robot;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commandGroups.LoadAndPutUp;
+import frc.robot.commandGroups.MoveToSideAndShoot;
+import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
 
 public class AutoRoutines {
   private final AutoFactory autoFactory;
   private final SwerveSubsystem driveTrain;
+  private final ElevatorSubsystem elevatorSubsystem;
+  private final TootsieSlideSubsystem tootsieSlideSubsystem;
+  private final FunnelSubsystem funnelSubsystem;
+  private final BooleanSupplier redside;
 
-  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-
-  public AutoRoutines(AutoFactory factory, SwerveSubsystem driveTrain) {
+  public AutoRoutines(AutoFactory factory, SwerveSubsystem driveTrain, ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem, FunnelSubsystem funnelSubsystem, BooleanSupplier redside) {
     autoFactory = factory;
     this.driveTrain = driveTrain;
+    this.elevatorSubsystem = elevatorSubsystem;
+    this.tootsieSlideSubsystem = tootsieSlideSubsystem;
+    this.funnelSubsystem = funnelSubsystem;
+    this.redside = redside;
   }
 
-  public AutoRoutine basicFourCoralAuto() {
-    final AutoRoutine routine = autoFactory.newRoutine("BasicFourCoralAuto");
-    final AutoTrajectory blueStartToL2 = routine.trajectory("BSTART-L2");
-    final AutoTrajectory l2ToBlueHumanPlayerStation = routine.trajectory("L2-BHPS");
-    final AutoTrajectory blueHumanPlayerStationToR1 = routine.trajectory("BHPS-R1");
-    final AutoTrajectory r1ToBlueHumanPlayerStation = routine.trajectory("R1-BHPS");
-    final AutoTrajectory blueHumanPlayerStationToL1 = routine.trajectory("BHPS-L1");
-    final AutoTrajectory l1ToBlueHumanPlayerStation = routine.trajectory("L1-BHPS");
-    final AutoTrajectory blueHumanPlayerStationToR0 = routine.trajectory("BHPS-R0");
+  public AutoRoutine autoRoutine(String chosenPath) {
+    AutoRoutine routine = autoFactory.newRoutine("routine");
+    switch (chosenPath) {
+      case "top":
+        routine
+            .active()
+            .onTrue(
+                routine
+                    .trajectory("TSTART-4R")
+                    .resetOdometry()
+                    .andThen(autoSubCommand(routine, "TSTART-4R"))
+                    .andThen(autoSubCommand(routine, "4R-THPS"))
+                    .andThen(autoSubCommand(routine, "THPS-5L"))
+                    .andThen(autoSubCommand(routine, "5L-THPS"))
+                    .andThen(autoSubCommand(routine, "THPS-5R"))
+                    .andThen(autoSubCommand(routine, "5R-THPS"))
+                    .andThen(autoSubCommand(routine, "THPS-0L")));
+        break;
 
-    routine
-        .active()
-        .onTrue(
-            new SequentialCommandGroup(
-                blueStartToL2.resetOdometry(),
-                blueStartToL2.cmd(),
-                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
-                l2ToBlueHumanPlayerStation.cmd(),
-                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
-                blueHumanPlayerStationToR1.cmd(),
-                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
-                r1ToBlueHumanPlayerStation.cmd(),
-                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
-                blueHumanPlayerStationToL1.cmd(),
-                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
-                l1ToBlueHumanPlayerStation.cmd(),
-                driveTrain.applyRequest(() -> brake).withTimeout(0.5),
-                blueHumanPlayerStationToR0.cmd()));
+      case "middle":
+        routine
+            .active()
+            .onTrue(
+                routine
+                    .trajectory("MSTART-3R")
+                    .resetOdometry()
+                    .andThen(autoSubCommand(routine, "MSTART-3R")));
+        break;
+
+      case "bottom":
+        routine
+            .active()
+            .onTrue(
+                routine
+                    .trajectory("BSTART-2L")
+                    .resetOdometry()
+                    .andThen(autoSubCommand(routine, "BSTART-2L"))
+                    .andThen(autoSubCommand(routine, "2L-BHPS"))
+                    .andThen(autoSubCommand(routine, "BHPS-1R"))
+                    .andThen(autoSubCommand(routine, "1R-BHPS"))
+                    .andThen(autoSubCommand(routine, "BHPS-1L"))
+                    .andThen(autoSubCommand(routine, "1L-BHPS"))
+                    .andThen(autoSubCommand(routine, "BHPS-0R")));
+        break;
+    }
 
     return routine;
   }
+
+  /**
+ * @param routine
+ * @param baseCommandName
+ * @return
+ */
+public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // for actual robot
+    BooleanSupplier pathGoesToHPS =
+        () -> !(baseCommandName.contains("HPS-") || baseCommandName.contains("START-"));
+    // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator
+    // and shoot, else lower elevator and intake
+    return Commands.parallel(
+            routine.trajectory(baseCommandName).cmd(),
+            ((pathGoesToHPS.getAsBoolean())
+                ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
+                : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)))        
+            .andThen(
+            (pathGoesToHPS.getAsBoolean()) //may want to change it such that it goes around at intake lvl and only raises to score
+                ? new LoadAndPutUp(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.Intake) //may want to make it such that it doesn't set the elevator pose at all because it is redundant
+                : new MoveToSideAndShoot(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L4, redside, baseCommandName.substring(1, 2).equals("R"))); //may want to make it such that it doesnt move extra at all or move elevator because it is redundant
+
+    }
 }
