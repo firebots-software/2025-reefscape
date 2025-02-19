@@ -19,13 +19,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.Intake;
-import frc.robot.commands.DaleCommands.ArmDefault;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -155,8 +153,12 @@ public class RobotContainer {
                             Constants.Landmarks.LEFT_LINEUP_RED[5],
                             Constants.Landmarks.reefFacingAngleRed[5]))));
 
-    joystick.b().onTrue(driveTrain.runOnce(
-        () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)))));
+    joystick
+        .b()
+        .onTrue(
+            driveTrain.runOnce(
+                () ->
+                    driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)))));
     // Mechanisms:
 
     joystick
