@@ -184,7 +184,6 @@ public final class Constants {
     public static final double SPEED_RPS = 100.0;
     public static final double GEAR_RATIO = 1 / 6.7556;
 
-
     public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
       double conversionFactor =
           0.159344d; // TODO: Find for actual bot. Will change with gear ratios.
