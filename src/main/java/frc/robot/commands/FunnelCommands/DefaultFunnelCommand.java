@@ -2,6 +2,7 @@ package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.FunnelSubsystem;
 
 // import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -35,9 +36,12 @@ public class DefaultFunnelCommand extends Command {
       funnelSubsystem.stopFunnel();
     }
 
-    if (funnelSubsystem.isCoralCheckedIn() && funnelSubsystem.drakeTripped()){
-      funnelSubsystem.spinBackFast();
-    }
+    // if (CoralPosition.isCoralInTootsieSlide() && CoralPosition.isCoralInFunnel()){
+    //   if(!funnelSubsystem.isCoralCheckedOut()){
+    //     funnelSubsystem.spinFunnel();
+    //   }
+    //   funnelSubsystem.spinBackFast();
+    // }
   }
 
   // Called once the command ends or is interrupted.

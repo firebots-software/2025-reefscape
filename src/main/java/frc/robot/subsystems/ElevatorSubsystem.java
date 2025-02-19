@@ -174,7 +174,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Time of Flight Sensor
-    DogLog.log("subsystems/Elevator/ToF/Distance", getToFDistance());
+    DogLog.log("subsystems/Elevator/ToF/Distance", distance.getDistance().getValueAsDouble());
     DogLog.log("subsystems/Elevator/ToF/Connected", distance.isConnected());
 
     DogLog.log("subsystems/Elevator/isAtPosition", this.isAtPosition());

@@ -26,11 +26,15 @@ import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.LoadAndPutUp;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
+import frc.robot.commands.DebugCommands.DebugEjectCoral;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.FunnelCommands.DefaultFunnelCommand;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionQuick;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -89,10 +93,11 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Automatic
-    // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
-    // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
-    // funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
-
+    funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+    Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
+    Trigger tooManyCoral = new Trigger(() -> (CoralPosition.isCoralInFunnel() && CoralPosition.isCoralInTootsieSlide()));
+    funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
+    tooManyCoral.onTrue(new DebugEjectCoral(funnelSubsystem));
     // Debugging
     debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
 
@@ -105,7 +110,7 @@ public class RobotContainer {
                 Constants.ElevatorConstants.ElevatorPositions.L2DALE));
     debugJoystick
         .x()
-        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L4));
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L2));
     debugJoystick.a().onTrue(new ZeroArm(armSubsystem));
     debugJoystick
         .b()
@@ -119,7 +124,7 @@ public class RobotContainer {
         .rightTrigger()
         .onTrue(
             new LoadAndPutUp(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
+                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L2));
 
     // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();

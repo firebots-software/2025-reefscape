@@ -644,16 +644,16 @@ public final class Constants {
   public static class FunnelConstants {
     public static final int RIGHT_MOTOR_PORT = 14; // TODO
     public static final int LEFT_MOTOR_PORT = 13; // TODO
-    public static final double SUPPLY_CURRENT_LIMIT = 20.0; // TODO
+    public static final double SUPPLY_CURRENT_LIMIT = 35.0; // TODO
     public static final double STATOR_CURRENT_LIMIT = 15.0; // TODO
-    public static final double S0C_KP = 1.0; // TODO
+    public static final double S0C_KP = 2.0; // TODO
     public static final double S0C_KI = 0.0; // TODO
     public static final double S0C_KD = 0.0; // TODO
-    public static final double CRUISE_VELOCITY = 10.0; // TODO
-    public static final double ACCELERATION = 10.0; // TODO
+    public static final double CRUISE_VELOCITY = 100.0; // TODO
+    public static final double ACCELERATION = 300.0; // TODO
 
-    public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
-    public static final double FAST_BACKWARDS_VELOCITY = -5.0;
+    public static final double SLOW_BACKWARDS_VELOCITY = -0.7;
+    public static final double FAST_BACKWARDS_VELOCITY = -12.0;
     public static final double SPEED_RPS = 5.0; // TODO
     public static final double GEAR_RATIO = 1d / 9d;
 
@@ -702,7 +702,7 @@ public final class Constants {
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.070),
+      Intake(0, 0.068),
       safePosition(0, 0.0),
       L1(1, 0.657 - 0.13),
       L2DALE(0, 0.493), // 0.8636 - 0.379

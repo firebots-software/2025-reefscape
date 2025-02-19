@@ -75,12 +75,12 @@ public class FunnelSubsystem extends SubsystemBase {
     m1Config.apply(s0c);
     m2Config.apply(s0c);
 
-    MotionMagicConfigs mmc =
-        new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(Constants.FunnelConstants.CRUISE_VELOCITY)
-            .withMotionMagicAcceleration(Constants.FunnelConstants.ACCELERATION);
-    m1Config.apply(mmc);
-    m2Config.apply(mmc);
+    // MotionMagicConfigs mmc =
+    //     new MotionMagicConfigs()
+    //         .withMotionMagicCruiseVelocity(Constants.FunnelConstants.CRUISE_VELOCITY)
+    //         .withMotionMagicAcceleration(Constants.FunnelConstants.ACCELERATION);
+    // m1Config.apply(mmc);
+    // m2Config.apply(mmc);
 
     coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble();
   }
@@ -130,11 +130,12 @@ public class FunnelSubsystem extends SubsystemBase {
   }
 
   public void spinBackSlowly() {
-    rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
+    runFunnelAtRPS(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY);
+    // rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
 
   public void spinBackFast() {
-    rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.FAST_BACKWARDS_VELOCITY));
+    runFunnelAtRPS(Constants.FunnelConstants.FAST_BACKWARDS_VELOCITY);
   }
 
 

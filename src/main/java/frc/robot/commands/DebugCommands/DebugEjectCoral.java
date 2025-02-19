@@ -32,12 +32,12 @@ public class DebugEjectCoral extends Command {
   @Override
   public void end(boolean interrupted) {
     funnel.stopFunnel();
-    ;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !funnel.isCoralCheckedIn();
+    return false;
+
   }
 }
