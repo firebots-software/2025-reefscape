@@ -140,9 +140,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void moveMuyNegative() {
-     armMotor.setControl(
-      new VelocityVoltage(-6)
-            .withSlot(0));
+    armMotor.setControl(new VelocityVoltage(-6).withSlot(0));
   }
 
   public boolean checkCurrent() {
@@ -166,7 +164,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void spinFlywheel() {
-    if(armMotor.get()/Constants.Arm.PIVOT_GEAR_RATIO > 0.1){
+    if (armMotor.get() / Constants.Arm.PIVOT_GEAR_RATIO > 0.1) {
       runFlywheelAtRPS(Constants.Flywheel.SPEED_RPS);
     }
   }

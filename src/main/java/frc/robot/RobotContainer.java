@@ -170,7 +170,6 @@ public class RobotContainer {
                             new Rotation2d(
                                 Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
 
-    
     // Mechanisms:
 
     joystick

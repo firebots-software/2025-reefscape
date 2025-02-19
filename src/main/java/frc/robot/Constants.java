@@ -152,7 +152,7 @@ public final class Constants {
     public static double S0C_KD = 0.0;
     public static double S0C_KS = 0.0;
     public static double S0C_KG = 0.0;
-    
+
     public static final double MOTIONMAGIC_MAX_VELOCITY =
         200; // MotionMagic Cruise Velocity in RPS of the arm
     public static final double MOTIONMAGIC_MAX_ACCELERATION =
