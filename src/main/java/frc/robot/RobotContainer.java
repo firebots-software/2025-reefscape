@@ -141,9 +141,9 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
-    elevatorSubsystem.setDefaultCommand(
-        new SetElevatorLevel(
-            elevatorSubsystem, Constants.ElevatorConstants.ElevatorPositions.Intake));
+    // elevatorSubsystem.setDefaultCommand(
+    //     new SetElevatorLevel(
+    //         elevatorSubsystem, Constants.ElevatorConstants.ElevatorPositions.Intake));
 
     joystick
         .a()
