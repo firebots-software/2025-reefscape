@@ -12,7 +12,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class GyroStabilizer extends Command {
-  public static final double TIP_THRESHOLD = 0.1;
+  public static final double TIP_THRESHOLD = 5 * Math.PI / 180; //1 deg for testing
 
   private SwerveSubsystem swerveSubsystem;
   private Pigeon2 pigeon;
@@ -40,8 +40,8 @@ public class GyroStabilizer extends Command {
     double dirToGoX = currentTipVectorRP.getY();
     double dirToGoY = -currentTipVectorRP.getX();
 
-    double xSpeed = pidController.calculate(dirToGoX, 0);
-    double ySpeed = pidController.calculate(dirToGoY, 0);
+    double xSpeed = pidController.calculate(dirToGoX * 10, 0);
+    double ySpeed = pidController.calculate(dirToGoY * 10, 0);
 
     SwerveRequest drive = robotCentricDrive.withVelocityX(xSpeed)
                                            .withVelocityY(ySpeed);
@@ -72,12 +72,7 @@ public class GyroStabilizer extends Command {
     return new Transform2d(roll, pitch, Rotation2d.kZero);
   }
 
-
-  public static double magnitudeTipVector(Transform2d tipVector) {
-    return Math.sqrt(tipVector.getX() * tipVector.getX() + tipVector.getY() * tipVector.getY());
-  }
-
   public static boolean tipping(SwerveSubsystem driveTrain) {
-    return GyroStabilizer.magnitudeTipVector(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2())) > TIP_THRESHOLD;
+    return Math.abs(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2()).getX()) > TIP_THRESHOLD || Math.abs(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2()).getY()) > TIP_THRESHOLD;
   }
 }
