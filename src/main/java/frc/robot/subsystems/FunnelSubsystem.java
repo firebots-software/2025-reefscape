@@ -133,6 +133,11 @@ public class FunnelSubsystem extends SubsystemBase {
     rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
 
+  public void spinBackFast() {
+    rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.FAST_BACKWARDS_VELOCITY));
+  }
+
+
   public void debugSpinBack() {
     runFunnelAtRPS(-Constants.FunnelConstants.SPEED_RPS);
   }

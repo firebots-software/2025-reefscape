@@ -653,6 +653,7 @@ public final class Constants {
     public static final double ACCELERATION = 10.0; // TODO
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
+    public static final double FAST_BACKWARDS_VELOCITY = -5.0;
     public static final double SPEED_RPS = 5.0; // TODO
     public static final double GEAR_RATIO = 1d / 9d;
 

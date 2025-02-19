@@ -34,6 +34,10 @@ public class DefaultFunnelCommand extends Command {
     } else {
       funnelSubsystem.stopFunnel();
     }
+
+    if (funnelSubsystem.isCoralCheckedIn() && funnelSubsystem.drakeTripped()){
+      funnelSubsystem.spinBackFast();
+    }
   }
 
   // Called once the command ends or is interrupted.
