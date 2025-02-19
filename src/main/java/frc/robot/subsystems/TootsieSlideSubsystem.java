@@ -8,10 +8,10 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.InvertedValue;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -73,54 +73,32 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     return instance;
   }
 
-  public void setPosition(double pos) {
-    master.setControl(new MotionMagicVoltage(pos));
-  }
+  private void runTootsieAtRPS(double flywheelSpeed) {
+    double motor_speed = flywheelSpeed / Constants.TootsieSlide.GEAR_RATIO;
+    motor_speed = MathUtil.clamp(motor_speed, -100, 100);
+    DogLog.log("subsystems/tootsieslide/Target Motor Speed", motor_speed);
+    master.setControl(m_velocity.withVelocity(motor_speed));
 
-  private void runTootsieAtRPS(double speed) {
-    DogLog.log("is it running", true);
-    master.setControl(m_velocity.withVelocity(speed));
-    DogLog.log("VelocityVoltage", master.getMotorVoltage().getValueAsDouble());
     m_flywheelSim.setInputVoltage(master.getSupplyVoltage().getValueAsDouble());
   }
 
   public void intakeCoral() {
-    runTootsieAtRPS(30); // TODO: Change based on speed to intake Coral at
+    runTootsieAtRPS(
+        Constants.TootsieSlide.INTAKE_SPEED_RPS); // TODO: Change based on speed to intake Coral at
   }
 
-  // public void spinTootsie(boolean thing) {
-  //   if (!thing) {
-  //     runTootsieAtRPS(30);
-  //   }
-  // }
-
   public void shootTootsie() {
-    runTootsieAtRPS(90);
+    runTootsieAtRPS(Constants.TootsieSlide.SHOOTING_SPEED_RPS);
   }
 
   public void stopTootsie() {
-    master.setControl(m_velocity.withVelocity(0));
-    master.stopMotor();
+    runTootsieAtRPS(0);
     m_flywheelSim.setInputVoltage(0);
-  }
-
-  // Simulation
-
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean atTarget() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     DogLog.log("subsystems/tootsieslide/tootsieVelocity", master.getVelocity().getValueAsDouble());
-    // DogLog.log("subsystems/tootsieslide/coralPresent", coralPresent());
   }
 
   @Override
