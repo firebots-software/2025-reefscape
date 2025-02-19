@@ -75,7 +75,6 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
   private void runTootsieAtRPS(double flywheelSpeed) {
     double motor_speed = flywheelSpeed / Constants.TootsieSlide.GEAR_RATIO;
-    motor_speed = MathUtil.clamp(motor_speed, -100, 100);
     DogLog.log("subsystems/tootsieslide/Target Motor Speed", motor_speed);
     master.setControl(m_velocity.withVelocity(motor_speed));
 
