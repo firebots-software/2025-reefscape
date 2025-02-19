@@ -83,11 +83,11 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   }
 
   public void intakeCoral() {
-    runTootsieAtRPS(5); // TODO: Change based on speed to intake Coral at
+    runTootsieAtRPS(Constants.TootsieSlide.INTAKE_SPEED_RPS); // TODO: Change based on speed to intake Coral at
   }
 
   public void shootTootsie() {
-    runTootsieAtRPS(15);
+    runTootsieAtRPS(Constants.TootsieSlide.SHOOTING_SPEED_RPS);
   }
 
   public void stopTootsie() {

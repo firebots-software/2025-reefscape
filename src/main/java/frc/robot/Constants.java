@@ -179,9 +179,9 @@ public final class Constants {
     public static final double MOTIONMAGIC_MAX_VELOCITY = 100;
     public static final double MOTIONMAGIC_MAX_ACCELERATION = 200;
 
-    public static final double FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS = 15.0;
-    public static final double FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS = 30.0;
-    public static final double FLYWHEEL_SPEED_RPS = 100.0;
+    public static final double SUPPLY_CURRENT_LIMIT_AMPS = 15.0;
+    public static final double STATOR_CURRENT_LIMIT_AMPS = 30.0;
+    public static final double SPEED_RPS = 100.0;
     public static final double GEAR_RATIO = 1 / 6.7556;
 
 
@@ -635,7 +635,8 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 10; // TODO
     public static final double ACCELERATION = 10; // TODO
     public static final double GEAR_RATIO = 1d / 6d;
-    public static final double SPEED_RPS = 5d; // TODO
+    public static final double INTAKE_SPEED_RPS = 5d; // TODO
+    public static final double SHOOTING_SPEED_RPS = 15d;
   }
 
   public static class FunnelConstants {
