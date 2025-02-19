@@ -11,10 +11,12 @@ import frc.robot.subsystems.ArmSubsystem;
 public class ZeroArm extends Command {
   /** Creates a new ZeroArm. */
   ArmSubsystem arm;
+  int timesExceededCurrent;
 
   public ZeroArm(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.arm = arm;
+    timesExceededCurrent=0;
     addRequirements(this.arm);
   }
 
@@ -39,6 +41,12 @@ public class ZeroArm extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.checkCurrent();
+    if(arm.checkCurrent()){
+      timesExceededCurrent++;
+    } else {
+      timesExceededCurrent = 0;
+    }
+    
+    return timesExceededCurrent >= 10;
   }
 }
