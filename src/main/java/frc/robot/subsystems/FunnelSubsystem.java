@@ -32,6 +32,7 @@ public class FunnelSubsystem extends SubsystemBase {
   private DigitalInput drake;
   private double coralCheckedOutPosition;
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+  private final VelocityVoltage VVControlRequest = new VelocityVoltage(0);
 
   private FunnelSubsystem() {
     rightMotor =
@@ -101,9 +102,7 @@ public class FunnelSubsystem extends SubsystemBase {
   }
 
   private void runFunnelAtRPS(double speed) {
-    VelocityVoltage m_velocityControlTop =
-        new VelocityVoltage(speed / Constants.FunnelConstants.GEAR_RATIO);
-    rightMotor.setControl(m_velocityControlTop);
+    rightMotor.setControl(VVControlRequest.withVelocity(speed / Constants.FunnelConstants.GEAR_RATIO));
   }
 
   public void spinFunnel() {
@@ -130,7 +129,7 @@ public class FunnelSubsystem extends SubsystemBase {
   }
 
   public void spinBackSlowly() {
-    rightMotor.setControl(new VelocityVoltage(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
+    rightMotor.setControl(VVControlRequest.withVelocity(Constants.FunnelConstants.SLOW_BACKWARDS_VELOCITY));
   }
 
   public void debugSpinBack() {
