@@ -31,7 +31,6 @@ import frc.robot.commands.DebugCommands.DebugFunnelIntake;
 import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
 import frc.robot.commands.DebugCommands.DebugTootsieSlide;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ArmSubsystem;
@@ -168,30 +167,30 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    // joystick
-    //     .a()
-    //     .onTrue(
-    //         driveTrain.runOnce(
-    //             () ->
-    //                 driveTrain.resetPose(
-    //                     new Pose2d(
-    //                         new Translation2d(
-    //                             Constants.Landmarks.leftBranchesRed[5].getX()
-    //                                 - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-    //                                                 .in(Meters)
-    //                                             / 2.0)
-    //                                         + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
-    //                                             .thickness.in(Meters)))
-    //                                     * Constants.Landmarks.reefFacingAngleRed[5].getCos(),
-    //                             Constants.Landmarks.leftBranchesRed[5].getY()
-    //                                 - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
-    //                                                 .in(Meters)
-    //                                             / 2.0)
-    //                                         + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
-    //                                             .thickness.in(Meters)))
-    //                                     * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
-    //                         new Rotation2d(
-    //                             Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
+    joystick
+        .a()
+        .onTrue(
+            driveTrain.runOnce(
+                () ->
+                    driveTrain.resetPose(
+                        new Pose2d(
+                            new Translation2d(
+                                Constants.Landmarks.leftBranchesRed[5].getX()
+                                    - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
+                                                    .in(Meters)
+                                                / 2.0)
+                                            + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                        * Constants.Landmarks.reefFacingAngleRed[5].getCos(),
+                                Constants.Landmarks.leftBranchesRed[5].getY()
+                                    - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
+                                                    .in(Meters)
+                                                / 2.0)
+                                            + Constants.Swerve.WHICH_SWERVE_ROBOT.BUMPER_THICKNESS
+                                                .thickness.in(Meters)))
+                                        * Constants.Landmarks.reefFacingAngleRed[5].getSin()),
+                            new Rotation2d(
+                                Constants.Landmarks.reefFacingAngleRed[5].getRadians())))));
 
     // Mechanisms:
     // joystick.rightBumper().onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
