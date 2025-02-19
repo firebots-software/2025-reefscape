@@ -93,7 +93,7 @@ public class IncreasePArm extends Command {
     armConfig.apply(s0cArm);
 
     Slot0Configs s0cFlywheel =
-        new Slot0Configs().withKP(Constants.Flywheel.FLYWHEEL_S0C_KP).withKI(0).withKD(0);
+        new Slot0Configs().withKP(Constants.Flywheel.S0C_KP).withKI(0).withKD(0);
     TalonFXConfigurator flywhConfigurator =
         ArmSubsystem.getInstance().flywheelMotor.getConfigurator();
     flywhConfigurator.apply(s0cFlywheel);
@@ -227,30 +227,30 @@ public class IncreasePArm extends Command {
   public void PIDIncreaseArmWheel(int pid2, int mech2) {
 
     if (pid2 == 1 && mech2 == 4) {
-      Constants.Flywheel.FLYWHEEL_S0C_KP += 0.1;
+      Constants.Flywheel.S0C_KP += 0.1;
     } else if (pid2 == 2 && mech2 == 4) {
-      Constants.Flywheel.FLYWHEEL_S0C_KI += 0.1;
+      Constants.Flywheel.S0C_KI += 0.1;
     } else if (pid2 == 3 && mech2 == 4) {
-      Constants.Flywheel.FLYWHEEL_S0C_KD += 0.1;
+      Constants.Flywheel.S0C_KD += 0.1;
     } else if (pid2 == 4 && mech2 == 4) {
-      Constants.Flywheel.FLYWHEEL_S0C_KS += 0.1;
+      Constants.Flywheel.S0C_KS += 0.1;
     } else if (pid2 == 5 && mech2 == 4) {
-      Constants.Flywheel.FLYWHEEL_S0C_KG += 0.1;
+      Constants.Flywheel.S0C_KG += 0.1;
     }
   }
 
   public void PIDDecreaseArmWheel(int pid2, int mech2) {
 
     if (pid2 == 1 && mech2 == 4) {
-      Constants.Flywheel.FLYWHEEL_S0C_KP -= 0.1;
+      Constants.Flywheel.S0C_KP -= 0.1;
     } else if (pid2 == 2 && mech2 == 4) {
-      Constants.Flywheel.FLYWHEEL_S0C_KI -= 0.1;
+      Constants.Flywheel.S0C_KI -= 0.1;
     } else if (pid2 == 3 && mech2 == 4) {
-      Constants.Flywheel.FLYWHEEL_S0C_KD -= 0.1;
+      Constants.Flywheel.S0C_KD -= 0.1;
     } else if (pid2 == 4 && mech2 == 4) {
-      Constants.Flywheel.FLYWHEEL_S0C_KS -= 0.1;
+      Constants.Flywheel.S0C_KS -= 0.1;
     } else if (pid2 == 5 && mech2 == 4) {
-      Constants.Flywheel.FLYWHEEL_S0C_KG -= 0.1;
+      Constants.Flywheel.S0C_KG -= 0.1;
     }
   }
 

@@ -128,28 +128,26 @@ public final class Constants {
 
   public static final class Arm {
     // this is new code
-
-    public static final double DALE_FLYWHEEL_GEAR_RATIO = 1 / 6.7556;
-    public static final double DALE_PIVOT_GEAR_RATIO = 1 / 36d; // TODO
+    public static final double PIVOT_GEAR_RATIO = 1 / 36d; // TODO
 
     // end of new code
-    public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
-    public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double STATOR_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
 
     public static double DEGREES_TO_ROTATIONS(double degrees) {
       double conversionFactor = 360;
-      return (degrees / conversionFactor) / DALE_PIVOT_GEAR_RATIO;
+      return (degrees / conversionFactor) / PIVOT_GEAR_RATIO;
     }
 
     public static double ROTATIONS_TO_DEGEREES(double rotations) {
       double conversionFactor = 360;
-      return (rotations * conversionFactor * DALE_PIVOT_GEAR_RATIO);
+      return (rotations * conversionFactor * PIVOT_GEAR_RATIO);
     }
 
     public static final int PIVOT_MOTOR_PORT = 16;
 
     public static final double CURRENT_LIMIT = 8.0;
-    public static double S0C_KP = 1.0;
+    public static double S0C_KP = 0.75;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.0;
     public static double S0C_KS = 0.0;
@@ -172,21 +170,19 @@ public final class Constants {
   public static class Flywheel {
     public static final int FLYWHEEL_PORT = 17;
 
-    public static double FLYWHEEL_S0C_KP = 1.0;
-    public static double FLYWHEEL_S0C_KI = 0.0;
-    public static double FLYWHEEL_S0C_KD = 0.0;
-    public static double FLYWHEEL_S0C_KS = 0.0;
-    public static double FLYWHEEL_S0C_KG = 0.0;
-
-    public static final double MOTIONMAGIC_KV = 1;
-    public static final double MOTIONMAGIC_KA = 0.04;
+    public static double S0C_KP = 1.0;
+    public static double S0C_KI = 0.0;
+    public static double S0C_KD = 0.0;
+    public static double S0C_KS = 0.0;
+    public static double S0C_KG = 0.0;
 
     public static final double MOTIONMAGIC_MAX_VELOCITY = 100;
     public static final double MOTIONMAGIC_MAX_ACCELERATION = 200;
 
-    public static final double FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS = 15.0;
-    public static final double FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS = 30.0;
-    public static final double FLYWHEEL_SPEED_RPS = 100.0;
+    public static final double SUPPLY_CURRENT_LIMIT_AMPS = 15.0;
+    public static final double STATOR_CURRENT_LIMIT_AMPS = 30.0;
+    public static final double SPEED_RPS = 100.0;
+    public static final double GEAR_RATIO = 1 / 6.7556;
 
     public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
       double conversionFactor =
@@ -638,7 +634,8 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 10; // TODO
     public static final double ACCELERATION = 10; // TODO
     public static final double GEAR_RATIO = 1d / 6d;
-    public static final double SPEED_RPS = 5d; // TODO
+    public static final double INTAKE_SPEED_RPS = 5d; // TODO
+    public static final double SHOOTING_SPEED_RPS = 15d;
   }
 
   public static class FunnelConstants {
