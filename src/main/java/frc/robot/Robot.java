@@ -8,6 +8,7 @@ import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -21,6 +22,7 @@ import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -40,12 +42,9 @@ public class Robot extends TimedRobot {
   private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   private final RobotContainer m_robotContainer;
 
-  private static Matrix<N3, N1> visionMatrix =
-      VecBuilder.fill(
-          0.01, 0.03d,
-          100d); // standard deviation for x (meters), y (meters) and rotation (radians) camera data
+  // standard deviation for x (meters), y (meters) and rotation (radians) camera data
 
-  double rightDistToAprilTag, leftDistToAprilTag;
+  double rightDistToAprilTag, leftDistToAprilTag, leastPoseAmbDist;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -79,75 +78,53 @@ public class Robot extends TimedRobot {
     Optional<EstimatedRobotPose> leftRobotPose =
         visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
 
-    DogLog.log(
-        "KalmanDebug/right has target", visionRight.hasTarget(visionRight.getPipelineResult()));
-    DogLog.log("KalmanDebug/right robot pose is present", rightRobotPose.isPresent());
-    DogLog.log("KalmanDebug/left has target", visionLeft.hasTarget(visionLeft.getPipelineResult()));
-    DogLog.log("KalmanDebug/left robot pose is present", leftRobotPose.isPresent());
+    Optional<EstimatedRobotPose> bestRobotPose = rightRobotPose;
 
-    if (visionRight.hasTarget(visionRight.getPipelineResult()) && rightRobotPose.isPresent()) {
+    PhotonPipelineResult pipelineRight = visionRight.getPipelineResult();
+    PhotonPipelineResult pipelineLeft = visionLeft.getPipelineResult();
 
-      rightDistToAprilTag =
-          visionRight
-              .getAprilTagFieldLayout()
-              .getTagPose(visionRight.getPipelineResult().getBestTarget().getFiducialId())
-              .get()
-              .getTranslation()
-              .getDistance(
-                  new Translation3d(
-                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+    
+//if both present, else if right present, else if left present
+    if(visionRight.hasTarget(pipelineRight) && rightRobotPose.isPresent() && visionLeft.hasTarget(pipelineLeft) && leftRobotPose.isPresent() ){
+      double leftPoseAmb = pipelineLeft.getBestTarget().getPoseAmbiguity();
+      double rightPoseAmb = pipelineRight.getBestTarget().getPoseAmbiguity();
+      if(leftPoseAmb < rightPoseAmb){
+        leastPoseAmbDist = visionLeft.getDistance();
+        bestRobotPose = leftRobotPose;
+      }
+      leastPoseAmbDist = visionRight.getDistance();
+      bestRobotPose = rightRobotPose;
 
-      // TODO: determine if these exponentials correctly model our vision's performance
-      double xKalman = 0.01 * Math.pow(1.15, rightDistToAprilTag);
-      double yKalman = 0.01 * Math.pow(1.4, rightDistToAprilTag);
+    }
+    else if (visionRight.hasTarget(pipelineRight) && rightRobotPose.isPresent()) {
+         leastPoseAmbDist = visionRight.getDistance();
+          bestRobotPose = rightRobotPose;
 
-      visionMatrix.set(0, 0, xKalman);
-      visionMatrix.set(1, 0, yKalman);
-
-      driveTrain.addVisionMeasurement(
-          rightRobotPose.get().estimatedPose.toPose2d(),
-          Timer.getFPGATimestamp() - Constants.Vision.CAMERA_LATENCY_SECONDS,
-          visionMatrix);
-
-      DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
-      DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
-      DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
-      DogLog.log(
-          "KalmanDebug/rightRobotPoseTheta",
-          rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
+    }
+    else if(visionLeft.hasTarget(pipelineLeft) && leftRobotPose.isPresent()){
+          leastPoseAmbDist  = visionLeft.getDistance();
+        
+          bestRobotPose = leftRobotPose;
+    }
+    else{
+      return; 
     }
 
-    if (visionLeft.hasTarget(visionLeft.getPipelineResult()) && leftRobotPose.isPresent()) {
-      leftDistToAprilTag =
-          visionLeft
-              .getAprilTagFieldLayout()
-              .getTagPose(visionLeft.getPipelineResult().getBestTarget().getFiducialId())
-              .get()
-              .getTranslation()
-              .getDistance(
-                  new Translation3d(
-                      driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+    double xKalman = 0.1 * Math.pow(1.15, leastPoseAmbDist);
+    double yKalman = 0.1 * Math.pow(1.4, leastPoseAmbDist);
 
-      // TODO: determine if these exponentials correctly model our vision's performance
-      double xKalman = 0.01 * Math.pow(1.15, leftDistToAprilTag);
-      double yKalman = 0.01 * Math.pow(1.4, leftDistToAprilTag);
+   Matrix<N3, N1> visionMatrix =VecBuilder.fill(xKalman, yKalman, 100d);
+    Pose2d bestRobotPose2d  =  bestRobotPose.get().estimatedPose.toPose2d();
+    Pose2d rotationLess = new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
 
-      visionMatrix.set(0, 0, xKalman);
-      visionMatrix.set(1, 0, yKalman);
-
-      driveTrain.addVisionMeasurement(
-          leftRobotPose.get().estimatedPose.toPose2d(),
-          Timer.getFPGATimestamp() - Constants.Vision.CAMERA_LATENCY_SECONDS,
-          visionMatrix);
-
-      DogLog.log("KalmanDebug/leftDistToAprilTag", leftDistToAprilTag);
-      DogLog.log("KalmanDebug/leftRobotPoseX", leftRobotPose.get().estimatedPose.getX());
-      DogLog.log("KalmanDebug/leftRobotPoseY", leftRobotPose.get().estimatedPose.getY());
-      DogLog.log(
-          "KalmanDebug/leftRobotPoseTheta",
-          leftRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
-    }
+    driveTrain.addVisionMeasurement(
+        rotationLess,
+        Timer.getFPGATimestamp() - pipelineRight.getTimestampSeconds(),
+        visionMatrix);
   }
+
+
+
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override

@@ -52,7 +52,7 @@ public class VisionSystem extends SubsystemBase {
   AprilTagFieldLayout aprilTagFieldLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   PhotonPoseEstimator photonPoseEstimator;
-
+  private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   public VisionSystem(String name, int index) {
 
     camera = new PhotonCamera(name);
@@ -64,6 +64,19 @@ public class VisionSystem extends SubsystemBase {
       pipeline = x;
     }
   }
+
+  public  Double getDistance(){
+    
+ return this.getAprilTagFieldLayout()
+ .getTagPose(getPipelineResult().getBestTarget().getFiducialId())
+ .get()
+ .getTranslation()
+ .getDistance(
+     new Translation3d(
+         driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+
+  }
+
 
   public static VisionSystem getInstance(Constants.Vision.Cameras name) {
     if (systemList[name.ordinal()] == null) {
