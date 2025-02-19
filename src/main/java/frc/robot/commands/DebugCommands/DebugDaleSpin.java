@@ -17,7 +17,7 @@ public class DebugDaleSpin extends Command {
 
   @Override
   public void execute() {
-    arm.spinFlywheel(40);
+    arm.spinFlywheel();
   }
 
   @Override

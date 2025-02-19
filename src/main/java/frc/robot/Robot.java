@@ -66,10 +66,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
+    LoggedTalonFX.periodic_static();
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
 
@@ -162,6 +159,23 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     DogLog.setOptions(
         new DogLogOptions().withNtPublish(true).withCaptureDs(true).withLogExtras(true));
+    DogLog.log("PIDArmKP", Constants.Arm.S0C_KP);
+    DogLog.log("PIDArmKI", Constants.Arm.S0C_KI);
+    DogLog.log("PIDArmKD", Constants.Arm.S0C_KD);
+    DogLog.log("PIDArmKS", Constants.Arm.S0C_KS);
+    DogLog.log("PIDArmKG", Constants.Arm.S0C_KG);
+
+    DogLog.log("PIDElevatorKP", Constants.ElevatorConstants.S0C_KP);
+    DogLog.log("PIDElevatorKI", Constants.ElevatorConstants.S0C_KI);
+    DogLog.log("PIDElevatorKD", Constants.ElevatorConstants.S0C_KD);
+    DogLog.log("PIDElevatorKS", Constants.ElevatorConstants.S0C_KS);
+    DogLog.log("PIDElevatorKG", Constants.ElevatorConstants.S0C_KG);
+
+    DogLog.log("PIDTootsieKP", Constants.TootsieSlide.S0C_KP);
+    DogLog.log("PIDTootsieKI", Constants.TootsieSlide.S0C_KI);
+    DogLog.log("PIDTootsieKD", Constants.TootsieSlide.S0C_KD);
+    DogLog.log("PIDTootsieKS", Constants.TootsieSlide.S0C_KS);
+    DogLog.log("PIDTootsieKG", Constants.TootsieSlide.S0C_KG);
     // Commented this code that logs the electric data because it crashed the robot code
     // there is an error related to the usage of this
     // DogLog.setPdh(new PowerDistribution());
@@ -205,28 +219,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    LoggedTalonFX.periodic_static();
-
     DogLog.log("PID Constant", IncreasePArm.broomIndex());
     DogLog.log("Mechanism Type", IncreasePArm.mechIndex());
-
-    DogLog.log("PIDArmKP", Constants.Arm.S0C_KP);
-    DogLog.log("PIDArmKI", Constants.Arm.S0C_KI);
-    DogLog.log("PIDArmKD", Constants.Arm.S0C_KD);
-    DogLog.log("PIDArmKS", Constants.Arm.S0C_KS);
-    DogLog.log("PIDArmKG", Constants.Arm.S0C_KG);
-
-    DogLog.log("PIDElevatorKP", Constants.ElevatorConstants.S0C_KP);
-    DogLog.log("PIDElevatorKI", Constants.ElevatorConstants.S0C_KI);
-    DogLog.log("PIDElevatorKD", Constants.ElevatorConstants.S0C_KD);
-    DogLog.log("PIDElevatorKS", Constants.ElevatorConstants.S0C_KS);
-    DogLog.log("PIDElevatorKG", Constants.ElevatorConstants.S0C_KG);
-
-    DogLog.log("PIDTootsieKP", Constants.TootsieSlide.S0C_KP);
-    DogLog.log("PIDTootsieKI", Constants.TootsieSlide.S0C_KI);
-    DogLog.log("PIDTootsieKD", Constants.TootsieSlide.S0C_KD);
-    DogLog.log("PIDTootsieKS", Constants.TootsieSlide.S0C_KS);
-    DogLog.log("PIDTootsieKG", Constants.TootsieSlide.S0C_KG);
   }
 
   @Override
