@@ -46,22 +46,19 @@ public final class Constants {
 
     // TODO: CHANGE FOR NEW ROBOT
     public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.499);
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.358);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(-11.358);
     public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.011);
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
 
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-11.927);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.927);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.357);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.01);
 
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
-
-    // TODO: determine if this latency is still true
-    public static final double CAMERA_LATENCY_SECONDS = 0.02;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
   }
 
   public static class Landmarks {
@@ -635,7 +632,7 @@ public final class Constants {
     public static final double ACCELERATION = 10; // TODO
     public static final double GEAR_RATIO = 1d / 6d;
     public static final double INTAKE_SPEED_RPS = 5d; // TODO
-    public static final double SHOOTING_SPEED_RPS = 15d;
+    public static final double SHOOTING_SPEED_RPS = 33d;
   }
 
   public static class FunnelConstants {
@@ -705,7 +702,7 @@ public final class Constants {
       L2(2, 0.8636),
       L3DALE(0, 0.91), // 1.27 - 0.379
       L3(3, 1.27),
-      L4(4, 1.82);
+      L4(4, 1.835);
 
       public final int position;
       public final double height;
