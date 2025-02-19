@@ -83,6 +83,12 @@ public class Robot extends TimedRobot {
     PhotonPipelineResult pipelineRight = visionRight.getPipelineResult();
     PhotonPipelineResult pipelineLeft = visionLeft.getPipelineResult();
 
+    DogLog.log("KalmanDebug/rightpipelinehastarget", visionRight.hasTarget(pipelineRight));
+    DogLog.log("KalmanDebug/leftpipelinehastarget", visionLeft.hasTarget(pipelineLeft));
+    DogLog.log("KalmanDebug/rightposeispresent", rightRobotPose.isPresent());
+    DogLog.log("KalmanDebug/leftposeispresent", leftRobotPose.isPresent());
+    
+    
     
 //if both present, else if right present, else if left present
     if(visionRight.hasTarget(pipelineRight) && rightRobotPose.isPresent() && visionLeft.hasTarget(pipelineLeft) && leftRobotPose.isPresent() ){
@@ -94,11 +100,27 @@ public class Robot extends TimedRobot {
       }
       leastPoseAmbDist = visionRight.getDistance();
       bestRobotPose = rightRobotPose;
+      DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
+      DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
+      DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
+      DogLog.log(
+          "KalmanDebug/rightRobotPoseTheta",
+          rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
 
     }
     else if (visionRight.hasTarget(pipelineRight) && rightRobotPose.isPresent()) {
+      DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
+      DogLog.log("KalmanDebug/rightestimatedpose", rightRobotPose.get().estimatedPose.toPose2d());
+      DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
+      DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
+      DogLog.log(
+          "KalmanDebug/rightRobotPoseTheta",
+          rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
+    
          leastPoseAmbDist = visionRight.getDistance();
           bestRobotPose = rightRobotPose;
+          DogLog.log("KalmanDebug/bestestimatedpose", bestRobotPose.get().estimatedPose.toPose2d());
+          DogLog.log("KalmanDebug/leastPoseAmbDist", leastPoseAmbDist);
 
     }
     else if(visionLeft.hasTarget(pipelineLeft) && leftRobotPose.isPresent()){
@@ -106,6 +128,7 @@ public class Robot extends TimedRobot {
           bestRobotPose = leftRobotPose;
     }
     else{
+      DogLog.log("KalmanDebug/visionUsed", false);
       return; 
     }
 
@@ -115,11 +138,15 @@ public class Robot extends TimedRobot {
    Matrix<N3, N1> visionMatrix =VecBuilder.fill(xKalman, yKalman, 100d);
     Pose2d bestRobotPose2d  =  bestRobotPose.get().estimatedPose.toPose2d();
     Pose2d rotationLess = new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
+    DogLog.log("KalmanDebug/rotationless", rotationLess);
 
     driveTrain.addVisionMeasurement(
         rotationLess,
-        Timer.getFPGATimestamp() - pipelineRight.getTimestampSeconds(),
+        pipelineRight.getTimestampSeconds(),
         visionMatrix);
+    DogLog.log("KalmanDebug/visionUsed", true);
+
+    DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
   }
 
 
