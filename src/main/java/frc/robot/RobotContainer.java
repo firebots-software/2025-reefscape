@@ -123,7 +123,7 @@ public class RobotContainer {
     Trigger leftShoulderTrigger = joystick.leftBumper();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
         leftRightFunction = () -> -joystick.getLeftX(),
-        rotationFunction = () -> joystick.getRightX(),
+        rotationFunction = () -> -joystick.getRightX(),
         speedFunction =
             () ->
                 leftShoulderTrigger.getAsBoolean()

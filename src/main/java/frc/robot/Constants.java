@@ -481,8 +481,8 @@ public final class Constants {
     private static final Distance WHEEL_RADIUS_INCHES = Inches.of(2); // TODO: VERIFY FOR NEW ROBOT
 
     private static final boolean STEER_MOTOR_REVERSED = true; // TODO: CHANGE FOR NEW ROBOT
-    private static final boolean INVERT_LEFT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
-    private static final boolean INVERT_RIGHT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
+    private static final boolean INVERT_LEFT_SIDE = true; // TODO: CHANGE FOR NEW ROBOT
+    private static final boolean INVERT_RIGHT_SIDE = true; // TODO: CHANGE FOR NEW ROBOT
 
     private static final int kPigeonId = 40; // TODO: CHANGE FOR NEW ROBOT
 
