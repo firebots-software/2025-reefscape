@@ -15,6 +15,7 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.LoadAndPutUp;
 import frc.robot.commandGroups.MoveToSideAndShoot;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -98,13 +99,14 @@ public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // 
     // and shoot, else lower elevator and intake
     return Commands.parallel(
             routine.trajectory(baseCommandName).cmd(),
+            Commands.sequence(new LoadAndPutUp(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.Intake).onlyIf(() -> !pathGoesToHPS.getAsBoolean()), 
             ((pathGoesToHPS.getAsBoolean())
-                ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
-                : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)))        
+            ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
+            : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))        
             .andThen(
-            (pathGoesToHPS.getAsBoolean()) //may want to change it such that it goes around at intake lvl and only raises to score
-                ? new LoadAndPutUp(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.Intake) //may want to make it such that it doesn't set the elevator pose at all because it is redundant
-                : new MoveToSideAndShoot(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L4, redside, baseCommandName.substring(1, 2).equals("R"))); //may want to make it such that it doesnt move extra at all or move elevator because it is redundant
+            (pathGoesToHPS.getAsBoolean())
+                ? new RunFunnelUntilCheckedIn(funnelSubsystem)
+                : new MoveToSideAndShoot(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L4, redside, baseCommandName.substring(1, 2).equals("R")));
 
     }
 }
