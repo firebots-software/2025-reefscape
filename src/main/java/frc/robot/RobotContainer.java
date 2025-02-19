@@ -24,9 +24,7 @@ import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commands.DaleCommands.ArmDefault;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
-import frc.robot.commands.DebugCommands.DebugFunnelIntake;
-import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
-import frc.robot.commands.DebugCommands.DebugTootsieSlide;
+import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
@@ -95,39 +93,22 @@ public class RobotContainer {
     // funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
 
     // Debugging
-    BooleanSupplier increaseFunction = () -> debugJoystick.rightBumper().getAsBoolean(),
-        decreaseFunction = () -> debugJoystick.leftBumper().getAsBoolean(),
-        pidChangeFunction = () -> debugJoystick.a().getAsBoolean(),
-        mechChangeFunction = () -> debugJoystick.b().getAsBoolean();
     debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
-
-    // debugJoystick
-    //     .rightTrigger()
-    //     .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
-
-    debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
-
-    debugJoystick.rightBumper().whileTrue(new DebugFunnelIntake(funnelSubsystem));
-    debugJoystick.leftBumper().whileTrue(new DebugFunnelOuttake(funnelSubsystem));
-
-    // debugJoystick.leftStick().onTrue(new Dealgaenate(ArmSubsystem.getInstance()));
-
-    // debugJoystick.leftBumper().whileFalse(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
-
-    debugJoystick.rightTrigger().whileTrue(new DebugTootsieSlide(tootsieSlideSubsystem));
 
     debugJoystick
         .y()
-        .onTrue(
+        .whileTrue(
             new Dealgaenate(
                 armSubsystem,
                 elevatorSubsystem,
                 Constants.ElevatorConstants.ElevatorPositions.L2DALE));
-    debugJoystick.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
-    debugJoystick.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    debugJoystick
+        .x()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L4));
+    debugJoystick.a().onTrue(new ZeroArm(armSubsystem));
     debugJoystick
         .b()
-        .onTrue(
+        .whileTrue(
             new Dealgaenate(
                 armSubsystem,
                 elevatorSubsystem,
@@ -136,12 +117,6 @@ public class RobotContainer {
     debugJoystick
         .rightTrigger()
         .onTrue(new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
-
-    // debugJoystick.a().whileTrue(new DebugDaleSpin(ArmSubsystem.getInstance()));
-    // debugJoystick.b().onTrue(new DebugArm(ArmSubsystem.getInstance()));
-
-    // debugJoystick.leftStick().whileTrue(new DebugFunnelIntake(FunnelSubsystem.getInstance()));
-    // debugJoystick.rightStick().whileTrue(new DebugFunnelOuttake(FunnelSubsystem.getInstance()));
 
     // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
@@ -162,7 +137,10 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
-    armSubsystem.setDefaultCommand(new ArmDefault(ArmSubsystem.getInstance()));
+    armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
+    elevatorSubsystem.setDefaultCommand(
+        new SetElevatorLevel(
+            elevatorSubsystem, Constants.ElevatorConstants.ElevatorPositions.Intake));
 
     joystick
         .a()

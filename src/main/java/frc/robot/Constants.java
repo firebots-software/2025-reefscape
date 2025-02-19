@@ -161,28 +161,26 @@ public final class Constants {
 
   public static final class Arm {
     // this is new code
-
-    public static final double DALE_FLYWHEEL_GEAR_RATIO = 1 / 6.7556;
-    public static final double DALE_PIVOT_GEAR_RATIO = 1 / 36d; // TODO
+    public static final double PIVOT_GEAR_RATIO = 1 / 36d; // TODO
 
     // end of new code
-    public static final double ARM_STATOR_CURRENT_LIMIT_AMPS = 5.0;
-    public static final double ARM_SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double STATOR_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
 
     public static double DEGREES_TO_ROTATIONS(double degrees) {
       double conversionFactor = 360;
-      return (degrees / conversionFactor) / DALE_PIVOT_GEAR_RATIO;
+      return (degrees / conversionFactor) / PIVOT_GEAR_RATIO;
     }
 
     public static double ROTATIONS_TO_DEGEREES(double rotations) {
       double conversionFactor = 360;
-      return (rotations * conversionFactor * DALE_PIVOT_GEAR_RATIO);
+      return (rotations * conversionFactor * PIVOT_GEAR_RATIO);
     }
 
     public static final int PIVOT_MOTOR_PORT = 16;
 
     public static final double CURRENT_LIMIT = 8.0;
-    public static double S0C_KP = 1.0;
+    public static double S0C_KP = 0.75;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.0;
     public static double S0C_KS = 0.0;
@@ -190,30 +188,34 @@ public final class Constants {
     public static final double ARMFF_KS = 0.16969;
     public static final double ARMFF_KG = 0.34;
     public static final double ARMFF_KV = 2.49;
-    public static final double MOTIONMAGIC_KV = 36; // MotionMagic Cruise Velocity in RPS of the arm
-    public static final double MOTIONMAGIC_KA =
+    public static final double MOTIONMAGIC_KV = 0;
+    public static final double MOTIONMAGIC_KA = 0;
+    public static final double MOTIONMAGIC_MAX_VELOCITY =
+        36; // MotionMagic Cruise Velocity in RPS of the arm
+    public static final double MOTIONMAGIC_MAX_ACCELERATION =
         2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
-    public static final double ZERO_CURRENT = 10;
+    public static final double ZERO_CURRENT = 5;
     public static final double DEALGAENATE_SPEED_ZOOM_ZOOM = 60;
-    public static final double EXTENDED_ANGLE = 120;
+    public static final double EXTENDED_ANGLE = 90;
     public static final double RETRACTED_ANGLE = 0;
   }
 
   public static class Flywheel {
     public static final int FLYWHEEL_PORT = 17;
 
-    public static double FLYWHEEL_S0C_KP = 1.0;
-    public static double FLYWHEEL_S0C_KI = 0.0;
-    public static double FLYWHEEL_S0C_KD = 0.0;
-    public static double FLYWHEEL_S0C_KS = 0.0;
-    public static double FLYWHEEL_S0C_KG = 0.0;
+    public static double S0C_KP = 1.0;
+    public static double S0C_KI = 0.0;
+    public static double S0C_KD = 0.0;
+    public static double S0C_KS = 0.0;
+    public static double S0C_KG = 0.0;
 
-    public static final double MOTIONMAGIC_KV = 0;
-    public static final double MOTIONMAGIC_KA = 0;
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 100;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 200;
 
-    public static final double FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS = 15.0;
-    public static final double FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS = 15.0;
-    public static final double FLYWHEEL_SPEED_RPS = 30.0;
+    public static final double SUPPLY_CURRENT_LIMIT_AMPS = 15.0;
+    public static final double STATOR_CURRENT_LIMIT_AMPS = 30.0;
+    public static final double SPEED_RPS = 100.0;
+    public static final double GEAR_RATIO = 1 / 6.7556;
 
     public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
       double conversionFactor =
@@ -247,7 +249,7 @@ public final class Constants {
     public static enum SwerveDrivePIDValues {
       SERRANO(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
       PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619),
-      JAMES_HARDEN(0.034816, 0d, 0d, 0.15396, 0.12145, 0.0029718);
+      JAMES_HARDEN(0.041539, 0d, 0d, 0.14856, 0.12301, 0.0053369);
       public final double KP, KI, KD, KS, KV, KA;
 
       SwerveDrivePIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
@@ -665,7 +667,8 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 10; // TODO
     public static final double ACCELERATION = 10; // TODO
     public static final double GEAR_RATIO = 1d / 6d;
-    public static final double SPEED_RPS = 5d; // TODO
+    public static final double INTAKE_SPEED_RPS = 5d; // TODO
+    public static final double SHOOTING_SPEED_RPS = 15d;
   }
 
   public static class FunnelConstants {
@@ -731,9 +734,9 @@ public final class Constants {
       Intake(0, 0.070),
       safePosition(0, 0.0),
       L1(1, 0.657 - 0.13),
-      L2DALE(0, 0.8636 - 0.279),
+      L2DALE(0, 0.493), // 0.8636 - 0.379
       L2(2, 0.8636),
-      L3DALE(0, 1.27 - 0.279),
+      L3DALE(0, 0.91), // 1.27 - 0.379
       L3(3, 1.27),
       L4(4, 1.82);
 

@@ -34,6 +34,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ElevatorPositions currentLevel;
   private CANrange distance; // Time of Flight (ToF) sensor
 
+  private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+
   private ElevatorSubsystem() {
     // Initialize motors
 
@@ -137,7 +139,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private void setPosition(double height) {
     master.setControl(
-        new MotionMagicVoltage(
+        controlRequest.withPosition(
             height
                 * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
                 / ElevatorConstants.CARRAIGE_UPDUCTION));
@@ -152,10 +154,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void testElevator(double height) {
     this.setPosition(height);
   }
-
-  // public void stopElevator(){
-  //   master.setControl()
-  // }
 
   public boolean isAtPosition() {
     return (Math.abs(getError()) <= ElevatorConstants.SETPOINT_TOLERANCE);
@@ -187,8 +185,6 @@ public class ElevatorSubsystem extends SubsystemBase {
             * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE
             * Constants.ElevatorConstants.CARRAIGE_UPDUCTION);
     DogLog.log("subsystems/Elevator/currentHeightRot", master.getPosition().getValueAsDouble());
-
-    // This method will be called once per scheduler run
   }
 
   @Override
