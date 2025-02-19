@@ -155,12 +155,15 @@ public final class Constants {
     public static final double ARMFF_KS = 0.16969;
     public static final double ARMFF_KG = 0.34;
     public static final double ARMFF_KV = 2.49;
-    public static final double MOTIONMAGIC_KV = 36; // MotionMagic Cruise Velocity in RPS of the arm
-    public static final double MOTIONMAGIC_KA =
+    public static final double MOTIONMAGIC_KV = 0;
+    public static final double MOTIONMAGIC_KA = 0;
+    public static final double MOTIONMAGIC_MAX_VELOCITY =
+        36; // MotionMagic Cruise Velocity in RPS of the arm
+    public static final double MOTIONMAGIC_MAX_ACCELERATION =
         2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
-    public static final double ZERO_CURRENT = 10;
+    public static final double ZERO_CURRENT = 5;
     public static final double DEALGAENATE_SPEED_ZOOM_ZOOM = 60;
-    public static final double EXTENDED_ANGLE = 120;
+    public static final double EXTENDED_ANGLE = 90;
     public static final double RETRACTED_ANGLE = 0;
   }
 
@@ -173,13 +176,14 @@ public final class Constants {
     public static double S0C_KS = 0.0;
     public static double S0C_KG = 0.0;
 
-    public static final double MOTIONMAGIC_KV = 50;
-    public static final double MOTIONMAGIC_KA = 100;
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 100;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 200;
 
-    public static final double SUPPLY_CURRENT_LIMIT_AMPS = 15.0;
-    public static final double STATOR_CURRENT_LIMIT_AMPS = 15.0;
-    public static final double SPEED_RPS = 30.0;
+    public static final double FLYWHEEL_SUPPLY_CURRENT_LIMIT_AMPS = 15.0;
+    public static final double FLYWHEEL_STATOR_CURRENT_LIMIT_AMPS = 30.0;
+    public static final double FLYWHEEL_SPEED_RPS = 100.0;
     public static final double GEAR_RATIO = 1 / 6.7556;
+
 
     public static double ANGLE_TO_ENCODER_ROTATIONS(double angle) {
       double conversionFactor =
@@ -697,9 +701,9 @@ public final class Constants {
       Intake(0, 0.070),
       safePosition(0, 0.0),
       L1(1, 0.657 - 0.13),
-      L2DALE(0, 0.8636 - 0.279),
+      L2DALE(0, 0.493), // 0.8636 - 0.379
       L2(2, 0.8636),
-      L3DALE(0, 1.27 - 0.279),
+      L3DALE(0, 0.91), // 1.27 - 0.379
       L3(3, 1.27),
       L4(4, 1.82);
 

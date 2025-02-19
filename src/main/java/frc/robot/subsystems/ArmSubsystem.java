@@ -120,13 +120,15 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Apply MotionMagicConfigs to master motor
     motionMagicConfigsArm = new MotionMagicConfigs();
-    motionMagicConfigsArm.MotionMagicCruiseVelocity = Constants.Arm.MOTIONMAGIC_KV;
-    motionMagicConfigsArm.MotionMagicAcceleration = Constants.Arm.MOTIONMAGIC_KA;
+    motionMagicConfigsArm.MotionMagicCruiseVelocity = Constants.Arm.MOTIONMAGIC_MAX_VELOCITY;
+    motionMagicConfigsArm.MotionMagicAcceleration = Constants.Arm.MOTIONMAGIC_MAX_ACCELERATION;
     masterConfiguratorArm.apply(motionMagicConfigsArm);
 
     motionMagicConfigsFlywheel = new MotionMagicConfigs();
-    motionMagicConfigsFlywheel.MotionMagicCruiseVelocity = Constants.Flywheel.MOTIONMAGIC_KV;
-    motionMagicConfigsFlywheel.MotionMagicAcceleration = Constants.Flywheel.MOTIONMAGIC_KA;
+    motionMagicConfigsFlywheel.MotionMagicCruiseVelocity =
+        Constants.Flywheel.MOTIONMAGIC_MAX_VELOCITY;
+    motionMagicConfigsFlywheel.MotionMagicAcceleration =
+        Constants.Flywheel.MOTIONMAGIC_MAX_ACCELERATION;
     masterConfiguratorFlywheel.apply(motionMagicConfigsFlywheel);
   }
 
@@ -156,7 +158,7 @@ public class ArmSubsystem extends SubsystemBase {
     double current = Math.abs(armMotor.getTorqueCurrent().getValue().magnitude());
     // TODO: Fix the zeroing current possibly, nah scratch that, most likely we will need to change
     // ts
-    if (current < Constants.Arm.ZERO_CURRENT) {
+    if (current > Constants.Arm.ZERO_CURRENT) {
       armMotor.disable();
       return true;
     }
