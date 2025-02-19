@@ -65,8 +65,7 @@ public class VisionSystem extends SubsystemBase {
     }
   }
 
-  public  Double getDistance(){
-    
+public Double getDistance(){
  return this.getAprilTagFieldLayout()
  .getTagPose(getPipelineResult().getBestTarget().getFiducialId())
  .get()

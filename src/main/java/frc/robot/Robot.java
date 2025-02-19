@@ -78,7 +78,7 @@ public class Robot extends TimedRobot {
     Optional<EstimatedRobotPose> leftRobotPose =
         visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
 
-    Optional<EstimatedRobotPose> bestRobotPose = rightRobotPose;
+    Optional<EstimatedRobotPose> bestRobotPose;
 
     PhotonPipelineResult pipelineRight = visionRight.getPipelineResult();
     PhotonPipelineResult pipelineLeft = visionLeft.getPipelineResult();
@@ -103,7 +103,6 @@ public class Robot extends TimedRobot {
     }
     else if(visionLeft.hasTarget(pipelineLeft) && leftRobotPose.isPresent()){
           leastPoseAmbDist  = visionLeft.getDistance();
-        
           bestRobotPose = leftRobotPose;
     }
     else{
