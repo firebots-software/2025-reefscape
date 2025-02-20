@@ -163,8 +163,8 @@ public final class Constants {
     public static final double PIVOT_GEAR_RATIO = 1 / 36d; // TODO
 
     // end of new code
-    public static final double STATOR_CURRENT_LIMIT_AMPS = 5.0;
-    public static final double SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double STATOR_CURRENT_LIMIT_AMPS = 30.0;
+    public static final double SUPPLY_CURRENT_LIMIT_AMPS = 30.0;
 
     public static double DEGREES_TO_ROTATIONS(double degrees) {
       double conversionFactor = 360;
@@ -184,15 +184,11 @@ public final class Constants {
     public static double S0C_KD = 0.0;
     public static double S0C_KS = 0.0;
     public static double S0C_KG = 0.0;
-    public static final double ARMFF_KS = 0.16969;
-    public static final double ARMFF_KG = 0.34;
-    public static final double ARMFF_KV = 2.49;
-    public static final double MOTIONMAGIC_KV = 0;
-    public static final double MOTIONMAGIC_KA = 0;
+
     public static final double MOTIONMAGIC_MAX_VELOCITY =
-        36; // MotionMagic Cruise Velocity in RPS of the arm
+        200; // MotionMagic Cruise Velocity in RPS of the arm
     public static final double MOTIONMAGIC_MAX_ACCELERATION =
-        2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
+        5 * MOTIONMAGIC_MAX_VELOCITY; // MotionMagic Acceleration in RPS^2 of the arm
     public static final double ZERO_CURRENT = 5;
     public static final double DEALGAENATE_SPEED_ZOOM_ZOOM = 60;
     public static final double EXTENDED_ANGLE = 90;

@@ -129,7 +129,7 @@ public class RobotContainer {
                 Constants.ElevatorConstants.ElevatorPositions.L2DALE));
     debugJoystick
         .x()
-        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L4));
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
     debugJoystick.a().onTrue(new ZeroArm(armSubsystem));
     debugJoystick
         .b()
