@@ -95,7 +95,9 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   }
 
   public void stopTootsie() {
-    master.setControl(voltage.withPosition(master.getPosition().getValueAsDouble()));
+    master.setPosition(0);
+    master.setControl(voltage.withPosition(0));
+    master.setPosition(0);
     m_flywheelSim.setInputVoltage(0);
   }
 

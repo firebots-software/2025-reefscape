@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AbstractedPID.IncreasePArm;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
@@ -64,6 +65,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
+    DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
     LoggedTalonFX.periodic_static();
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
@@ -139,6 +142,10 @@ public class Robot extends TimedRobot {
     DogLog.log("KalmanDebug/visionUsed", true);
 
     DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
+
+    DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
+    DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
+ 
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

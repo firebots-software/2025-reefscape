@@ -31,6 +31,7 @@ import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.ElevatorIntakeLevel;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionQuick;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
@@ -97,10 +98,10 @@ public class RobotContainer {
     // Automatic
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide());
-    Trigger ejectTime = new Trigger(() -> CoralPosition.isCoralInTootsieSlide() && CoralPosition.isCoralInFunnel());
+    Trigger ejectTime = new Trigger(() -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()));
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
     funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
-    funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
+    funnelCheckin.onTrue(new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
     Trigger funnelCheckout = new Trigger(() -> CoralPosition.isCoralInFunnel() && elevatorSubsystem.atIntake() && elevatorSubsystem.isAtPosition());
     funnelCheckout.onTrue(new TransferPieceBetweenFunnelAndElevator(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide());

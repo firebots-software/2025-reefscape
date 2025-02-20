@@ -23,4 +23,5 @@ public class CoralPosition {
   public static void setCoralInTootsieSlide(boolean newCondition) {
     coralInTootsieSlide = newCondition;
   }
+
 }
