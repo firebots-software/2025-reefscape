@@ -28,6 +28,7 @@ import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DebugCommands.DebugFunnelIntake;
 import frc.robot.commands.DebugCommands.DebugFunnelOuttake;
 import frc.robot.commands.DebugCommands.DebugTootsieSlide;
+import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
@@ -94,6 +95,8 @@ public class RobotContainer {
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     // Trigger funnelCheckin = new Trigger(() -> funnelSubsystem.isCoralCheckedIn());
     // funnelCheckin.onTrue(new RunFunnelUntilDetectionQuick(funnelSubsystem));
+
+    elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
 
     // Debugging
     BooleanSupplier increaseFunction = () -> debugJoystick.rightBumper().getAsBoolean(),
