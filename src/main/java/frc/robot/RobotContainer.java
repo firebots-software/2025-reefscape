@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
-import frc.robot.commandGroups.LoadAndPutUp;
+import frc.robot.commandGroups.MoveElevatorAndShoot;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -137,11 +137,11 @@ public class RobotContainer {
                 elevatorSubsystem,
                 Constants.ElevatorConstants.ElevatorPositions.L3DALE));
 
-    debugJoystick
-        .rightTrigger()
-        .onTrue(
-            new LoadAndPutUp(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
+    // debugJoystick
+    //     .rightTrigger()
+    //     .onTrue(
+    //         new MoveElevatorAndShoot(
+    //             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
 
     // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
