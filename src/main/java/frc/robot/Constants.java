@@ -46,22 +46,19 @@ public final class Constants {
 
     // TODO: CHANGE FOR NEW ROBOT
     public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.499);
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.358);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(-11.358);
     public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.011);
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
 
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-11.927);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.927);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.357);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.01);
 
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
-
-    // TODO: determine if this latency is still true
-    public static final double CAMERA_LATENCY_SECONDS = 0.02;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
   }
 
   public static class Landmarks {
@@ -212,7 +209,7 @@ public final class Constants {
     public static enum SwerveDrivePIDValues {
       SERRANO(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
       PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619),
-      JAMES_HARDEN(0.034816, 0d, 0d, 0.15396, 0.12145, 0.0029718);
+      JAMES_HARDEN(0.041539, 0d, 0d, 0.14856, 0.12301, 0.0053369);
       public final double KP, KI, KD, KS, KV, KA;
 
       SwerveDrivePIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
@@ -444,8 +441,8 @@ public final class Constants {
     private static final Distance WHEEL_RADIUS_INCHES = Inches.of(2); // TODO: VERIFY FOR NEW ROBOT
 
     private static final boolean STEER_MOTOR_REVERSED = true; // TODO: CHANGE FOR NEW ROBOT
-    private static final boolean INVERT_LEFT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
-    private static final boolean INVERT_RIGHT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
+    private static final boolean INVERT_LEFT_SIDE = true; // TODO: CHANGE FOR NEW ROBOT
+    private static final boolean INVERT_RIGHT_SIDE = true; // TODO: CHANGE FOR NEW ROBOT
 
     private static final int kPigeonId = 40; // TODO: CHANGE FOR NEW ROBOT
 
