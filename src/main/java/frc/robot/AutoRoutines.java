@@ -2,15 +2,8 @@ package frc.robot;
 
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
-import choreo.auto.AutoTrajectory;
-
-import java.util.function.BooleanSupplier;
-
-import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.LoadAndPutUp;
 import frc.robot.commandGroups.MoveToSideAndShoot;
@@ -20,6 +13,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
+import java.util.function.BooleanSupplier;
 
 public class AutoRoutines {
   private final AutoFactory autoFactory;
@@ -29,7 +23,13 @@ public class AutoRoutines {
   private final FunnelSubsystem funnelSubsystem;
   private final BooleanSupplier redside;
 
-  public AutoRoutines(AutoFactory factory, SwerveSubsystem driveTrain, ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem, FunnelSubsystem funnelSubsystem, BooleanSupplier redside) {
+  public AutoRoutines(
+      AutoFactory factory,
+      SwerveSubsystem driveTrain,
+      ElevatorSubsystem elevatorSubsystem,
+      TootsieSlideSubsystem tootsieSlideSubsystem,
+      FunnelSubsystem funnelSubsystem,
+      BooleanSupplier redside) {
     autoFactory = factory;
     this.driveTrain = driveTrain;
     this.elevatorSubsystem = elevatorSubsystem;
@@ -88,25 +88,36 @@ public class AutoRoutines {
   }
 
   /**
- * @param routine
- * @param baseCommandName
- * @return
- */
-public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // for actual robot
+   * @param routine
+   * @param baseCommandName
+   * @return
+   */
+  public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // for actual robot
     BooleanSupplier pathGoesToHPS =
         () -> !(baseCommandName.contains("HPS-") || baseCommandName.contains("START-"));
     // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator
     // and shoot, else lower elevator and intake
     return Commands.parallel(
             routine.trajectory(baseCommandName).cmd(),
-            Commands.sequence(new LoadAndPutUp(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.Intake).onlyIf(() -> !pathGoesToHPS.getAsBoolean()), 
-            ((pathGoesToHPS.getAsBoolean())
-            ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
-            : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))        
-            .andThen(
+            Commands.sequence(
+                new LoadAndPutUp(
+                        elevatorSubsystem,
+                        funnelSubsystem,
+                        tootsieSlideSubsystem,
+                        ElevatorPositions.Intake)
+                    .onlyIf(() -> !pathGoesToHPS.getAsBoolean()),
+                ((pathGoesToHPS.getAsBoolean())
+                    ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
+                    : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))
+        .andThen(
             (pathGoesToHPS.getAsBoolean())
                 ? new RunFunnelUntilCheckedIn(funnelSubsystem)
-                : new MoveToSideAndShoot(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L4, redside, baseCommandName.substring(1, 2).equals("R")));
-
-    }
+                : new MoveToSideAndShoot(
+                    elevatorSubsystem,
+                    tootsieSlideSubsystem,
+                    driveTrain,
+                    ElevatorPositions.L4,
+                    redside,
+                    baseCommandName.substring(1, 2).equals("R")));
+  }
 }

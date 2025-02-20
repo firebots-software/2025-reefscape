@@ -6,7 +6,6 @@ momentum, then this moves the funnel motors backwards)
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.FunnelSubsystem;
 
 /**
