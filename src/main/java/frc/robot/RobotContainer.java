@@ -141,9 +141,12 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
+
+    // Gyro Tip Prevention
     Trigger tipping = new Trigger(() -> (GyroStabilizer.tipping(driveTrain)));
     tipping.whileTrue(new GyroStabilizer(driveTrain));
 
+    // By default, Dale is being set to Angle 0 when no button is pressed
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
     elevatorSubsystem.setDefaultCommand(
         new SetElevatorLevel(
