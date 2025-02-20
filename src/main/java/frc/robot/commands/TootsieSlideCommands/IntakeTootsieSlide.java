@@ -13,6 +13,7 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 public class IntakeTootsieSlide extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private TootsieSlideSubsystem tootsieSlideSubsystem;
+
   private FunnelSubsystem funnelSubsystem;
 
   public IntakeTootsieSlide(TootsieSlideSubsystem subsystem, FunnelSubsystem funnelSubsystem) {

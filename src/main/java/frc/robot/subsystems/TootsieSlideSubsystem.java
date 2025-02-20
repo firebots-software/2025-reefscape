@@ -5,15 +5,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.InvertedValue;
 import dev.doglog.DogLog;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;

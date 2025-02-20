@@ -145,7 +145,6 @@ public class Robot extends TimedRobot {
 
     DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
     DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
- 
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
