@@ -21,9 +21,6 @@ public class DefaultElevator extends Command {
     if (!CoralPosition.isCoralInTootsieSlide()) {
       elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
     }
-    else if(CoralPosition.isCoralInTootsieSlide()) {
-      elevatorSubsystem.elevateTo(ElevatorPositions.L1);
-    }
   }
 
   @Override
