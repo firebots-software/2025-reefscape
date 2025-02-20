@@ -132,6 +132,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     return currentLevel;
   }
 
+  public boolean atIntake() {
+    return currentLevel.equals(ElevatorPositions.Intake);
+  }
+
   public void elevateTo(ElevatorPositions level) {
     this.currentLevel = level;
     this.setPosition(level.height);

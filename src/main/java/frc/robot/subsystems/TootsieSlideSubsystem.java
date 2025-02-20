@@ -8,10 +8,10 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.InvertedValue;
 import dev.doglog.DogLog;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -28,6 +28,8 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   public LoggedTalonFX master;
 
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
+
+  private final MotionMagicVoltage voltage = new MotionMagicVoltage(0);
 
   // FOR SIMULATION
   private final DCMotor m_tootsieSlideGearbox = DCMotor.getKrakenX60(1);
@@ -75,7 +77,6 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
   private void runTootsieAtRPS(double flywheelSpeed) {
     double motor_speed = flywheelSpeed / Constants.TootsieSlide.GEAR_RATIO;
-    motor_speed = MathUtil.clamp(motor_speed, -100, 100);
     DogLog.log("subsystems/tootsieslide/Target Motor Speed", motor_speed);
     master.setControl(m_velocity.withVelocity(motor_speed));
 
@@ -92,7 +93,9 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   }
 
   public void stopTootsie() {
-    runTootsieAtRPS(0);
+    master.setPosition(0);
+    master.setControl(voltage.withPosition(0));
+    master.setPosition(0);
     m_flywheelSim.setInputVoltage(0);
   }
 

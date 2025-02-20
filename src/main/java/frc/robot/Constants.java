@@ -632,7 +632,7 @@ public final class Constants {
     public static final double ACCELERATION = 10; // TODO
     public static final double GEAR_RATIO = 1d / 6d;
     public static final double INTAKE_SPEED_RPS = 5d; // TODO
-    public static final double SHOOTING_SPEED_RPS = 15d;
+    public static final double SHOOTING_SPEED_RPS = 33d;
   }
 
   public static class FunnelConstants {
@@ -695,14 +695,14 @@ public final class Constants {
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.070),
-      safePosition(0, 0.0),
+      Intake(0, 0.068),
+      safePosition(0, 0.657 - 0.13),
       L1(1, 0.657 - 0.13),
       L2DALE(0, 0.493), // 0.8636 - 0.379
       L2(2, 0.8636),
       L3DALE(0, 0.91), // 1.27 - 0.379
       L3(3, 1.27),
-      L4(4, 1.82);
+      L4(4, 1.835);
 
       public final int position;
       public final double height;

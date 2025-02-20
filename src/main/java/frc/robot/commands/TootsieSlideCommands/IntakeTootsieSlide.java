@@ -6,6 +6,7 @@ package frc.robot.commands.TootsieSlideCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralPosition;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
 /** An example command that uses an example subsystem. */
@@ -13,8 +14,11 @@ public class IntakeTootsieSlide extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private TootsieSlideSubsystem tootsieSlideSubsystem;
 
-  public IntakeTootsieSlide(TootsieSlideSubsystem subsystem) {
+  private FunnelSubsystem funnelSubsystem;
+
+  public IntakeTootsieSlide(TootsieSlideSubsystem subsystem, FunnelSubsystem funnelSubsystem) {
     tootsieSlideSubsystem = subsystem;
+    this.funnelSubsystem = funnelSubsystem;
     addRequirements(tootsieSlideSubsystem);
   }
 
@@ -38,6 +42,6 @@ public class IntakeTootsieSlide extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return funnelSubsystem.drakeTripped();
   }
 }
