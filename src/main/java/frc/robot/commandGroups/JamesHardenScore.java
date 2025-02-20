@@ -29,6 +29,6 @@ public class JamesHardenScore extends SequentialCommandGroup {
 
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, height).alongWith(movementCommand),
-        new ShootTootsieSlide(tootsieSlideSubsystem));
+        new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5));
   }
 }

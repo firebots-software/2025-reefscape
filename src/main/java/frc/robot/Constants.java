@@ -46,19 +46,22 @@ public final class Constants {
 
     // TODO: CHANGE FOR NEW ROBOT
     public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.499);
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(-11.358);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.358);
     public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.011);
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
 
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.927);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-11.927);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.357);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.01);
 
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
+
+    // TODO: determine if this latency is still true
+    public static final double CAMERA_LATENCY_SECONDS = 0.02;
   }
 
   public static class Landmarks {
@@ -101,7 +104,7 @@ public final class Constants {
       new Translation2d(3.70901, 5.04882)
     };
 
-    public static final Translation2d[] LEFT_LINEUP_RED = {
+    public static final Translation2d[] RIGHT_LINEUP_RED = {
       new Translation2d(14.3349, 4.191),
       new Translation2d(13.83833, 3.00392),
       new Translation2d(12.56351, 2.83963),
@@ -110,7 +113,7 @@ public final class Constants {
       new Translation2d(13.55382, 5.21214)
     };
 
-    public static final Translation2d[] RIGHT_LINEUP_RED = {
+    public static final Translation2d[] LEFT_LINEUP_RED = {
       new Translation2d(14.33472, 3.86156),
       new Translation2d(13.55438, 2.83864),
       new Translation2d(12.27834, 3.00293),
@@ -137,7 +140,7 @@ public final class Constants {
         new Translation2d(3.05726, 4.67253)
     };
     
-    public static final Translation2d[] LEFT_OUTPOST_RED = {
+    public static final Translation2d[] RIGHT_OUTPOST_RED = {
         new Translation2d(14.3349, 4.94358),
         new Translation2d(14.49008, 3.38021),
         new Translation2d(13.21526, 2.46334),
@@ -146,7 +149,7 @@ public final class Constants {
         new Translation2d(12.90207, 5.58843)
     };
     
-    public static final Translation2d[] RIGHT_OUTPOST_RED = {
+    public static final Translation2d[] LEFT_OUTPOST_RED = {
         new Translation2d(14.33472, 3.10899),
         new Translation2d(12.90263, 2.46235),
         new Translation2d(11.62659, 3.37922),

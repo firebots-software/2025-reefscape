@@ -23,7 +23,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
+import frc.robot.commandGroups.EdwardScore;
 import frc.robot.commandGroups.Intake;
+import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -154,18 +156,16 @@ public class RobotContainer {
                             Constants.Landmarks.reefFacingAngleRed[5]))));
 
     joystick
-        .b()
-        .onTrue(
-            driveTrain.runOnce(
-                () ->
-                    driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)))));
-    // Mechanisms:
-
-    joystick
         .rightBumper()
         .onTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
     joystick.rightBumper().onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, armSubsystem));
-    joystick.y().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside));
+
+    joystick
+        .b()
+        .onTrue(new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
+
+    joystick.x().whileTrue(new JamesHardenScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L3, redside, true));
+    joystick.y().whileTrue(new EdwardScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L3, redside, true));
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
