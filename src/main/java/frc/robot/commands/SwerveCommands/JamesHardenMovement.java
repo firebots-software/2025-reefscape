@@ -177,18 +177,18 @@ public class JamesHardenMovement extends Command {
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOSTS_RED[0]);
+            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_RED[0]);
             int sideOfMinDist = 0;
             for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOSTS_RED[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOSTS_RED[i]);
+              if (currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_RED[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_RED[i]);
                 sideOfMinDist = i;
               }
             }
 
             Pose2d target =
                 new Pose2d(
-                    Constants.Landmarks.LEFT_OUTPOSTS_RED[sideOfMinDist],
+                    Constants.Landmarks.LEFT_OUTPOST_RED[sideOfMinDist],
                     Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestLeftOutpost/sideOfMinDist(m)", sideOfMinDist);
@@ -196,18 +196,18 @@ public class JamesHardenMovement extends Command {
 
             return target;
           } else {
-            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOSTS_BLUE[0]);
+            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_BLUE[0]);
             int sideOfMinDist = 0;
             for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOSTS_BLUE[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOSTS_BLUE[i]);
+              if (currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_BLUE[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_BLUE[i]);
                 sideOfMinDist = i;
               }
             }
 
             Pose2d target =
                 new Pose2d(
-                    Constants.Landmarks.LEFT_OUTPOSTS_BLUE[sideOfMinDist],
+                    Constants.Landmarks.LEFT_OUTPOST_BLUE[sideOfMinDist],
                     Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestLeftOutpost/sideOfMinDist(m)", sideOfMinDist);
@@ -226,37 +226,36 @@ public class JamesHardenMovement extends Command {
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOSTS_RED[0]);
+            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_RED[0]);
             int sideOfMinDist = 0;
             for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOSTS_RED[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOSTS_RED[i]);
+              if (currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_RED[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_RED[i]);
                 sideOfMinDist = i;
               }
             }
 
             Pose2d target =
                 new Pose2d(
-                    Constants.Landmarks.RIGHT_OUTPOSTS_RED[sideOfMinDist],
+                    Constants.Landmarks.RIGHT_OUTPOST_RED[sideOfMinDist],
                     Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
-
             DogLog.log("JamesHardenMovement/toClosestRightOutpost/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestRightOutpost/minDist(m)", minDist);
 
             return target;
           } else {
-            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOSTS_BLUE[0]);
+            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_BLUE[0]);
             int sideOfMinDist = 0;
             for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOSTS_BLUE[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOSTS_BLUE[i]);
+              if (currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_BLUE[i]) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_BLUE[i]);
                 sideOfMinDist = i;
               }
             }
 
             Pose2d target =
                 new Pose2d(
-                    Constants.Landmarks.RIGHT_OUTPOSTS_BLUE[sideOfMinDist],
+                    Constants.Landmarks.RIGHT_OUTPOST_BLUE[sideOfMinDist],
                     Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
 
             DogLog.log("JamesHardenMovement/toClosestRightOutpost/sideOfMinDist(m)", sideOfMinDist);

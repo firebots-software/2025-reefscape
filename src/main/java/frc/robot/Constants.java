@@ -96,12 +96,12 @@ public final class Constants {
     };
 
     public static final Translation2d[] RIGHT_LINEUP_BLUE = {
-      new Translation2d(3.2131, 4.191),
-      new Translation2d(3.70967, 3.00392),
-      new Translation2d(4.98449, 2.83963),
-      new Translation2d(5.76425, 3.86156),
-      new Translation2d(5.26908, 5.04783),
-      new Translation2d(3.99418, 5.21214)
+      new Translation2d(3.21328, 3.86156),
+      new Translation2d(3.99362, 2.83864),
+      new Translation2d(5.26966, 3.00293),
+      new Translation2d(5.76539, 4.19019),
+      new Translation2d(4.98505, 5.21313),
+      new Translation2d(3.70901, 5.04882)
     };
 
     public static final Translation2d[] LEFT_LINEUP_RED = {
@@ -114,48 +114,48 @@ public final class Constants {
     };
 
     public static final Translation2d[] RIGHT_LINEUP_RED = {
-      new Translation2d(14.3349, 4.191),
-      new Translation2d(13.83833, 3.00392),
-      new Translation2d(12.56351, 2.83963),
-      new Translation2d(11.78375, 3.86156),
-      new Translation2d(12.27892, 5.04783),
-      new Translation2d(13.55382, 5.21214)
+      new Translation2d(14.33472, 3.86156),
+      new Translation2d(13.55438, 2.83864),
+      new Translation2d(12.27834, 3.00293),
+      new Translation2d(11.78261, 4.19019),
+      new Translation2d(12.56295, 5.21313),
+      new Translation2d(13.83899, 5.04882)
     };
 
-    public static final Translation2d[] LEFT_OUTPOSTS_BLUE = {
-      new Translation2d(3.2131, 4.94358),
-      new Translation2d(3.05792, 3.38021),
-      new Translation2d(4.33274, 2.46334),
-      new Translation2d(5.76425, 3.10899),
-      new Translation2d(5.92083, 4.67154),
-      new Translation2d(4.64593, 5.58843)
+    public static final Translation2d[] LEFT_OUTPOST_BLUE = {
+        new Translation2d(3.2131, 4.94358),
+        new Translation2d(3.05792, 3.38021),
+        new Translation2d(4.33274, 2.46334),
+        new Translation2d(5.76425, 3.10899),
+        new Translation2d(5.92083, 4.67154),
+        new Translation2d(4.64593, 5.58843)
     };
-
-    public static final Translation2d[] RIGHT_OUTPOSTS_BLUE = {
-      new Translation2d(3.2131, 3.43842),
-      new Translation2d(4.36142, 2.62763),
-      new Translation2d(5.63624, 3.21592),
-      new Translation2d(5.76425, 4.61414),
-      new Translation2d(4.61733, 5.42412),
-      new Translation2d(3.34243, 4.83586)
+    
+    public static final Translation2d[] RIGHT_OUTPOST_BLUE = {
+        new Translation2d(3.21328, 3.10899),
+        new Translation2d(4.64537, 2.46235),
+        new Translation2d(5.92141, 3.37922),
+        new Translation2d(5.76539, 4.94276),
+        new Translation2d(4.3333, 5.58942),
+        new Translation2d(3.05726, 4.67253)
     };
-
-    public static final Translation2d[] LEFT_OUTPOSTS_RED = {
-      new Translation2d(14.3349, 4.94358),
-      new Translation2d(14.49008, 3.38021),
-      new Translation2d(13.21526, 2.46334),
-      new Translation2d(11.78375, 3.10899),
-      new Translation2d(11.62717, 4.67154),
-      new Translation2d(12.90207, 5.58843)
+    
+    public static final Translation2d[] LEFT_OUTPOST_RED = {
+        new Translation2d(14.3349, 4.94358),
+        new Translation2d(14.49008, 3.38021),
+        new Translation2d(13.21526, 2.46334),
+        new Translation2d(11.78375, 3.10899),
+        new Translation2d(11.62717, 4.67154),
+        new Translation2d(12.90207, 5.58843)
     };
-
-    public static final Translation2d[] RIGHT_OUTPOSTS_RED = {
-      new Translation2d(14.3349, 3.43842),
-      new Translation2d(13.18658, 2.62763),
-      new Translation2d(11.91176, 3.21592),
-      new Translation2d(11.78375, 4.61414),
-      new Translation2d(12.93067, 5.42412),
-      new Translation2d(14.20557, 4.83586)
+    
+    public static final Translation2d[] RIGHT_OUTPOST_RED = {
+        new Translation2d(14.33472, 3.10899),
+        new Translation2d(12.90263, 2.46235),
+        new Translation2d(11.62659, 3.37922),
+        new Translation2d(11.78261, 4.94276),
+        new Translation2d(13.2147, 5.58942),
+        new Translation2d(14.49074, 4.67253)
     };
   }
 
