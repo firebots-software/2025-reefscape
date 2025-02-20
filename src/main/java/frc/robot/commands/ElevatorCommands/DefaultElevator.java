@@ -31,6 +31,6 @@ public class DefaultElevator extends Command {
 
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.isAtPosition();
+    return false;
   }
 }
