@@ -141,10 +141,10 @@ public class Robot extends TimedRobot {
     //     rotationLess, pipelineRight.getTimestampSeconds(), visionMatrix);
     // DogLog.log("KalmanDebug/visionUsed", true);
 
-    DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
+    // DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
 
-    DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
-    DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
+    // DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
+    // DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
