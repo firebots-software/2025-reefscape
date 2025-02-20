@@ -13,7 +13,7 @@ public class ArmToAngleCmd extends Command {
 
   private final ArmSubsystem arm;
   private final double angle;
-  private double tolerance = 5;
+  private double tolerance = 2;
 
   @Override
   public void initialize() {}

@@ -144,11 +144,11 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean checkCurrent() {
-    double current = Math.abs(armMotor.getTorqueCurrent().getValue().magnitude());
+    double current = Math.abs(armMotor.getStatorCurrent().getValue().magnitude());
     // TODO: Fix the zeroing current possibly, nah scratch that, most likely we will need to change
     // ts
     if (current > Constants.Arm.ZERO_CURRENT) {
-      armMotor.disable();
+      // armMotor.disable();
       return true;
     }
 
@@ -176,6 +176,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void zeroSensor() {
+    armMotor.disable();
     armMotor.setPosition(0);
   }
 

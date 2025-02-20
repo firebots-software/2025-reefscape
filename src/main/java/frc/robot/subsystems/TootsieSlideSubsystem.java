@@ -92,7 +92,6 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   }
 
   public void stopTootsie() {
-    runTootsieAtRPS(0);
     m_flywheelSim.setInputVoltage(0);
   }
 
