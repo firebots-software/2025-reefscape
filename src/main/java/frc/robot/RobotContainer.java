@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
+import frc.robot.commandGroups.LoadAndPutUp;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.DebugCommands.DebugElevator;
@@ -139,7 +140,7 @@ public class RobotContainer {
                 Constants.ElevatorConstants.ElevatorPositions.L2DALE));
     debugJoystick
         .x()
-        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.L4));
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
     debugJoystick.a().onTrue(new ZeroArm(armSubsystem));
     debugJoystick
         .b()
@@ -151,8 +152,9 @@ public class RobotContainer {
 
     debugJoystick
         .rightTrigger()
-        .whileTrue(new DebugTootsieSlide(TootsieSlideSubsystem.getInstance()));
-    debugJoystick.y().onTrue(new DebugElevator(ElevatorSubsystem.getInstance()));
+        .onTrue(
+            new LoadAndPutUp(
+                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3));
 
     // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
