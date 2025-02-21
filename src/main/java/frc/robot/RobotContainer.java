@@ -27,8 +27,6 @@ import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.LoadAndPutUp;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
-import frc.robot.commands.DebugCommands.DebugElevator;
-import frc.robot.commands.DebugCommands.DebugTootsieSlide;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
@@ -286,5 +284,6 @@ public class RobotContainer {
     String chosenPath = startPosChooser.getSelected();
 
     return autoRoutines.autoRoutine(chosenPath).cmd();
-  }
+
+}
 }
