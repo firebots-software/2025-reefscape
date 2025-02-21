@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -40,6 +41,8 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
+import frc.robot.util.CustomController;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -65,6 +68,7 @@ public class RobotContainer {
   private final CommandXboxController joystick = new CommandXboxController(0);
   private final CommandXboxController joystick2 = new CommandXboxController(1);
   private final CommandXboxController debugJoystick = new CommandXboxController(3);
+  private final CustomController customController = new CustomController(4);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
@@ -94,6 +98,18 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    customController.LeftL1().onTrue(new PrintCommand("LeftL1"));
+    customController.LeftL2().onTrue(new PrintCommand("LeftL2"));
+    customController.LeftL3().onTrue(new PrintCommand("LeftL3"));
+    customController.LeftL4().onTrue(new PrintCommand("LeftL4"));
+    customController.RightL1().onTrue(new PrintCommand("RightL1"));
+    customController.RightL2().onTrue(new PrintCommand("RightL2"));
+    customController.RightL3().onTrue(new PrintCommand("RightL3"));
+    customController.RightL4().onTrue(new PrintCommand("RightL4"));
+    customController.Eject().onTrue(new PrintCommand("Eject"));
+    customController.In().onTrue(new PrintCommand("In"));
+    customController.Out().onTrue(new PrintCommand("Out"));
+
     // Automatic
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     Trigger funnelCheckin =
@@ -130,7 +146,6 @@ public class RobotContainer {
     joystick2.leftTrigger().onTrue(new D2Intake(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
     joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
     joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-
 
     // Debugging
     debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
