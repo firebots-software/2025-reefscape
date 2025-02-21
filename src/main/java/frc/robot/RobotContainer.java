@@ -120,13 +120,15 @@ public class RobotContainer {
     // Debugging
     debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
 
-    debugJoystick
-        .y()
-        .whileTrue(
-            new Dealgaenate(
-                armSubsystem,
-                elevatorSubsystem,
-                Constants.ElevatorConstants.ElevatorPositions.L2DALE));
+    // debugJoystick
+    //     .y()
+    //     .whileTrue(
+    //         new Dealgaenate(
+    //             armSubsystem,
+    //             elevatorSubsystem,
+    //             Constants.ElevatorConstants.ElevatorPositions.L2DALE));
+
+    debugJoystick.y().whileTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
     debugJoystick
         .x()
         .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
@@ -187,7 +189,7 @@ public class RobotContainer {
         .onTrue(new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
 
     joystick.x().whileTrue(new JamesHardenScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L3, redside, true));
-    joystick.y().whileTrue(new EdwardScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L3, redside, true));
+    joystick.y().whileTrue(new JamesHardenScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L4, redside, true));
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));

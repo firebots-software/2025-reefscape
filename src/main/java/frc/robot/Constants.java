@@ -635,8 +635,8 @@ public final class Constants {
 
     // TODO: CHANGE FOR NEW ROBOT
     // these outline the speed calculations
-    public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND =
-        5.944; // before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s,
+    public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.5;
+        //5.944; // before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s,
     public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
     public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.75;
     public static final double TELE_DRIVE_SLOW_MODE_SPEED_PERCENT = 0.3;
@@ -663,7 +663,7 @@ public final class Constants {
     public static final double ACCELERATION = 10; // TODO
     public static final double GEAR_RATIO = 1d / 6d;
     public static final double INTAKE_SPEED_RPS = 5d; // TODO
-    public static final double SHOOTING_SPEED_RPS = 33d;
+    public static final double SHOOTING_SPEED_RPS = 11d;
   }
 
   public static class FunnelConstants {

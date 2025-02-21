@@ -79,14 +79,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             0,
             0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 4.5));
     yProfiledPIDController =
         new ProfiledPIDController(
             5.5,
             0,
             0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 4.5));
 
     qProfiledPIDController =
         new ProfiledPIDController(
@@ -94,7 +94,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             0,
             0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 4.5));
 
     headingProfiledPIDController =
         new ProfiledPIDController(
