@@ -59,14 +59,11 @@ public final class Constants {
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
-
-    
   }
 
   public static class Landmarks {
     // midline constant
-    public static final double MIDLINE_X = 8.774;
-
+    public static final double MIDLINE_X = 8.7741125;
     public static final Rotation2d[] reefFacingAngleBlue = {
       new Rotation2d(Degrees.of(0)),
       new Rotation2d(Degrees.of(60)),
@@ -84,77 +81,78 @@ public final class Constants {
       new Rotation2d(Degrees.of(-60)),
       new Rotation2d(Degrees.of(-120))
     };
-
+    // Blue Lineup Translations
     public static final Translation2d[] LEFT_LINEUP_BLUE = {
-      new Translation2d(3.2131, 4.191),
-      new Translation2d(3.70967, 3.00392),
-      new Translation2d(4.98449, 2.83963),
-      new Translation2d(5.76425, 3.86156),
-      new Translation2d(5.26908, 5.04783),
-      new Translation2d(3.99418, 5.21214)
+      new Translation2d(3.14058, 4.19448),
+      new Translation2d(3.66895, 2.94212),
+      new Translation2d(5.0177, 2.77352),
+      new Translation2d(5.83809, 3.85728),
+      new Translation2d(5.30973, 5.10963),
+      new Translation2d(3.96097, 5.27823)
     };
 
     public static final Translation2d[] RIGHT_LINEUP_BLUE = {
-      new Translation2d(3.21328, 3.86156),
-      new Translation2d(3.99362, 2.83864),
-      new Translation2d(5.26966, 3.00293),
-      new Translation2d(5.76539, 4.19019),
-      new Translation2d(4.98505, 5.21313),
-      new Translation2d(3.70901, 5.04882)
+      new Translation2d(3.14058, 3.85728),
+      new Translation2d(3.96097, 2.77352),
+      new Translation2d(5.30973, 2.94212),
+      new Translation2d(5.83809, 4.19448),
+      new Translation2d(5.0177, 5.27823),
+      new Translation2d(3.66895, 5.10963)
+    };
+
+    // Blue Outpost Translations
+    public static final Translation2d[] LEFT_OUTPOST_BLUE = {
+      new Translation2d(3.14058, 4.94706),
+      new Translation2d(3.0172, 3.31841),
+      new Translation2d(4.36595, 2.39723),
+      new Translation2d(5.83809, 3.1047),
+      new Translation2d(5.96148, 4.73334),
+      new Translation2d(4.61272, 5.65452)
+    };
+
+    public static final Translation2d[] RIGHT_OUTPOST_BLUE = {
+      new Translation2d(3.14058, 3.1047),
+      new Translation2d(4.61272, 2.39723),
+      new Translation2d(5.96148, 3.31841),
+      new Translation2d(5.83809, 4.94706),
+      new Translation2d(4.36595, 5.65452),
+      new Translation2d(3.0172, 4.73334)
     };
 
     public static final Translation2d[] RIGHT_LINEUP_RED = {
-      new Translation2d(14.3349, 4.191),
-      new Translation2d(13.83833, 3.00392),
-      new Translation2d(12.56351, 2.83963),
-      new Translation2d(11.78375, 3.86156),
-      new Translation2d(12.27892, 5.04783),
-      new Translation2d(13.55382, 5.21214)
+      new Translation2d(14.4076704, 4.19448), // 17.5482504 - 3.14058
+      new Translation2d(13.8793004, 2.94212), // 17.5482504 - 3.66895
+      new Translation2d(12.5305504, 2.77352), // 17.5482504 - 5.0177
+      new Translation2d(11.7101604, 3.85728), // 17.5482504 - 5.83809
+      new Translation2d(12.2385204, 5.10963), // 17.5482504 - 5.30973
+      new Translation2d(13.5872804, 5.27823)  // 17.5482504 - 3.96097
     };
 
     public static final Translation2d[] LEFT_LINEUP_RED = {
-      new Translation2d(14.33472, 3.86156),
-      new Translation2d(13.55438, 2.83864),
-      new Translation2d(12.27834, 3.00293),
-      new Translation2d(11.78261, 4.19019),
-      new Translation2d(12.56295, 5.21313),
-      new Translation2d(13.83899, 5.04882)
+      new Translation2d(14.4076704, 3.85728), // 17.5482504 - 3.14058
+      new Translation2d(13.5872804, 2.77352), // 17.5482504 - 3.96097
+      new Translation2d(12.2385204, 2.94212), // 17.5482504 - 5.30973
+      new Translation2d(11.7101604, 4.19448), // 17.5482504 - 5.83809
+      new Translation2d(12.5305504, 5.27823), // 17.5482504 - 5.0177
+      new Translation2d(13.8793004, 5.10963)  // 17.5482504 - 3.66895
     };
 
-    public static final Translation2d[] LEFT_OUTPOST_BLUE = {
-        new Translation2d(3.2131, 4.94358),
-        new Translation2d(3.05792, 3.38021),
-        new Translation2d(4.33274, 2.46334),
-        new Translation2d(5.76425, 3.10899),
-        new Translation2d(5.92083, 4.67154),
-        new Translation2d(4.64593, 5.58843)
-    };
-    
-    public static final Translation2d[] RIGHT_OUTPOST_BLUE = {
-        new Translation2d(3.21328, 3.10899),
-        new Translation2d(4.64537, 2.46235),
-        new Translation2d(5.92141, 3.37922),
-        new Translation2d(5.76539, 4.94276),
-        new Translation2d(4.3333, 5.58942),
-        new Translation2d(3.05726, 4.67253)
-    };
-    
     public static final Translation2d[] RIGHT_OUTPOST_RED = {
-        new Translation2d(14.3349, 4.94358),
-        new Translation2d(14.49008, 3.38021),
-        new Translation2d(13.21526, 2.46334),
-        new Translation2d(11.78375, 3.10899),
-        new Translation2d(11.62717, 4.67154),
-        new Translation2d(12.90207, 5.58843)
+      new Translation2d(14.4076704, 4.94706), // 17.5482504 - 3.14058
+      new Translation2d(14.5310504, 3.31841), // 17.5482504 - 3.0172
+      new Translation2d(13.1823004, 2.39723), // 17.5482504 - 4.36595
+      new Translation2d(11.7101604, 3.10470), // 17.5482504 - 5.83809
+      new Translation2d(11.5867704, 4.73334), // 17.5482504 - 5.96148
+      new Translation2d(12.9355304, 5.65452)  // 17.5482504 - 4.61272
     };
-    
+
     public static final Translation2d[] LEFT_OUTPOST_RED = {
-        new Translation2d(14.33472, 3.10899),
-        new Translation2d(12.90263, 2.46235),
-        new Translation2d(11.62659, 3.37922),
-        new Translation2d(11.78261, 4.94276),
-        new Translation2d(13.2147, 5.58942),
-        new Translation2d(14.49074, 4.67253)
+      new Translation2d(14.4076704, 3.10470), // 17.5482504 - 3.14058
+      new Translation2d(12.9355304, 2.39723), // 17.5482504 - 4.61272
+      new Translation2d(11.5867704, 3.31841), // 17.5482504 - 5.96148
+      new Translation2d(11.7101604, 4.94706), // 17.5482504 - 5.83809
+      new Translation2d(13.1823004, 5.65452), // 17.5482504 - 4.36595
+      new Translation2d(14.5310504, 4.73334)  // 17.5482504 - 3.0172
     };
   }
 
@@ -636,7 +634,7 @@ public final class Constants {
     // TODO: CHANGE FOR NEW ROBOT
     // these outline the speed calculations
     public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.5;
-        //5.944; // before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s,
+    // 5.944; // before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s,
     public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
     public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.75;
     public static final double TELE_DRIVE_SLOW_MODE_SPEED_PERCENT = 0.3;
@@ -663,7 +661,7 @@ public final class Constants {
     public static final double ACCELERATION = 10; // TODO
     public static final double GEAR_RATIO = 1d / 6d;
     public static final double INTAKE_SPEED_RPS = 5d; // TODO
-    public static final double SHOOTING_SPEED_RPS = 11d;
+    public static final double SHOOTING_SPEED_RPS = 13d;
   }
 
   public static class FunnelConstants {
@@ -732,7 +730,7 @@ public final class Constants {
       L2DALE(0, 0.493), // 0.8636 - 0.379
       L2(2, 0.8636),
       L3DALE(0, 0.91), // 1.27 - 0.379
-      L3(3, 1.27),
+      L3(3, 1.29), // 1.27
       L4(4, 1.835);
 
       public final int position;
