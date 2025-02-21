@@ -30,6 +30,8 @@ import frc.robot.commandGroups.LoadAndPutUp;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.FunnelCommands.RunFunnelInCommand;
+import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
@@ -98,17 +100,19 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    customController.LeftL1().onTrue(new PrintCommand("LeftL1"));
-    customController.LeftL2().onTrue(new PrintCommand("LeftL2"));
-    customController.LeftL3().onTrue(new PrintCommand("LeftL3"));
-    customController.LeftL4().onTrue(new PrintCommand("LeftL4"));
-    customController.RightL1().onTrue(new PrintCommand("RightL1"));
-    customController.RightL2().onTrue(new PrintCommand("RightL2"));
-    customController.RightL3().onTrue(new PrintCommand("RightL3"));
-    customController.RightL4().onTrue(new PrintCommand("RightL4"));
-    customController.Eject().onTrue(new PrintCommand("Eject"));
-    customController.In().onTrue(new PrintCommand("In"));
-    customController.Out().onTrue(new PrintCommand("Out"));
+    
+    customController.LeftL1().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    customController.LeftL2().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    customController.LeftL3().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    customController.LeftL4().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    customController.RightL1().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    customController.RightL2().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+    customController.RightL3().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    customController.RightL4().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    
+    customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
+    customController.In().whileTrue(new RunFunnelInCommand(funnelSubsystem));
+    customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem));
 
     // Automatic
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
