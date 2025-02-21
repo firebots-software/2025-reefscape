@@ -12,17 +12,17 @@ public class CustomController extends GenericHID {
     public CustomController(int port){
         super(port);
         
-        LeftL1 = new Trigger(() -> this.getRawButton(0));
-        LeftL2 = new Trigger(() -> this.getRawButton(1));
+        LeftL1 = new Trigger(() -> this.getRawButton(4));
+        LeftL2 = new Trigger(() -> this.getRawButton(3));
         LeftL3 = new Trigger(() -> this.getRawButton(2));
-        LeftL4 = new Trigger(() -> this.getRawButton(3));
-        RightL1 = new Trigger(() -> this.getRawButton(7));
-        RightL2 = new Trigger(() -> this.getRawButton(8));
-        RightL3 = new Trigger(() -> this.getRawButton(9));
-        RightL4 = new Trigger(() -> this.getRawButton(10));
-        Eject = new Trigger(() -> this.getRawButton(4));
-        In = new Trigger(() -> this.getRawButton(5));
-        Out = new Trigger(() -> this.getRawButton(6));
+        LeftL4 = new Trigger(() -> this.getRawButton(1));
+        RightL1 = new Trigger(() -> this.getRawButton(8));
+        RightL2 = new Trigger(() -> this.getRawButton(9));
+        RightL3 = new Trigger(() -> this.getRawButton(10));
+        RightL4 = new Trigger(() -> this.getRawButton(11));
+        Eject = new Trigger(() -> this.getRawButton(5));
+        In = new Trigger(() -> this.getRawButton(6));
+        Out = new Trigger(() -> this.getRawButton(7));
 
     }
 
