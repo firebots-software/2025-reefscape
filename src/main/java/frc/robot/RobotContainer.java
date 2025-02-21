@@ -28,6 +28,7 @@ import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.LoadAndPutUp;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
+import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
@@ -99,6 +100,8 @@ public class RobotContainer {
   private void configureBindings() {
 
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
+    elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
+    
 
     // Custom Controller:
 
