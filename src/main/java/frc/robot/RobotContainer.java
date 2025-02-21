@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commandGroups.D2Intake;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.LoadAndPutUp;
@@ -62,6 +63,7 @@ public class RobotContainer {
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
+  private final CommandXboxController joystick2 = new CommandXboxController(1);
   private final CommandXboxController debugJoystick = new CommandXboxController(3);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
@@ -166,6 +168,17 @@ public class RobotContainer {
     // elevatorSubsystem.setDefaultCommand(
     //     new SetElevatorLevel(
     //         elevatorSubsystem, Constants.ElevatorConstants.ElevatorPositions.Intake));
+
+    joystick.rightBumper().whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L3DALE));
+    joystick.y().onTrue(null);//TODO: Put in the zero command
+    joystick.a().onTrue(null);//TODO: put in the move to human player station command
+
+    joystick2.leftTrigger().onTrue(new D2Intake(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
+    joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
+
+
+
 
     joystick
         .a()
