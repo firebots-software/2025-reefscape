@@ -101,7 +101,6 @@ public class RobotContainer {
 
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
-    
 
     // Custom Controller:
 

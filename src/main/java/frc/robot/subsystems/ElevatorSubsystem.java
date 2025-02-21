@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -35,7 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private CANrange distance; // Time of Flight (ToF) sensor
 
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
-
+  private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
   private ElevatorSubsystem() {
     // Initialize motors
 
@@ -152,6 +153,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         height
             * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
             / ElevatorConstants.CARRAIGE_UPDUCTION);
+  }
+
+  public void ElevatorTorqueMode() {
+    master.setControl(torqueRequest.withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
   }
 
   // TODO: ONLY FOR DEBUGGING
