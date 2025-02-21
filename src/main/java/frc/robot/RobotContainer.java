@@ -62,6 +62,7 @@ public class RobotContainer {
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
   private final CommandXboxController joystick = new CommandXboxController(0);
+  private final CommandXboxController joystick2 = new CommandXboxController(1);
   private final CommandXboxController debugJoystick = new CommandXboxController(3);
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
@@ -114,6 +115,17 @@ public class RobotContainer {
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide());
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
+
+
+    // joystick.leftTrigger().whileTrue(); // slow mode(??)
+    joystick.leftBumper().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
+    joystick.rightBumper().whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
+
+    joystick2.rightTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
+    // joystick2.rightBumper().whileTrue(); // reset mode
+    joystick2.y().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    joystick2.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+
 
     // Debugging
     debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
