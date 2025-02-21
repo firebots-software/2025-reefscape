@@ -123,7 +123,6 @@ public class RobotContainer {
     joystick.rightBumper().whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
     joystick.rightBumper().whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L3DALE));
     joystick.y().onTrue( driveTrain.runOnce(() -> driveTrain.resetPose(new Pose2d(driveTrain.getPose().getTranslation(), new Rotation2d(0)))));
-    
     joystick2.rightTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
     joystick2.rightBumper().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition)); // reset mode
     joystick2.y().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
