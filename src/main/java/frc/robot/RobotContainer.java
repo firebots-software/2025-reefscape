@@ -137,11 +137,16 @@ public class RobotContainer {
     // joystick.leftTrigger().whileTrue(); // slow mode(??)
     joystick.leftBumper().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
     joystick.rightBumper().whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
-
+    joystick.rightBumper().whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L3DALE));
+    joystick.y().onTrue( driveTrain.runOnce(() -> driveTrain.resetPose(new Pose2d(driveTrain.getPose().getTranslation(), new Rotation2d(0)))));
+    
     joystick2.rightTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
-    // joystick2.rightBumper().whileTrue(); // reset mode
+    joystick2.rightBumper().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition)); // reset mode
     joystick2.y().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
     joystick2.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    joystick2.leftTrigger().onTrue(new D2Intake(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
+    joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
 
     // Debugging
     debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
@@ -194,16 +199,6 @@ public class RobotContainer {
     // elevatorSubsystem.setDefaultCommand(
     //     new SetElevatorLevel(
     //         elevatorSubsystem, Constants.ElevatorConstants.ElevatorPositions.Intake));
-
-    joystick.rightBumper().whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L3DALE));
-    joystick.y().onTrue(null);//TODO: Put in the zero command
-    joystick.a().onTrue(null);//TODO: put in the move to human player station command
-
-    joystick2.leftTrigger().onTrue(new D2Intake(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
-    joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
-    joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-
-
 
 
     joystick
