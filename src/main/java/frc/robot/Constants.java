@@ -276,7 +276,7 @@ public final class Constants {
     public static enum RobotDimensions {
       SERRANO(Inches.of(22.52), Inches.of(22.834)), // length, width
       PROTO(Inches.of(22.52), Inches.of(22.834)), // length, width
-      JAMES_HARDEN(Inches.of(26.749), Inches.of(22.74)); // length, width
+      JAMES_HARDEN(Inches.of(26.75), Inches.of(22.75)); // length, width
       public final Distance length, width;
 
       RobotDimensions(Distance length, Distance width) {
@@ -692,7 +692,7 @@ public final class Constants {
     public static final int MOTOR2_PORT = 12; // TODO: change port
     public static final int CANRANGE_PORT = 41; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
-    public static final double STATOR_CURRENT_LIMIT = 30.0; // TODO: change for actual match
+    public static final double STATOR_CURRENT_LIMIT = 40.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 10.0; // TODO: change for actual match
 
     public static double S0C_KP = 2.0;
@@ -710,7 +710,7 @@ public final class Constants {
     // public static final double MOTIONMAGIC_KG = 0.28;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
-    public static final double SETPOINT_TOLERANCE = 0.1; // To-do
+    public static final double SETPOINT_TOLERANCE = 0.2; // To-do
     public static final double MAX_POSITIONAL_ERROR = 0.05;
     public static final double SPROCKET_CIRCUM_INCHES =
         1.751 * Math.PI; // TODO: change 0 to radius/diameter
