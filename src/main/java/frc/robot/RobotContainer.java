@@ -138,7 +138,6 @@ public class RobotContainer {
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
 
 
-    // joystick.leftTrigger().whileTrue(); // slow mode(??)
     joystick.leftBumper().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
     joystick.rightBumper().whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
     joystick.rightBumper().whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L3DALE));
@@ -180,13 +179,13 @@ public class RobotContainer {
                 elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
 
     // Swerve
-    Trigger leftShoulderTrigger = joystick.leftBumper();
+    Trigger leftTrigger = joystick.leftTrigger();
     DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
         leftRightFunction = () -> -joystick.getLeftX(),
         rotationFunction = () -> -joystick.getRightX(),
         speedFunction =
             () ->
-                leftShoulderTrigger.getAsBoolean()
+                leftTrigger.getAsBoolean()
                     ? 0d
                     : 1d; // slowmode when left shoulder is pressed, otherwise fast
     SwerveJoystickCommand swerveJoystickCommand =
