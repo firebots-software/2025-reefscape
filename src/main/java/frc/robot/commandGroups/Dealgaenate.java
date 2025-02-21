@@ -7,8 +7,7 @@ package frc.robot.commandGroups;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.commands.DaleCommands.ArmToAngleCmd;
-import frc.robot.commands.DaleCommands.SpinFlywheel;
+import frc.robot.commands.DaleCommands.ArmToAngleAndSpinFlywheel;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -25,8 +24,6 @@ public class Dealgaenate extends SequentialCommandGroup {
     // TODO: To whomever reads this, have fun finding actual numbers;
     // Fe fi fo fum, i proclaim that ritvik's a bum
     addCommands(new SetElevatorLevel(elevator, position));
-    addCommands(new ArmToAngleCmd(Constants.Arm.EXTENDED_ANGLE, arm));
-    addCommands(
-        new SpinFlywheel(arm).andThen(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE, arm)));
+    addCommands(new ArmToAngleAndSpinFlywheel(Constants.Arm.EXTENDED_ANGLE, arm));
   }
 }
