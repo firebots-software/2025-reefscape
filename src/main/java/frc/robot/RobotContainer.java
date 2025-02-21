@@ -148,10 +148,13 @@ public class RobotContainer {
 
     // By default, Dale is being set to Angle 0 when no button is pressed
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
+
+    // By default, Elevator is being set to Intake level when no button is pressed
     elevatorSubsystem.setDefaultCommand(
         new SetElevatorLevel(
             elevatorSubsystem, Constants.ElevatorConstants.ElevatorPositions.Intake));
 
+    // When "A" pressed, reset the Robot Pose to
     joystick
         .a()
         .onTrue(
