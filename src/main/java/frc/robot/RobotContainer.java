@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
 import choreo.auto.AutoFactory;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -28,7 +25,6 @@ import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenElevator;
-import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
@@ -38,6 +34,7 @@ import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
+import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -45,6 +42,8 @@ import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -253,19 +252,27 @@ public class RobotContainer {
     // (When the Check-In sensor detects a Coral AND there is NO Coral in the Tootsie Slide.)
     Trigger funnelCheckin =
         new Trigger(
-            () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide() && !AutoRoutines.getIsAutoRunning());
-    
+            () ->
+                funnelSubsystem.isCoralCheckedIn()
+                    && !CoralPosition.isCoralInTootsieSlide()
+                    && !AutoRoutines.getIsAutoRunning());
+
     // This triggers when we need to eject a Coral from the funnel.
     // (When the Check-In sensor detects a Coral AND there IS a Coral in the Tootsie Slide.)
     Trigger ejectTime =
         new Trigger(
-            () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide() && !AutoRoutines.getIsAutoRunning()));
+            () ->
+                (funnelSubsystem.isCoralCheckedIn()
+                    && CoralPosition.isCoralInTootsieSlide()
+                    && !AutoRoutines.getIsAutoRunning()));
 
     //  !!!  When we need to eject a Coral from the funnel, we run EjectCoralFR().
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
 
-    //  !!!  Each time a new Coral enters the funnel, we move elevator to Intake and intake the Coral.
-    // (RunFunnelUntilDetectionSafe() runs the intake motors until the Check-Out sensor gets triggered.)
+    //  !!!  Each time a new Coral enters the funnel, we move elevator to Intake and intake the
+    // Coral.
+    // (RunFunnelUntilDetectionSafe() runs the intake motors until the Check-Out sensor gets
+    // triggered.)
     funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
     funnelCheckin.onTrue(new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
 
@@ -279,18 +286,23 @@ public class RobotContainer {
                     && elevatorSubsystem.isAtPosition()
                     && !AutoRoutines.getIsAutoRunning());
 
-    //  !!!  Each time a Coral is ready to be transferred to the Tootsie Slide, we transfer it to the Tootsie Slide.
+    //  !!!  Each time a Coral is ready to be transferred to the Tootsie Slide, we transfer it to
+    // the Tootsie Slide.
     funnelCheckout.onTrue(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
 
     // Triggers when there is a Coral in the Tootsie Slide.
-    Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide() && !AutoRoutines.getIsAutoRunning());
+    Trigger coralInElevator =
+        new Trigger(
+            () -> CoralPosition.isCoralInTootsieSlide() && !AutoRoutines.getIsAutoRunning());
 
-    //  !!!  Each time a new Coral goes into the Tootsie Slide, we move the elevator to the Safe Position (L1).
+    //  !!!  Each time a new Coral goes into the Tootsie Slide, we move the elevator to the Safe
+    // Position (L1).
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
 
-    //  !!!  By default (when no other commands are using the Elevator Subsystem), we move the elevator to Intake unless it
+    //  !!!  By default (when no other commands are using the Elevator Subsystem), we move the
+    // elevator to Intake unless it
     // is carrying a Coral in the Tootsie Slide.
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
 

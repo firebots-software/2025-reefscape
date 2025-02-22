@@ -5,21 +5,18 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.commandGroups.AutoLiftAndShoot;
-import frc.robot.commandGroups.LoadAndPutUp;
+import frc.robot.commandGroups.Intake;
+import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.AutoCommands.SetIsAutoRunningToFalse;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
-import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
-
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
 
@@ -105,23 +102,23 @@ public class AutoRoutines {
     this.middleTraj = new ArrayList<>();
     this.bottomTraj = new ArrayList<>();
 
-    for(String n : topNames){
+    for (String n : topNames) {
       topTraj.add(routine.trajectory(n));
     }
-    for(String n : middleNames){
+    for (String n : middleNames) {
       middleTraj.add(routine.trajectory(n));
     }
-    for(String n : bottomNames){
+    for (String n : bottomNames) {
       bottomTraj.add(routine.trajectory(n));
     }
-
   }
 
   public AutoRoutine autoRoutine(String chosenAuto) {
     SequentialCommandGroup autoCommandGroup = new SequentialCommandGroup();
     int numPaths; // Number of trajectories (segments) in the chosen Auto routine
 
-    // Set the first command in the AutoCommandGroup to reset the Odometry to the start Pose of the first trajectory in Choreo
+    // Set the first command in the AutoCommandGroup to reset the Odometry to the start Pose of the
+    // first trajectory in Choreo
     switch (chosenAuto) {
       case "top":
         autoCommandGroup.addCommands(topTraj.get(0).resetOdometry());
@@ -138,11 +135,12 @@ public class AutoRoutines {
         numPaths = bottomNames.size();
         break;
       default:
-        throw new Error("AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoRoutine()");
+        throw new Error(
+            "AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoRoutine()");
     }
 
     // Add all the auto segments as commands
-    for(int i = 0; i < numPaths; i++) {
+    for (int i = 0; i < numPaths; i++) {
       autoCommandGroup.addCommands(autoSubCommand(chosenAuto, i));
     }
 
@@ -156,14 +154,19 @@ public class AutoRoutines {
   }
 
   /**
-   * AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and necessary mechanism action.
-   * @param chosenAuto - A String representing whether the top, middle, or bottom auto routine was selected. Passed on as a parameter inside autoRoutine().
-   * @param index - An int representing which trajectory/segment of the auto routine to create a command for. Corresponds to the ArrayLists of trajectory names and AutoTrajectories created in the constructor.
+   * AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and
+   * necessary mechanism action.
+   *
+   * @param chosenAuto - A String representing whether the top, middle, or bottom auto routine was
+   *     selected. Passed on as a parameter inside autoRoutine().
+   * @param index - An int representing which trajectory/segment of the auto routine to create a
+   *     command for. Corresponds to the ArrayLists of trajectory names and AutoTrajectories created
+   *     in the constructor.
    */
   public Command autoSubCommand(String chosenAuto, int index) {
     /*
     AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and necessary mechanism action.
-     
+
     ----- Old Structure (not using configureBindings()): -----
 
     Sequential (
@@ -176,7 +179,7 @@ public class AutoRoutines {
       ),
       Wait-For-Coral / Shoot-Coral
     )
-    
+
     ----- New Structure 1 (using configureBindings()): -----
 
     (actually i don't think making an Auto that relies on the default bindings is ideal or even possible;
@@ -205,7 +208,8 @@ public class AutoRoutines {
     */
 
     String trajName; // Name of the .traj file that corresponds to chosenAuto and index
-    AutoTrajectory trajectory; // Corresponding AutoTrajectory from the ArrayList initialized in the constructor
+    AutoTrajectory trajectory; // Corresponding AutoTrajectory from the ArrayList initialized in the
+    // constructor
 
     // Set trajName and trajectory based on chosenAuto and index
     switch (chosenAuto) {
@@ -213,7 +217,7 @@ public class AutoRoutines {
         trajName = topNames.get(index);
         trajectory = topTraj.get(index);
         break;
-        
+
       case "middle":
         trajName = middleNames.get(index);
         trajectory = middleTraj.get(index);
@@ -223,32 +227,42 @@ public class AutoRoutines {
         trajName = bottomNames.get(index);
         trajectory = bottomTraj.get(index);
         break;
-      
+
       default:
-        throw new Error("AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoSubCommand()");
+        throw new Error(
+            "AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoSubCommand()");
     }
 
     // boolean pathIsStart = trajName.contains("START-");
-    BooleanSupplier pathGoesToHPS = () -> !(trajName.contains("HPS-") || trajName.contains("START-"));
+    BooleanSupplier pathGoesToHPS =
+        () -> !(trajName.contains("HPS-") || trajName.contains("START-"));
     BooleanSupplier startOrLeavingHPS = () -> !pathGoesToHPS.getAsBoolean();
 
     DogLog.log("Auto/trajName", trajName);
     DogLog.log("Auto/pathGoesToHPS", pathGoesToHPS.getAsBoolean());
 
     // See Structure description comment above for a sort-of better explanation
-    Command newStructure2 = new SequentialCommandGroup(
-      new LoadAndPutUp(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L1).onlyIf(startOrLeavingHPS),
-      new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1), // using L1 as the Safe Position because not sure if the "pos" value in the Constants Enum should be 0 or 1
-      trajectory.cmd(), // actual robot movement
-      (pathGoesToHPS.getAsBoolean() ?
-      new ParallelCommandGroup(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
-        new RunFunnelUntilCheckedIn(funnelSubsystem)) :
-      new SequentialCommandGroup(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4),
-        new ShootTootsieSlide(tootsieSlideSubsystem)))
-      
-    );
+    Command newStructure2 =
+        new SequentialCommandGroup(
+            new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem)
+                .onlyIf(startOrLeavingHPS),
+            new SetElevatorLevel(
+                elevatorSubsystem,
+                ElevatorPositions
+                    .L1), // using L1 as the Safe Position because not sure if the "pos" value in
+            // the Constants Enum should be 0 or 1
+            trajectory.cmd(), // actual robot movement
+            (pathGoesToHPS.getAsBoolean()
+                ? new ParallelCommandGroup(
+                    new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+                    new RunFunnelUntilCheckedIn(funnelSubsystem))
+                : new JamesHardenScore(
+                    elevatorSubsystem,
+                    tootsieSlideSubsystem,
+                    driveTrain,
+                    ElevatorPositions.L4,
+                    redside,
+                    isAutoRunning)));
 
     // Command oldStructure =  Commands.parallel(
     //         trajectory.cmd(),
@@ -258,7 +272,8 @@ public class AutoRoutines {
     //                     funnelSubsystem,
     //                     tootsieSlideSubsystem,
     //                     ElevatorPositions.Intake)
-    //                 .onlyIf(() -> !pathGoesToHPS.getAsBoolean()), // LoadAndPutUp(Intake) only if the path does NOT go to the HPS. Should run on Start path
+    //                 .onlyIf(() -> !pathGoesToHPS.getAsBoolean()), // LoadAndPutUp(Intake) only if
+    // the path does NOT go to the HPS. Should run on Start path
     //             ((pathGoesToHPS.getAsBoolean())
     //                 ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
     //                 : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))
@@ -266,7 +281,7 @@ public class AutoRoutines {
     //         (pathGoesToHPS.getAsBoolean())
     //             ? new RunFunnelUntilCheckedIn(funnelSubsystem)
     //             : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
-    
+
     return newStructure2;
   }
 

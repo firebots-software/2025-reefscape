@@ -4,11 +4,6 @@
 
 package frc.robot;
 
-import java.util.Optional;
-
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.targeting.PhotonPipelineResult;
-
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -214,7 +209,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    //m_robotContainer.configureBindings();
+    // m_robotContainer.configureBindings();
 
     // CommandScheduler.getInstance();
     // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
