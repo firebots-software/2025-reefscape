@@ -24,9 +24,9 @@ import java.util.function.BooleanSupplier;
 public class AutoRoutines {
   private final AutoFactory autoFactory;
   private final SwerveSubsystem driveTrain;
-  private final ElevatorSubsystem elevatorSubsystem;
-  private final TootsieSlideSubsystem tootsieSlideSubsystem;
-  private final FunnelSubsystem funnelSubsystem;
+  // private final ElevatorSubsystem elevatorSubsystem;
+  // private final TootsieSlideSubsystem tootsieSlideSubsystem;
+  // private final FunnelSubsystem funnelSubsystem;
   private final BooleanSupplier redside;
 
   private AutoRoutine routine;
@@ -42,16 +42,16 @@ public class AutoRoutines {
   public AutoRoutines(
       AutoFactory factory,
       SwerveSubsystem driveTrain,
-      ElevatorSubsystem elevatorSubsystem,
-      TootsieSlideSubsystem tootsieSlideSubsystem,
-      FunnelSubsystem funnelSubsystem,
+      // ElevatorSubsystem elevatorSubsystem,
+      // TootsieSlideSubsystem tootsieSlideSubsystem,
+      // FunnelSubsystem funnelSubsystem,
       BooleanSupplier redside) {
 
     this.autoFactory = factory;
     this.driveTrain = driveTrain;
-    this.elevatorSubsystem = elevatorSubsystem;
-    this.tootsieSlideSubsystem = tootsieSlideSubsystem;
-    this.funnelSubsystem = funnelSubsystem;
+    // this.elevatorSubsystem = elevatorSubsystem;
+    // this.tootsieSlideSubsystem = tootsieSlideSubsystem;
+    // this.funnelSubsystem = funnelSubsystem;
     this.redside = redside;
 
     // this.routine = autoFactory.newRoutine("routine");
@@ -172,9 +172,9 @@ public class AutoRoutines {
     }
 
     // Add all the auto segments as commands
-    for (int i = 0; i < numPaths; i++) {
-      autoCommandGroup.addCommands(autoSubCommand(chosenAuto, i));
-    }
+    // for (int i = 0; i < numPaths; i++) {
+    //   autoCommandGroup.addCommands(autoSubCommand(chosenAuto, i));
+    // }
 
     // Set isAutoRunning to false when auto routine finishes
     autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
@@ -198,7 +198,7 @@ public class AutoRoutines {
    *     command for. Corresponds to the ArrayLists of trajectory names and AutoTrajectories created
    *     in the constructor.
    */
-  public SequentialCommandGroup autoSubCommand(String chosenAuto, int index) {
+  //public SequentialCommandGroup autoSubCommand(String chosenAuto, int index) {
     /*
     AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and necessary mechanism action.
 
@@ -242,86 +242,86 @@ public class AutoRoutines {
 
     */
 
-    String trajName; // Name of the .traj file that corresponds to chosenAuto and index
-    AutoTrajectory trajectory; // Corresponding AutoTrajectory from the ArrayList initialized in the
-    // constructor
+  //   String trajName; // Name of the .traj file that corresponds to chosenAuto and index
+  //   AutoTrajectory trajectory; // Corresponding AutoTrajectory from the ArrayList initialized in the
+  //   // constructor
 
-    // Set trajName and trajectory based on chosenAuto and index
-    switch (chosenAuto) {
-      case "top":
-        trajName = topNames.get(index);
-        trajectory = topTraj.get(index);
-        break;
+  //   // Set trajName and trajectory based on chosenAuto and index
+  //   switch (chosenAuto) {
+  //     case "top":
+  //       trajName = topNames.get(index);
+  //       trajectory = topTraj.get(index);
+  //       break;
 
-      case "middle":
-        trajName = middleNames.get(index);
-        trajectory = middleTraj.get(index);
-        break;
+  //     case "middle":
+  //       trajName = middleNames.get(index);
+  //       trajectory = middleTraj.get(index);
+  //       break;
 
-      case "bottom":
-        trajName = bottomNames.get(index);
-        trajectory = bottomTraj.get(index);
-        break;
+  //     case "bottom":
+  //       trajName = bottomNames.get(index);
+  //       trajectory = bottomTraj.get(index);
+  //       break;
 
-      default:
-        throw new Error(
-            "AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoSubCommand()");
-    }
+  //     default:
+  //       throw new Error(
+  //           "AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoSubCommand()");
+  //   }
 
-    // boolean pathIsStart = trajName.contains("START-");
-    BooleanSupplier pathGoesToHPS =
-        () -> !(trajName.contains("HPS-") || trajName.contains("START-"));
-    BooleanSupplier startOrLeavingHPS = () -> !pathGoesToHPS.getAsBoolean();
-    boolean goRightBranch = trajName.substring(trajName.length() - 1).equals("R");
+  //   // boolean pathIsStart = trajName.contains("START-");
+  //   BooleanSupplier pathGoesToHPS =
+  //       () -> !(trajName.contains("HPS-") || trajName.contains("START-"));
+  //   BooleanSupplier startOrLeavingHPS = () -> !pathGoesToHPS.getAsBoolean();
+  //   boolean goRightBranch = trajName.substring(trajName.length() - 1).equals("R");
 
-    DogLog.log("Auto/trajName", trajName);
-    DogLog.log("Auto/pathGoesToHPS", pathGoesToHPS.getAsBoolean());
+  //   DogLog.log("Auto/trajName", trajName);
+  //   DogLog.log("Auto/pathGoesToHPS", pathGoesToHPS.getAsBoolean());
 
-    // See Structure description comment above for a sort-of better explanation
-    SequentialCommandGroup newStructure2 =
-        new SequentialCommandGroup(
-            new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem)
-                .onlyIf(startOrLeavingHPS),
-            new SetElevatorLevel(
-                elevatorSubsystem,
-                ElevatorPositions
-                    .L1), // using L1 as the Safe Position because not sure if the "pos" value in
-            // the Constants Enum should be 0 or 1
-            trajectory.cmd(), // actual robot movement
-            (pathGoesToHPS.getAsBoolean()
-                ? new ParallelCommandGroup(
-                    new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
-                    new RunFunnelUntilCheckedIn(funnelSubsystem))
-                : new JamesHardenScore(
-                    elevatorSubsystem,
-                    tootsieSlideSubsystem,
-                    driveTrain,
-                    ElevatorPositions.L4,
-                    redside,
-                    goRightBranch)));
+  //   // See Structure description comment above for a sort-of better explanation
+  //   SequentialCommandGroup newStructure2 =
+  //       new SequentialCommandGroup(
+  //           new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem)
+  //               .onlyIf(startOrLeavingHPS),
+  //           new SetElevatorLevel(
+  //               elevatorSubsystem,
+  //               ElevatorPositions
+  //                   .L1), // using L1 as the Safe Position because not sure if the "pos" value in
+  //           // the Constants Enum should be 0 or 1
+  //           trajectory.cmd(), // actual robot movement
+  //           (pathGoesToHPS.getAsBoolean()
+  //               ? new ParallelCommandGroup(
+  //                   new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+  //                   new RunFunnelUntilCheckedIn(funnelSubsystem))
+  //               : new JamesHardenScore(
+  //                   elevatorSubsystem,
+  //                   tootsieSlideSubsystem,
+  //                   driveTrain,
+  //                   ElevatorPositions.L4,
+  //                   redside,
+  //                   goRightBranch)));
 
-    // Command oldStructure =  Commands.parallel(
-    //         trajectory.cmd(),
-    //         Commands.sequence(
-    //             new LoadAndPutUp(
-    //                     elevatorSubsystem,
-    //                     funnelSubsystem,
-    //                     tootsieSlideSubsystem,
-    //                     ElevatorPositions.Intake)
-    //                 .onlyIf(() -> !pathGoesToHPS.getAsBoolean()), // LoadAndPutUp(Intake) only if
-    // the path does NOT go to the HPS. Should run on Start path
-    //             ((pathGoesToHPS.getAsBoolean())
-    //                 ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
-    //                 : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))
-    //     .andThen(
-    //         (pathGoesToHPS.getAsBoolean())
-    //             ? new RunFunnelUntilCheckedIn(funnelSubsystem)
-    //             : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
+  //   // Command oldStructure =  Commands.parallel(
+  //   //         trajectory.cmd(),
+  //   //         Commands.sequence(
+  //   //             new LoadAndPutUp(
+  //   //                     elevatorSubsystem,
+  //   //                     funnelSubsystem,
+  //   //                     tootsieSlideSubsystem,
+  //   //                     ElevatorPositions.Intake)
+  //   //                 .onlyIf(() -> !pathGoesToHPS.getAsBoolean()), // LoadAndPutUp(Intake) only if
+  //   // the path does NOT go to the HPS. Should run on Start path
+  //   //             ((pathGoesToHPS.getAsBoolean())
+  //   //                 ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
+  //   //                 : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))
+  //   //     .andThen(
+  //   //         (pathGoesToHPS.getAsBoolean())
+  //   //             ? new RunFunnelUntilCheckedIn(funnelSubsystem)
+  //   //             : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
 
-    DogLog.log("Auto/AutoSubCommand-ran", true);
+  //   DogLog.log("Auto/AutoSubCommand-ran", true);
 
-    return newStructure2;
-  }
+  //   return newStructure2;
+  // }
 
   public static void setIsAutoRunning(boolean running) {
     isAutoRunning = running;
