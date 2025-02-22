@@ -24,7 +24,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
       BooleanSupplier redSide,
       RobotPosition position) {
     double currentTime = Timer.getFPGATimestamp();
-    if(Math.abs(currentTime - position.dTime) <= 2.0){ //If the button has been pressed in the last 2 seconds
+    if(position != null && Math.abs(currentTime - position.dTime) <= 2.0){ //If the button has been pressed in the last 2 seconds
       Command movementCommand;
       if (position.side.equals(BranchSide.RIGHT)) {
         movementCommand = JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide);
