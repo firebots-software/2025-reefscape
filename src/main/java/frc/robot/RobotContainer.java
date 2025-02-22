@@ -92,7 +92,8 @@ public class RobotContainer {
             true, // If alliance flipping should be enabled
             driveTrain);
 
-    // Set up the Auto chooser in SmartDashboard, which allows you to
+    // Set up the Auto chooser in SmartDashboard, which allows you to choose between the Top, Middle, and Bottom auto paths
+    // (Mirroring for Blue or Red side happens automatically with Choreo)
     startPosChooser = new SendableChooser<String>();
     startPosChooser.setDefaultOption("Top (next to blue barge zone)", "top");
     startPosChooser.addOption("Middle (between blue and red barge zones)", "middle");
