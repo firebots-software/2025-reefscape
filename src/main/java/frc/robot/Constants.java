@@ -62,6 +62,11 @@ public final class Constants {
   }
 
   public static class Landmarks {
+    public static enum BranchSide {
+      // TODO: Change the height values based on heights needed to score/intake coral on
+      LEFT(),
+      RIGHT();
+    }
     // midline constant
     public static final double MIDLINE_X = 8.7741125;
     public static final Rotation2d[] reefFacingAngleBlue = {

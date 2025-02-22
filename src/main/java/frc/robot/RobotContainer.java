@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.Constants.Landmarks.BranchSide;
 import frc.robot.commandGroups.D2Intake;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
@@ -28,6 +29,7 @@ import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.CoralInTootsie;
+import frc.robot.commands.RobotPositionCommand;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
@@ -45,6 +47,8 @@ import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
+import frc.robot.util.RobotPosition;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -125,86 +129,33 @@ public class RobotContainer {
     // Left Elevator Levels
     customController
         .LeftL1()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L1,
-                redside,
-                false));
+        .whileTrue(new RobotPositionCommand(ElevatorPositions.L1,BranchSide.LEFT));
+
     customController
         .LeftL2()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L2,
-                redside,
-                false));
+        .whileTrue(new RobotPositionCommand(ElevatorPositions.L2,BranchSide.LEFT));
     customController
         .LeftL3()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L3,
-                redside,
-                false));
+        .whileTrue(new RobotPositionCommand(ElevatorPositions.L3,BranchSide.LEFT));
     customController
         .LeftL4()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L4,
-                redside,
-                false));
+        .whileTrue(new RobotPositionCommand(ElevatorPositions.L4,BranchSide.LEFT));
 
     // Right Elevator Levels
     customController
         .RightL1()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L1,
-                redside,
-                true));
+        .whileTrue(new RobotPositionCommand(ElevatorPositions.L1,BranchSide.RIGHT));
     customController
         .RightL2()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L2,
-                redside,
-                true));
+        .whileTrue(new RobotPositionCommand(ElevatorPositions.L2,BranchSide.RIGHT));
+
     customController
         .RightL3()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L3,
-                redside,
-                true));
+        .whileTrue(new RobotPositionCommand(ElevatorPositions.L3,BranchSide.RIGHT));
+
     customController
         .RightL4()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L4,
-                redside,
-                true));
+        .whileTrue(new RobotPositionCommand(ElevatorPositions.L4,BranchSide.RIGHT));
 
     // Bottom Three Buttons
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
@@ -229,7 +180,14 @@ public class RobotContainer {
                 () ->
                     driveTrain.resetPose(
                         new Pose2d(driveTrain.getPose().getTranslation(), new Rotation2d(0)))));
-
+    joystick.rightTrigger().onTrue(
+        new JamesHardenScore(
+        elevatorSubsystem,
+        tootsieSlideSubsystem,
+        driveTrain,
+        redside,
+        RobotPosition.Instance
+        ));
     // Joystick 2:
     // Elevator
     joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
