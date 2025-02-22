@@ -37,6 +37,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
+
   private ElevatorSubsystem() {
     // Initialize motors
 
