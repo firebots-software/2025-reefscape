@@ -41,6 +41,7 @@ import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
+import frc.robot.commands.CoralInTootsie;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CoralPosition;
@@ -259,9 +260,11 @@ public class RobotContainer {
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide());
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
-
-    elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
-
+    
+    //If we start with Coral in Tootsie Slide
+    Trigger drake = new Trigger(() -> funnelSubsystem.drakeTripped());
+    drake.whileTrue(new CoralInTootsie());
+    
     // Debugging
     debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
 
