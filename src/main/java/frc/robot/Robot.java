@@ -4,19 +4,24 @@
 
 package frc.robot;
 
-import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.targeting.PhotonPipelineResult;
-
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.AbstractedPID.IncreasePArm;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CoralPosition;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.LoggedTalonFX;
 
 /**
@@ -35,8 +40,18 @@ public class Robot extends TimedRobot {
   // private VisionSystem visionRight =
   // VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
   // private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
+  TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
+  FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
+  ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+  ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   private final RobotContainer m_robotContainer;
+  private final AutoFactory autoFactory;
+  private final AutoRoutines autoRoutines;
+  private final AutoChooser autoChooser;
+  private BooleanSupplier redside = () -> redAlliance;
+  private static boolean redAlliance;
+
 
   // standard deviation for x (meters), y (meters) and rotation (radians) camera data
 
@@ -50,7 +65,37 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    DogLog.log("Auto/drivetrain-null", driveTrain == null);
+    autoFactory =
+        new AutoFactory(
+            driveTrain::getPose, // A function that returns the current robot pose
+            driveTrain
+                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            driveTrain::followTrajectory, // The drive subsystem trajectory follower
+            true, // If alliance flipping should be enabled
+            driveTrain);
+
+    autoRoutines =
+        new AutoRoutines(
+            autoFactory,
+            driveTrain,
+            redside);
+    autoChooser = new AutoChooser();
+    autoChooser.addRoutine("Simple Bottom Blue", autoRoutines::simpleTest);
+    SmartDashboard.putData("autochooser", autoChooser);
     absoluteInit();
+
+    DogLog.log("Auto/CommandIsNull", true);
+    DogLog.log("Auto/CommandScheduled", false);
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand(); // UNCOMMENT
+
+    // schedule the autonomous command (example) (UNCOMMENT)
+    // if (m_autonomousCommand != null) {
+      DogLog.log("Auto/CommandIsNull", false);
+      // m_autonomousCommand.schedule();
+      RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+      DogLog.log("Auto/CommandScheduled", true);
+    // }
   }
 
   /**
@@ -185,16 +230,17 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.setAlliance();
-    DogLog.log("Auto/CommandIsNull", true);
-    DogLog.log("Auto/CommandScheduled", false);
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand(); // UNCOMMENT
+    // DogLog.log("Auto/CommandIsNull", true);
+    // DogLog.log("Auto/CommandScheduled", false);
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand(); // UNCOMMENT
 
-    // schedule the autonomous command (example) (UNCOMMENT)
-    if (m_autonomousCommand != null) {
-      DogLog.log("Auto/CommandIsNull", false);
-      m_autonomousCommand.schedule();
-      DogLog.log("Auto/CommandScheduled", true);
-    }
+    // // schedule the autonomous command (example) (UNCOMMENT)
+    // if (m_autonomousCommand != null) {
+    //   DogLog.log("Auto/CommandIsNull", false);
+    //   // m_autonomousCommand.schedule();
+    //   RobotModeTriggers.autonomous().whileTrue(m_autonomousCommand);
+    //   DogLog.log("Auto/CommandScheduled", true);
+    // }
   }
 
   /** This function is called periodically during autonomous. */
@@ -214,7 +260,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    //m_robotContainer.configureBindings();
+    // m_robotContainer.configureBindings();
 
     // CommandScheduler.getInstance();
     // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
