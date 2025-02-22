@@ -328,26 +328,26 @@ public class RobotContainer {
     // // joystick.b().onTrue(new Intake(elevatorSubsystem, funnelSubsystem,
     // tootsieSlideSubsystem));
 
-    // joystick
-    //     .x()
-    //     .whileTrue(
-    //         new JamesHardenScore(
-    //             elevatorSubsystem,
-    //             tootsieSlideSubsystem,
-    //             driveTrain,
-    //             ElevatorPositions.L3,
-    //             redside,
-    //             true));
-    // joystick
-    //     .y()
-    //     .whileTrue(
-    //         new JamesHardenScore(
-    //             elevatorSubsystem,
-    //             tootsieSlideSubsystem,
-    //             driveTrain,
-    //             ElevatorPositions.L4,
-    //             redside,
-    //             false));
+    joystick
+        .x()
+        .whileTrue(
+            new JamesHardenScore(
+                elevatorSubsystem,
+                tootsieSlideSubsystem,
+                driveTrain,
+                ElevatorPositions.L3,
+                redside,
+                true));
+    joystick
+        .y()
+        .whileTrue(
+            new JamesHardenScore(
+                elevatorSubsystem,
+                tootsieSlideSubsystem,
+                driveTrain,
+                ElevatorPositions.L4,
+                redside,
+                false));
 
     joystick.b().whileTrue(new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3));
     joystick.povUp().whileTrue(new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L2));

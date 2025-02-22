@@ -159,8 +159,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void ElevatorTorqueMode() {
     master.setControl(
         torqueRequest
-            .withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE)
-            .withMaxAbsDutyCycle(0.3));
+            .withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
+            // .withMaxAbsDutyCycle(Constants.ElevatorConstants.ELEVATOR_DUTY_CYCLE));
   }
 
   // TODO: ONLY FOR DEBUGGING

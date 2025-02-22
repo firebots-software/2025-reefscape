@@ -720,7 +720,8 @@ public final class Constants {
         (SPROCKET_GEAR_RATIO) / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
     public static final double CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE =
         1d / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
-    public static final double ELEVATOR_TORQUE = 15.0;
+    public static final double ELEVATOR_TORQUE = 55;
+    public static final double ELEVATOR_DUTY_CYCLE = 0.5;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
