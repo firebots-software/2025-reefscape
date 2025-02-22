@@ -143,7 +143,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     this.setPosition(level.height);
   }
 
-  private void setPosition(double height) {
+  public void setPosition(double height) {
     master.setControl(
         controlRequest.withPosition(
             height

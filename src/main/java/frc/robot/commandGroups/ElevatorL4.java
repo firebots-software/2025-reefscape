@@ -5,10 +5,11 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.ElevatorHoldL4;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
 
 public class ElevatorL4 extends SequentialCommandGroup {
 
-  public ElevatorL4(ElevatorSubsystem elevatorSubsystem) {
+  public ElevatorL4(ElevatorSubsystem elevatorSubsystem,TootsieSlideSubsystem shooter) {
 
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)

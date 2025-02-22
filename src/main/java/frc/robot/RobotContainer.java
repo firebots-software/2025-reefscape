@@ -112,8 +112,8 @@ public class RobotContainer {
     // Left Elevator Levels
     customController
         .LeftL1()
-        .onTrue(
-            new JamesHardenElevator(
+        .whileTrue(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -122,8 +122,8 @@ public class RobotContainer {
                 false));
     customController
         .LeftL2()
-        .onTrue(
-            new JamesHardenElevator(
+        .whileTrue(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -132,8 +132,8 @@ public class RobotContainer {
                 false));
     customController
         .LeftL3()
-        .onTrue(
-            new JamesHardenElevator(
+        .whileTrue(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -142,8 +142,8 @@ public class RobotContainer {
                 false));
     customController
         .LeftL4()
-        .onTrue(
-            new JamesHardenElevator(
+        .whileTrue(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -154,8 +154,8 @@ public class RobotContainer {
     // Right Elevator Levels
     customController
         .RightL1()
-        .onTrue(
-            new JamesHardenElevator(
+        .whileTrue(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -164,8 +164,8 @@ public class RobotContainer {
                 true));
     customController
         .RightL2()
-        .onTrue(
-            new JamesHardenElevator(
+        .whileTrue(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -174,8 +174,8 @@ public class RobotContainer {
                 true));
     customController
         .RightL3()
-        .onTrue(
-            new JamesHardenElevator(
+        .whileTrue(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -184,8 +184,8 @@ public class RobotContainer {
                 true));
     customController
         .RightL4()
-        .onTrue(
-            new JamesHardenElevator(
+        .whileTrue(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
