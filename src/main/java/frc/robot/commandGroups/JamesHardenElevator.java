@@ -25,7 +25,14 @@ public class JamesHardenElevator extends SequentialCommandGroup {
     } else {
       movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide);
     }
+    
+    Command elevatorCommand;
+    if(height.equals(ElevatorPositions.L4)){
+      elevatorCommand = new ElevatorL4(elevatorSubsystem);
+    } else {
+      elevatorCommand = new SetElevatorLevel(elevatorSubsystem, height);
+    }
 
-    addCommands(movementCommand, new SetElevatorLevel(elevatorSubsystem, height));
+    addCommands(movementCommand, elevatorCommand);
   }
 }
