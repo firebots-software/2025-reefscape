@@ -152,23 +152,33 @@ public class AutoRoutines {
    */
   public Command autoSubCommand(AutoRoutine routine, String chosenAuto, int index) {
     /*
-    AutoSubCommand creates a ParallelCommandGroup, which is a combination of the robot's swerve motion and necessary mechanism action.
+    AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and necessary mechanism action.
      
-    Structure:
+    ----- Old Structure (not using configureBindings()): -----
 
-    Sequential(
+    Sequential (
       Parallel (
         Follow Trajectory,
-        
+        Sequential (
+          Intake-To-Tootsie (if Start or leaving HPS)
+          Elevator: Intake (if going to HPS) or L4 (if Start or leaving HPS)
+        )
       ),
       Wait-For-Coral / Shoot-Coral
     )
     
+    ----- New Structure (using configureBindings()): -----
+
+    (actually i don't think making an Auto that relies on the default bindings is ideal or even possible;
+    we would have to alter the triggers and commands in configureBindings() a lot in order to get it to work properly)
+
+    
 
     */
-    String trajName;
-    AutoTrajectory trajectory;
+    String trajName; // Name of the .traj file that corresponds to chosenAuto and index
+    AutoTrajectory trajectory; // Corresponding AutoTrajectory from the ArrayList initialized in the constructor
 
+    // Set trajName and trajectory based on chosenAuto and index
     switch (chosenAuto) {
       case "top":
         trajName = topNames.get(index);
@@ -184,13 +194,16 @@ public class AutoRoutines {
         trajName = bottomNames.get(index);
         trajectory = bottomTraj.get(index);
         break;
+      
+      default:
+        throw new Error("AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoSubCommand()");
     }
 
-    boolean pathIsStart = trajName.contains("START-");
-    boolean pathGoesToHPS = !(trajName.contains("HPS-") || trajName.contains("START-"));
+    // boolean pathIsStart = trajName.contains("START-");
+    BooleanSupplier pathGoesToHPS = () -> !(trajName.contains("HPS-") || trajName.contains("START-"));
 
     return Commands.parallel(
-            routine.trajectory(baseCommandName).cmd(),
+            trajectory.cmd(),
             Commands.sequence(
                 new LoadAndPutUp(
                         elevatorSubsystem,
@@ -207,6 +220,8 @@ public class AutoRoutines {
                 : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
   }
 }
+
+// Commands we should use for Auto:
 // new SetElevatorLevel // Intake
 // new RunFunnelUntilDetectionSafe
 // new TransferPieceBetweenFunnelAndElevator
