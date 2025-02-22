@@ -147,7 +147,7 @@ public class RobotContainer {
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
 
     // Triggers when there is a Coral in the Tootsie Slide.
-    Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide());
+    Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide() && !AutoRoutines.getIsAutoRunning());
 
     //  !!!  Each time a new Coral goes into the Tootsie Slide, we move the elevator to the Safe Position (L1).
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));

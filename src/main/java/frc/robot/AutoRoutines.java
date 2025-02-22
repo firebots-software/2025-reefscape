@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.AutoLiftAndShoot;
 import frc.robot.commandGroups.LoadAndPutUp;
+import frc.robot.commands.AutoCommands.SetIsAutoRunning;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -35,6 +36,8 @@ public class AutoRoutines {
   private ArrayList<AutoTrajectory> middleTraj;
   private ArrayList<AutoTrajectory> bottomTraj;
 
+  private static boolean isAutoRunning;
+
   public AutoRoutines(
       AutoFactory factory,
       SwerveSubsystem driveTrain,
@@ -42,7 +45,8 @@ public class AutoRoutines {
       TootsieSlideSubsystem tootsieSlideSubsystem,
       FunnelSubsystem funnelSubsystem,
       BooleanSupplier redside) {
-    autoFactory = factory;
+    this.isAutoRunning = true;
+    this.autoFactory = factory;
     this.driveTrain = driveTrain;
     this.elevatorSubsystem = elevatorSubsystem;
     this.tootsieSlideSubsystem = tootsieSlideSubsystem;
@@ -136,7 +140,7 @@ public class AutoRoutines {
 
     // Add all the auto segments as commands
     for(int i = 0; i < numPaths; i++) {
-      autoCommandGroup.addCommands(autoSubCommand(routine, chosenAuto, i));
+      autoCommandGroup.addCommands(autoSubCommand(chosenAuto, i));
     }
 
     // Bind the Auto SequentialCommandGroup to run when the routine is activated
@@ -146,11 +150,11 @@ public class AutoRoutines {
   }
 
   /**
-   * @param routine
-   * @param baseCommandName
-   * @return
+   * AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and necessary mechanism action.
+   * @param chosenAuto - A String representing whether the top, middle, or bottom auto routine was selected. Passed on as a parameter inside autoRoutine().
+   * @param index - An int representing which trajectory/segment of the auto routine to create a command for. Corresponds to the ArrayLists of trajectory names and AutoTrajectories created in the constructor.
    */
-  public Command autoSubCommand(AutoRoutine routine, String chosenAuto, int index) {
+  public Command autoSubCommand(String chosenAuto, int index) {
     /*
     AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and necessary mechanism action.
      
@@ -167,10 +171,22 @@ public class AutoRoutines {
       Wait-For-Coral / Shoot-Coral
     )
     
-    ----- New Structure (using configureBindings()): -----
+    ----- New Structure 1 (using configureBindings()): -----
 
     (actually i don't think making an Auto that relies on the default bindings is ideal or even possible;
     we would have to alter the triggers and commands in configureBindings() a lot in order to get it to work properly)
+
+    ----- New Structure 2 (not using configureBindings()): -----
+
+    Sequential (
+      Sequential (
+        Intake-To-Tootsie (if Start or leaving HPS),
+        Elevator: Intake (if going to HPS), // we don't want to go to HPS with the elevator still up
+        Follow Trajectory,
+        Elevator: L4 (if Start or leaving HPS),
+      ),
+      Wait-For-Coral (if going to HPS) / Shoot-Coral (if not going to HPS)
+    )
 
     
 
@@ -218,6 +234,14 @@ public class AutoRoutines {
             (pathGoesToHPS.getAsBoolean())
                 ? new RunFunnelUntilCheckedIn(funnelSubsystem)
                 : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
+  }
+
+  public static void setIsAutoRunning(boolean running) {
+    isAutoRunning = running;
+  }
+
+  public static boolean getIsAutoRunning() {
+    return isAutoRunning;
   }
 }
 
