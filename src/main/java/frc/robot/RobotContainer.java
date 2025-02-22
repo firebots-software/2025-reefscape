@@ -116,13 +116,13 @@ public class RobotContainer {
     // (When the Check-In sensor detects a Coral AND there is NO Coral in the Tootsie Slide.)
     Trigger funnelCheckin =
         new Trigger(
-            () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide());
+            () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide() && !AutoRoutines.getIsAutoRunning());
     
     // This triggers when we need to eject a Coral from the funnel.
     // (When the Check-In sensor detects a Coral AND there IS a Coral in the Tootsie Slide.)
     Trigger ejectTime =
         new Trigger(
-            () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()));
+            () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide() && !AutoRoutines.getIsAutoRunning()));
 
     //  !!!  When we need to eject a Coral from the funnel, we run EjectCoralFR().
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
@@ -139,7 +139,8 @@ public class RobotContainer {
             () ->
                 CoralPosition.isCoralInFunnel()
                     && elevatorSubsystem.atIntake()
-                    && elevatorSubsystem.isAtPosition());
+                    && elevatorSubsystem.isAtPosition()
+                    && !AutoRoutines.getIsAutoRunning());
 
     //  !!!  Each time a Coral is ready to be transferred to the Tootsie Slide, we transfer it to the Tootsie Slide.
     funnelCheckout.onTrue(

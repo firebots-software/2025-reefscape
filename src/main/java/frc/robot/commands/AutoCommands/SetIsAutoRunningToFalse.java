@@ -5,19 +5,18 @@ import frc.robot.AutoRoutines;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class SetIsAutoRunning extends Command {
-  private final boolean isAutoRunning;
+public class SetIsAutoRunningToFalse extends Command {
 
-  public SetIsAutoRunning(boolean isAutoRunning) {
-    this.isAutoRunning = isAutoRunning;
+  public SetIsAutoRunningToFalse() {}
+
+  @Override
+  public void initialize() {
+    AutoRoutines.setIsAutoRunning(false);
   }
 
   @Override
-  public void initialize() {}
-
-  @Override
   public void execute() {
-    AutoRoutines.setIsAutoRunning(isAutoRunning);
+    AutoRoutines.setIsAutoRunning(false);
   }
 
   @Override

@@ -6,11 +6,16 @@ package frc.robot;
 
 import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -186,17 +191,23 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.setAlliance();
+    DogLog.log("Auto/CommandIsNull", true);
+    DogLog.log("Auto/CommandScheduled", false);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand(); // UNCOMMENT
 
     // schedule the autonomous command (example) (UNCOMMENT)
     if (m_autonomousCommand != null) {
+      DogLog.log("Auto/CommandIsNull", false);
       m_autonomousCommand.schedule();
+      DogLog.log("Auto/CommandScheduled", true);
     }
   }
 
   /** This function is called periodically during autonomous. */
   // @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    DogLog.log("Auto/IsAutoRunning", AutoRoutines.getIsAutoRunning());
+  }
 
   @Override
   public void teleopInit() {

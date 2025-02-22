@@ -35,11 +35,17 @@ public class ElevatorIntakeLevel extends Command {
   // Called every time the scheduler runs while the command is scheduled.
 
   public void execute() {
-    if (!funnelSubsystem.isCoralCheckedOut()) {
-      elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
-    } else {
-      elevatorSubsystem.elevateTo(ElevatorPositions.L1);
-    }
+    // Commented out this if-statement because i think this command should go down to Intake level no matter what;
+    // not too sure in what case it would need to go to L1. Auto will rely on this command to go down to Intake even
+    // if there is a coral in the funnel, so this if-statement would interfere with Auto...
+    
+    // if (!funnelSubsystem.isCoralCheckedOut()) {
+    //   elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
+    // } else {
+    //   elevatorSubsystem.elevateTo(ElevatorPositions.L1);
+    // }
+
+    elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
   }
 
   // Called once the command ends or is interrupted.

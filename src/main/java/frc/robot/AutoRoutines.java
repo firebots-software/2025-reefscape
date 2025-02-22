@@ -3,15 +3,18 @@ package frc.robot;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.AutoLiftAndShoot;
 import frc.robot.commandGroups.LoadAndPutUp;
-import frc.robot.commands.AutoCommands.SetIsAutoRunning;
+import frc.robot.commands.AutoCommands.SetIsAutoRunningToFalse;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
+import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -36,7 +39,7 @@ public class AutoRoutines {
   private ArrayList<AutoTrajectory> middleTraj;
   private ArrayList<AutoTrajectory> bottomTraj;
 
-  private static boolean isAutoRunning;
+  private static boolean isAutoRunning = true;
 
   public AutoRoutines(
       AutoFactory factory,
@@ -45,7 +48,7 @@ public class AutoRoutines {
       TootsieSlideSubsystem tootsieSlideSubsystem,
       FunnelSubsystem funnelSubsystem,
       BooleanSupplier redside) {
-    this.isAutoRunning = true;
+
     this.autoFactory = factory;
     this.driveTrain = driveTrain;
     this.elevatorSubsystem = elevatorSubsystem;
@@ -143,6 +146,9 @@ public class AutoRoutines {
       autoCommandGroup.addCommands(autoSubCommand(chosenAuto, i));
     }
 
+    // Set isAutoRunning to false when auto routine finishes
+    autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
+
     // Bind the Auto SequentialCommandGroup to run when the routine is activated
     routine.active().onTrue(autoCommandGroup);
 
@@ -179,18 +185,25 @@ public class AutoRoutines {
     ----- New Structure 2 (not using configureBindings()): -----
 
     Sequential (
-      Sequential (
-        Intake-To-Tootsie (if Start or leaving HPS),
-        Elevator: Intake (if going to HPS), // we don't want to go to HPS with the elevator still up
-        Follow Trajectory,
-        Elevator: L4 (if Start or leaving HPS),
-      ),
-      Wait-For-Coral (if going to HPS) / Shoot-Coral (if not going to HPS)
+      Intake-To-Tootsie (if Start or leaving HPS),
+      Elevator: Safe Position, // we only want to move with the elevator down at the Safe position
+      Follow Trajectory,
+      if going to HPS (
+        Parallel (
+          Elevator: Intake // start moving Elevator to Intake to get ready for incoming Coral at HPS
+          Wait-For-Coral-Checkin // waiting for a Coral to hit Checkin sensor at the HPS
+        )
+      )
+      else if Start or leaving HPS (
+        Sequential (
+          Elevator: L4
+          Shoot-Coral
+        )
+      )
     )
 
-    
-
     */
+
     String trajName; // Name of the .traj file that corresponds to chosenAuto and index
     AutoTrajectory trajectory; // Corresponding AutoTrajectory from the ArrayList initialized in the constructor
 
@@ -217,23 +230,44 @@ public class AutoRoutines {
 
     // boolean pathIsStart = trajName.contains("START-");
     BooleanSupplier pathGoesToHPS = () -> !(trajName.contains("HPS-") || trajName.contains("START-"));
+    BooleanSupplier startOrLeavingHPS = () -> !pathGoesToHPS.getAsBoolean();
 
-    return Commands.parallel(
-            trajectory.cmd(),
-            Commands.sequence(
-                new LoadAndPutUp(
-                        elevatorSubsystem,
-                        funnelSubsystem,
-                        tootsieSlideSubsystem,
-                        ElevatorPositions.Intake)
-                    .onlyIf(() -> !pathGoesToHPS.getAsBoolean()), // LoadAndPutUp(Intake) only if the path does NOT go to the HPS. Should run on Start path
-                ((pathGoesToHPS.getAsBoolean())
-                    ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
-                    : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))
-        .andThen(
-            (pathGoesToHPS.getAsBoolean())
-                ? new RunFunnelUntilCheckedIn(funnelSubsystem)
-                : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
+    DogLog.log("Auto/trajName", trajName);
+    DogLog.log("Auto/pathGoesToHPS", pathGoesToHPS.getAsBoolean());
+
+    // See Structure description comment above for a sort-of better explanation
+    Command newStructure2 = new SequentialCommandGroup(
+      new LoadAndPutUp(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L1).onlyIf(startOrLeavingHPS),
+      new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1), // using L1 as the Safe Position because not sure if the "pos" value in the Constants Enum should be 0 or 1
+      trajectory.cmd(), // actual robot movement
+      (pathGoesToHPS.getAsBoolean() ?
+      new ParallelCommandGroup(
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+        new RunFunnelUntilCheckedIn(funnelSubsystem)) :
+      new SequentialCommandGroup(
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4),
+        new ShootTootsieSlide(tootsieSlideSubsystem)))
+      
+    );
+
+    // Command oldStructure =  Commands.parallel(
+    //         trajectory.cmd(),
+    //         Commands.sequence(
+    //             new LoadAndPutUp(
+    //                     elevatorSubsystem,
+    //                     funnelSubsystem,
+    //                     tootsieSlideSubsystem,
+    //                     ElevatorPositions.Intake)
+    //                 .onlyIf(() -> !pathGoesToHPS.getAsBoolean()), // LoadAndPutUp(Intake) only if the path does NOT go to the HPS. Should run on Start path
+    //             ((pathGoesToHPS.getAsBoolean())
+    //                 ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
+    //                 : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))
+    //     .andThen(
+    //         (pathGoesToHPS.getAsBoolean())
+    //             ? new RunFunnelUntilCheckedIn(funnelSubsystem)
+    //             : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
+    
+    return newStructure2;
   }
 
   public static void setIsAutoRunning(boolean running) {
