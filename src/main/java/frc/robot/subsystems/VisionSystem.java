@@ -74,7 +74,7 @@ public class VisionSystem extends SubsystemBase {
         .getDistance(
             new Translation3d(
                 driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
-  }
+  } 
 
   public static VisionSystem getInstance(Constants.Vision.Cameras name) {
     if (systemList[name.ordinal()] == null) {
