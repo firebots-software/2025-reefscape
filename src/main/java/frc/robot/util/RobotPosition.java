@@ -8,11 +8,11 @@ public class RobotPosition {
 
     public ElevatorPositions elevator;
     public BranchSide side;
-    public double dTime;
+    public double time;
 
-    public RobotPosition(ElevatorPositions elevator, BranchSide side, double dTime){
+    public RobotPosition(ElevatorPositions elevator, BranchSide side, double time){
         this.elevator = elevator;
         this.side=side;
-        this.dTime = dTime;
+        this.time = time;
     }
 }

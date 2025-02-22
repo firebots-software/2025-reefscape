@@ -73,11 +73,11 @@ public class Robot extends TimedRobot {
     if (RobotPosition.Instance != null){
       DogLog.log("RobotPosition/elevatorLevel", RobotPosition.Instance.elevator.toString());
       DogLog.log("RobotPosition/branchSide", RobotPosition.Instance.side.toString());
-      DogLog.log("RobotPosition/time", RobotPosition.Instance.dTime);
+      DogLog.log("RobotPosition/time", RobotPosition.Instance.time);
     } else {
-      DogLog.log("RobotPosition/elevatorLevel", "null");
-      DogLog.log("RobotPosition/branchSide", "null");
-      DogLog.log("RobotPosition/time", "null");
+      DogLog.log("RobotPosition/elevatorLevel", "null1");
+      DogLog.log("RobotPosition/branchSide", "null1");
+      DogLog.log("RobotPosition/time", -1.0);
     }
 
     LoggedTalonFX.periodic_static();
