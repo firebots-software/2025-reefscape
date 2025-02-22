@@ -6,22 +6,41 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Swerve;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+import org.w3c.dom.html.HTMLAnchorElement;
+
+import dev.doglog.DogLog;
 
 /** Creates a new VisionSystem. */
 public class VisionSystem extends SubsystemBase {
+
+  List<Integer> reefIDs = new ArrayList<Integer>(
+    Arrays.asList(19,20,21,22,17,18,6,7,8,9,10,11)
+  );
+
   Pose2d savedResult = new Pose2d(0, 0, new Rotation2d(0.01, 0.01));
   private static VisionSystem[] systemList =
       new VisionSystem[Constants.Vision.Cameras.values().length];
@@ -133,6 +152,49 @@ public class VisionSystem extends SubsystemBase {
 
   public PhotonPipelineResult getPipelineResult() {
     return pipeline;
+  }
+
+
+  public Pose2d addFilteredPose(){
+    double translationStdDevs = 1000;
+    double rotationStdDevs = 1000;
+    PhotonPipelineResult pipelineResult = getPipelineResult();
+    
+    if(hasTarget(pipelineResult)){
+      Optional<MultiTargetPNPResult> multitagresult = pipelineResult.getMultiTagResult();
+      boolean hasMultitags = !multitagresult.isEmpty();
+      double timestamp = pipelineResult.getTimestampSeconds();
+      double targetSize = pipelineResult.getBestTarget().area;
+      Optional<EstimatedRobotPose> estPose = camera.getMultiTagPose3d(swerve.getState().Pose);
+      List<PhotonTrackedTarget> targets = pipelineResult.getTargets();
+      boolean hasReefTag = false;
+      double poseAmbiguity = pipelineResult.getBestTarget().poseAmbiguity;
+      for (PhotonTrackedTarget target : targets) {
+        if(reefIDs.contains(target.getFiducialId())){
+          hasReefTag = true;
+        }
+      }
+
+    if(hasReefTag){
+      double xKalman = 0.1 * Math.pow(1.15, poseAmbiguity);
+      double yKalman = 0.1 * Math.pow(1.4, poseAmbiguity);
+  
+      Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, 100d);
+      Pose2d bestRobotPose2d = getPose2d();
+      Pose2d rotationLess =
+          new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
+      DogLog.log("KalmanDebug/rotationless", rotationLess);
+  
+      driveTrain.addVisionMeasurement(
+          rotationLess, pipelineResult.getTimestampSeconds(), visionMatrix);
+    }
+
+
+    }
+    
+
+
+
   }
 
   @Override
