@@ -24,8 +24,9 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.D2Intake;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
+import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
-import frc.robot.commandGroups.JamesHardenScore;
+import frc.robot.commandGroups.JamesHardenElevator;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
@@ -108,7 +109,7 @@ public class RobotContainer {
     customController
         .LeftL1()
         .onTrue(
-            new JamesHardenScore(
+            new JamesHardenElevator(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -118,7 +119,7 @@ public class RobotContainer {
     customController
         .LeftL2()
         .onTrue(
-            new JamesHardenScore(
+            new JamesHardenElevator(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -128,7 +129,7 @@ public class RobotContainer {
     customController
         .LeftL3()
         .onTrue(
-            new JamesHardenScore(
+            new JamesHardenElevator(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -138,11 +139,11 @@ public class RobotContainer {
     customController
         .LeftL4()
         .onTrue(
-            new JamesHardenScore(
+            new JamesHardenElevator(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
-                ElevatorPositions.L4,
+                ElevatorPositions.L1,
                 redside,
                 false));
 
@@ -150,7 +151,7 @@ public class RobotContainer {
     customController
         .RightL1()
         .onTrue(
-            new JamesHardenScore(
+            new JamesHardenElevator(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -160,31 +161,31 @@ public class RobotContainer {
     customController
         .RightL2()
         .onTrue(
-            new JamesHardenScore(
+            new JamesHardenElevator(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
-                ElevatorPositions.L1,
+                ElevatorPositions.L2,
                 redside,
                 true));
     customController
         .RightL3()
         .onTrue(
-            new JamesHardenScore(
+            new JamesHardenElevator(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
-                ElevatorPositions.L1,
+                ElevatorPositions.L3,
                 redside,
                 true));
     customController
         .RightL4()
         .onTrue(
-            new JamesHardenScore(
+            new JamesHardenElevator(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
-                ElevatorPositions.L1,
+                ElevatorPositions.L4,
                 redside,
                 true));
 
@@ -217,7 +218,7 @@ public class RobotContainer {
     // Elevator
     joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    joystick2.y().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    joystick2.y().onTrue(new ElevatorL4(elevatorSubsystem));
     joystick2.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
     joystick2
         .rightBumper()
