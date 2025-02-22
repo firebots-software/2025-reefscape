@@ -6,11 +6,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import java.util.Optional;
@@ -89,6 +93,56 @@ public class VisionSystem extends SubsystemBase {
     }
 
     return systemList[name.ordinal()];
+  }
+
+  public void DoKalman(VisionSystem secondCam){
+    double leastPoseAmbDist;
+    Optional<EstimatedRobotPose> firstCamPose = this.getMultiTagPose3d(driveTrain.getState().Pose);
+    Optional<EstimatedRobotPose> secondRobotPose =  secondCam.getMultiTagPose3d(driveTrain.getState().Pose);
+
+    Optional<EstimatedRobotPose> bestRobotPose;
+
+    PhotonPipelineResult pipeline1 = this.getPipelineResult();
+    PhotonPipelineResult pipeline2 = secondCam.getPipelineResult();
+
+    
+    // if both present, else if right present, else if left present
+    if (this.hasTarget(pipeline1)
+        && firstCamPose.isPresent()
+        && secondCam.hasTarget(pipeline2)
+        && secondRobotPose.isPresent()) {
+      double thisPoseAmb = pipeline1.getBestTarget().getPoseAmbiguity();
+      double otherPoseAmb = pipeline2.getBestTarget().getPoseAmbiguity();
+      if (thisPoseAmb < otherPoseAmb) {
+        leastPoseAmbDist = this.getDistance();
+        bestRobotPose = firstCamPose;
+      }
+      leastPoseAmbDist = secondCam.getDistance();
+      bestRobotPose = secondRobotPose;
+
+    } else if (this.hasTarget(pipeline1) && firstCamPose.isPresent()) {
+
+      leastPoseAmbDist = this.getDistance();
+      bestRobotPose = firstCamPose;
+  
+    } else if (secondCam.hasTarget(pipeline2) && secondRobotPose.isPresent()) {
+      leastPoseAmbDist = secondCam.getDistance();
+      bestRobotPose = secondRobotPose;
+    } else {
+      return;
+    }
+
+    double xKalman = 0.1 * Math.pow(1.15, leastPoseAmbDist);
+    double yKalman = 0.1 * Math.pow(1.4, leastPoseAmbDist);
+
+    Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, 100d);
+    Pose2d bestRobotPose2d = bestRobotPose.get().estimatedPose.toPose2d();
+    Pose2d rotationLess =
+        new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
+
+    driveTrain.addVisionMeasurement(
+        rotationLess, pipeline1.getTimestampSeconds(), visionMatrix);
+
   }
 
   // use this when feeding into drivetrain
