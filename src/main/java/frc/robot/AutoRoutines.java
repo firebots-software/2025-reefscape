@@ -145,31 +145,31 @@ public class AutoRoutines {
     return testRoutine;
   }
 
-  public AutoRoutine autoRoutine(String chosenAuto) {
-    SequentialCommandGroup autoCommandGroup = new SequentialCommandGroup();
-    int numPaths; // Number of trajectories (segments) in the chosen Auto routine
+  // public AutoRoutine autoRoutine(String chosenAuto) {
+  //   SequentialCommandGroup autoCommandGroup = new SequentialCommandGroup();
+  //   int numPaths; // Number of trajectories (segments) in the chosen Auto routine
 
-    // Set the first command in the AutoCommandGroup to reset the Odometry to the start Pose of the
-    // first trajectory in Choreo
-    switch (chosenAuto) {
-      case "top":
-        autoCommandGroup.addCommands(topTraj.get(0).resetOdometry());
-        numPaths = topNames.size();
-        break;
+  //   // Set the first command in the AutoCommandGroup to reset the Odometry to the start Pose of the
+  //   // first trajectory in Choreo
+  //   switch (chosenAuto) {
+  //     case "top":
+  //       autoCommandGroup.addCommands(topTraj.get(0).resetOdometry());
+  //       numPaths = topNames.size();
+  //       break;
 
-      case "middle":
-        autoCommandGroup.addCommands(middleTraj.get(0).resetOdometry());
-        numPaths = middleNames.size();
-        break;
+  //     case "middle":
+  //       autoCommandGroup.addCommands(middleTraj.get(0).resetOdometry());
+  //       numPaths = middleNames.size();
+  //       break;
 
-      case "bottom":
-        autoCommandGroup.addCommands(bottomTraj.get(0).resetOdometry());
-        numPaths = bottomNames.size();
-        break;
-      default:
-        throw new Error(
-            "AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoRoutine()");
-    }
+  //     case "bottom":
+  //       autoCommandGroup.addCommands(bottomTraj.get(0).resetOdometry());
+  //       numPaths = bottomNames.size();
+  //       break;
+  //     default:
+  //       throw new Error(
+  //           "AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoRoutine()");
+  //   }
 
     // Add all the auto segments as commands
     // for (int i = 0; i < numPaths; i++) {
@@ -177,16 +177,16 @@ public class AutoRoutines {
     // }
 
     // Set isAutoRunning to false when auto routine finishes
-    autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
+  //   autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
 
-    // Bind the Auto SequentialCommandGroup to run when the routine is activated
-    routine.active().onTrue(autoCommandGroup);
+  //   // Bind the Auto SequentialCommandGroup to run when the routine is activated
+  //   routine.active().onTrue(autoCommandGroup);
 
-    DogLog.log("Auto/Returning-Auto-Routine", chosenAuto);
-    DogLog.log("Auto/Returning-Num-Paths", numPaths);
+  //   DogLog.log("Auto/Returning-Auto-Routine", chosenAuto);
+  //   DogLog.log("Auto/Returning-Num-Paths", numPaths);
 
-    return routine;
-  }
+  //   return routine;
+  // }
 
   /**
    * AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and

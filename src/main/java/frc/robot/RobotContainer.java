@@ -481,7 +481,8 @@ public class RobotContainer {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
     String chosenPath = startPosChooser.getSelected();
 
-    return autoRoutines.autoRoutine(chosenPath).cmd();
+    //return autoRoutines.autoRoutine(chosenPath).cmd();
+    return null;
   }
 
   //   public void testAutoCommands() {}
