@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.SwerveCommands.EdwardMovement;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -11,8 +12,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 
-public class MoveToSideAndShoot extends SequentialCommandGroup {
-  public MoveToSideAndShoot(
+public class EdwardScore extends SequentialCommandGroup {
+  public EdwardScore(
       ElevatorSubsystem elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
@@ -20,15 +21,23 @@ public class MoveToSideAndShoot extends SequentialCommandGroup {
       BooleanSupplier redSide,
       boolean moveRight) {
 
-    Command movementCommand;
+    Command outpostMovement;
     if (moveRight) {
-      movementCommand = JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide);
+      outpostMovement = JamesHardenMovement.toClosestRightOutpost(swerveSubsystem, redSide);
     } else {
-      movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide);
+      outpostMovement = JamesHardenMovement.toClosestLeftOutpost(swerveSubsystem, redSide);
+    }
+
+    Command qDirectionalMovement;
+    if (moveRight) {
+      qDirectionalMovement = EdwardMovement.toClosestRightBranch(swerveSubsystem, redSide);
+    } else {
+      qDirectionalMovement = EdwardMovement.toClosestLeftBranch(swerveSubsystem, redSide);
     }
 
     addCommands(
-        new SetElevatorLevel(elevatorSubsystem, height).alongWith(movementCommand),
+        outpostMovement,
+        new SetElevatorLevel(elevatorSubsystem, height).alongWith(qDirectionalMovement),
         new ShootTootsieSlide(tootsieSlideSubsystem));
   }
 }
