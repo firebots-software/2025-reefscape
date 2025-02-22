@@ -4,6 +4,7 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import dev.doglog.DogLog;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -114,24 +115,29 @@ public class AutoRoutines {
   }
 
   public AutoRoutine simpleTest() {
-    SequentialCommandGroup autoCommandGroup = new SequentialCommandGroup();
+    // SequentialCommandGroup autoCommandGroup = new SequentialCommandGroup();
     AutoRoutine testRoutine = autoFactory.newRoutine("testRoutine");
     AutoTrajectory firstPathBottom = testRoutine.trajectory("BSTART-2L");
     
-    autoCommandGroup.addCommands(firstPathBottom.resetOdometry().alongWith(new DogLogCmd("Auto/Running", "resetOdo")));
+    // autoCommandGroup.addCommands(firstPathBottom.resetOdometry().alongWith(new DogLogCmd("Auto/Running", "resetOdo")));
 
     // Add all the auto segments as commands
     // for (int i = 0; i < bottomNames.size(); i++) {
     //   autoCommandGroup.addCommands(bottomTraj.get(i).cmd());
     //   DogLog.log("Auto/creating-path", i);
     // }
-    autoCommandGroup.addCommands(firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath")));
+    // autoCommandGroup.addCommands(firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath")));
 
     // Set isAutoRunning to false when auto routine finishes
-    autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
+    // autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
 
     // Bind the Auto SequentialCommandGroup to run when the routine is activated
-    testRoutine.active().onTrue(autoCommandGroup);
+    testRoutine.active().onTrue(
+      Commands.sequence(
+        firstPathBottom.resetOdometry().alongWith(new DogLogCmd("Auto/Running", "resetOdo")),
+        firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath"))
+      )
+    );
 
     DogLog.log("Auto/Simple-Test-Constructor", "Ran");
     // DogLog.log("Auto/Returning-Num-Paths", numPaths);
