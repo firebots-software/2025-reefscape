@@ -27,6 +27,7 @@ import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.LoadAndPutUp;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
+import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
@@ -104,33 +105,55 @@ public class RobotContainer {
     startPosChooser.addOption("Bottom (next to red barge zone)", "bottom");
     SmartDashboard.putData(startPosChooser);
 
-    // configureBindings();
+    configureBindings();
   }
 
   public void configureBindings() {
-    // Automatic
+    // Automatic Command Bindings
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
+
+    // This triggers each time a new Coral enters the funnel.
+    // (When the Check-In sensor detects a Coral AND there is NO Coral in the Tootsie Slide.)
     Trigger funnelCheckin =
         new Trigger(
             () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide());
+    
+    // This triggers when we need to eject a Coral from the funnel.
+    // (When the Check-In sensor detects a Coral AND there IS a Coral in the Tootsie Slide.)
     Trigger ejectTime =
         new Trigger(
             () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()));
+
+    // !! When we need to eject a Coral from the funnel, we run EjectCoralFR().
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
+
+    // !! Each time a new Coral enters the funnel, we move elevator to Intake and intake the Coral.
+    // (RunFunnelUntilDetectionSafe() runs the intake motors until the Check-Out sensor gets triggered.)
     funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
     funnelCheckin.onTrue(new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
+
+    // This triggers when there is a Coral in the funnel ready to be transferred to Tootsie Slide.
+    // (When a Coral is in the funnel AND the elevator is definitely at the Intake position.)
     Trigger funnelCheckout =
         new Trigger(
             () ->
                 CoralPosition.isCoralInFunnel()
                     && elevatorSubsystem.atIntake()
                     && elevatorSubsystem.isAtPosition());
+
+    // Each time a Coral is ready to be transferred to the Tootsie Slide, we transfer it to the Tootsie Slide.
     funnelCheckout.onTrue(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
+
+    // Triggers when there is a Coral in the Tootsie Slide.
     Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide());
+
+    // Each time there is a Coral in the Tootsie Slide, we move the elevator to the Safe Position (L1).
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
 
+    // By default (when no other commands are using the Elevator Subsystem), we move the elevator to Intake unless it
+    // is carrying a Coral in the Tootsie Slide.
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
 
     // Debugging
@@ -143,37 +166,39 @@ public class RobotContainer {
                 armSubsystem,
                 elevatorSubsystem,
                 Constants.ElevatorConstants.ElevatorPositions.L2DALE));
-    // debugJoystick
-    //     .x()
-    //     .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
-    // debugJoystick.a().onTrue(new ZeroArm(armSubsystem));
-    // debugJoystick
-    //     .b()
-    //     .whileTrue(
-    //         new Dealgaenate(
-    //             armSubsystem,
-    //             elevatorSubsystem,
-    //             Constants.ElevatorConstants.ElevatorPositions.L3DALE));
-
-    // debugJoystick
-    //     .rightTrigger()
-    //     .onTrue(
-    //         new LoadAndPutUp(
-    //             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem,
-    // ElevatorPositions.L3));
     debugJoystick
-        .a()
+        .x()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
+    debugJoystick.a().onTrue(new ZeroArm(armSubsystem));
+    debugJoystick
+        .b()
+        .whileTrue(
+            new Dealgaenate(
+                armSubsystem,
+                elevatorSubsystem,
+                Constants.ElevatorConstants.ElevatorPositions.L3DALE));
+
+    debugJoystick
+        .rightTrigger()
         .onTrue(
             new LoadAndPutUp(
-                elevatorSubsystem,
-                funnelSubsystem,
-                tootsieSlideSubsystem,
-                ElevatorPositions.Intake));
+                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem,
+    ElevatorPositions.L3));
 
-    debugJoystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
-    debugJoystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
-    debugJoystick.b().onTrue(new RunFunnelUntilCheckedIn(funnelSubsystem));
-    debugJoystick.x().onTrue(new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
+    // Auto debugging
+    // debugJoystick
+    //     .a()
+    //     .onTrue(
+    //         new LoadAndPutUp(
+    //             elevatorSubsystem,
+    //             funnelSubsystem,
+    //             tootsieSlideSubsystem,
+    //             ElevatorPositions.Intake));
+
+    // debugJoystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
+    // debugJoystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    // debugJoystick.b().onTrue(new RunFunnelUntilCheckedIn(funnelSubsystem));
+    // debugJoystick.x().onTrue(new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
 
     // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
