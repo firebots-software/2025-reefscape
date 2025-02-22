@@ -124,10 +124,10 @@ public class RobotContainer {
         new Trigger(
             () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()));
 
-    // !! When we need to eject a Coral from the funnel, we run EjectCoralFR().
+    //  !!!  When we need to eject a Coral from the funnel, we run EjectCoralFR().
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
 
-    // !! Each time a new Coral enters the funnel, we move elevator to Intake and intake the Coral.
+    //  !!!  Each time a new Coral enters the funnel, we move elevator to Intake and intake the Coral.
     // (RunFunnelUntilDetectionSafe() runs the intake motors until the Check-Out sensor gets triggered.)
     funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
     funnelCheckin.onTrue(new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
@@ -141,7 +141,7 @@ public class RobotContainer {
                     && elevatorSubsystem.atIntake()
                     && elevatorSubsystem.isAtPosition());
 
-    // Each time a Coral is ready to be transferred to the Tootsie Slide, we transfer it to the Tootsie Slide.
+    //  !!!  Each time a Coral is ready to be transferred to the Tootsie Slide, we transfer it to the Tootsie Slide.
     funnelCheckout.onTrue(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
@@ -149,10 +149,10 @@ public class RobotContainer {
     // Triggers when there is a Coral in the Tootsie Slide.
     Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide());
 
-    // Each time there is a Coral in the Tootsie Slide, we move the elevator to the Safe Position (L1).
+    //  !!!  Each time a new Coral goes into the Tootsie Slide, we move the elevator to the Safe Position (L1).
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
 
-    // By default (when no other commands are using the Elevator Subsystem), we move the elevator to Intake unless it
+    //  !!!  By default (when no other commands are using the Elevator Subsystem), we move the elevator to Intake unless it
     // is carrying a Coral in the Tootsie Slide.
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
 
@@ -297,29 +297,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
-
-    /*
-    Field Diagram
-
-              BLUE                        RED
-    ___________________________________________________
-    |THPS                 TSTART                  THPS|
-    |                       | |                       |
-    |        5    4         | |         4    5        |
-    |     0          3    MSTART     3          0     |
-    |        1    2         | |         2    1        |
-    |                       | |                       |
-    |BHPS_________________BSTART__________________BHPS|
-
-    L and R branches are on the left and right of the robot when it is at the reef in between the two branches
-
-    a path name consists of a start and a destination
-    a start and a destinantion can be on any one of those marked areas
-    the format for a path is start-destination
-    ex. 2L-BHPS
-    this path starts from the left branch on the second part of the reef (2L), and goes to the bottom human player station (BHPS)
-    */
-    
     String chosenPath = startPosChooser.getSelected();
 
     return autoRoutines.autoRoutine(chosenPath).cmd();
