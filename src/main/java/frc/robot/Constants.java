@@ -125,7 +125,7 @@ public final class Constants {
       new Translation2d(12.5305504, 2.77352), // 17.5482504 - 5.0177
       new Translation2d(11.7101604, 3.85728), // 17.5482504 - 5.83809
       new Translation2d(12.2385204, 5.10963), // 17.5482504 - 5.30973
-      new Translation2d(13.5872804, 5.27823)  // 17.5482504 - 3.96097
+      new Translation2d(13.5872804, 5.27823) // 17.5482504 - 3.96097
     };
 
     public static final Translation2d[] LEFT_LINEUP_RED = {
@@ -134,7 +134,7 @@ public final class Constants {
       new Translation2d(12.2385204, 2.94212), // 17.5482504 - 5.30973
       new Translation2d(11.7101604, 4.19448), // 17.5482504 - 5.83809
       new Translation2d(12.5305504, 5.27823), // 17.5482504 - 5.0177
-      new Translation2d(13.8793004, 5.10963)  // 17.5482504 - 3.66895
+      new Translation2d(13.8793004, 5.10963) // 17.5482504 - 3.66895
     };
 
     public static final Translation2d[] RIGHT_OUTPOST_RED = {
@@ -143,7 +143,7 @@ public final class Constants {
       new Translation2d(13.1823004, 2.39723), // 17.5482504 - 4.36595
       new Translation2d(11.7101604, 3.10470), // 17.5482504 - 5.83809
       new Translation2d(11.5867704, 4.73334), // 17.5482504 - 5.96148
-      new Translation2d(12.9355304, 5.65452)  // 17.5482504 - 4.61272
+      new Translation2d(12.9355304, 5.65452) // 17.5482504 - 4.61272
     };
 
     public static final Translation2d[] LEFT_OUTPOST_RED = {
@@ -152,7 +152,7 @@ public final class Constants {
       new Translation2d(11.5867704, 3.31841), // 17.5482504 - 5.96148
       new Translation2d(11.7101604, 4.94706), // 17.5482504 - 5.83809
       new Translation2d(13.1823004, 5.65452), // 17.5482504 - 4.36595
-      new Translation2d(14.5310504, 4.73334)  // 17.5482504 - 3.0172
+      new Translation2d(14.5310504, 4.73334) // 17.5482504 - 3.0172
     };
   }
 
@@ -633,17 +633,16 @@ public final class Constants {
 
     // TODO: CHANGE FOR NEW ROBOT
     // these outline the speed calculations
-    public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.5;
+    public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.868;
     // 5.944; // before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s,
-    public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
+    public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 10.917;
     public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.75;
     public static final double TELE_DRIVE_SLOW_MODE_SPEED_PERCENT = 0.3;
-    public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420;
+    public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 8;
     public static final double TELE_DRIVE_PERCENT_SPEED_RANGE =
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
-    public static final double TELE_DRIVE_MAX_ANGULAR_RATE = Math.PI * 1.5;
-    public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND =
-        TELE_DRIVE_MAX_ANGULAR_RATE * 8;
+    public static final double TELE_DRIVE_MAX_ANGULAR_RATE = 10.917;
+    public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 26.971;
   }
 
   public static class TootsieSlide {
@@ -661,7 +660,7 @@ public final class Constants {
     public static final double ACCELERATION = 10; // TODO
     public static final double GEAR_RATIO = 1d / 6d;
     public static final double INTAKE_SPEED_RPS = 5d; // TODO
-    public static final double SHOOTING_SPEED_RPS = 13d;
+    public static final double SHOOTING_SPEED_RPS = 11.5d;//12.5, 12 good for L3 and L2  worked for L2
   }
 
   public static class FunnelConstants {
@@ -728,9 +727,9 @@ public final class Constants {
       safePosition(0, 0.657 - 0.13),
       L1(1, 0.657 - 0.13),
       L2DALE(0, 0.493), // 0.8636 - 0.379
-      L2(2, 0.8636),
+      L2(2, 0.9036),
       L3DALE(0, 0.91), // 1.27 - 0.379
-      L3(3, 1.29), // 1.27
+      L3(3, 1.32), // 1.27
       L4(4, 1.835);
 
       public final int position;

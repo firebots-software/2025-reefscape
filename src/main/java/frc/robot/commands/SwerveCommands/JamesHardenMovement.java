@@ -43,7 +43,7 @@ public class JamesHardenMovement extends Command {
 
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
-    DogLog.log("JamesHardenMovement/TargetPoseHeading(deg)", targetPose.getRotation().getDegrees());
+    DogLog.log("JamesHardenMovement/TargetPoseHeading(deg)", targetPose.getRotation().getRadians());
 
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(mps)", speeds.vxMetersPerSecond);
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
@@ -59,9 +59,9 @@ public class JamesHardenMovement extends Command {
     double targetRot = targetPose.getRotation().getRadians();
     targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
 
-    if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX()) < 0.02)
-        && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY()) < 0.02)
-        && (Math.abs(targetRot - currRot) < 0.5)) {
+    if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX()) < 0.03)
+        && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY()) < 0.03)
+        && (Math.abs(targetRot - currRot) < 0.01)) {
       return true;
     } else return false;
   }

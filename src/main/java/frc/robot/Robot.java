@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.Matrix;
@@ -19,9 +24,6 @@ import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
-import java.util.Optional;
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -36,7 +38,8 @@ public class Robot extends TimedRobot {
   // TODO: uncomment when arm is on real bot
   // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
-  // private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  // private VisionSystem visionRight =
+  //  VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
   // private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
   private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   private final RobotContainer m_robotContainer;
@@ -108,7 +111,8 @@ public class Robot extends TimedRobot {
 
     // } else if (visionRight.hasTarget(pipelineRight) && rightRobotPose.isPresent()) {
     //   DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
-    //   DogLog.log("KalmanDebug/rightestimatedpose", rightRobotPose.get().estimatedPose.toPose2d());
+    //   DogLog.log("KalmanDebug/rightestimatedpose",
+    // rightRobotPose.get().estimatedPose.toPose2d());
     //   DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
     //   DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
     //   DogLog.log(

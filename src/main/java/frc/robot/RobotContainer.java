@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -26,6 +28,7 @@ import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
+import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -206,19 +209,20 @@ public class RobotContainer {
                 redside,
                 false));
 
-    joystick
-        .a()
-        .onTrue(
-            driveTrain.runOnce(
-                () ->
-                    driveTrain.resetPose(
-                        new Pose2d(
-                            new Translation2d(0, 0), new Rotation2d()))));
+    joystick.b().whileTrue(new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3));
+    joystick.povUp().whileTrue(new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L2));
+    joystick.povDown().whileTrue(new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
 
+    // joystick
+    //     .a()
+    //     .onTrue(
+    //         driveTrain.runOnce(
+    //             () ->
+    //                 driveTrain.resetPose(
+    //                     new Pose2d(
+    //                         new Translation2d(0, 0), new Rotation2d()))));
+    // new InstantCommand()
 
-    joystick.povUp().whileTrue(new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(2, 0), new Rotation2d())));
-    joystick.povDown().whileTrue(new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(2, 2), new Rotation2d())));
-    joystick.povUp().whileTrue(new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(2, 2), new Rotation2d(Math.PI))));
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
