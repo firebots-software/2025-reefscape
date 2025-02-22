@@ -245,7 +245,7 @@ public class AutoRoutines {
         new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
         new RunFunnelUntilCheckedIn(funnelSubsystem)) :
       new SequentialCommandGroup(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4),
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4), //There is a different command for moving elevator to L4
         new ShootTootsieSlide(tootsieSlideSubsystem)))
       
     );
