@@ -104,20 +104,14 @@ public class AutoRoutines {
                         elevatorSubsystem,
                         funnelSubsystem,
                         tootsieSlideSubsystem,
-                        ElevatorPositions.Intake)
+                        ElevatorPositions.Intake) // TEST TEST TEST
                     .onlyIf(() -> !pathGoesToHPS.getAsBoolean()),
                 ((pathGoesToHPS.getAsBoolean())
-                    ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
-                    : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))
+                    ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake) // TEST THIS
+                    : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)))) // TEST THIS
         .andThen(
             (pathGoesToHPS.getAsBoolean())
-                ? new RunFunnelUntilCheckedIn(funnelSubsystem)
-                : new MoveToSideAndShoot(
-                    elevatorSubsystem,
-                    tootsieSlideSubsystem,
-                    driveTrain,
-                    ElevatorPositions.L4,
-                    redside,
-                    baseCommandName.substring(1, 2).equals("R")));
+                ? new RunFunnelUntilCheckedIn(funnelSubsystem) // TEST
+                : new ); // TEST!!
   }
 }
