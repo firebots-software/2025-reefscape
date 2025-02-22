@@ -113,6 +113,28 @@ public class AutoRoutines {
     }
   }
 
+  public AutoRoutine simpleTest() {
+    SequentialCommandGroup autoCommandGroup = new SequentialCommandGroup();
+
+    autoCommandGroup.addCommands(bottomTraj.get(0).resetOdometry());
+
+    // Add all the auto segments as commands
+    for (int i = 0; i < bottomNames.size(); i++) {
+      autoCommandGroup.addCommands(bottomTraj.get(i).cmd());
+    }
+
+    // Set isAutoRunning to false when auto routine finishes
+    autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
+
+    // Bind the Auto SequentialCommandGroup to run when the routine is activated
+    routine.active().onTrue(autoCommandGroup);
+
+    DogLog.log("Auto/Simple-Test-Constructor", "Ran");
+    // DogLog.log("Auto/Returning-Num-Paths", numPaths);
+
+    return routine;
+  }
+
   public AutoRoutine autoRoutine(String chosenAuto) {
     SequentialCommandGroup autoCommandGroup = new SequentialCommandGroup();
     int numPaths; // Number of trajectories (segments) in the chosen Auto routine
@@ -166,7 +188,7 @@ public class AutoRoutines {
    *     command for. Corresponds to the ArrayLists of trajectory names and AutoTrajectories created
    *     in the constructor.
    */
-  public Command autoSubCommand(String chosenAuto, int index) {
+  public SequentialCommandGroup autoSubCommand(String chosenAuto, int index) {
     /*
     AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and necessary mechanism action.
 
@@ -246,7 +268,7 @@ public class AutoRoutines {
     DogLog.log("Auto/pathGoesToHPS", pathGoesToHPS.getAsBoolean());
 
     // See Structure description comment above for a sort-of better explanation
-    Command newStructure2 =
+    SequentialCommandGroup newStructure2 =
         new SequentialCommandGroup(
             new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem)
                 .onlyIf(startOrLeavingHPS),
@@ -285,6 +307,8 @@ public class AutoRoutines {
     //         (pathGoesToHPS.getAsBoolean())
     //             ? new RunFunnelUntilCheckedIn(funnelSubsystem)
     //             : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
+
+    DogLog.log("Auto/AutoSubCommand-ran", true);
 
     return newStructure2;
   }

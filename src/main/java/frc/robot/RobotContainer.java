@@ -44,6 +44,7 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import choreo.auto.AutoChooser;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -77,6 +78,7 @@ public class RobotContainer {
   }
 
   private final AutoFactory autoFactory;
+  private final AutoChooser autoChooser;
   private final AutoRoutines autoRoutines;
 
   public RobotContainer() {
@@ -97,6 +99,9 @@ public class RobotContainer {
             tootsieSlideSubsystem,
             funnelSubsystem,
             redside);
+    autoChooser = new AutoChooser();
+    autoChooser.addRoutine("Simple Bottom Blue", autoRoutines::simpleTest);
+    SmartDashboard.putData("autochooser", autoChooser);
 
     // Set up the Auto chooser in SmartDashboard, which allows you to choose between the Top,
     // Middle, and Bottom auto paths
@@ -497,7 +502,8 @@ public class RobotContainer {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
     String chosenPath = startPosChooser.getSelected();
 
-    return autoRoutines.autoRoutine(chosenPath).cmd();
+    // return autoRoutines.simpleTest(chosenPath).cmd();
+    return autoChooser.selectedCommandScheduler();
   }
 
   //   public void testAutoCommands() {}
