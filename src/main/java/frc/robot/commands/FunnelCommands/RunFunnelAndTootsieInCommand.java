@@ -1,7 +1,6 @@
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.TootsieSlide;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
@@ -9,10 +8,11 @@ public class RunFunnelAndTootsieInCommand extends Command {
   private FunnelSubsystem funnelSubsystem;
   private TootsieSlideSubsystem shooter;
 
-  public RunFunnelAndTootsieInCommand(FunnelSubsystem funnelSubsystem, TootsieSlideSubsystem shooter) {
+  public RunFunnelAndTootsieInCommand(
+      FunnelSubsystem funnelSubsystem, TootsieSlideSubsystem shooter) {
     this.funnelSubsystem = funnelSubsystem;
     this.shooter = shooter;
-    addRequirements(funnelSubsystem,shooter);
+    addRequirements(funnelSubsystem, shooter);
   }
 
   // Called when the command is initially scheduled.
