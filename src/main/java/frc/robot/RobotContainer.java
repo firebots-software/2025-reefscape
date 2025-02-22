@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -44,7 +45,6 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import choreo.auto.AutoChooser;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);

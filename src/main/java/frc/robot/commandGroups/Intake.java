@@ -22,7 +22,7 @@ public class Intake extends SequentialCommandGroup {
       ElevatorSubsystem elevatorSubsystem,
       FunnelSubsystem funnelSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem) {
-      DogLog.log("Auto/Intake-Cmd-Init", true);
+    DogLog.log("Auto/Intake-Cmd-Init", true);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
