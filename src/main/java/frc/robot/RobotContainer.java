@@ -6,6 +6,7 @@ package frc.robot;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
+import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -500,6 +501,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
+    DogLog.log("Auto/Get-Auto-Command", "Called");
     String chosenPath = startPosChooser.getSelected();
 
     // return autoRoutines.simpleTest(chosenPath).cmd();
