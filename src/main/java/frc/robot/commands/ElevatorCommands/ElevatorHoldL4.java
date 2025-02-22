@@ -9,12 +9,10 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 
 public class ElevatorHoldL4 extends Command {
   private ElevatorSubsystem elevatorSubsystem;
-  private TootsieSlideSubsystem shooter;
 
   public ElevatorHoldL4(ElevatorSubsystem elevatorSubsystem) {
     this.elevatorSubsystem = elevatorSubsystem;
-    this.shooter = shooter;
-    addRequirements(elevatorSubsystem, shooter);
+    addRequirements(elevatorSubsystem);
   }
 
   // Called when the command is initially scheduled.

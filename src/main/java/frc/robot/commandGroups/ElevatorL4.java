@@ -5,14 +5,13 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.ElevatorHoldL4;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.TootsieSlideSubsystem;
 
 public class ElevatorL4 extends SequentialCommandGroup {
 
-  public ElevatorL4(ElevatorSubsystem elevatorSubsystem,TootsieSlideSubsystem shooter) {
+  public ElevatorL4(ElevatorSubsystem elevatorSubsystem) {
 
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)
-            .andThen(new ElevatorHoldL4(elevatorSubsystem)));
+            .andThen(new ElevatorHoldL4(elevatorSubsystem).withTimeout(0.25)));
   }
 }

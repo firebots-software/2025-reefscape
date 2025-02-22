@@ -1,14 +1,18 @@
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.TootsieSlide;
 import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
 
-public class RunFunnelInCommand extends Command {
+public class RunFunnelAndTootsieInCommand extends Command {
   private FunnelSubsystem funnelSubsystem;
+  private TootsieSlideSubsystem shooter;
 
-  public RunFunnelInCommand(FunnelSubsystem funnelSubsystem) {
+  public RunFunnelAndTootsieInCommand(FunnelSubsystem funnelSubsystem, TootsieSlideSubsystem shooter) {
     this.funnelSubsystem = funnelSubsystem;
-    addRequirements(funnelSubsystem);
+    this.shooter = shooter;
+    addRequirements(funnelSubsystem,shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -21,12 +25,14 @@ public class RunFunnelInCommand extends Command {
   @Override
   public void execute() {
     funnelSubsystem.spinFunnel();
+    shooter.intakeCoral();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     funnelSubsystem.stopFunnel();
+    shooter.stopTootsie();
   }
 
   // Returns true when the command should end.

@@ -27,10 +27,16 @@ public class JamesHardenScore extends SequentialCommandGroup {
     } else {
       movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide);
     }
+    Command elevateCommand;
+    if (height.equals(ElevatorPositions.L4)) {
+      elevateCommand = new ElevatorL4(elevatorSubsystem);
+    } else {
+      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height);
+    }
 
     addCommands(
         movementCommand,
-        new SetElevatorLevel(elevatorSubsystem, height),
+        elevateCommand,
         new WaitCommand(0.25),
         new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5));
   }
