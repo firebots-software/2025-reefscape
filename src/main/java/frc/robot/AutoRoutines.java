@@ -10,6 +10,7 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.AutoCommands.SetIsAutoRunningToFalse;
+import frc.robot.commands.DebugCommands.DogLogCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -117,25 +118,25 @@ public class AutoRoutines {
     AutoRoutine testRoutine = autoFactory.newRoutine("testRoutine");
     AutoTrajectory firstPathBottom = testRoutine.trajectory("BSTART-2L");
     
-    autoCommandGroup.addCommands(firstPathBottom.resetOdometry());
+    autoCommandGroup.addCommands(firstPathBottom.resetOdometry().alongWith(new DogLogCmd("Auto/Running", "resetOdo")));
 
     // Add all the auto segments as commands
     // for (int i = 0; i < bottomNames.size(); i++) {
     //   autoCommandGroup.addCommands(bottomTraj.get(i).cmd());
     //   DogLog.log("Auto/creating-path", i);
     // }
-    autoCommandGroup.addCommands(firstPathBottom.cmd());
+    autoCommandGroup.addCommands(firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath")));
 
     // Set isAutoRunning to false when auto routine finishes
     autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
 
     // Bind the Auto SequentialCommandGroup to run when the routine is activated
-    routine.active().onTrue(autoCommandGroup);
+    testRoutine.active().onTrue(autoCommandGroup);
 
     DogLog.log("Auto/Simple-Test-Constructor", "Ran");
     // DogLog.log("Auto/Returning-Num-Paths", numPaths);
 
-    return routine;
+    return testRoutine;
   }
 
   public AutoRoutine autoRoutine(String chosenAuto) {

@@ -79,32 +79,11 @@ public class RobotContainer {
     logger.telemeterize(driveTrain.getCurrentState());
   }
 
-  private final AutoFactory autoFactory;
-  private final AutoChooser autoChooser;
-  private final AutoRoutines autoRoutines;
+  
 
   public RobotContainer() {
-    DogLog.log("Auto/drivetrain-null", driveTrain == null);
-    autoFactory =
-        new AutoFactory(
-            driveTrain::getPose, // A function that returns the current robot pose
-            driveTrain
-                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
-            driveTrain::followTrajectory, // The drive subsystem trajectory follower
-            true, // If alliance flipping should be enabled
-            driveTrain);
-
-    autoRoutines =
-        new AutoRoutines(
-            autoFactory,
-            driveTrain,
-            elevatorSubsystem,
-            tootsieSlideSubsystem,
-            funnelSubsystem,
-            redside);
-    autoChooser = new AutoChooser();
-    autoChooser.addRoutine("Simple Bottom Blue", autoRoutines::simpleTest);
-    SmartDashboard.putData("autochooser", autoChooser);
+    
+    
 
     // Set up the Auto chooser in SmartDashboard, which allows you to choose between the Top,
     // Middle, and Bottom auto paths
@@ -507,7 +486,8 @@ public class RobotContainer {
     // String chosenPath = startPosChooser.getSelected();
 
     // return autoRoutines.simpleTest(chosenPath).cmd();
-    return autoChooser.selectedCommandScheduler();
+    // return autoChooser.selectedCommandScheduler();
+    return null;
   }
 
   //   public void testAutoCommands() {}
