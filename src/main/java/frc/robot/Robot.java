@@ -81,7 +81,9 @@ public class Robot extends TimedRobot {
             driveTrain,
             redside);
     autoChooser = new AutoChooser();
-    autoChooser.addRoutine("Simple Bottom Blue", autoRoutines::simpleTest);
+    autoChooser.addRoutine("Top (next to blue barge zone)", autoRoutines::topAutoRoutine);
+    autoChooser.addRoutine("Middle (between blue and red barge zones)", autoRoutines::middleAutoRoutine);
+    autoChooser.addRoutine("Bottom (next to red barge zone)", autoRoutines::bottomAutoRoutine);
     SmartDashboard.putData("autochooser", autoChooser);
     absoluteInit();
 
