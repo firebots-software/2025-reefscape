@@ -8,16 +8,15 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class GyroStabilizer extends Command {
-  public static final double TIP_THRESHOLD = 5 * Math.PI / 180; //1 deg for testing
+  public static final double TIP_THRESHOLD = 5 * Math.PI / 180; // 1 deg for testing
 
   private SwerveSubsystem swerveSubsystem;
   private Pigeon2 pigeon;
 
-  private static PIDController pidController = new PIDController(1, 0.0, 0.0); //TODO: values
+  private static PIDController pidController = new PIDController(1, 0.0, 0.0); // TODO: values
 
   private final SwerveRequest.RobotCentric robotCentricDrive =
       new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
@@ -43,8 +42,7 @@ public class GyroStabilizer extends Command {
     double xSpeed = pidController.calculate(dirToGoX * 10, 0);
     double ySpeed = pidController.calculate(dirToGoY * 10, 0);
 
-    SwerveRequest drive = robotCentricDrive.withVelocityX(xSpeed)
-                                           .withVelocityY(ySpeed);
+    SwerveRequest drive = robotCentricDrive.withVelocityX(xSpeed).withVelocityY(ySpeed);
 
     DogLog.log("gyroStabilizer/xSpeed", xSpeed);
     DogLog.log("gyroStabilizer/ySpeed", ySpeed);
@@ -73,6 +71,7 @@ public class GyroStabilizer extends Command {
   }
 
   public static boolean tipping(SwerveSubsystem driveTrain) {
-    return Math.abs(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2()).getX()) > TIP_THRESHOLD || Math.abs(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2()).getY()) > TIP_THRESHOLD;
+    return Math.abs(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2()).getX()) > TIP_THRESHOLD
+        || Math.abs(GyroStabilizer.getTipVectorRP(driveTrain.getPigeon2()).getY()) > TIP_THRESHOLD;
   }
 }
