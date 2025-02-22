@@ -36,6 +36,8 @@ public class AutoRoutines {
     this.tootsieSlideSubsystem = tootsieSlideSubsystem;
     this.funnelSubsystem = funnelSubsystem;
     this.redside = redside;
+
+    // Load trajectories:
   }
 
   public AutoRoutine autoRoutine(String chosenPath) {
