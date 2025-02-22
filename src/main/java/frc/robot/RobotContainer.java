@@ -74,6 +74,7 @@ public class RobotContainer {
   }
 
   private final AutoFactory autoFactory;
+  private final AutoRoutines autoRoutines;
 
   public RobotContainer() {
     autoFactory =
@@ -85,6 +86,15 @@ public class RobotContainer {
             true, // If alliance flipping should be enabled
             driveTrain);
 
+    autoRoutines =
+        new AutoRoutines(
+            autoFactory,
+            driveTrain,
+            elevatorSubsystem,
+            tootsieSlideSubsystem,
+            funnelSubsystem,
+            redside);
+
     // Set up the Auto chooser in SmartDashboard, which allows you to choose between the Top,
     // Middle, and Bottom auto paths
     // (Mirroring for Blue or Red side happens automatically with Choreo)
@@ -94,7 +104,7 @@ public class RobotContainer {
     startPosChooser.addOption("Bottom (next to red barge zone)", "bottom");
     SmartDashboard.putData(startPosChooser);
 
-    //configureBindings();
+    // configureBindings();
   }
 
   public void configureBindings() {
@@ -284,14 +294,7 @@ public class RobotContainer {
     ex. 2L-BHPS
     this path starts from the left branch on the second part of the reef (2L), and goes to the bottom human player station (BHPS)
     */
-    AutoRoutines autoRoutines =
-        new AutoRoutines(
-            autoFactory,
-            driveTrain,
-            elevatorSubsystem,
-            tootsieSlideSubsystem,
-            funnelSubsystem,
-            redside);
+    
     String chosenPath = startPosChooser.getSelected();
 
     return autoRoutines.autoRoutine(chosenPath).cmd();
