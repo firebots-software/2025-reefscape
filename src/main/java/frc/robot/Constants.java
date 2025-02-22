@@ -45,68 +45,25 @@ public final class Constants {
     }
 
     // TODO: CHANGE FOR NEW ROBOT
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.499);
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.358);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.358);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(-11.499);
     public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.011);
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
 
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(-11.927);
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.357);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.357);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.927);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.01);
 
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
-
-    // TODO: determine if this latency is still true
-    public static final double CAMERA_LATENCY_SECONDS = 0.02;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
   }
 
   public static class Landmarks {
     // midline constant
-    public static final double MIDLINE_X = 8.774;
-
-    // blude side
-    public static final Translation2d[] leftBranchesBlue = {
-      new Translation2d(3.7084, 4.191),
-      new Translation2d(3.95732, 3.4328608),
-      new Translation2d(4.736846, 3.2685736),
-      new Translation2d(5.2689506, 3.861562),
-      new Translation2d(5.0214276, 4.6188884),
-      new Translation2d(4.2418254, 4.783201)
-    };
-
-    // blue side
-    public static final Translation2d[] rightBranchesBlue = {
-      new Translation2d(3.7085778, 3.861562),
-      new Translation2d(4.2412666, 3.267583),
-      new Translation2d(5.0220118, 3.4318702),
-      new Translation2d(5.2700936, 4.1901872),
-      new Translation2d(4.7374048, 4.7841916),
-      new Translation2d(3.9566596, 4.619879)
-    };
-
-    public static final Translation2d[] rightBranchesRed = {
-      new Translation2d(13.839825, 4.191),
-      new Translation2d(13.590905, 3.4328608),
-      new Translation2d(12.811379, 3.2685736),
-      new Translation2d(12.2792744, 3.861562),
-      new Translation2d(12.5267974, 4.6188884),
-      new Translation2d(13.3063996, 4.783201)
-    };
-
-    // blue side
-    public static final Translation2d[] leftBranchesRed = {
-      new Translation2d(13.8396472, 3.861562),
-      new Translation2d(13.3069584, 3.267583),
-      new Translation2d(12.5262132, 3.4318702),
-      new Translation2d(12.2781314, 4.1901872),
-      new Translation2d(12.8108202, 4.7841916),
-      new Translation2d(13.5915654, 4.619879)
-    };
-
+    public static final double MIDLINE_X = 8.7741125;
     public static final Rotation2d[] reefFacingAngleBlue = {
       new Rotation2d(Degrees.of(0)),
       new Rotation2d(Degrees.of(60)),
@@ -124,6 +81,79 @@ public final class Constants {
       new Rotation2d(Degrees.of(-60)),
       new Rotation2d(Degrees.of(-120))
     };
+    // Blue Lineup Translations
+    public static final Translation2d[] LEFT_LINEUP_BLUE = {
+      new Translation2d(3.14058, 4.19448),
+      new Translation2d(3.66895, 2.94212),
+      new Translation2d(5.0177, 2.77352),
+      new Translation2d(5.83809, 3.85728),
+      new Translation2d(5.30973, 5.10963),
+      new Translation2d(3.96097, 5.27823)
+    };
+
+    public static final Translation2d[] RIGHT_LINEUP_BLUE = {
+      new Translation2d(3.14058, 3.85728),
+      new Translation2d(3.96097, 2.77352),
+      new Translation2d(5.30973, 2.94212),
+      new Translation2d(5.83809, 4.19448),
+      new Translation2d(5.0177, 5.27823),
+      new Translation2d(3.66895, 5.10963)
+    };
+
+    // Blue Outpost Translations
+    public static final Translation2d[] LEFT_OUTPOST_BLUE = {
+      new Translation2d(3.14058, 4.94706),
+      new Translation2d(3.0172, 3.31841),
+      new Translation2d(4.36595, 2.39723),
+      new Translation2d(5.83809, 3.1047),
+      new Translation2d(5.96148, 4.73334),
+      new Translation2d(4.61272, 5.65452)
+    };
+
+    public static final Translation2d[] RIGHT_OUTPOST_BLUE = {
+      new Translation2d(3.14058, 3.1047),
+      new Translation2d(4.61272, 2.39723),
+      new Translation2d(5.96148, 3.31841),
+      new Translation2d(5.83809, 4.94706),
+      new Translation2d(4.36595, 5.65452),
+      new Translation2d(3.0172, 4.73334)
+    };
+
+    public static final Translation2d[] RIGHT_LINEUP_RED = {
+      new Translation2d(14.4076704, 4.19448), // 17.5482504 - 3.14058
+      new Translation2d(13.8793004, 2.94212), // 17.5482504 - 3.66895
+      new Translation2d(12.5305504, 2.77352), // 17.5482504 - 5.0177
+      new Translation2d(11.7101604, 3.85728), // 17.5482504 - 5.83809
+      new Translation2d(12.2385204, 5.10963), // 17.5482504 - 5.30973
+      new Translation2d(13.5872804, 5.27823) // 17.5482504 - 3.96097
+    };
+
+    public static final Translation2d[] LEFT_LINEUP_RED = {
+      new Translation2d(14.4076704, 3.85728), // 17.5482504 - 3.14058
+      new Translation2d(13.5872804, 2.77352), // 17.5482504 - 3.96097
+      new Translation2d(12.2385204, 2.94212), // 17.5482504 - 5.30973
+      new Translation2d(11.7101604, 4.19448), // 17.5482504 - 5.83809
+      new Translation2d(12.5305504, 5.27823), // 17.5482504 - 5.0177
+      new Translation2d(13.8793004, 5.10963) // 17.5482504 - 3.66895
+    };
+
+    public static final Translation2d[] RIGHT_OUTPOST_RED = {
+      new Translation2d(14.4076704, 4.94706), // 17.5482504 - 3.14058
+      new Translation2d(14.5310504, 3.31841), // 17.5482504 - 3.0172
+      new Translation2d(13.1823004, 2.39723), // 17.5482504 - 4.36595
+      new Translation2d(11.7101604, 3.10470), // 17.5482504 - 5.83809
+      new Translation2d(11.5867704, 4.73334), // 17.5482504 - 5.96148
+      new Translation2d(12.9355304, 5.65452) // 17.5482504 - 4.61272
+    };
+
+    public static final Translation2d[] LEFT_OUTPOST_RED = {
+      new Translation2d(14.4076704, 3.10470), // 17.5482504 - 3.14058
+      new Translation2d(12.9355304, 2.39723), // 17.5482504 - 4.61272
+      new Translation2d(11.5867704, 3.31841), // 17.5482504 - 5.96148
+      new Translation2d(11.7101604, 4.94706), // 17.5482504 - 5.83809
+      new Translation2d(13.1823004, 5.65452), // 17.5482504 - 4.36595
+      new Translation2d(14.5310504, 4.73334) // 17.5482504 - 3.0172
+    };
   }
 
   public static final class Arm {
@@ -131,8 +161,8 @@ public final class Constants {
     public static final double PIVOT_GEAR_RATIO = 1 / 36d; // TODO
 
     // end of new code
-    public static final double STATOR_CURRENT_LIMIT_AMPS = 5.0;
-    public static final double SUPPLY_CURRENT_LIMIT_AMPS = 5.0;
+    public static final double STATOR_CURRENT_LIMIT_AMPS = 30.0;
+    public static final double SUPPLY_CURRENT_LIMIT_AMPS = 30.0;
 
     public static double DEGREES_TO_ROTATIONS(double degrees) {
       double conversionFactor = 360;
@@ -152,15 +182,11 @@ public final class Constants {
     public static double S0C_KD = 0.0;
     public static double S0C_KS = 0.0;
     public static double S0C_KG = 0.0;
-    public static final double ARMFF_KS = 0.16969;
-    public static final double ARMFF_KG = 0.34;
-    public static final double ARMFF_KV = 2.49;
-    public static final double MOTIONMAGIC_KV = 0;
-    public static final double MOTIONMAGIC_KA = 0;
+
     public static final double MOTIONMAGIC_MAX_VELOCITY =
-        36; // MotionMagic Cruise Velocity in RPS of the arm
+        200; // MotionMagic Cruise Velocity in RPS of the arm
     public static final double MOTIONMAGIC_MAX_ACCELERATION =
-        2.2 * 36; // MotionMagic Acceleration in RPS^2 of the arm
+        5 * MOTIONMAGIC_MAX_VELOCITY; // MotionMagic Acceleration in RPS^2 of the arm
     public static final double ZERO_CURRENT = 5;
     public static final double DEALGAENATE_SPEED_ZOOM_ZOOM = 60;
     public static final double EXTENDED_ANGLE = 90;
@@ -248,7 +274,7 @@ public final class Constants {
     public static enum RobotDimensions {
       SERRANO(Inches.of(22.52), Inches.of(22.834)), // length, width
       PROTO(Inches.of(22.52), Inches.of(22.834)), // length, width
-      JAMES_HARDEN(Inches.of(26.749), Inches.of(22.74)); // length, width
+      JAMES_HARDEN(Inches.of(26.75), Inches.of(22.75)); // length, width
       public final Distance length, width;
 
       RobotDimensions(Distance length, Distance width) {
@@ -448,8 +474,8 @@ public final class Constants {
     private static final Distance WHEEL_RADIUS_INCHES = Inches.of(2); // TODO: VERIFY FOR NEW ROBOT
 
     private static final boolean STEER_MOTOR_REVERSED = true; // TODO: CHANGE FOR NEW ROBOT
-    private static final boolean INVERT_LEFT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
-    private static final boolean INVERT_RIGHT_SIDE = false; // TODO: CHANGE FOR NEW ROBOT
+    private static final boolean INVERT_LEFT_SIDE = true; // TODO: CHANGE FOR NEW ROBOT
+    private static final boolean INVERT_RIGHT_SIDE = true; // TODO: CHANGE FOR NEW ROBOT
 
     private static final int kPigeonId = 40; // TODO: CHANGE FOR NEW ROBOT
 
@@ -607,8 +633,8 @@ public final class Constants {
 
     // TODO: CHANGE FOR NEW ROBOT
     // these outline the speed calculations
-    public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND =
-        5.944; // before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s,
+    public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.5;
+    // 5.944; // before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s,
     public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
     public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.75;
     public static final double TELE_DRIVE_SLOW_MODE_SPEED_PERCENT = 0.3;
@@ -635,7 +661,7 @@ public final class Constants {
     public static final double ACCELERATION = 10; // TODO
     public static final double GEAR_RATIO = 1d / 6d;
     public static final double INTAKE_SPEED_RPS = 5d; // TODO
-    public static final double SHOOTING_SPEED_RPS = 15d;
+    public static final double SHOOTING_SPEED_RPS = 13d;
   }
 
   public static class FunnelConstants {
@@ -664,7 +690,7 @@ public final class Constants {
     public static final int MOTOR2_PORT = 12; // TODO: change port
     public static final int CANRANGE_PORT = 41; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
-    public static final double STATOR_CURRENT_LIMIT = 30.0; // TODO: change for actual match
+    public static final double STATOR_CURRENT_LIMIT = 40.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 10.0; // TODO: change for actual match
 
     public static double S0C_KP = 2.0;
@@ -682,7 +708,7 @@ public final class Constants {
     // public static final double MOTIONMAGIC_KG = 0.28;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
-    public static final double SETPOINT_TOLERANCE = 0.1; // To-do
+    public static final double SETPOINT_TOLERANCE = 0.2; // To-do
     public static final double MAX_POSITIONAL_ERROR = 0.05;
     public static final double SPROCKET_CIRCUM_INCHES =
         1.751 * Math.PI; // TODO: change 0 to radius/diameter
@@ -695,17 +721,18 @@ public final class Constants {
         (SPROCKET_GEAR_RATIO) / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
     public static final double CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE =
         1d / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
+    public static final double ELEVATOR_TORQUE = 15.0;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.070),
-      safePosition(0, 0.0),
+      Intake(0, 0.068),
+      safePosition(0, 0.657 - 0.13),
       L1(1, 0.657 - 0.13),
       L2DALE(0, 0.493), // 0.8636 - 0.379
       L2(2, 0.8636),
       L3DALE(0, 0.91), // 1.27 - 0.379
       L3(3, 1.27),
-      L4(4, 1.82);
+      L4(4, 1.800);
 
       public final int position;
       public final double height;

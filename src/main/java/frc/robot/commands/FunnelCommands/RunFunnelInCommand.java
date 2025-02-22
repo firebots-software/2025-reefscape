@@ -1,23 +1,12 @@
-/*
-This Command spins the Funnel motors until the Coral is detected by the Checkout sensor. At That
-point, the funnel maintains its current position (if the Coral moves the Funnel motors due to
-momentum, then this moves the funnel motors backwards)
-*/
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.FunnelSubsystem;
 
-/**
- * Runs the intake and preshooter until IR sensor detects note
- *
- * @param subsystem The subsystem used by this command.
- */
-public class RunFunnelUntilDetectionQuick extends Command {
+public class RunFunnelInCommand extends Command {
   private FunnelSubsystem funnelSubsystem;
 
-  public RunFunnelUntilDetectionQuick(FunnelSubsystem funnelSubsystem) {
+  public RunFunnelInCommand(FunnelSubsystem funnelSubsystem) {
     this.funnelSubsystem = funnelSubsystem;
     addRequirements(funnelSubsystem);
   }
@@ -37,13 +26,12 @@ public class RunFunnelUntilDetectionQuick extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    funnelSubsystem.maintainCurrentPosition();
-    CoralPosition.setCoralInFunnel(true);
+    funnelSubsystem.stopFunnel();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return funnelSubsystem.isCoralCheckedOut();
+    return false;
   }
 }

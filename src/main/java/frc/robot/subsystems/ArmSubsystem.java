@@ -123,13 +123,6 @@ public class ArmSubsystem extends SubsystemBase {
     motionMagicConfigsArm.MotionMagicCruiseVelocity = Constants.Arm.MOTIONMAGIC_MAX_VELOCITY;
     motionMagicConfigsArm.MotionMagicAcceleration = Constants.Arm.MOTIONMAGIC_MAX_ACCELERATION;
     masterConfiguratorArm.apply(motionMagicConfigsArm);
-
-    motionMagicConfigsFlywheel = new MotionMagicConfigs();
-    motionMagicConfigsFlywheel.MotionMagicCruiseVelocity =
-        Constants.Flywheel.MOTIONMAGIC_MAX_VELOCITY;
-    motionMagicConfigsFlywheel.MotionMagicAcceleration =
-        Constants.Flywheel.MOTIONMAGIC_MAX_ACCELERATION;
-    masterConfiguratorFlywheel.apply(motionMagicConfigsFlywheel);
   }
 
   // ARM:
@@ -147,19 +140,15 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void moveMuyNegative() {
-    double veryNegativeNumberToTurnTo = -1000d;
-    armMotor.setControl(
-        controlRequestArm
-            .withPosition(Constants.Arm.DEGREES_TO_ROTATIONS(veryNegativeNumberToTurnTo))
-            .withSlot(0));
+    armMotor.setControl(new VelocityVoltage(-6).withSlot(0));
   }
 
   public boolean checkCurrent() {
-    double current = Math.abs(armMotor.getTorqueCurrent().getValue().magnitude());
+    double current = Math.abs(armMotor.getStatorCurrent().getValue().magnitude());
     // TODO: Fix the zeroing current possibly, nah scratch that, most likely we will need to change
     // ts
     if (current > Constants.Arm.ZERO_CURRENT) {
-      armMotor.disable();
+      // armMotor.disable();
       return true;
     }
 
@@ -175,15 +164,19 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void spinFlywheel() {
-    runFlywheelAtRPS(Constants.Flywheel.SPEED_RPS);
+    if (armMotor.get() / Constants.Arm.PIVOT_GEAR_RATIO > 0.1) {
+      runFlywheelAtRPS(Constants.Flywheel.SPEED_RPS);
+    }
   }
 
   // Stops the flywheel
   public void stopFlywheel() {
     runFlywheelAtRPS(0);
+    flywheelMotor.stopMotor();
   }
 
   public void zeroSensor() {
+    armMotor.disable();
     armMotor.setPosition(0);
   }
 
