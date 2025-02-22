@@ -233,7 +233,7 @@ public class RobotContainer {
 
     // Joystick 2:
     // Elevator
-    joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
+    joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
     joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
     joystick2.y().onTrue(new ElevatorL4(elevatorSubsystem));
     joystick2.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
