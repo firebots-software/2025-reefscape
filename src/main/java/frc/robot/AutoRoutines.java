@@ -237,6 +237,7 @@ public class AutoRoutines {
     BooleanSupplier pathGoesToHPS =
         () -> !(trajName.contains("HPS-") || trajName.contains("START-"));
     BooleanSupplier startOrLeavingHPS = () -> !pathGoesToHPS.getAsBoolean();
+    boolean goRightBranch = trajName.substring(trajName.length() - 1).equals("R");
 
     DogLog.log("Auto/trajName", trajName);
     DogLog.log("Auto/pathGoesToHPS", pathGoesToHPS.getAsBoolean());
@@ -262,7 +263,7 @@ public class AutoRoutines {
                     driveTrain,
                     ElevatorPositions.L4,
                     redside,
-                    isAutoRunning)));
+                    goRightBranch)));
 
     // Command oldStructure =  Commands.parallel(
     //         trajectory.cmd(),
