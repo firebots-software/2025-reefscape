@@ -12,12 +12,15 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -35,6 +38,7 @@ import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
+import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
@@ -47,6 +51,8 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import com.ctre.phoenix6.swerve.SwerveRequest;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -90,7 +96,7 @@ public class RobotContainer {
             true, // If alliance flipping should be enabled
             driveTrain);
     autoChooser = new AutoChooser();
-    AutoRoutines autoRoutines = new AutoRoutines(autoFactory, driveTrain);
+    AutoRoutines autoRoutines = new AutoRoutines(autoFactory, driveTrain, tootsieSlideSubsystem, elevatorSubsystem);
     // Add options to the chooser
     autoChooser.addRoutine("Basic Four Coral Auto", autoRoutines::basicFourCoralAuto);
 
@@ -457,6 +463,22 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    return autoChooser.selectedCommandScheduler();
+    final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> driveTrain.resetPose(new Pose2d(new Translation2d(10.463430404663086, 7.600519180297852), new Rotation2d()))),
+        new JamesHardenScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L3, redside, false),
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+        new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(16.70710563659668, 6.779853343963623), new Rotation2d(0.9429051116124475+Math.PI))),
+        driveTrain.applyRequest(() -> brake).withTimeout(0.5),
+        new JamesHardenScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L3, redside, false),
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+        new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(16.70710563659668, 6.779853343963623), new Rotation2d(0.9429051116124475+Math.PI))),
+        driveTrain.applyRequest(() -> brake).withTimeout(0.5),
+        new JamesHardenScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, ElevatorPositions.L3, redside, true),
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+        new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(16.70710563659668, 6.779853343963623), new Rotation2d(0.9429051116124475+Math.PI))),
+        driveTrain.applyRequest(() -> brake).withTimeout(0.5)
+    );
+    // return autoChooser.selectedCommandScheduler();
   }
 }

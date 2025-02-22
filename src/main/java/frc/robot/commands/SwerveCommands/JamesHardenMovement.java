@@ -59,9 +59,9 @@ public class JamesHardenMovement extends Command {
     double targetRot = targetPose.getRotation().getRadians();
     targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
 
-    if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX()) < 0.03)
-        && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY()) < 0.03)
-        && (Math.abs(targetRot - currRot) < 0.01)) {
+    if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX()) < 0.02)
+        && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY()) < 0.02)
+        && (Math.abs(targetRot - currRot) < 0.0075)) {
       return true;
     } else return false;
   }
