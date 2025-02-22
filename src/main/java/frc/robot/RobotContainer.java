@@ -255,6 +255,8 @@ public class RobotContainer {
     Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide());
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
 
+    elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
+
     // Debugging
     debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
 
