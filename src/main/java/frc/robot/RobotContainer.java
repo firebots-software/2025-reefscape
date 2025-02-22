@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.D2Intake;
@@ -503,7 +504,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
     DogLog.log("Auto/Get-Auto-Command", "Called");
-    String chosenPath = startPosChooser.getSelected();
+    // String chosenPath = startPosChooser.getSelected();
 
     // return autoRoutines.simpleTest(chosenPath).cmd();
     return autoChooser.selectedCommandScheduler();

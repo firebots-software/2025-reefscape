@@ -9,6 +9,7 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.AbstractedPID.IncreasePArm;
 import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -187,7 +188,8 @@ public class Robot extends TimedRobot {
     // schedule the autonomous command (example) (UNCOMMENT)
     if (m_autonomousCommand != null) {
       DogLog.log("Auto/CommandIsNull", false);
-      m_autonomousCommand.schedule();
+      // m_autonomousCommand.schedule();
+      RobotModeTriggers.autonomous().whileTrue(m_autonomousCommand);
       DogLog.log("Auto/CommandScheduled", true);
     }
   }
