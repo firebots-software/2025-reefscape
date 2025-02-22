@@ -108,7 +108,23 @@ public class RobotContainer {
 
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
-
+    DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
+        leftRightFunction = () -> -joystick.getLeftX(),
+        rotationFunction = () -> -joystick.getRightX(),
+        speedFunction =
+            () ->
+            joystick.leftTrigger().getAsBoolean()
+                    ? 0d
+                    : 1d; // slowmode when left shoulder is pressed, otherwise fast
+    SwerveJoystickCommand swerveJoystickCommand =
+        new SwerveJoystickCommand(
+            frontBackFunction,
+            leftRightFunction,
+            rotationFunction,
+            speedFunction, // slowmode when left shoulder is pressed, otherwise fast
+            () -> true, //always field centric
+            driveTrain);
+    driveTrain.setDefaultCommand(swerveJoystickCommand);
     // Custom Controller:
 
     // Left Elevator Levels
@@ -264,55 +280,8 @@ public class RobotContainer {
     //If we start with Coral in Tootsie Slide
     Trigger drake = new Trigger(() -> funnelSubsystem.drakeTripped());
     drake.whileTrue(new CoralInTootsie());
-    
-    // Debugging
-    debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
-
-    // debugJoystick
-    //     .y()
-    //     .whileTrue(
-    //         new Dealgaenate(
-    //             armSubsystem,
-    //             elevatorSubsystem,
-    //             Constants.ElevatorConstants.ElevatorPositions.L2DALE));
-
-    debugJoystick.y().whileTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
-    debugJoystick
-        .x()
-        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
-    debugJoystick.a().onTrue(new ZeroArm(armSubsystem));
-    debugJoystick
-        .b()
-        .whileTrue(
-            new Dealgaenate(
-                armSubsystem,
-                elevatorSubsystem,
-                Constants.ElevatorConstants.ElevatorPositions.L3DALE));
-
-    debugJoystick
-        .rightTrigger()
-        .onTrue(new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
 
     // Swerve
-    Trigger leftTrigger = joystick.leftTrigger();
-    DoubleSupplier frontBackFunction = () -> -joystick.getLeftY(),
-        leftRightFunction = () -> -joystick.getLeftX(),
-        rotationFunction = () -> -joystick.getRightX(),
-        speedFunction =
-            () ->
-                leftTrigger.getAsBoolean()
-                    ? 0d
-                    : 1d; // slowmode when left shoulder is pressed, otherwise fast
-    SwerveJoystickCommand swerveJoystickCommand =
-        new SwerveJoystickCommand(
-            frontBackFunction,
-            leftRightFunction,
-            rotationFunction,
-            speedFunction, // slowmode when left shoulder is pressed, otherwise fast
-            () -> joystick.leftTrigger().getAsBoolean(),
-            driveTrain);
-    driveTrain.setDefaultCommand(swerveJoystickCommand);
-
     joystick
         .a()
         .onTrue(
@@ -322,63 +291,7 @@ public class RobotContainer {
                         new Pose2d(
                             Constants.Landmarks.LEFT_LINEUP_RED[5],
                             Constants.Landmarks.reefFacingAngleRed[5]))));
-
-    // joystick
-    //     .rightBumper()
-    //     .onTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
-    // joystick.rightBumper().onFalse(new ArmToAngleCmd(Constants.Arm.RETRACTED_ANGLE,
-    // armSubsystem));
-
-    // // joystick.b().onTrue(new Intake(elevatorSubsystem, funnelSubsystem,
-    // tootsieSlideSubsystem));
-
-    joystick
-        .x()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L3,
-                redside,
-                true));
-    // joystick
-    //     .y()
-    //     .whileTrue(
-    //         new JamesHardenScore(
-    //             elevatorSubsystem,
-    //             tootsieSlideSubsystem,
-    //             driveTrain,
-    //             ElevatorPositions.L4,
-    //             redside,
-    //             false));
-
-    joystick.b().whileTrue(new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3));
-    joystick.povUp().whileTrue(new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L2));
-    joystick.povDown().whileTrue(new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
-
-    // joystick
-    //     .a()
-    //     .onTrue(
-    //         driveTrain.runOnce(
-    //             () ->
-    //                 driveTrain.resetPose(
-    //                     new Pose2d(
-    //                         new Translation2d(0, 0), new Rotation2d()))));
-    // new InstantCommand()
-
-    // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
-    // joystick.povRight().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    // joystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
-    // joystick.povLeft().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
-
-    // joystick
-    //     .a()
-    //     .whileTrue(
-    //         new SetElevatorLevel(
-    //             elevatorSubsystem, ElevatorPositions.safePosition)); // change safepos in
-    // constants
-
+    
     /*
     Sysid button commands, commented out (I like keeping this commented because
     every branch will have access to the necessary commands to run SysID immediately)
@@ -396,6 +309,7 @@ public class RobotContainer {
        joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
        joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     */
+    
     // new Translation2d(
     //     Constants.Landmarks.leftBranchesRed[5].getX()
     //         - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
@@ -435,6 +349,32 @@ public class RobotContainer {
                 armSubsystem,
                 elevatorSubsystem,
                 Constants.ElevatorConstants.ElevatorPositions.L3DALE));
+
+    debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
+
+    // debugJoystick
+    //     .y()
+    //     .whileTrue(
+    //         new Dealgaenate(
+    //             armSubsystem,
+    //             elevatorSubsystem,
+    //             Constants.ElevatorConstants.ElevatorPositions.L2DALE));
+
+    debugJoystick.y().whileTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    debugJoystick
+        .x()
+        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
+    debugJoystick
+        .b()
+        .whileTrue(
+            new Dealgaenate(
+                armSubsystem,
+                elevatorSubsystem,
+                Constants.ElevatorConstants.ElevatorPositions.L3DALE));
+
+    debugJoystick
+        .rightTrigger()
+        .onTrue(new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
 
     // debugJoystick
     //     .rightTrigger()
