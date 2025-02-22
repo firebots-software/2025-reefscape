@@ -5,8 +5,8 @@ import choreo.auto.AutoRoutine;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commandGroups.AutoLiftAndShoot;
 import frc.robot.commandGroups.LoadAndPutUp;
-import frc.robot.commandGroups.MoveToSideAndShoot;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -93,9 +93,6 @@ public class AutoRoutines {
    * @return
    */
   public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // for actual robot
-    // POTENTIAL BUG: When the robot just starts Auto, pathGoesToHPS = false, which actually makes the elevator lift to L4
-    // before intaking and transfering the preloaded Coral into the Tootsie slide. We could create another boolean like
-    // ""
     BooleanSupplier pathGoesToHPS =
         () -> !(baseCommandName.contains("HPS-") || baseCommandName.contains("START-"));
     // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator
@@ -115,6 +112,6 @@ public class AutoRoutines {
         .andThen(
             (pathGoesToHPS.getAsBoolean())
                 ? new RunFunnelUntilCheckedIn(funnelSubsystem) // TEST
-                : new ); // TEST!!
+                : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem)); // TEST!!
   }
 }

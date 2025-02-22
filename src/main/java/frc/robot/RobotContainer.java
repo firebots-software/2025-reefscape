@@ -158,7 +158,8 @@ public class RobotContainer {
     //     .rightTrigger()
     //     .onTrue(
     //         new LoadAndPutUp(
-    //             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3));
+    //             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem,
+    // ElevatorPositions.L3));
     debugJoystick
         .a()
         .onTrue(
