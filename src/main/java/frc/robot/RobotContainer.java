@@ -26,7 +26,6 @@ import frc.robot.commandGroups.AutoLiftAndShoot;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.LoadAndPutUp;
-import frc.robot.commandGroups.MoveToSideAndShoot;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -62,16 +61,7 @@ public class RobotContainer {
 
   private static SendableChooser<String> startPosChooser = new SendableChooser<>();
 
-  private final SwerveSubsystem driveTrain =
-      new SwerveSubsystem(
-          Constants.Swerve.DrivetrainConstants,
-          250.0, // TODO: CHANGE ODOMETRY UPDATE FREQUENCY TO CONSTANT,
-          odometryMatrix,
-          visionMatrix,
-          Constants.Swerve.FrontLeft,
-          Constants.Swerve.FrontRight,
-          Constants.Swerve.BackLeft,
-          Constants.Swerve.BackRight);
+  private final SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
 
   private final Telemetry logger =
       new Telemetry(Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
@@ -104,7 +94,7 @@ public class RobotContainer {
     startPosChooser.addOption("Bottom (next to red barge zone)", "bottom");
     SmartDashboard.putData(startPosChooser);
 
-    // configureBindings();
+    //configureBindings();
   }
 
   public void configureBindings() {
@@ -173,10 +163,7 @@ public class RobotContainer {
     debugJoystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
     debugJoystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
     debugJoystick.b().onTrue(new RunFunnelUntilCheckedIn(funnelSubsystem));
-    debugJoystick
-        .x()
-        .onTrue(
-            new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
+    debugJoystick.x().onTrue(new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
 
     // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
@@ -310,7 +297,5 @@ public class RobotContainer {
     return autoRoutines.autoRoutine(chosenPath).cmd();
   }
 
-  public void testAutoCommands() {
-    
-  }
+  //   public void testAutoCommands() {}
 }

@@ -180,12 +180,12 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.setAlliance();
-    //m_autonomousCommand = m_robotContainer.getAutonomousCommand(); // UNCOMMENT
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand(); // UNCOMMENT
 
     // schedule the autonomous command (example) (UNCOMMENT)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
   }
 
   /** This function is called periodically during autonomous. */
@@ -203,7 +203,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    m_robotContainer.configureBindings();
+    //m_robotContainer.configureBindings();
 
     // CommandScheduler.getInstance();
     // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler

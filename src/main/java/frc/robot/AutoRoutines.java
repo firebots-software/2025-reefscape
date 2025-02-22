@@ -115,10 +115,9 @@ public class AutoRoutines {
                 : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem)); // TEST!!
   }
 }
-// new SetElevatorLevel - Intake
+// new SetElevatorLevel // Intake
 // new RunFunnelUntilDetectionSafe
 // new TransferPieceBetweenFunnelAndElevator
-// new SetElevatorLevel - L4
+// new SetElevatorLevel // L4
 // new ShootTootsieSlide
-// new SetElevatorLevel - Intake
-
+// new SetElevatorLevel // Intake
