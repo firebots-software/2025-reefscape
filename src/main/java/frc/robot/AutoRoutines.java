@@ -93,6 +93,9 @@ public class AutoRoutines {
    * @return
    */
   public Command autoSubCommand(AutoRoutine routine, String baseCommandName) { // for actual robot
+    // POTENTIAL BUG: When the robot just starts Auto, pathGoesToHPS = false, which actually makes the elevator lift to L4
+    // before intaking and transfering the preloaded Coral into the Tootsie slide. We could create another boolean like
+    // ""
     BooleanSupplier pathGoesToHPS =
         () -> !(baseCommandName.contains("HPS-") || baseCommandName.contains("START-"));
     // if it has HPS- or START- the path ends at the reef and thus we will want to raise elevator
