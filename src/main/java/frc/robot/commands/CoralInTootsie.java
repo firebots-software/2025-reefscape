@@ -10,9 +10,7 @@ import frc.robot.subsystems.CoralPosition;
 /** An example command that uses an example subsystem. */
 public class CoralInTootsie extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-
-  public CoralInTootsie() {
-  }
+  public CoralInTootsie() {}
 
   // Called when the command is initially scheduled.
   @Override
@@ -26,8 +24,7 @@ public class CoralInTootsie extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

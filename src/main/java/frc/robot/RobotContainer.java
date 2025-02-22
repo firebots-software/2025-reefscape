@@ -12,15 +12,12 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -30,8 +27,7 @@ import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
-import frc.robot.commandGroups.PutUpAndShoot;
-import frc.robot.commandGroups.JamesHardenElevator;
+import frc.robot.commands.CoralInTootsie;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
@@ -41,7 +37,6 @@ import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
-import frc.robot.commands.CoralInTootsie;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CoralPosition;
@@ -113,7 +108,7 @@ public class RobotContainer {
         rotationFunction = () -> -joystick.getRightX(),
         speedFunction =
             () ->
-            joystick.leftTrigger().getAsBoolean()
+                joystick.leftTrigger().getAsBoolean()
                     ? 0d
                     : 1d; // slowmode when left shoulder is pressed, otherwise fast
     SwerveJoystickCommand swerveJoystickCommand =
@@ -122,7 +117,7 @@ public class RobotContainer {
             leftRightFunction,
             rotationFunction,
             speedFunction, // slowmode when left shoulder is pressed, otherwise fast
-            () -> true, //always field centric
+            () -> true, // always field centric
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
     // Custom Controller:
@@ -213,11 +208,12 @@ public class RobotContainer {
 
     // Bottom Three Buttons
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
-    customController.In().whileTrue(new RunFunnelAndTootsieInCommand(funnelSubsystem,tootsieSlideSubsystem));
+    customController
+        .In()
+        .whileTrue(new RunFunnelAndTootsieInCommand(funnelSubsystem, tootsieSlideSubsystem));
     customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem));
 
     // Joystick 1:
-
     // Dale
     joystick
         .rightBumper()
@@ -233,10 +229,9 @@ public class RobotContainer {
             driveTrain.runOnce(
                 () ->
                     driveTrain.resetPose(
-                       new Pose2d(driveTrain.getPose().getTranslation(), new Rotation2d(0)))));
+                        new Pose2d(driveTrain.getPose().getTranslation(), new Rotation2d(0)))));
 
     // Joystick 2:
-
     // Elevator
     joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
     joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
@@ -276,8 +271,8 @@ public class RobotContainer {
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide());
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
-    
-    //If we start with Coral in Tootsie Slide
+
+    // If we start with Coral in Tootsie Slide
     Trigger drake = new Trigger(() -> funnelSubsystem.drakeTripped());
     drake.whileTrue(new CoralInTootsie());
 
@@ -291,7 +286,7 @@ public class RobotContainer {
                         new Pose2d(
                             Constants.Landmarks.LEFT_LINEUP_RED[5],
                             Constants.Landmarks.reefFacingAngleRed[5]))));
-    
+
     /*
     Sysid button commands, commented out (I like keeping this commented because
     every branch will have access to the necessary commands to run SysID immediately)
@@ -309,7 +304,7 @@ public class RobotContainer {
        joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
        joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     */
-    
+
     // new Translation2d(
     //     Constants.Landmarks.leftBranchesRed[5].getX()
     //         - (((Constants.Swerve.WHICH_SWERVE_ROBOT.ROBOT_DIMENSIONS.length
