@@ -19,6 +19,8 @@ import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
+import frc.robot.util.RobotPosition;
+
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -67,6 +69,11 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
     DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
+    
+    DogLog.log("RobotPosition/elevatorLevel", RobotPosition.Instance.elevator.toString());
+    DogLog.log("RobotPosition/branchSide", RobotPosition.Instance.side.toString());
+    DogLog.log("RobotPosition/time", RobotPosition.Instance.dTime);
+
     LoggedTalonFX.periodic_static();
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
