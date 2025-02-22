@@ -25,10 +25,11 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.LoadAndPutUp;
+import frc.robot.commandGroups.MoveToSideAndShoot;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
-import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
@@ -93,7 +94,8 @@ public class RobotContainer {
             true, // If alliance flipping should be enabled
             driveTrain);
 
-    // Set up the Auto chooser in SmartDashboard, which allows you to choose between the Top, Middle, and Bottom auto paths
+    // Set up the Auto chooser in SmartDashboard, which allows you to choose between the Top,
+    // Middle, and Bottom auto paths
     // (Mirroring for Blue or Red side happens automatically with Choreo)
     startPosChooser = new SendableChooser<String>();
     startPosChooser.setDefaultOption("Top (next to blue barge zone)", "top");
@@ -140,23 +142,45 @@ public class RobotContainer {
                 armSubsystem,
                 elevatorSubsystem,
                 Constants.ElevatorConstants.ElevatorPositions.L2DALE));
-    debugJoystick
-        .x()
-        .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
-    debugJoystick.a().onTrue(new ZeroArm(armSubsystem));
-    debugJoystick
-        .b()
-        .whileTrue(
-            new Dealgaenate(
-                armSubsystem,
-                elevatorSubsystem,
-                Constants.ElevatorConstants.ElevatorPositions.L3DALE));
+    // debugJoystick
+    //     .x()
+    //     .onTrue(new SetElevatorLevel(ElevatorSubsystem.getInstance(), ElevatorPositions.Intake));
+    // debugJoystick.a().onTrue(new ZeroArm(armSubsystem));
+    // debugJoystick
+    //     .b()
+    //     .whileTrue(
+    //         new Dealgaenate(
+    //             armSubsystem,
+    //             elevatorSubsystem,
+    //             Constants.ElevatorConstants.ElevatorPositions.L3DALE));
 
+    // debugJoystick
+    //     .rightTrigger()
+    //     .onTrue(
+    //         new LoadAndPutUp(
+    //             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3));
     debugJoystick
-        .rightTrigger()
+        .a()
         .onTrue(
             new LoadAndPutUp(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3));
+                elevatorSubsystem,
+                funnelSubsystem,
+                tootsieSlideSubsystem,
+                ElevatorPositions.Intake));
+
+    debugJoystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
+    debugJoystick.povDown().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4));
+    debugJoystick.b().onTrue(new RunFunnelUntilCheckedIn(funnelSubsystem));
+    debugJoystick
+        .x()
+        .onTrue(
+            new MoveToSideAndShoot(
+                elevatorSubsystem,
+                tootsieSlideSubsystem,
+                driveTrain,
+                ElevatorPositions.L4,
+                redside,
+                false));
 
     // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
@@ -288,6 +312,5 @@ public class RobotContainer {
     String chosenPath = startPosChooser.getSelected();
 
     return autoRoutines.autoRoutine(chosenPath).cmd();
-
-}
+  }
 }
