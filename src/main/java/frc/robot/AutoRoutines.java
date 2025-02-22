@@ -2,6 +2,7 @@ package frc.robot;
 
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -23,6 +24,11 @@ public class AutoRoutines {
   private final FunnelSubsystem funnelSubsystem;
   private final BooleanSupplier redside;
 
+  private final AutoRoutine routine;
+  private final AutoTrajectory[] topTraj;
+  private final AutoTrajectory[] middleTraj;
+  private final AutoTrajectory[] bottomTraj;
+
   public AutoRoutines(
       AutoFactory factory,
       SwerveSubsystem driveTrain,
@@ -36,6 +42,12 @@ public class AutoRoutines {
     this.tootsieSlideSubsystem = tootsieSlideSubsystem;
     this.funnelSubsystem = funnelSubsystem;
     this.redside = redside;
+
+    
+
+  
+
+
   }
 
   public AutoRoutine autoRoutine(String chosenPath) {
