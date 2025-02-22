@@ -4,6 +4,7 @@
 
 package frc.robot.commandGroups;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ElevatorCommands.ElevatorIntakeLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
@@ -21,6 +22,7 @@ public class Intake extends SequentialCommandGroup {
       ElevatorSubsystem elevatorSubsystem,
       FunnelSubsystem funnelSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem) {
+      DogLog.log("Auto/Intake-Cmd-Init", true);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

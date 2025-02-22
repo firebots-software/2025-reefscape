@@ -150,6 +150,9 @@ public class AutoRoutines {
     // Bind the Auto SequentialCommandGroup to run when the routine is activated
     routine.active().onTrue(autoCommandGroup);
 
+    DogLog.log("Auto/Returning-Auto-Routine", chosenAuto);
+    DogLog.log("Auto/Returning-Num-Paths", numPaths);
+
     return routine;
   }
 
