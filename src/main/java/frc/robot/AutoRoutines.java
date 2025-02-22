@@ -118,9 +118,11 @@ public class AutoRoutines {
     autoCommandGroup.addCommands(bottomTraj.get(0).resetOdometry());
 
     // Add all the auto segments as commands
-    for (int i = 0; i < bottomNames.size(); i++) {
-      autoCommandGroup.addCommands(bottomTraj.get(i).cmd());
-    }
+    // for (int i = 0; i < bottomNames.size(); i++) {
+    //   autoCommandGroup.addCommands(bottomTraj.get(i).cmd());
+    //   DogLog.log("Auto/creating-path", i);
+    // }
+    autoCommandGroup.addCommands(bottomTraj.get(0).cmd());
 
     // Set isAutoRunning to false when auto routine finishes
     autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());

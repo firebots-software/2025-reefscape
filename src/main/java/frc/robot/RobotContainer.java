@@ -83,6 +83,7 @@ public class RobotContainer {
   private final AutoRoutines autoRoutines;
 
   public RobotContainer() {
+    DogLog.log("Auto/drivetrain-null", driveTrain == null);
     autoFactory =
         new AutoFactory(
             driveTrain::getPose, // A function that returns the current robot pose
