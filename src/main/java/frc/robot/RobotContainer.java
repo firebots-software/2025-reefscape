@@ -104,10 +104,10 @@ public class RobotContainer {
     startPosChooser.addOption("Bottom (next to red barge zone)", "bottom");
     SmartDashboard.putData(startPosChooser);
 
-    configureBindings();
+    // configureBindings();
   }
 
-  private void configureBindings() {
+  public void configureBindings() {
     // Automatic
     // funnelSubsystem.setDefaultCommand(new DefaultFunnelCommand(funnelSubsystem));
     Trigger funnelCheckin =
@@ -308,5 +308,9 @@ public class RobotContainer {
     String chosenPath = startPosChooser.getSelected();
 
     return autoRoutines.autoRoutine(chosenPath).cmd();
+  }
+
+  public void testAutoCommands() {
+    
   }
 }
