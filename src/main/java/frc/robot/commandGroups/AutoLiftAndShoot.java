@@ -12,7 +12,7 @@ public class AutoLiftAndShoot extends SequentialCommandGroup {
       ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem) {
 
     addCommands(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4),
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4).withTimeout(3),
         new ShootTootsieSlide(tootsieSlideSubsystem));
   }
 }

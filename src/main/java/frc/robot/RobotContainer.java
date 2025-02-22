@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commandGroups.AutoLiftAndShoot;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.LoadAndPutUp;
@@ -175,13 +176,7 @@ public class RobotContainer {
     debugJoystick
         .x()
         .onTrue(
-            new MoveToSideAndShoot(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L4,
-                redside,
-                false));
+            new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
 
     // Swerve
     Trigger leftShoulderTrigger = joystick.leftBumper();
