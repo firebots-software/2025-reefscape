@@ -466,7 +466,7 @@ public class RobotContainer {
     /* Run the path selected from the auto chooser */
     final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
-    if (!redside.getAsBoolean()) {
+    if (redside.getAsBoolean()) {
       return new SequentialCommandGroup(
           new InstantCommand(
               () ->
