@@ -39,7 +39,6 @@ import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieOutCommand;
-import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
@@ -203,7 +202,9 @@ public class RobotContainer {
     customController
         .In()
         .whileTrue(new RunFunnelAndTootsieInCommand(funnelSubsystem, tootsieSlideSubsystem));
-    customController.Out().whileTrue(new RunFunnelAndTootsieOutCommand(funnelSubsystem,tootsieSlideSubsystem));
+    customController
+        .Out()
+        .whileTrue(new RunFunnelAndTootsieOutCommand(funnelSubsystem, tootsieSlideSubsystem));
 
     // Joystick 1:
 

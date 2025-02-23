@@ -8,11 +8,12 @@ public class RunFunnelAndTootsieOutCommand extends Command {
   private FunnelSubsystem funnelSubsystem;
   private TootsieSlideSubsystem tootsieSlideSubsystem;
 
-  public RunFunnelAndTootsieOutCommand(FunnelSubsystem funnelSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem) {
+  public RunFunnelAndTootsieOutCommand(
+      FunnelSubsystem funnelSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem) {
     this.funnelSubsystem = funnelSubsystem;
     this.tootsieSlideSubsystem = tootsieSlideSubsystem;
 
-    addRequirements(funnelSubsystem,tootsieSlideSubsystem);
+    addRequirements(funnelSubsystem, tootsieSlideSubsystem);
   }
 
   // Called when the command is initially scheduled.
