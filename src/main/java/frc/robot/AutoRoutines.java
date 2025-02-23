@@ -4,6 +4,7 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import dev.doglog.DogLog;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -198,7 +199,7 @@ public class AutoRoutines {
    *     command for. Corresponds to the ArrayLists of trajectory names and AutoTrajectories created
    *     in the constructor.
    */
-  public SequentialCommandGroup autoSubCommand(String chosenAuto, int index) {
+  public Command autoSubCommand(String chosenAuto, int index) {
     /*
     AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and necessary mechanism action.
 
@@ -278,8 +279,8 @@ public class AutoRoutines {
     DogLog.log("Auto/pathGoesToHPS", pathGoesToHPS.getAsBoolean());
 
     // See Structure description comment above for a sort-of better explanation
-    SequentialCommandGroup newStructure2 =
-        new SequentialCommandGroup(
+    Command newStructure2 =
+        Commands.sequence(
             new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem)
                 .onlyIf(startOrLeavingHPS),
             new SetElevatorLevel(
