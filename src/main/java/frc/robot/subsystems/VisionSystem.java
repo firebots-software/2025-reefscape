@@ -161,11 +161,11 @@ public class VisionSystem extends SubsystemBase {
       double targetSize = pipelineResult.getBestTarget().area;
       Optional<EstimatedRobotPose> estPose = getMultiTagPose3d(driveTrain.getState().Pose);
       List<PhotonTrackedTarget> targets = pipelineResult.getTargets();
-      boolean hasReefTag = false;
+      boolean hasReefTag = true;
       double poseAmbiguity = pipelineResult.getBestTarget().poseAmbiguity;
       for (PhotonTrackedTarget target : targets) {
-        if (reefIDs.contains(target.getFiducialId())) {
-          hasReefTag = true;
+        if (!reefIDs.contains(target.getFiducialId())) {
+          hasReefTag = false;
         }
       }
 
