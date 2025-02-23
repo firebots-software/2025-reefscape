@@ -12,6 +12,6 @@ public class ElevatorL4 extends SequentialCommandGroup {
 
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)
-            .andThen(new ElevatorHoldL4(elevatorSubsystem)));
+            .andThen(new ElevatorHoldL4(elevatorSubsystem).withTimeout(0.25)));
   }
 }

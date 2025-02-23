@@ -1,7 +1,7 @@
 package frc.robot.commands.ElevatorCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralPosition;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ElevatorHoldL4 extends Command {
@@ -14,7 +14,9 @@ public class ElevatorHoldL4 extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    elevatorSubsystem.elevateTo(ElevatorPositions.LIMIT_OF_TRAVEL);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
 
@@ -29,6 +31,6 @@ public class ElevatorHoldL4 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !CoralPosition.isCoralInTootsieSlide();
+    return elevatorSubsystem.isAtPosition();
   }
 }

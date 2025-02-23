@@ -143,7 +143,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     this.setPosition(level.height);
   }
 
-  private void setPosition(double height) {
+  public void setPosition(double height) {
     master.setControl(
         controlRequest.withPosition(
             height
@@ -157,10 +157,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void ElevatorTorqueMode() {
-    master.setControl(
-        torqueRequest
-            .withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE)
-            .withMaxAbsDutyCycle(0.3));
+    DogLog.log("subsystems/Elevator/usingTorqueMode", true);
+    master.setControl(torqueRequest.withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
+    // .withMaxAbsDutyCycle(Constants.ElevatorConstants.ELEVATOR_DUTY_CYCLE));
   }
 
   // TODO: ONLY FOR DEBUGGING
@@ -198,6 +197,9 @@ public class ElevatorSubsystem extends SubsystemBase {
             * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE
             * Constants.ElevatorConstants.CARRAIGE_UPDUCTION);
     DogLog.log("subsystems/Elevator/currentHeightRot", master.getPosition().getValueAsDouble());
+    DogLog.log(
+        "subsystems/Elevator/command",
+        this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 
   @Override
