@@ -45,4 +45,14 @@ public class JamesHardenScore extends SequentialCommandGroup {
           new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5));
     }
   }
+
+  public JamesHardenScore(
+      ElevatorSubsystem elevatorSubsystem,
+      TootsieSlideSubsystem tootsieSlideSubsystem,
+      SwerveSubsystem swerveSubsystem,
+      ElevatorPositions elevatorPosition,
+      BooleanSupplier redSide,
+      BranchSide side) {
+    this(elevatorSubsystem,tootsieSlideSubsystem,swerveSubsystem,redSide,new RobotPosition(elevatorPosition,side,Timer.getFPGATimestamp()));
+  }
 }
