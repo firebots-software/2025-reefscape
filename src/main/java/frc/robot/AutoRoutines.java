@@ -5,7 +5,6 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.TootsieSlide;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -20,7 +19,11 @@ public class AutoRoutines {
 
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
-  public AutoRoutines(AutoFactory factory, SwerveSubsystem driveTrain, TootsieSlideSubsystem shooter, ElevatorSubsystem elevator) {
+  public AutoRoutines(
+      AutoFactory factory,
+      SwerveSubsystem driveTrain,
+      TootsieSlideSubsystem shooter,
+      ElevatorSubsystem elevator) {
     autoFactory = factory;
     this.driveTrain = driveTrain;
     this.shooter = shooter;
@@ -58,8 +61,7 @@ public class AutoRoutines {
                 l1ToBlueHumanPlayerStation.cmd(),
                 driveTrain.applyRequest(() -> brake).withTimeout(0.5),
                 blueHumanPlayerStationToR0.cmd(),
-                new PutUpAndShoot(elevator, shooter, ElevatorPositions.L3)
-                ));
+                new PutUpAndShoot(elevator, shooter, ElevatorPositions.L3)));
 
     return routine;
   }

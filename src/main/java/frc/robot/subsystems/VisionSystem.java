@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
@@ -17,8 +18,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.Swerve;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,16 +29,12 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-import org.w3c.dom.html.HTMLAnchorElement;
-
-import dev.doglog.DogLog;
 
 /** Creates a new VisionSystem. */
 public class VisionSystem extends SubsystemBase {
 
-  List<Integer> reefIDs = new ArrayList<Integer>(
-    Arrays.asList(19,20,21,22,17,18,6,7,8,9,10,11)
-  );
+  List<Integer> reefIDs =
+      new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18, 6, 7, 8, 9, 10, 11));
 
   Pose2d savedResult = new Pose2d(0, 0, new Rotation2d(0.01, 0.01));
   private static VisionSystem[] systemList =
@@ -93,7 +88,7 @@ public class VisionSystem extends SubsystemBase {
         .getDistance(
             new Translation3d(
                 driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
-  } 
+  }
 
   public static VisionSystem getInstance(Constants.Vision.Cameras name) {
     if (systemList[name.ordinal()] == null) {
@@ -154,13 +149,12 @@ public class VisionSystem extends SubsystemBase {
     return pipeline;
   }
 
-
-  public void addFilteredPose(){
+  public void addFilteredPose() {
     double translationStdDevs = 1000;
     double rotationStdDevs = 1000;
     PhotonPipelineResult pipelineResult = getPipelineResult();
-    
-    if(hasTarget(pipelineResult)){
+
+    if (hasTarget(pipelineResult)) {
       Optional<MultiTargetPNPResult> multitagresult = pipelineResult.getMultiTagResult();
       boolean hasMultitags = !multitagresult.isEmpty();
       double timestamp = pipelineResult.getTimestampSeconds();
@@ -170,24 +164,24 @@ public class VisionSystem extends SubsystemBase {
       boolean hasReefTag = false;
       double poseAmbiguity = pipelineResult.getBestTarget().poseAmbiguity;
       for (PhotonTrackedTarget target : targets) {
-        if(reefIDs.contains(target.getFiducialId())){
+        if (reefIDs.contains(target.getFiducialId())) {
           hasReefTag = true;
         }
       }
 
-    if(hasReefTag){
-      double xKalman = 0.1 * Math.pow(1.15, poseAmbiguity);
-      double yKalman = 0.1 * Math.pow(1.4, poseAmbiguity);
-  
-      Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, 100d);
-      Pose2d bestRobotPose2d = getPose2d();
-      Pose2d rotationLess =
-          new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
-      DogLog.log("KalmanDebug/rotationless", rotationLess);
-  
-      driveTrain.addVisionMeasurement(
-          rotationLess, pipelineResult.getTimestampSeconds(), visionMatrix);
-    }
+      if (hasReefTag) {
+        double xKalman = 0.1 * Math.pow(1.15, poseAmbiguity);
+        double yKalman = 0.1 * Math.pow(1.4, poseAmbiguity);
+
+        Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, 100d);
+        Pose2d bestRobotPose2d = getPose2d();
+        Pose2d rotationLess =
+            new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
+        DogLog.log("KalmanDebug/rotationless", rotationLess);
+
+        driveTrain.addVisionMeasurement(
+            rotationLess, pipelineResult.getTimestampSeconds(), visionMatrix);
+      }
     }
   }
 

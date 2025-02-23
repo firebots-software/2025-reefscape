@@ -52,7 +52,6 @@ public final class Constants {
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(-12.5);
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(40);
 
-
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(8.867);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(12.478);
     public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(6.158);
