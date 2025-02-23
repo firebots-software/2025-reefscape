@@ -146,6 +146,18 @@ public class AutoRoutines {
     return testRoutine;
   }
 
+  public AutoRoutine topAutoRoutine() {
+    return autoRoutine("top");
+  }
+
+  public AutoRoutine middleAutoRoutine() {
+    return autoRoutine("middle");
+  }
+
+  public AutoRoutine bottomAutoRoutine() {
+    return autoRoutine("bottom");
+  }
+
   public AutoRoutine autoRoutine(String chosenAuto) {
     SequentialCommandGroup autoCommandGroup = new SequentialCommandGroup();
     int numPaths; // Number of trajectories (segments) in the chosen Auto routine
