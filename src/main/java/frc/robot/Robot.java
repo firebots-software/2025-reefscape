@@ -127,18 +127,8 @@ public class Robot extends TimedRobot {
       DogLog.log("KalmanDebug/visionUsed", false);
       return;
     }
-
-    double xKalman = 0.1 * Math.pow(1.15, leastPoseAmbDist);
-    double yKalman = 0.1 * Math.pow(1.4, leastPoseAmbDist);
-
-    Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, 100d);
-    Pose2d bestRobotPose2d = bestRobotPose.get().estimatedPose.toPose2d();
-    Pose2d rotationLess =
-        new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
-    DogLog.log("KalmanDebug/rotationless", rotationLess);
-
-    driveTrain.addVisionMeasurement(
-        rotationLess, pipelineRight.getTimestampSeconds(), visionMatrix);
+    visionRight.addFilteredPose();
+    visionLeft.addFilteredPose();
     DogLog.log("KalmanDebug/visionUsed", true);
 
     DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
