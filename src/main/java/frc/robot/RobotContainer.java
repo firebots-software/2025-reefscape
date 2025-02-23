@@ -8,16 +8,20 @@ import static edu.wpi.first.units.Units.*;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -30,13 +34,16 @@ import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.CoralInTootsie;
 import frc.robot.commands.RobotPositionCommand;
+import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
+import frc.robot.commands.DebugCommands.DogLogCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
+import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
@@ -94,7 +101,8 @@ public class RobotContainer {
             true, // If alliance flipping should be enabled
             driveTrain);
     autoChooser = new AutoChooser();
-    AutoRoutines autoRoutines = new AutoRoutines(autoFactory, driveTrain);
+    AutoRoutines autoRoutines =
+        new AutoRoutines(autoFactory, driveTrain, tootsieSlideSubsystem, elevatorSubsystem);
     // Add options to the chooser
     autoChooser.addRoutine("Basic Four Coral Auto", autoRoutines::basicFourCoralAuto);
 
@@ -244,6 +252,19 @@ public class RobotContainer {
                             Constants.Landmarks.LEFT_LINEUP_RED[5],
                             Constants.Landmarks.reefFacingAngleRed[5]))));
 
+    joystick
+        .b()
+        .whileTrue(
+            new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3));
+    joystick
+        .povUp()
+        .whileTrue(
+            new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L2));
+    joystick
+        .povDown()
+        .whileTrue(
+            new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
+
     /*
     Sysid button commands, commented out (I like keeping this commented because
     every branch will have access to the necessary commands to run SysID immediately)
@@ -345,6 +366,132 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    return autoChooser.selectedCommandScheduler();
+    final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+
+    if (redside.getAsBoolean()) {
+      return new SequentialCommandGroup(
+          new InstantCommand(
+              () ->
+                  driveTrain.resetPose(
+                      new Pose2d(
+                          new Translation2d(10.463430404663086, 7.600519180297852),
+                          new Rotation2d()))),
+          new DogLogCmd("CURRENT COMMAND", "RESET POSE"),
+          new JamesHardenScore(
+              elevatorSubsystem,
+              tootsieSlideSubsystem,
+              driveTrain,
+              ElevatorPositions.L3,
+              redside,
+              BranchSide.LEFT),
+          new DogLogCmd("CURRENT COMMAND", "1ST JH SCORE"),
+          new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+          new DogLogCmd("CURRENT COMMAND", "1ST ELEVATOR DOWN"),
+          new JamesHardenMovement(
+              driveTrain,
+              new Pose2d(
+                  new Translation2d(16.70710563659668, 6.779853343963623),
+                  new Rotation2d(0.9429051116124475 + Math.PI))),
+          new DogLogCmd("CURRENT COMMAND", "1ST HPS VISIT"),
+          driveTrain.applyRequest(() -> brake).withTimeout(0.5),
+          new DogLogCmd("CURRENT COMMAND", "1ST BRAKE"),
+          new JamesHardenScore(
+              elevatorSubsystem,
+              tootsieSlideSubsystem,
+              driveTrain,
+              ElevatorPositions.L3,
+              redside,
+              BranchSide.LEFT),
+          new DogLogCmd("CURRENT COMMAND", "2ND JH SCORE"),
+          new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+          new DogLogCmd("CURRENT COMMAND", "2ND ELEVATOR DOWN"),
+          new JamesHardenMovement(
+              driveTrain,
+              new Pose2d(
+                  new Translation2d(16.70710563659668, 6.779853343963623),
+                  new Rotation2d(0.9429051116124475 + Math.PI))),
+          new DogLogCmd("CURRENT COMMAND", "2ND HPS VISIT"),
+          driveTrain.applyRequest(() -> brake).withTimeout(0.5),
+          new DogLogCmd("CURRENT COMMAND", "2ND BRAKE"),
+          new JamesHardenScore(
+              elevatorSubsystem,
+              tootsieSlideSubsystem,
+              driveTrain,
+              ElevatorPositions.L3,
+              redside,
+              BranchSide.RIGHT),
+          new DogLogCmd("CURRENT COMMAND", "3RD JH SCORE"),
+          new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+          new DogLogCmd("CURRENT COMMAND", "3RD ELEVATOR DOWN"),
+          new JamesHardenMovement(
+              driveTrain,
+              new Pose2d(
+                  new Translation2d(16.70710563659668, 6.779853343963623),
+                  new Rotation2d(0.9429051116124475 + Math.PI))),
+          new DogLogCmd("CURRENT COMMAND", "3RD HPS VISIT"),
+          driveTrain.applyRequest(() -> brake).withTimeout(0.5));
+    } else {
+      return new SequentialCommandGroup(
+          new InstantCommand(
+              () ->
+                  driveTrain.resetPose(
+                      new Pose2d(
+                          new Translation2d(7.117019176483154, 0.44347667694091797),
+                          new Rotation2d(Math.PI)))),
+          new DogLogCmd("CURRENT COMMAND", "RESET POSE"),
+          new JamesHardenScore(
+              elevatorSubsystem,
+              tootsieSlideSubsystem,
+              driveTrain,
+              ElevatorPositions.L3,
+              redside,
+              BranchSide.LEFT),
+          new DogLogCmd("CURRENT COMMAND", "1ST JH SCORE"),
+          new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+          new DogLogCmd("CURRENT COMMAND", "1ST ELEVATOR DOWN"),
+          new JamesHardenMovement(
+              driveTrain,
+              new Pose2d(
+                  new Translation2d(1.102602243423462, 1.0577188730239868),
+                  new Rotation2d(0.9481256208435748))),
+          new DogLogCmd("CURRENT COMMAND", "1ST HPS VISIT"),
+          driveTrain.applyRequest(() -> brake).withTimeout(0.5),
+          new DogLogCmd("CURRENT COMMAND", "1ST BRAKE"),
+          new JamesHardenScore(
+              elevatorSubsystem,
+              tootsieSlideSubsystem,
+              driveTrain,
+              ElevatorPositions.L3,
+              redside,
+              BranchSide.LEFT),
+          new DogLogCmd("CURRENT COMMAND", "2ND JH SCORE"),
+          new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+          new DogLogCmd("CURRENT COMMAND", "2ND ELEVATOR DOWN"),
+          new JamesHardenMovement(
+              driveTrain,
+              new Pose2d(
+                  new Translation2d(1.102602243423462, 1.0577188730239868),
+                  new Rotation2d(0.9481256208435748))),
+          new DogLogCmd("CURRENT COMMAND", "2ND HPS VISIT"),
+          driveTrain.applyRequest(() -> brake).withTimeout(0.5),
+          new DogLogCmd("CURRENT COMMAND", "2ND BRAKE"),
+          new JamesHardenScore(
+              elevatorSubsystem,
+              tootsieSlideSubsystem,
+              driveTrain,
+              ElevatorPositions.L3,
+              redside,
+              BranchSide.RIGHT),
+          new DogLogCmd("CURRENT COMMAND", "3RD JH SCORE"),
+          new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+          new DogLogCmd("CURRENT COMMAND", "3RD ELEVATOR DOWN"),
+          new JamesHardenMovement(
+              driveTrain,
+              new Pose2d(
+                  new Translation2d(1.102602243423462, 1.0577188730239868),
+                  new Rotation2d(0.9481256208435748))),
+          new DogLogCmd("CURRENT COMMAND", "3RD HPS VISIT"),
+          driveTrain.applyRequest(() -> brake).withTimeout(0.5));
+    }
   }
 }

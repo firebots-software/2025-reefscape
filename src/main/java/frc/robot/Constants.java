@@ -45,20 +45,19 @@ public final class Constants {
     }
 
     // TODO: CHANGE FOR NEW ROBOT
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.358);
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(-11.499);
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.011);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(8.867);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(-12.478);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(6.158);
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(50);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(-12.5);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(40);
 
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(11.357);
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(11.927);
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(10.01);
-
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(8.867);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(12.478);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(6.158);
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
-    public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = 0;
-    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-50);
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(-12.5);
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-40);
   }
 
   public static class Landmarks {
@@ -731,9 +730,9 @@ public final class Constants {
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.072),
+      Intake(0, 0.069),
       safePosition(0, 0.3),
-      L1(1, 0.657 - 0.13),
+      L1(1, 0.657),
       L2DALE(0, 0.493), // 0.8636 - 0.379
       L2(2, 0.9036),
       L3DALE(0, 0.91), // 1.27 - 0.379

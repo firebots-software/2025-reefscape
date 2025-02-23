@@ -6,11 +6,6 @@ package frc.robot;
 
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -20,7 +15,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
 import frc.robot.util.RobotPosition;
-
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -79,14 +73,72 @@ public class Robot extends TimedRobot {
       DogLog.log("RobotPosition/branchSide", "null1");
       DogLog.log("RobotPosition/time", -1.0);
     }
-
     LoggedTalonFX.periodic_static();
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
-     
-    visionRight.DoKalman(visionLeft);
 
+    Optional<EstimatedRobotPose> rightRobotPose =
+        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+    Optional<EstimatedRobotPose> leftRobotPose =
+        visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
+
+    Optional<EstimatedRobotPose> bestRobotPose;
+
+    PhotonPipelineResult pipelineRight = visionRight.getPipelineResult();
+    PhotonPipelineResult pipelineLeft = visionLeft.getPipelineResult();
+
+    DogLog.log("KalmanDebug/rightpipelinehastarget", visionRight.hasTarget(pipelineRight));
+    DogLog.log("KalmanDebug/leftpipelinehastarget", visionLeft.hasTarget(pipelineLeft));
+    DogLog.log("KalmanDebug/rightposeispresent", rightRobotPose.isPresent());
+    DogLog.log("KalmanDebug/leftposeispresent", leftRobotPose.isPresent());
+
+    // if both present, else if right present, else if left present
+    if (visionRight.hasTarget(pipelineRight)
+        && rightRobotPose.isPresent()
+        && visionLeft.hasTarget(pipelineLeft)
+        && leftRobotPose.isPresent()) {
+      double leftPoseAmb = pipelineLeft.getBestTarget().getPoseAmbiguity();
+      double rightPoseAmb = pipelineRight.getBestTarget().getPoseAmbiguity();
+      if (leftPoseAmb < rightPoseAmb) {
+        leastPoseAmbDist = visionLeft.getDistance();
+        bestRobotPose = leftRobotPose;
       }
+      leastPoseAmbDist = visionRight.getDistance();
+      bestRobotPose = rightRobotPose;
+      DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
+      DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
+      DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
+      DogLog.log(
+          "KalmanDebug/rightRobotPoseTheta",
+          rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
+
+    } else if (visionRight.hasTarget(pipelineRight) && rightRobotPose.isPresent()) {
+      DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
+      DogLog.log("KalmanDebug/rightestimatedpose", rightRobotPose.get().estimatedPose.toPose2d());
+      DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
+      DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
+      DogLog.log(
+          "KalmanDebug/rightRobotPoseTheta",
+          rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
+
+      leastPoseAmbDist = visionRight.getDistance();
+      bestRobotPose = rightRobotPose;
+      DogLog.log("KalmanDebug/bestestimatedpose", bestRobotPose.get().estimatedPose.toPose2d());
+      DogLog.log("KalmanDebug/leastPoseAmbDist", leastPoseAmbDist);
+
+    } else if (visionLeft.hasTarget(pipelineLeft) && leftRobotPose.isPresent()) {
+      leastPoseAmbDist = visionLeft.getDistance();
+      bestRobotPose = leftRobotPose;
+    } else {
+      DogLog.log("KalmanDebug/visionUsed", false);
+      return;
+    }
+    visionRight.addFilteredPose();
+    visionLeft.addFilteredPose();
+    DogLog.log("KalmanDebug/visionUsed", true);
+
+    DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
+  }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
