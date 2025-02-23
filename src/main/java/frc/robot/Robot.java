@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
@@ -23,6 +21,7 @@ import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.LoggedTalonFX;
+import java.util.function.BooleanSupplier;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -52,7 +51,6 @@ public class Robot extends TimedRobot {
   private BooleanSupplier redside = () -> redAlliance;
   private static boolean redAlliance;
 
-
   // standard deviation for x (meters), y (meters) and rotation (radians) camera data
 
   double rightDistToAprilTag, leftDistToAprilTag, leastPoseAmbDist;
@@ -76,15 +74,12 @@ public class Robot extends TimedRobot {
             true, // If alliance flipping should be enabled
             driveTrain);
 
-    autoRoutines =
-        new AutoRoutines(
-            autoFactory,
-            driveTrain,
-            redside);
+    autoRoutines = new AutoRoutines(autoFactory, driveTrain, redside);
     autoChooser = new AutoChooser();
     autoChooser.addRoutine("Test", autoRoutines::simpleTest);
     autoChooser.addRoutine("Top (next to blue barge zone)", autoRoutines::topAutoRoutine);
-    autoChooser.addRoutine("Middle (between blue and red barge zones)", autoRoutines::middleAutoRoutine);
+    autoChooser.addRoutine(
+        "Middle (between blue and red barge zones)", autoRoutines::middleAutoRoutine);
     autoChooser.addRoutine("Bottom (next to red barge zone)", autoRoutines::bottomAutoRoutine);
     SmartDashboard.putData("autochooser", autoChooser);
     absoluteInit();
@@ -95,10 +90,10 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example) (UNCOMMENT)
     // if (m_autonomousCommand != null) {
-      DogLog.log("Auto/CommandIsNull", false);
-      // m_autonomousCommand.schedule();
-      RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
-      DogLog.log("Auto/CommandScheduled", true);
+    DogLog.log("Auto/CommandIsNull", false);
+    // m_autonomousCommand.schedule();
+    RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+    DogLog.log("Auto/CommandScheduled", true);
     // }
   }
 

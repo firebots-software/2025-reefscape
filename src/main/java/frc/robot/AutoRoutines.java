@@ -6,19 +6,10 @@ import choreo.auto.AutoTrajectory;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.commandGroups.Intake;
-import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.AutoCommands.SetIsAutoRunningToFalse;
 import frc.robot.commands.DebugCommands.DogLogCmd;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
 
@@ -119,26 +110,30 @@ public class AutoRoutines {
     SequentialCommandGroup autoCommandGroup = new SequentialCommandGroup();
     AutoRoutine testRoutine = autoFactory.newRoutine("testRoutine");
     AutoTrajectory firstPathBottom = testRoutine.trajectory("BSTART-2L");
-    
-    autoCommandGroup.addCommands(firstPathBottom.resetOdometry().alongWith(new DogLogCmd("Auto/Running", "resetOdo")));
 
-    //Add all the auto segments as commands
+    autoCommandGroup.addCommands(
+        firstPathBottom.resetOdometry().alongWith(new DogLogCmd("Auto/Running", "resetOdo")));
+
+    // Add all the auto segments as commands
     for (int i = 0; i < bottomNames.size(); i++) {
       autoCommandGroup.addCommands(bottomTraj.get(i).cmd());
       DogLog.log("Auto/creating-path", i);
     }
-    autoCommandGroup.addCommands(firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath")));
+    autoCommandGroup.addCommands(
+        firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath")));
 
-   // Set isAutoRunning to false when auto routine finishes
+    // Set isAutoRunning to false when auto routine finishes
     autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
 
-   // Bind the Auto SequentialCommandGroup to run when the routine is activated
-    testRoutine.active().onTrue(
-      Commands.sequence(
-        firstPathBottom.resetOdometry().alongWith(new DogLogCmd("Auto/Running", "resetOdo")),
-        firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath"))
-      )
-    );
+    // Bind the Auto SequentialCommandGroup to run when the routine is activated
+    testRoutine
+        .active()
+        .onTrue(
+            Commands.sequence(
+                firstPathBottom
+                    .resetOdometry()
+                    .alongWith(new DogLogCmd("Auto/Running", "resetOdo")),
+                firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath"))));
 
     DogLog.log("Auto/Simple-Test-Constructor", "Ran");
     // DogLog.log("Auto/Returning-Num-Paths", numPaths);
@@ -184,12 +179,12 @@ public class AutoRoutines {
             "AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoRoutine()");
     }
 
-   // Add all the auto segments as commands
+    // Add all the auto segments as commands
     for (int i = 0; i < numPaths; i++) {
       autoCommandGroup.addCommands(autoSubCommand(chosenAuto, i));
     }
 
-    //Set isAutoRunning to false when auto routine finishes
+    // Set isAutoRunning to false when auto routine finishes
     autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
 
     // Bind the Auto SequentialCommandGroup to run when the routine is activated
@@ -293,23 +288,24 @@ public class AutoRoutines {
     // See Structure description comment above for a sort-of better explanation
     Command newStructure2 = trajectory.cmd(); // actual robot movement
 
-  //   Command oldStructure =  Commands.parallel(
-  //           trajectory.cmd(),
-  //           Commands.sequence(
-  //               new LoadAndPutUp(
-  //                       elevatorSubsystem,
-  //                       funnelSubsystem,
-  //                       tootsieSlideSubsystem,
-  //                       ElevatorPositions.Intake)
-  //                   .onlyIf(() -> !pathGoesToHPS.getAsBoolean()), // LoadAndPutUp(Intake) only if
-  //  // the path does NOT go to the HPS. Should run on Start path
-  //               ((pathGoesToHPS.getAsBoolean())
-  //                   ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
-  //                   : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))
-  //       .andThen(
-  //           (pathGoesToHPS.getAsBoolean())
-  //               ? new RunFunnelUntilCheckedIn(funnelSubsystem)
-  //               : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
+    //   Command oldStructure =  Commands.parallel(
+    //           trajectory.cmd(),
+    //           Commands.sequence(
+    //               new LoadAndPutUp(
+    //                       elevatorSubsystem,
+    //                       funnelSubsystem,
+    //                       tootsieSlideSubsystem,
+    //                       ElevatorPositions.Intake)
+    //                   .onlyIf(() -> !pathGoesToHPS.getAsBoolean()), // LoadAndPutUp(Intake) only
+    // if
+    //  // the path does NOT go to the HPS. Should run on Start path
+    //               ((pathGoesToHPS.getAsBoolean())
+    //                   ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
+    //                   : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))
+    //       .andThen(
+    //           (pathGoesToHPS.getAsBoolean())
+    //               ? new RunFunnelUntilCheckedIn(funnelSubsystem)
+    //               : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
 
     DogLog.log("Auto/AutoSubCommand-ran", true);
 
