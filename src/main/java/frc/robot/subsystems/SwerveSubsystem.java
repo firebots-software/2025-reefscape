@@ -79,14 +79,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             0,
             0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
+                2, 2));
     yProfiledPIDController =
         new ProfiledPIDController(
-            3.75,
+            3.75, // 3.75 good nasa
             0,
             0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
+                2, 2));
 
     qProfiledPIDController =
         new ProfiledPIDController(
@@ -98,12 +98,12 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     headingProfiledPIDController =
         new ProfiledPIDController(
-            4,
+            3, // 4 good nasa
             0,
             0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE,
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND));
+                2*Math.PI,
+                3*Math.PI));
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     configureAutoBuilder();
   }
@@ -330,6 +330,15 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         headingProfiledPIDController.calculate(
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
+    DogLog.log("calculateRequiredComponentChassisSpeeds/currentMeasurement X", currentState.Pose.getX());
+    DogLog.log("calculateRequiredComponentChassisSpeeds/targetMeasurement X", targetPose.getX());
+    DogLog.log("calculateRequiredComponentChassisSpeeds/currentMeasurement Y", currentState.Pose.getY());
+    DogLog.log("calculateRequiredComponentChassisSpeeds/targetMeasurement Y", targetPose.getY());
+    DogLog.log("calculateRequiredComponentChassisSpeeds/currentMeasurement heading", currentState.Pose.getRotation().getRadians());
+    DogLog.log("calculateRequiredComponentChassisSpeeds/targetMeasurement heading", targetPose.getRotation().getRadians());
+    DogLog.log("calculateRequiredComponentChassisSpeeds/xfeedback", xFeedback);
+    DogLog.log("calculateRequiredComponentChassisSpeeds/xfeedback", yFeedback);
+    DogLog.log("calculateRequiredComponentChassisSpeeds/xfeedback", thetaFeedback);
     return new ChassisSpeeds(xFeedback, yFeedback, thetaFeedback);
   }
 

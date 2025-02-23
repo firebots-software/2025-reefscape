@@ -489,7 +489,7 @@ public class RobotContainer {
               driveTrain,
               new Pose2d(
                   new Translation2d(16.70710563659668, 6.779853343963623),
-                  new Rotation2d(0.9429051116124475 + Math.PI))),
+                  new Rotation2d(0.9429051116124475 + Math.PI))).withTimeout(4.5),
           new DogLogCmd("CURRENT COMMAND", "1ST HPS VISIT"),
           driveTrain.applyRequest(() -> brake).withTimeout(0.5),
           new DogLogCmd("CURRENT COMMAND", "1ST BRAKE"),
@@ -507,7 +507,7 @@ public class RobotContainer {
               driveTrain,
               new Pose2d(
                   new Translation2d(16.70710563659668, 6.779853343963623),
-                  new Rotation2d(0.9429051116124475 + Math.PI))),
+                  new Rotation2d(0.9429051116124475 + Math.PI))).withTimeout(4.5),
           new DogLogCmd("CURRENT COMMAND", "2ND HPS VISIT"),
           driveTrain.applyRequest(() -> brake).withTimeout(0.5),
           new DogLogCmd("CURRENT COMMAND", "2ND BRAKE"),
@@ -525,7 +525,7 @@ public class RobotContainer {
               driveTrain,
               new Pose2d(
                   new Translation2d(16.70710563659668, 6.779853343963623),
-                  new Rotation2d(0.9429051116124475 + Math.PI))),
+                  new Rotation2d(0.9429051116124475 + Math.PI))).withTimeout(4.5),
           new DogLogCmd("CURRENT COMMAND", "3RD HPS VISIT"),
           driveTrain.applyRequest(() -> brake).withTimeout(0.5));
     } else {
