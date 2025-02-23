@@ -155,7 +155,7 @@ public class VisionSystem extends SubsystemBase {
   }
 
 
-  public Pose2d addFilteredPose(){
+  public void addFilteredPose(){
     double translationStdDevs = 1000;
     double rotationStdDevs = 1000;
     PhotonPipelineResult pipelineResult = getPipelineResult();
@@ -165,7 +165,7 @@ public class VisionSystem extends SubsystemBase {
       boolean hasMultitags = !multitagresult.isEmpty();
       double timestamp = pipelineResult.getTimestampSeconds();
       double targetSize = pipelineResult.getBestTarget().area;
-      Optional<EstimatedRobotPose> estPose = camera.getMultiTagPose3d(swerve.getState().Pose);
+      Optional<EstimatedRobotPose> estPose = getMultiTagPose3d(driveTrain.getState().Pose);
       List<PhotonTrackedTarget> targets = pipelineResult.getTargets();
       boolean hasReefTag = false;
       double poseAmbiguity = pipelineResult.getBestTarget().poseAmbiguity;
@@ -188,13 +188,7 @@ public class VisionSystem extends SubsystemBase {
       driveTrain.addVisionMeasurement(
           rotationLess, pipelineResult.getTimestampSeconds(), visionMatrix);
     }
-
-
     }
-    
-
-
-
   }
 
   @Override
