@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    RobotContainer.setAlliance();
     DogLog.log("Auto/drivetrain-null", driveTrain == null);
     autoFactory =
         new AutoFactory(
@@ -81,6 +82,7 @@ public class Robot extends TimedRobot {
             driveTrain,
             redside);
     autoChooser = new AutoChooser();
+    autoChooser.addRoutine("Test", autoRoutines::simpleTest);
     autoChooser.addRoutine("Top (next to blue barge zone)", autoRoutines::topAutoRoutine);
     autoChooser.addRoutine("Middle (between blue and red barge zones)", autoRoutines::middleAutoRoutine);
     autoChooser.addRoutine("Bottom (next to red barge zone)", autoRoutines::bottomAutoRoutine);

@@ -84,6 +84,7 @@ public class RobotContainer {
   private final AutoRoutines autoRoutines;
 
   public RobotContainer() {
+    setAlliance();
     autoFactory =
         new AutoFactory(
             driveTrain::getPose, // A function that returns the current robot pose
