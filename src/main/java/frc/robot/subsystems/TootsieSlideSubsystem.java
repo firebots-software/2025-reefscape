@@ -92,6 +92,10 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     runTootsieAtRPS(Constants.TootsieSlide.SHOOTING_SPEED_RPS);
   }
 
+  public void runTootsieBackwards(){
+    runTootsieAtRPS(-Constants.TootsieSlide.INTAKE_SPEED_RPS);
+  }
+
   public void stopTootsie() {
     master.setPosition(0);
     master.setControl(voltage.withPosition(0));
