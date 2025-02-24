@@ -113,6 +113,7 @@ public class JamesHardenMovement extends Command {
 
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
+            DogLog.log("Auto/JamesHardenTarget(LEFT)", target);
 
             return target;
           }
@@ -162,6 +163,7 @@ public class JamesHardenMovement extends Command {
 
             DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
+            DogLog.log("Auto/JamesHardenTarget(RIGHT)", target);
 
             return target;
           }

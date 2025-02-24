@@ -13,7 +13,9 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -59,7 +61,7 @@ public class Robot extends TimedRobot {
   private final AutoFactory autoFactory;
   private final AutoRoutines autoRoutines;
   private final AutoChooser autoChooser;
-  private BooleanSupplier redside = () -> redAlliance;
+  private BooleanSupplier redside = () -> DriverStation.getAlliance().get().equals(Alliance.Red);
   private static boolean redAlliance;
 
   // standard deviation for x (meters), y (meters) and rotation (radians) camera data
@@ -87,10 +89,8 @@ public class Robot extends TimedRobot {
 
     autoRoutines = new AutoRoutines(autoFactory, driveTrain, elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem, redside);
     autoChooser = new AutoChooser();
-    autoChooser.addRoutine("Test", autoRoutines::simpleTest);
     autoChooser.addRoutine("Top (next to blue barge zone)", autoRoutines::topAutoRoutine);
-    autoChooser.addRoutine(
-        "Middle (between blue and red barge zones)", autoRoutines::middleAutoRoutine);
+    autoChooser.addRoutine("Middle (between blue and red barge zones)", autoRoutines::middleAutoRoutine);
     autoChooser.addRoutine("Bottom (next to red barge zone)", autoRoutines::bottomAutoRoutine);
     SmartDashboard.putData("autochooser", autoChooser);
     absoluteInit();
@@ -119,6 +119,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
     DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
+    DogLog.log("Auto/IsRedAlliance", redside.getAsBoolean());
     LoggedTalonFX.periodic_static();
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();

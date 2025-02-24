@@ -300,7 +300,7 @@ public class AutoRoutines {
                 ElevatorPositions
                     .L1), // using L1 as the Safe Position because not sure if the "pos" value in
             // the Constants Enum should be 0 or 1
-            trajectory.cmd(), // actual robot movement
+            trajectory.cmd().alongWith(new DogLogCmd("Auto/CurrTrajRunning", trajName)), // actual robot movement
             (pathGoesToHPS.getAsBoolean()
                 ? new ParallelCommandGroup(
                     new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),

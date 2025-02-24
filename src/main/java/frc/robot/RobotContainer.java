@@ -60,7 +60,7 @@ public class RobotContainer {
   Boolean coralInFunnel = Boolean.valueOf(false);
   Boolean coralInElevator = Boolean.valueOf(false);
 
-  private BooleanSupplier redside = () -> redAlliance;
+  private BooleanSupplier redside = () -> DriverStation.getAlliance().get().equals(Alliance.Red);;
   private static boolean redAlliance;
 
   private static SendableChooser<String> startPosChooser = new SendableChooser<>();
