@@ -55,7 +55,7 @@ public class AutoRoutines {
     this.funnelSubsystem = funnelSubsystem;
     this.redside = redside;
 
-    // this.routine = autoFactory.newRoutine("routine");
+    this.routine = autoFactory.newRoutine("routine");
 
     /*
     Field Diagram
@@ -79,40 +79,40 @@ public class AutoRoutines {
     this path starts from the left branch on the second part of the reef (2L), and goes to the bottom human player station (BHPS)
     */
 
-    // this.topNames = new ArrayList<>();
-    // this.topNames.add("TSTART-4R");
-    // this.topNames.add("4R-THPS");
-    // this.topNames.add("THPS-5L");
-    // this.topNames.add("5L-THPS");
-    // this.topNames.add("THPS-5R");
-    // this.topNames.add("5R-THPS");
-    // this.topNames.add("THPS-0L");
+    this.topNames = new ArrayList<>();
+    this.topNames.add("TSTART-4R");
+    this.topNames.add("4R-THPS");
+    this.topNames.add("THPS-5L");
+    this.topNames.add("5L-THPS");
+    this.topNames.add("THPS-5R");
+    this.topNames.add("5R-THPS");
+    this.topNames.add("THPS-0L");
 
-    // this.middleNames = new ArrayList<>();
-    // this.middleNames.add("MSTART-3R");
+    this.middleNames = new ArrayList<>();
+    this.middleNames.add("MSTART-3R");
 
-    // this.bottomNames = new ArrayList<>();
-    // this.bottomNames.add("BSTART-2L");
-    // this.bottomNames.add("2L-BHPS");
-    // this.bottomNames.add("BHPS-1R");
-    // this.bottomNames.add("1R-BHPS");
-    // this.bottomNames.add("BHPS-1L");
-    // this.bottomNames.add("1L-BHPS");
-    // this.bottomNames.add("BHPS-0R");
+    this.bottomNames = new ArrayList<>();
+    this.bottomNames.add("BSTART-2L");
+    this.bottomNames.add("2L-BHPS");
+    this.bottomNames.add("BHPS-1R");
+    this.bottomNames.add("1R-BHPS");
+    this.bottomNames.add("BHPS-1L");
+    this.bottomNames.add("1L-BHPS");
+    this.bottomNames.add("BHPS-0R");
 
-    // this.topTraj = new ArrayList<>();
-    // this.middleTraj = new ArrayList<>();
-    // this.bottomTraj = new ArrayList<>();
+    this.topTraj = new ArrayList<>();
+    this.middleTraj = new ArrayList<>();
+    this.bottomTraj = new ArrayList<>();
 
-    // for (String n : topNames) {
-    //   topTraj.add(routine.trajectory(n));
-    // }
-    // for (String n : middleNames) {
-    //   middleTraj.add(routine.trajectory(n));
-    // }
-    // for (String n : bottomNames) {
-    //   bottomTraj.add(routine.trajectory(n));
-    // }
+    for (String n : topNames) {
+      topTraj.add(routine.trajectory(n));
+    }
+    for (String n : middleNames) {
+      middleTraj.add(routine.trajectory(n));
+    }
+    for (String n : bottomNames) {
+      bottomTraj.add(routine.trajectory(n));
+    }
   }
 
   public AutoRoutine simpleTest() {
