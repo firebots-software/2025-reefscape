@@ -82,18 +82,6 @@ public class RobotContainer {
   
 
   public RobotContainer() {
-    
-    
-
-    // Set up the Auto chooser in SmartDashboard, which allows you to choose between the Top,
-    // Middle, and Bottom auto paths
-    // (Mirroring for Blue or Red side happens automatically with Choreo)
-    startPosChooser = new SendableChooser<String>();
-    startPosChooser.setDefaultOption("Top (next to blue barge zone)", "top");
-    startPosChooser.addOption("Middle (between blue and red barge zones)", "middle");
-    startPosChooser.addOption("Bottom (next to red barge zone)", "bottom");
-    SmartDashboard.putData(startPosChooser);
-
     configureBindings();
   }
 
