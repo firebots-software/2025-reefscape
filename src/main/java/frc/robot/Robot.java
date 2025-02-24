@@ -240,6 +240,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    AutoRoutines.setIsAutoRunning(true);
     RobotContainer.setAlliance();
     // DogLog.log("Auto/CommandIsNull", true);
     // DogLog.log("Auto/CommandScheduled", false);
@@ -266,6 +267,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    AutoRoutines.setIsAutoRunning(false);
     absoluteInit();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
