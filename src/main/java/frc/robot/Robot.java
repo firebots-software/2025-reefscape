@@ -89,9 +89,9 @@ public class Robot extends TimedRobot {
 
     autoRoutines = new AutoRoutines(autoFactory, driveTrain, elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem, redside);
     autoChooser = new AutoChooser();
-    autoChooser.addRoutine("Top (next to allied barge zone)", autoRoutines::topAutoRoutine);
-    autoChooser.addRoutine("Middle (between blue and red barge zones)", autoRoutines::middleAutoRoutine);
-    autoChooser.addRoutine("Bottom (next to opposing barge zone)", autoRoutines::bottomAutoRoutine);
+    autoChooser.addRoutine("Next to allied barge zone", autoRoutines::topAutoRoutine);
+    autoChooser.addRoutine("Between blue and red barge zones", autoRoutines::middleAutoRoutine);
+    autoChooser.addRoutine("Next to opposing barge zone", autoRoutines::bottomAutoRoutine);
     SmartDashboard.putData("autochooser", autoChooser);
     absoluteInit();
 
