@@ -20,6 +20,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
+import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
 import java.util.function.BooleanSupplier;
 
@@ -36,9 +37,9 @@ public class Robot extends TimedRobot {
   // TODO: uncomment when arm is on real bot
   // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
-  // private VisionSystem visionRight =
-  // VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
-  // private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
+  private VisionSystem visionRight =
+  VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
