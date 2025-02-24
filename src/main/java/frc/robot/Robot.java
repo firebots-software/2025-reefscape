@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
 
     autoRoutines = new AutoRoutines(autoFactory, driveTrain, elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem, redside);
     autoChooser = new AutoChooser();
-    autoChooser.addRoutine("Top (next to blue barge zone)", autoRoutines::topAutoRoutine);
+    autoChooser.addRoutine("Top (next to blue barge zone)", autoRoutines::topAutoRoutine); //TODO: make names more accurate (on red alliance bottom is the actual "top" path)
     autoChooser.addRoutine("Middle (between blue and red barge zones)", autoRoutines::middleAutoRoutine);
     autoChooser.addRoutine("Bottom (next to red barge zone)", autoRoutines::bottomAutoRoutine);
     SmartDashboard.putData("autochooser", autoChooser);
