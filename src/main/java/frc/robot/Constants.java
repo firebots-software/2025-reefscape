@@ -12,6 +12,7 @@ import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -63,6 +64,16 @@ public final class Constants {
   public static class Landmarks {
     // midline constant
     public static final double MIDLINE_X = 8.7741125;
+    public static final Pose2d blueProcessorSideAutoStart = new Pose2d(new Translation2d(7.11305570602417, 0.4940316081047058), new Rotation2d(Math.PI));
+    public static final Pose2d blueClearSideAutoStart = new Pose2d(new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI));
+    public static final Pose2d redProcessorSideAutoStart = new Pose2d(new Translation2d(10.441716194152832, 7.607936382293701), new Rotation2d());
+    public static final Pose2d redClearSideAutoStart = new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d());
+
+    public static final Pose2d blueProcessorSideHPS = new Pose2d(new Translation2d(1.118087887763977, 1.0306631326675415), new Rotation2d(0.9334126223560425));
+    public static final Pose2d blueClearSideHPS = new Pose2d(new Translation2d(1.1465998888015747, 7.014684677124023), new Rotation2d(-0.9419997588093272));
+    public static final Pose2d redProcessorSideHPS = new Pose2d(new Translation2d(16.341829299926758, 7.0662689208984375), new Rotation2d(-2.1939969266716175));
+    public static final Pose2d redClearSideHPS = new Pose2d(new Translation2d(16.39461326599121, 1.0060197114944458), new Rotation2d(2.1932607985206625));
+
     public static final Rotation2d[] reefFacingAngleBlue = {
       new Rotation2d(Degrees.of(0)),
       new Rotation2d(Degrees.of(60)),
