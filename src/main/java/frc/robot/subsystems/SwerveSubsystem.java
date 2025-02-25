@@ -111,18 +111,18 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     autoProfiledPID_X =
     new ProfiledPIDController(
-        3.75, // 3.75 was good
+        3, // 3.75 was good
         0,
         0,
         new TrapezoidProfile.Constraints(
-            Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
+            Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND-1, 5));
     autoProfiledPID_Y =
         new ProfiledPIDController(
-            3.75,
+            3,
             0,
             0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND-1, 5));
 
     autoProfiledPID_HEADING =
         new ProfiledPIDController(
@@ -130,8 +130,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             0,
             0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE,
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND));
+                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE-6,
+                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND-15));
 
     autoProfiledPID_HEADING.enableContinuousInput(-Math.PI, Math.PI);
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);

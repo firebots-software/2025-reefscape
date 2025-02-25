@@ -700,26 +700,26 @@ public final class Constants {
     public static final int MOTOR2_PORT = 12; // TODO: change port
     public static final int CANRANGE_PORT = 41; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
-    public static final double STATOR_CURRENT_LIMIT = 40.0; // TODO: change for actual match
-    public static final double SUPPLY_CURRENT_LIMIT = 10.0; // TODO: change for actual match
+    public static final double STATOR_CURRENT_LIMIT = 50.0; // TODO: change for actual match
+    public static final double SUPPLY_CURRENT_LIMIT = 30.0; // TODO: change for actual match
 
     public static double S0C_KP = 2.0;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.005;
     public static double S0C_KS = 0.0;
-    public static double S0C_KG = 0.28;
+    public static double S0C_KG = 0.29;
     public static double S0C_KA = 0.0004657452997; // 0.04
     public static double S0C_KV = 0.124; // 10.66
 
-    public static final double MOTIONMAGIC_MAX_VELOCITY = 50;
-    public static final double MOTIONMAGIC_MAX_ACCELERATION = 100;
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 60;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 125;
 
     public static double SENSOR_OFFSET = 0.11;
     // public static final double MOTIONMAGIC_KG = 0.28;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0.2; // To-do
-    public static final double MAX_POSITIONAL_ERROR = 0.05;
+    public static final double MAX_POSITIONAL_ERROR = 0.02;
     public static final double SPROCKET_CIRCUM_INCHES =
         1.751 * Math.PI; // TODO: change 0 to radius/diameter
     public static final double GEAR_RATIO = 1d / 12d;
@@ -736,7 +736,7 @@ public final class Constants {
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.069),
+      Intake(0, 0.071),
       safePosition(0, 0.3),
       L1(1, 0.657),
       L2DALE(0, 0.493), // 0.8636 - 0.379

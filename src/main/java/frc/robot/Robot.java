@@ -31,8 +31,8 @@ public class Robot extends TimedRobot {
   // TODO: uncomment when arm is on real bot
   // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
-  // private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
-  // private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
+  private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
   private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   private final RobotContainer m_robotContainer;
 
@@ -66,70 +66,70 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
 
-    // Optional<EstimatedRobotPose> rightRobotPose =
-    //     visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
-    // Optional<EstimatedRobotPose> leftRobotPose =
-    //     visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
+    Optional<EstimatedRobotPose> rightRobotPose =
+        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+    Optional<EstimatedRobotPose> leftRobotPose =
+        visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
 
-    // Optional<EstimatedRobotPose> bestRobotPose;
+    Optional<EstimatedRobotPose> bestRobotPose;
 
-    // PhotonPipelineResult pipelineRight = visionRight.getPipelineResult();
-    // PhotonPipelineResult pipelineLeft = visionLeft.getPipelineResult();
+    PhotonPipelineResult pipelineRight = visionRight.getPipelineResult();
+    PhotonPipelineResult pipelineLeft = visionLeft.getPipelineResult();
 
-    // DogLog.log("KalmanDebug/rightpipelinehastarget", visionRight.hasTarget(pipelineRight));
-    // DogLog.log("KalmanDebug/leftpipelinehastarget", visionLeft.hasTarget(pipelineLeft));
-    // DogLog.log("KalmanDebug/rightposeispresent", rightRobotPose.isPresent());
-    // DogLog.log("KalmanDebug/leftposeispresent", leftRobotPose.isPresent());
+    DogLog.log("KalmanDebug/rightpipelinehastarget", visionRight.hasTarget(pipelineRight));
+    DogLog.log("KalmanDebug/leftpipelinehastarget", visionLeft.hasTarget(pipelineLeft));
+    DogLog.log("KalmanDebug/rightposeispresent", rightRobotPose.isPresent());
+    DogLog.log("KalmanDebug/leftposeispresent", leftRobotPose.isPresent());
 
-    // // if both present, else if right present, else if left present
-    // if (visionRight.hasTarget(pipelineRight)
-    //     && rightRobotPose.isPresent()
-    //     && visionLeft.hasTarget(pipelineLeft)
-    //     && leftRobotPose.isPresent()) {
-    //   double leftPoseAmb = pipelineLeft.getBestTarget().getPoseAmbiguity();
-    //   double rightPoseAmb = pipelineRight.getBestTarget().getPoseAmbiguity();
-    //   if (leftPoseAmb < rightPoseAmb) {
-    //     leastPoseAmbDist = visionLeft.getDistance();
-    //     bestRobotPose = leftRobotPose;
-    //   }
-    //   leastPoseAmbDist = visionRight.getDistance();
-    //   bestRobotPose = rightRobotPose;
-    //   DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
-    //   DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
-    //   DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
-    //   DogLog.log(
-    //       "KalmanDebug/rightRobotPoseTheta",
-    //       rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
+    // if both present, else if right present, else if left present
+    if (visionRight.hasTarget(pipelineRight)
+        && rightRobotPose.isPresent()
+        && visionLeft.hasTarget(pipelineLeft)
+        && leftRobotPose.isPresent()) {
+      double leftPoseAmb = pipelineLeft.getBestTarget().getPoseAmbiguity();
+      double rightPoseAmb = pipelineRight.getBestTarget().getPoseAmbiguity();
+      if (leftPoseAmb < rightPoseAmb) {
+        leastPoseAmbDist = visionLeft.getDistance();
+        bestRobotPose = leftRobotPose;
+      }
+      leastPoseAmbDist = visionRight.getDistance();
+      bestRobotPose = rightRobotPose;
+      DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
+      DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
+      DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
+      DogLog.log(
+          "KalmanDebug/rightRobotPoseTheta",
+          rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
 
-    // } else if (visionRight.hasTarget(pipelineRight) && rightRobotPose.isPresent()) {
-    //   DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
-    //   DogLog.log("KalmanDebug/rightestimatedpose", rightRobotPose.get().estimatedPose.toPose2d());
-    //   DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
-    //   DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
-    //   DogLog.log(
-    //       "KalmanDebug/rightRobotPoseTheta",
-    //       rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
+    } else if (visionRight.hasTarget(pipelineRight) && rightRobotPose.isPresent()) {
+      DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
+      DogLog.log("KalmanDebug/rightestimatedpose", rightRobotPose.get().estimatedPose.toPose2d());
+      DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
+      DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
+      DogLog.log(
+          "KalmanDebug/rightRobotPoseTheta",
+          rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
 
-    //   leastPoseAmbDist = visionRight.getDistance();
-    //   bestRobotPose = rightRobotPose;
-    //   DogLog.log("KalmanDebug/bestestimatedpose", bestRobotPose.get().estimatedPose.toPose2d());
-    //   DogLog.log("KalmanDebug/leastPoseAmbDist", leastPoseAmbDist);
+      leastPoseAmbDist = visionRight.getDistance();
+      bestRobotPose = rightRobotPose;
+      DogLog.log("KalmanDebug/bestestimatedpose", bestRobotPose.get().estimatedPose.toPose2d());
+      DogLog.log("KalmanDebug/leastPoseAmbDist", leastPoseAmbDist);
 
-    // } else if (visionLeft.hasTarget(pipelineLeft) && leftRobotPose.isPresent()) {
-    //   leastPoseAmbDist = visionLeft.getDistance();
-    //   bestRobotPose = leftRobotPose;
-    // } else {
-    //   DogLog.log("KalmanDebug/visionUsed", false);
-    //   return;
-    // }
-    // visionRight.addFilteredPose();
-    // visionLeft.addFilteredPose();
-    // DogLog.log("KalmanDebug/visionUsed", true);
+    } else if (visionLeft.hasTarget(pipelineLeft) && leftRobotPose.isPresent()) {
+      leastPoseAmbDist = visionLeft.getDistance();
+      bestRobotPose = leftRobotPose;
+    } else {
+      DogLog.log("KalmanDebug/visionUsed", false);
+      return;
+    }
+    visionRight.addFilteredPose();
+    visionLeft.addFilteredPose();
+    DogLog.log("KalmanDebug/visionUsed", true);
 
-    // DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
+    DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
 
-    // DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
-    // DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
+    DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
+    DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
