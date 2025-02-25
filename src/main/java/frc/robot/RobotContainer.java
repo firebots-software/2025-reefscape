@@ -318,7 +318,8 @@ public class RobotContainer {
             speedFunction, // slowmode when left shoulder is pressed, otherwise fast
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
-    driveTrain.setDefaultCommand(swerveJoystickCommand.onlyIf(() -> !AutoRoutines.getIsAutoRunning()));
+    driveTrain.setDefaultCommand(
+        swerveJoystickCommand.onlyIf(() -> !AutoRoutines.getIsAutoRunning()));
 
     joystick
         .a()
