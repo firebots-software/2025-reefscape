@@ -85,7 +85,8 @@ public class RobotContainer {
     // By default, Dale goes to 0 degrees (retracted)
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
 
-    // By default, elevator goes to Intake if no Coral is in Tootsie Slide and Auto is not running
+    //  !!!  By default (when no other commands are using the Elevator Subsystem), we move the
+    // elevator to Intake unless it
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
 
     // Custom Controller:
@@ -271,11 +272,6 @@ public class RobotContainer {
     // Position (L1).
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
 
-    //  !!!  By default (when no other commands are using the Elevator Subsystem), we move the
-    // elevator to Intake unless it
-    // is carrying a Coral in the Tootsie Slide.
-    elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
-
     // Debugging
     debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
 
@@ -322,7 +318,7 @@ public class RobotContainer {
             speedFunction, // slowmode when left shoulder is pressed, otherwise fast
             () -> joystick.leftTrigger().getAsBoolean(),
             driveTrain);
-    driveTrain.setDefaultCommand(swerveJoystickCommand);
+    driveTrain.setDefaultCommand(swerveJoystickCommand.onlyIf(() -> !AutoRoutines.getIsAutoRunning()));
 
     joystick
         .a()
