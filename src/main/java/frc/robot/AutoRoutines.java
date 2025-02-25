@@ -120,26 +120,30 @@ public class AutoRoutines {
     // SequentialCommandGroup autoCommandGroup = new SequentialCommandGroup();
     AutoRoutine testRoutine = autoFactory.newRoutine("testRoutine");
     AutoTrajectory firstPathBottom = testRoutine.trajectory("BSTART-2L");
-    
-    // autoCommandGroup.addCommands(firstPathBottom.resetOdometry().alongWith(new DogLogCmd("Auto/Running", "resetOdo")));
+
+    // autoCommandGroup.addCommands(firstPathBottom.resetOdometry().alongWith(new
+    // DogLogCmd("Auto/Running", "resetOdo")));
 
     // Add all the auto segments as commands
     // for (int i = 0; i < bottomNames.size(); i++) {
     //   autoCommandGroup.addCommands(bottomTraj.get(i).cmd());
     //   DogLog.log("Auto/creating-path", i);
     // }
-    // autoCommandGroup.addCommands(firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath")));
+    // autoCommandGroup.addCommands(firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running",
+    // "firstPath")));
 
     // Set isAutoRunning to false when auto routine finishes
     // autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
 
     // Bind the Auto SequentialCommandGroup to run when the routine is activated
-    testRoutine.active().onTrue(
-      Commands.sequence(
-        firstPathBottom.resetOdometry().alongWith(new DogLogCmd("Auto/Running", "resetOdo")),
-        firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath"))
-      )
-    );
+    testRoutine
+        .active()
+        .onTrue(
+            Commands.sequence(
+                firstPathBottom
+                    .resetOdometry()
+                    .alongWith(new DogLogCmd("Auto/Running", "resetOdo")),
+                firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath"))));
 
     DogLog.log("Auto/Simple-Test-Constructor", "Ran");
     // DogLog.log("Auto/Returning-Num-Paths", numPaths);
@@ -301,18 +305,23 @@ public class AutoRoutines {
                 ElevatorPositions
                     .L1), // using L1 as the Safe Position because not sure if the "pos" value in
             // the Constants Enum should be 0 or 1
-            trajectory.cmd().alongWith(new DogLogCmd("Auto/CurrTrajRunning", trajName)).andThen(new DogLogCmd("Auto/CurrTrajRunning", "none")), // actual robot movement
+            trajectory
+                .cmd()
+                .alongWith(new DogLogCmd("Auto/CurrTrajRunning", trajName))
+                .andThen(new DogLogCmd("Auto/CurrTrajRunning", "none")), // actual robot movement
             (pathGoesToHPS.getAsBoolean()
                 ? new ParallelCommandGroup(
                     new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
                     new RunFunnelUntilCheckedIn(funnelSubsystem))
-                : new WaitCommand(1).andThen(new JamesHardenScore(
-                    elevatorSubsystem,
-                    tootsieSlideSubsystem,
-                    driveTrain,
-                    ElevatorPositions.L4,
-                    redside,
-                    goRightBranch))));
+                : new WaitCommand(1)
+                    .andThen(
+                        new JamesHardenScore(
+                            elevatorSubsystem,
+                            tootsieSlideSubsystem,
+                            driveTrain,
+                            ElevatorPositions.L4,
+                            redside,
+                            goRightBranch))));
 
     // Command oldStructure =  Commands.parallel(
     //         trajectory.cmd(),

@@ -68,9 +68,9 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     }
 
     currentState = getCurrentState();
-    xRegularPIDController = new PIDController(8, 0, 0);
-    yRegularPIDController = new PIDController(8, 0, 0);
-    headingRegularPIDController = new PIDController(8, 0, 0);
+    xRegularPIDController = new PIDController(4, 0, 0);
+    yRegularPIDController = new PIDController(4, 0, 0);
+    headingRegularPIDController = new PIDController(4, 0, 0);
     headingRegularPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     xProfiledPIDController =

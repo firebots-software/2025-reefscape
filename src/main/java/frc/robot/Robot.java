@@ -14,8 +14,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -29,10 +29,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
-
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
-
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonPipelineResult;
 
@@ -49,8 +47,7 @@ public class Robot extends TimedRobot {
   // TODO: uncomment when arm is on real bot
   // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
-  private VisionSystem visionRight =
-  VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
   private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
@@ -87,7 +84,14 @@ public class Robot extends TimedRobot {
             true, // If alliance flipping should be enabled
             driveTrain);
 
-    autoRoutines = new AutoRoutines(autoFactory, driveTrain, elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem, redside);
+    autoRoutines =
+        new AutoRoutines(
+            autoFactory,
+            driveTrain,
+            elevatorSubsystem,
+            tootsieSlideSubsystem,
+            funnelSubsystem,
+            redside);
     autoChooser = new AutoChooser();
     autoChooser.addRoutine("Next to allied barge zone", autoRoutines::topAutoRoutine);
     autoChooser.addRoutine("Between blue and red barge zones", autoRoutines::middleAutoRoutine);
@@ -161,8 +165,7 @@ public class Robot extends TimedRobot {
 
     } else if (visionRight.hasTarget(pipelineRight) && rightRobotPose.isPresent()) {
       DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
-      DogLog.log("KalmanDebug/rightestimatedpose",
-    rightRobotPose.get().estimatedPose.toPose2d());
+      DogLog.log("KalmanDebug/rightestimatedpose", rightRobotPose.get().estimatedPose.toPose2d());
       DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
       DogLog.log("KalmanDebug/rightRobotPoseY", rightRobotPose.get().estimatedPose.getY());
       DogLog.log(

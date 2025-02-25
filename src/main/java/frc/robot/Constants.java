@@ -62,7 +62,6 @@ public final class Constants {
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-38.8);
   }
 
-
   public static class Landmarks {
     // midline constant
     public static final double MIDLINE_X = 8.7741125;

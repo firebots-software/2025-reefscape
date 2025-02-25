@@ -13,8 +13,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 
-import dev.doglog.DogLog;
-
 public class JamesHardenScore extends SequentialCommandGroup {
   public JamesHardenScore(
       ElevatorSubsystem elevatorSubsystem,
@@ -32,12 +30,11 @@ public class JamesHardenScore extends SequentialCommandGroup {
     }
 
     addCommands(
-      new DogLogCmd("Auto/JamesHardenScore", "running"),
+        new DogLogCmd("Auto/JamesHardenScore", "running"),
         movementCommand,
         new SetElevatorLevel(elevatorSubsystem, height),
         new WaitCommand(0.25),
         new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5),
-        new DogLogCmd("Auto/JamesHardenScore", "finished")
-    );
+        new DogLogCmd("Auto/JamesHardenScore", "finished"));
   }
 }

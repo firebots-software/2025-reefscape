@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import choreo.auto.AutoChooser;
-import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -16,10 +14,8 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.D2Intake;
@@ -60,7 +56,8 @@ public class RobotContainer {
   Boolean coralInFunnel = Boolean.valueOf(false);
   Boolean coralInElevator = Boolean.valueOf(false);
 
-  private BooleanSupplier redside = () -> DriverStation.getAlliance().get().equals(Alliance.Red);;
+  private BooleanSupplier redside = () -> DriverStation.getAlliance().get().equals(Alliance.Red);
+  ;
   private static boolean redAlliance;
 
   private static SendableChooser<String> startPosChooser = new SendableChooser<>();
@@ -78,8 +75,6 @@ public class RobotContainer {
   public void doTelemetry() {
     logger.telemeterize(driveTrain.getCurrentState());
   }
-
-  
 
   public RobotContainer() {
     configureBindings();
