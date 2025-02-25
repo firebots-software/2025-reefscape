@@ -111,14 +111,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     autoProfiledPID_X =
     new ProfiledPIDController(
-        1.5, // 3.75 was good
+        3.75, // 3.75 was good
         0,
         0,
         new TrapezoidProfile.Constraints(
             Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
     autoProfiledPID_Y =
         new ProfiledPIDController(
-            1.5,
+            3.75,
             0,
             0,
             new TrapezoidProfile.Constraints(
@@ -126,7 +126,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     autoProfiledPID_HEADING =
         new ProfiledPIDController(
-            1.5,
+            4,
             0,
             0,
             new TrapezoidProfile.Constraints(
@@ -254,6 +254,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     xProfiledPIDController.reset(currentState.Pose.getX());
     yProfiledPIDController.reset(currentState.Pose.getY());
     headingProfiledPIDController.reset(currentState.Pose.getRotation().getRadians());
+
+    autoProfiledPID_X.reset(currentState.Pose.getX());
+    autoProfiledPID_Y.reset(currentState.Pose.getY());
+    autoProfiledPID_HEADING.reset(currentState.Pose.getRotation().getRadians());
   }
 
   /* Swerve requests to apply during SysId characterization */
