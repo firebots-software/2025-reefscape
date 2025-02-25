@@ -313,15 +313,13 @@ public class AutoRoutines {
                 ? new ParallelCommandGroup(
                     new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
                     new RunFunnelUntilCheckedIn(funnelSubsystem))
-                : new WaitCommand(1)
-                    .andThen(
-                        new JamesHardenScore(
+                : new JamesHardenScore(
                             elevatorSubsystem,
                             tootsieSlideSubsystem,
                             driveTrain,
                             ElevatorPositions.L4,
                             redside,
-                            goRightBranch))));
+                            goRightBranch)));
 
     // Command oldStructure =  Commands.parallel(
     //         trajectory.cmd(),
