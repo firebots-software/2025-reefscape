@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.D2Intake;
@@ -256,10 +257,10 @@ public class RobotContainer {
     // Auto Intake and Eject
     Trigger funnelCheckin =
         new Trigger(
-            () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide());
+            () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
     Trigger ejectTime =
         new Trigger(
-            () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()));
+            () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide())).and(RobotModeTriggers.teleop());
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
     funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
     funnelCheckin.onTrue(new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
@@ -268,11 +269,11 @@ public class RobotContainer {
             () ->
                 CoralPosition.isCoralInFunnel()
                     && elevatorSubsystem.atIntake()
-                    && elevatorSubsystem.isAtPosition());
+                    && elevatorSubsystem.isAtPosition()).and(RobotModeTriggers.teleop()).and(RobotModeTriggers.teleop());
     funnelCheckout.onTrue(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
-    Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide());
+    Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
 
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
@@ -484,7 +485,6 @@ public class RobotContainer {
                       new Pose2d(
                           new Translation2d(10.463430404663086, 7.600519180297852),
                           new Rotation2d()))),
-          new DogLogCmd("current command", 1),
           new JamesHardenScore(
               elevatorSubsystem,
               tootsieSlideSubsystem,
@@ -492,40 +492,30 @@ public class RobotContainer {
               ElevatorPositions.L3,
               redside,
               false),
-          new DogLogCmd("current command", 2),
           new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
-          new DogLogCmd("current command", 3),
           new JamesHardenMovement(
               driveTrain,
               new Pose2d(
                   new Translation2d(16.70710563659668, 6.779853343963623),
-                  new Rotation2d(0.9429051116124475 + Math.PI))).withTimeout(3.5),
-          new PrintCommand("JH SCORE 1 Ended"),
-          JamesHardenMovement.toClosestRightBranch(driveTrain, redside),
-          new PrintCommand("JH TO RIGHT 1 Ended"),
-          new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3),
-          new DogLogCmd("current command", 7),
+                  new Rotation2d(0.9429051116124475 + Math.PI))).withTimeout(3),
+          driveTrain.applyRequest(() -> brake).withTimeout(0.1),
+          (JamesHardenMovement.toClosestRightBranch(driveTrain, redside).alongWith(new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem))).withTimeout(3),
+          new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4),
           new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
-          new DogLogCmd("current command", 8),
           new JamesHardenMovement(
               driveTrain,
               new Pose2d(
                   new Translation2d(16.70710563659668, 6.779853343963623),
-                  new Rotation2d(0.9429051116124475 + Math.PI))).withTimeout(3.5),
-          new DogLogCmd("current command", 9),
-          new DogLogCmd("current command", 10),
-          JamesHardenMovement.toClosestLeftBranch(driveTrain, redside),
-          new DogLogCmd("current command", 11),
-          new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3),
-          new DogLogCmd("current command", 12),
+                  new Rotation2d(0.9429051116124475 + Math.PI))).withTimeout(3),
+          driveTrain.applyRequest(() -> brake).withTimeout(0.1),
+          (JamesHardenMovement.toClosestLeftBranch(driveTrain, redside).alongWith(new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem))).withTimeout(3),
+          new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4),
           new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
-          new DogLogCmd("current command", 13),
           new JamesHardenMovement(
               driveTrain,
               new Pose2d(
                   new Translation2d(16.70710563659668, 6.779853343963623),
-                  new Rotation2d(0.9429051116124475 + Math.PI))).withTimeout(3.5),
-          new DogLogCmd("current command", 14));
+                  new Rotation2d(0.9429051116124475 + Math.PI))).withTimeout(3));
     } else {
       return new SequentialCommandGroup(
           new InstantCommand(
