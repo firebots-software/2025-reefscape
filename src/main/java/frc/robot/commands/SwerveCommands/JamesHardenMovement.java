@@ -43,7 +43,7 @@ public class JamesHardenMovement extends Command {
 
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
-    DogLog.log("JamesHardenMovement/TargetPoseHeading(deg)", targetPose.getRotation().getDegrees());
+    DogLog.log("JamesHardenMovement/TargetPoseHeading(deg)", targetPose.getRotation().getRadians());
 
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(mps)", speeds.vxMetersPerSecond);
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
@@ -61,7 +61,7 @@ public class JamesHardenMovement extends Command {
 
     if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX()) < 0.02)
         && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY()) < 0.02)
-        && (Math.abs(targetRot - currRot) < 0.5)) {
+        && (Math.abs(targetRot - currRot) < 0.0075)) {
       return true;
     } else return false;
   }
@@ -113,7 +113,6 @@ public class JamesHardenMovement extends Command {
 
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
-            DogLog.log("Auto/JamesHardenTarget(LEFT)", target);
 
             return target;
           }
@@ -163,7 +162,6 @@ public class JamesHardenMovement extends Command {
 
             DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
             DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
-            DogLog.log("Auto/JamesHardenTarget(RIGHT)", target);
 
             return target;
           }
