@@ -12,6 +12,7 @@ import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -45,26 +46,34 @@ public final class Constants {
     }
 
     // TODO: CHANGE FOR NEW ROBOT
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(9.034);
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(-12.689);
-    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(6.155);
-
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(8.867);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(-12.478);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(6.158);
     public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(-41.6);
-    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(38.8);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(-12.5);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(40);
 
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(9.034);
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(12.689);
-    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(6.155);
-
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = Units.inchesToMeters(8.867);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = Units.inchesToMeters(12.478);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = Units.inchesToMeters(6.158);
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
-    public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(-41.6);
-    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-38.8);
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(-12.5);
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-40);
   }
 
   public static class Landmarks {
     // midline constant
     public static final double MIDLINE_X = 8.7741125;
+    public static final Pose2d blueProcessorSideAutoStart = new Pose2d(new Translation2d(7.11305570602417, 0.4940316081047058), new Rotation2d(Math.PI));
+    public static final Pose2d blueClearSideAutoStart = new Pose2d(new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI));
+    public static final Pose2d redProcessorSideAutoStart = new Pose2d(new Translation2d(10.441716194152832, 7.607936382293701), new Rotation2d());
+    public static final Pose2d redClearSideAutoStart = new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d());
+
+    public static final Pose2d blueProcessorSideHPS = new Pose2d(new Translation2d(1.118087887763977, 1.0306631326675415), new Rotation2d(0.9334126223560425));
+    public static final Pose2d blueClearSideHPS = new Pose2d(new Translation2d(1.1465998888015747, 7.014684677124023), new Rotation2d(-0.9419997588093272));
+    public static final Pose2d redProcessorSideHPS = new Pose2d(new Translation2d(16.341829299926758, 7.0662689208984375), new Rotation2d(-2.1939969266716175));
+    public static final Pose2d redClearSideHPS = new Pose2d(new Translation2d(16.39461326599121, 1.0060197114944458), new Rotation2d(2.1932607985206625));
+
     public static final Rotation2d[] reefFacingAngleBlue = {
       new Rotation2d(Degrees.of(0)),
       new Rotation2d(Degrees.of(60)),
@@ -634,17 +643,16 @@ public final class Constants {
 
     // TODO: CHANGE FOR NEW ROBOT
     // these outline the speed calculations
-    public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.5;
+    public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.868;
     // 5.944; // before: 4.8768;// 18ft/s = 5.486, 19m/s = 5.791ft/s, 19.5m/s = 5.944 ft/s,
-    public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
+    public static final double PHYSICAL_MAX_ANGLUAR_SPEED_RADIANS_PER_SECOND = 10.917;
     public static final double TELE_DRIVE_FAST_MODE_SPEED_PERCENT = 0.75;
     public static final double TELE_DRIVE_SLOW_MODE_SPEED_PERCENT = 0.3;
-    public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 6.01420;
+    public static final double TELE_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 8;
     public static final double TELE_DRIVE_PERCENT_SPEED_RANGE =
         (TELE_DRIVE_FAST_MODE_SPEED_PERCENT - TELE_DRIVE_SLOW_MODE_SPEED_PERCENT);
-    public static final double TELE_DRIVE_MAX_ANGULAR_RATE = Math.PI * 1.5;
-    public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND =
-        TELE_DRIVE_MAX_ANGULAR_RATE * 8;
+    public static final double TELE_DRIVE_MAX_ANGULAR_RATE = 10.917;
+    public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 26.971;
   }
 
   public static class TootsieSlide {
@@ -662,7 +670,8 @@ public final class Constants {
     public static final double ACCELERATION = 10; // TODO
     public static final double GEAR_RATIO = 1d / 6d;
     public static final double INTAKE_SPEED_RPS = 5d; // TODO
-    public static final double SHOOTING_SPEED_RPS = 13d;
+    public static final double SHOOTING_SPEED_RPS =
+        11.5d; // 12.5, 12 good for L3 and L2  worked for L2
   }
 
   public static class FunnelConstants {
@@ -722,18 +731,20 @@ public final class Constants {
         (SPROCKET_GEAR_RATIO) / (SPROCKET_CIRCUM_INCHES * 0.0254); // This is converted to meters
     public static final double CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE =
         1d / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
-    public static final double ELEVATOR_TORQUE = 15.0;
+    public static final double ELEVATOR_TORQUE = 32;
+    public static final double ELEVATOR_DUTY_CYCLE = 0.4;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.068),
-      safePosition(0, 0.657 - 0.13),
-      L1(1, 0.657 - 0.13),
+      Intake(0, 0.069),
+      safePosition(0, 0.3),
+      L1(1, 0.657),
       L2DALE(0, 0.493), // 0.8636 - 0.379
-      L2(2, 0.8636),
+      L2(2, 0.9036),
       L3DALE(0, 0.91), // 1.27 - 0.379
-      L3(3, 1.27),
-      L4(4, 1.800);
+      L3(3, 1.32), // 1.27
+      L4(4, 1.81),
+      LIMIT_OF_TRAVEL(1, 1.825);
 
       public final int position;
       public final double height;
