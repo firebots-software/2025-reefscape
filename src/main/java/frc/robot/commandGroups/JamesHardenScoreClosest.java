@@ -12,8 +12,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 
-public class JamesHardenScore extends SequentialCommandGroup {
-  public JamesHardenScore(
+public class JamesHardenScoreClosest extends SequentialCommandGroup {
+  public JamesHardenScoreClosest(
       ElevatorSubsystem elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
@@ -38,7 +38,6 @@ public class JamesHardenScore extends SequentialCommandGroup {
     addCommands(
         movementCommand,
         elevateCommand,
-        new WaitCommand(0.25),
         new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5));
   }
 }
