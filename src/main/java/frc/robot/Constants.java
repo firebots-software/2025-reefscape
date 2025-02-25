@@ -694,19 +694,19 @@ public final class Constants {
     public static final int MOTOR2_PORT = 12; // TODO: change port
     public static final int CANRANGE_PORT = 41; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
-    public static final double STATOR_CURRENT_LIMIT = 40.0; // TODO: change for actual match
-    public static final double SUPPLY_CURRENT_LIMIT = 10.0; // TODO: change for actual match
+    public static final double STATOR_CURRENT_LIMIT = 50.0; // TODO: change for actual match
+    public static final double SUPPLY_CURRENT_LIMIT = 30.0; // TODO: change for actual match
 
     public static double S0C_KP = 2.0;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.005;
     public static double S0C_KS = 0.0;
-    public static double S0C_KG = 0.28;
+    public static double S0C_KG = 0.285;
     public static double S0C_KA = 0.0004657452997; // 0.04
     public static double S0C_KV = 0.124; // 10.66
 
-    public static final double MOTIONMAGIC_MAX_VELOCITY = 50;
-    public static final double MOTIONMAGIC_MAX_ACCELERATION = 100;
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 60;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 125;
 
     public static double SENSOR_OFFSET = 0.11;
     // public static final double MOTIONMAGIC_KG = 0.28;

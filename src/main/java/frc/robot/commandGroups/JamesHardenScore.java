@@ -15,6 +15,9 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.RobotPosition;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
+
+import dev.doglog.DogLog;
 
 public class JamesHardenScore extends SequentialCommandGroup {
   public JamesHardenScore(
@@ -22,28 +25,27 @@ public class JamesHardenScore extends SequentialCommandGroup {
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
       BooleanSupplier redSide,
-      RobotPosition position) {
-    double currentTime = Timer.getFPGATimestamp();
-    if(position != null && Math.abs(currentTime - position.time) <= 2.0){ //If the button has been pressed in the last 2 seconds
+      Supplier<ElevatorPositions> elevatorPosition,
+      Supplier<BranchSide> side) {
       Command movementCommand;
-      if (position.side.equals(BranchSide.RIGHT)) {
+
+      if (side.get().equals(BranchSide.RIGHT)) {
         movementCommand = JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide);
       } else {
         movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide);
       }
 
       Command elevateCommand;
-      if (position.elevator.equals(ElevatorPositions.L4)) {
+      if (elevatorPosition.get().equals(ElevatorPositions.L4)) {
         elevateCommand = new ElevatorL4(elevatorSubsystem);
       } else {
-        elevateCommand = new SetElevatorLevel(elevatorSubsystem, position.elevator);
+        elevateCommand = new SetElevatorLevel(elevatorSubsystem, elevatorPosition.get());
       }
       addCommands(
           movementCommand,
           elevateCommand,
           new WaitCommand(0.25),
           new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5));
-    }
   }
 
   public JamesHardenScore(
@@ -52,7 +54,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
       SwerveSubsystem swerveSubsystem,
       ElevatorPositions elevatorPosition,
       BooleanSupplier redSide,
-      BranchSide side) {
-    this(elevatorSubsystem,tootsieSlideSubsystem,swerveSubsystem,redSide,new RobotPosition(elevatorPosition,side,Timer.getFPGATimestamp()));
+      Supplier<BranchSide> side) {
+    this(elevatorSubsystem,tootsieSlideSubsystem,swerveSubsystem,redSide, () -> elevatorPosition, side);
   }
 }

@@ -105,7 +105,7 @@ public class RobotContainer {
         new AutoRoutines(autoFactory, driveTrain, tootsieSlideSubsystem, elevatorSubsystem);
     // Add options to the chooser
     autoChooser.addRoutine("Basic Four Coral Auto", autoRoutines::basicFourCoralAuto);
-
+    RobotPosition.Instance = new RobotPosition(ElevatorPositions.L1, BranchSide.RIGHT, 0);
     // Put the auto chooser on the dashboard
     SmartDashboard.putData("autochooser", autoChooser);
     configureBindings();
@@ -188,14 +188,15 @@ public class RobotContainer {
                 () ->
                     driveTrain.resetPose(
                         new Pose2d(driveTrain.getPose().getTranslation(), new Rotation2d(0)))));
-    joystick.rightTrigger().onTrue(
+    joystick.rightTrigger().whileTrue(
         new JamesHardenScore(
         elevatorSubsystem,
         tootsieSlideSubsystem,
         driveTrain,
         redside,
-        RobotPosition.Instance
-        ));
+        () -> RobotPosition.Instance.elevator,
+        () -> RobotPosition.Instance.side
+        ).onlyIf(() -> Math.abs(RobotPosition.Instance.getCurrentTime() - RobotPosition.Instance.time) <= 3.0));
     // Joystick 2:
     // Elevator
     joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
@@ -383,7 +384,7 @@ public class RobotContainer {
               driveTrain,
               ElevatorPositions.L3,
               redside,
-              BranchSide.LEFT),
+              () -> BranchSide.LEFT),
           new DogLogCmd("CURRENT COMMAND", "1ST JH SCORE"),
           new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
           new DogLogCmd("CURRENT COMMAND", "1ST ELEVATOR DOWN"),
@@ -401,7 +402,7 @@ public class RobotContainer {
               driveTrain,
               ElevatorPositions.L3,
               redside,
-              BranchSide.LEFT),
+              () -> BranchSide.LEFT),
           new DogLogCmd("CURRENT COMMAND", "2ND JH SCORE"),
           new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
           new DogLogCmd("CURRENT COMMAND", "2ND ELEVATOR DOWN"),
@@ -419,7 +420,7 @@ public class RobotContainer {
               driveTrain,
               ElevatorPositions.L3,
               redside,
-              BranchSide.RIGHT),
+              () -> BranchSide.RIGHT),
           new DogLogCmd("CURRENT COMMAND", "3RD JH SCORE"),
           new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
           new DogLogCmd("CURRENT COMMAND", "3RD ELEVATOR DOWN"),
@@ -445,7 +446,7 @@ public class RobotContainer {
               driveTrain,
               ElevatorPositions.L3,
               redside,
-              BranchSide.LEFT),
+              () -> BranchSide.LEFT),
           new DogLogCmd("CURRENT COMMAND", "1ST JH SCORE"),
           new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
           new DogLogCmd("CURRENT COMMAND", "1ST ELEVATOR DOWN"),
@@ -463,7 +464,7 @@ public class RobotContainer {
               driveTrain,
               ElevatorPositions.L3,
               redside,
-              BranchSide.LEFT),
+              () -> BranchSide.LEFT),
           new DogLogCmd("CURRENT COMMAND", "2ND JH SCORE"),
           new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
           new DogLogCmd("CURRENT COMMAND", "2ND ELEVATOR DOWN"),
@@ -481,7 +482,7 @@ public class RobotContainer {
               driveTrain,
               ElevatorPositions.L3,
               redside,
-              BranchSide.RIGHT),
+              () -> BranchSide.RIGHT),
           new DogLogCmd("CURRENT COMMAND", "3RD JH SCORE"),
           new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
           new DogLogCmd("CURRENT COMMAND", "3RD ELEVATOR DOWN"),

@@ -20,12 +20,14 @@ public class RobotPositionCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotPosition.Instance = new RobotPosition(elevatorPosition, branchSide, Timer.getFPGATimestamp());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    RobotPosition.Instance.elevator = elevatorPosition;
+    RobotPosition.Instance.side = branchSide;
+    RobotPosition.Instance.time = Timer.getFPGATimestamp();
     
   }
 
@@ -37,6 +39,6 @@ public class RobotPositionCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
