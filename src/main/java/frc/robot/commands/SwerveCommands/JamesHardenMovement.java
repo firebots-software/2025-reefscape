@@ -18,7 +18,8 @@ public class JamesHardenMovement extends Command {
   private Pose2d targetPose = null;
   private boolean isInAuto;
 
-  public JamesHardenMovement(SwerveSubsystem swerve, Supplier<Pose2d> targetPoseSupplier, boolean isInAuto) {
+  public JamesHardenMovement(
+      SwerveSubsystem swerve, Supplier<Pose2d> targetPoseSupplier, boolean isInAuto) {
     this.swerve = swerve;
     this.targetPoseSupplier = targetPoseSupplier;
     this.isInAuto = isInAuto;
@@ -42,7 +43,10 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public void execute() {
-    ChassisSpeeds speeds = (isInAuto) ? swerve.calculateRequiredComponentChassisSpeeds_AUTO_VERSION(targetPose) : swerve.calculateRequiredComponentChassisSpeeds(targetPose);
+    ChassisSpeeds speeds =
+        (isInAuto)
+            ? swerve.calculateRequiredComponentChassisSpeeds_AUTO_VERSION(targetPose)
+            : swerve.calculateRequiredComponentChassisSpeeds(targetPose);
 
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
@@ -74,21 +78,41 @@ public class JamesHardenMovement extends Command {
     swerve.setRobotSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
-  public static JamesHardenMovement toSpecificLeftBranch(SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, int reefSideIndex) {
+  public static JamesHardenMovement toSpecificLeftBranch(
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, int reefSideIndex) {
     if (redSide.getAsBoolean()) {
-      return new JamesHardenMovement(swerve, new Pose2d(Constants.Landmarks.LEFT_LINEUP_RED[reefSideIndex], Constants.Landmarks.reefFacingAngleRed[reefSideIndex]), isInAuto);
-    }
-    else {
-      return new JamesHardenMovement(swerve, new Pose2d(Constants.Landmarks.LEFT_LINEUP_BLUE[reefSideIndex], Constants.Landmarks.reefFacingAngleBlue[reefSideIndex]), isInAuto);
+      return new JamesHardenMovement(
+          swerve,
+          new Pose2d(
+              Constants.Landmarks.LEFT_LINEUP_RED[reefSideIndex],
+              Constants.Landmarks.reefFacingAngleRed[reefSideIndex]),
+          isInAuto);
+    } else {
+      return new JamesHardenMovement(
+          swerve,
+          new Pose2d(
+              Constants.Landmarks.LEFT_LINEUP_BLUE[reefSideIndex],
+              Constants.Landmarks.reefFacingAngleBlue[reefSideIndex]),
+          isInAuto);
     }
   }
 
-  public static JamesHardenMovement toSpecificRightBranch(SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, int reefSideIndex) {
+  public static JamesHardenMovement toSpecificRightBranch(
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, int reefSideIndex) {
     if (redSide.getAsBoolean()) {
-      return new JamesHardenMovement(swerve, new Pose2d(Constants.Landmarks.RIGHT_LINEUP_RED[reefSideIndex], Constants.Landmarks.reefFacingAngleRed[reefSideIndex]), isInAuto);
-    }
-    else {
-      return new JamesHardenMovement(swerve, new Pose2d(Constants.Landmarks.RIGHT_LINEUP_BLUE[reefSideIndex], Constants.Landmarks.reefFacingAngleBlue[reefSideIndex]), isInAuto);
+      return new JamesHardenMovement(
+          swerve,
+          new Pose2d(
+              Constants.Landmarks.RIGHT_LINEUP_RED[reefSideIndex],
+              Constants.Landmarks.reefFacingAngleRed[reefSideIndex]),
+          isInAuto);
+    } else {
+      return new JamesHardenMovement(
+          swerve,
+          new Pose2d(
+              Constants.Landmarks.RIGHT_LINEUP_BLUE[reefSideIndex],
+              Constants.Landmarks.reefFacingAngleBlue[reefSideIndex]),
+          isInAuto);
     }
   }
 

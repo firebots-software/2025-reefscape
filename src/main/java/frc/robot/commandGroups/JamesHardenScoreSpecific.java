@@ -2,7 +2,6 @@ package frc.robot.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
@@ -25,9 +24,13 @@ public class JamesHardenScoreSpecific extends SequentialCommandGroup {
 
     Command movementCommand;
     if (moveRight) {
-      movementCommand = JamesHardenMovement.toSpecificRightBranch(swerveSubsystem, redSide, isInAuto, reefSideIndex);
+      movementCommand =
+          JamesHardenMovement.toSpecificRightBranch(
+              swerveSubsystem, redSide, isInAuto, reefSideIndex);
     } else {
-      movementCommand = JamesHardenMovement.toSpecificLeftBranch(swerveSubsystem, redSide, isInAuto, reefSideIndex);
+      movementCommand =
+          JamesHardenMovement.toSpecificLeftBranch(
+              swerveSubsystem, redSide, isInAuto, reefSideIndex);
     }
 
     Command elevateCommand;

@@ -22,7 +22,8 @@ public class JamesHardenElevator extends SequentialCommandGroup {
 
     Command movementCommand;
     if (moveRight) {
-      movementCommand = JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto);
+      movementCommand =
+          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto);
     } else {
       movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto);
     }
