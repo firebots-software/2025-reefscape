@@ -6,25 +6,16 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import choreo.auto.AutoChooser;
-import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
-
-import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -38,13 +29,11 @@ import frc.robot.commandGroups.JamesHardenScoreClosest;
 import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
-import frc.robot.commands.DebugCommands.DogLogCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
-import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
@@ -89,7 +78,7 @@ public class RobotContainer {
     String commandName = "nah";
 
     if (driveTrain.getCurrentCommand() != null) {
-        commandName = driveTrain.getCurrentCommand().getName();
+      commandName = driveTrain.getCurrentCommand().getName();
     }
     DogLog.log("Robot/SwerveDriveCommand", commandName);
   }
@@ -115,7 +104,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L1,
                 redside,
-                false, false));
+                false,
+                false));
     customController
         .LeftL2()
         .whileTrue(
@@ -125,7 +115,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L2,
                 redside,
-                false, false));
+                false,
+                false));
     customController
         .LeftL3()
         .whileTrue(
@@ -135,7 +126,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L3,
                 redside,
-                false, false));
+                false,
+                false));
     customController
         .LeftL4()
         .whileTrue(
@@ -145,7 +137,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L4,
                 redside,
-                false, false));
+                false,
+                false));
 
     // Right Elevator Levels
     customController
@@ -157,7 +150,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L1,
                 redside,
-                true, false));
+                true,
+                false));
     customController
         .RightL2()
         .whileTrue(
@@ -167,7 +161,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L2,
                 redside,
-                true, false));
+                true,
+                false));
     customController
         .RightL3()
         .whileTrue(
@@ -177,7 +172,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L3,
                 redside,
-                true, false));
+                true,
+                false));
     customController
         .RightL4()
         .whileTrue(
@@ -187,7 +183,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L4,
                 redside,
-                true, false));
+                true,
+                false));
 
     // Bottom Three Buttons
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
@@ -238,23 +235,28 @@ public class RobotContainer {
     // Auto Intake and Eject
     Trigger funnelCheckin =
         new Trigger(
-            () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
+                () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide())
+            .and(RobotModeTriggers.teleop());
     Trigger ejectTime =
         new Trigger(
-            () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide())).and(RobotModeTriggers.teleop());
+                () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()))
+            .and(RobotModeTriggers.teleop());
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
     funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
     funnelCheckin.onTrue(new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
     Trigger funnelCheckout =
         new Trigger(
-            () ->
-                CoralPosition.isCoralInFunnel()
-                    && elevatorSubsystem.atIntake()
-                    && elevatorSubsystem.isAtPosition()).and(RobotModeTriggers.teleop()).and(RobotModeTriggers.teleop());
+                () ->
+                    CoralPosition.isCoralInFunnel()
+                        && elevatorSubsystem.atIntake()
+                        && elevatorSubsystem.isAtPosition())
+            .and(RobotModeTriggers.teleop())
+            .and(RobotModeTriggers.teleop());
     funnelCheckout.onTrue(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
-    Trigger coralInElevator = new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
+    Trigger coralInElevator =
+        new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
     coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
 
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
@@ -446,6 +448,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    return new AutoRedProcessor3L4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem);
+    return new AutoRedProcessor3L4(
+        driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem);
   }
 }
