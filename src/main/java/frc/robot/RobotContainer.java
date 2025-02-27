@@ -15,10 +15,18 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.AutoRoutines.AutoBlueClear3L4;
+import frc.robot.AutoRoutines.AutoBlueLeaveOnly;
+import frc.robot.AutoRoutines.AutoBlueProcessor3L4;
+import frc.robot.AutoRoutines.AutoRedClear3L4;
+import frc.robot.AutoRoutines.AutoRedLeaveOnly;
+import frc.robot.AutoRoutines.AutoRedProcessor3L4;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.D2Intake;
 import frc.robot.commandGroups.Dealgaenate;
@@ -70,6 +78,8 @@ public class RobotContainer {
   private final CommandXboxController joystick2 = new CommandXboxController(1);
   private final CommandXboxController debugJoystick = new CommandXboxController(3);
   private final CustomController customController = new CustomController(4);
+
+  private SendableChooser<Integer> autoChooser;
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
@@ -437,6 +447,10 @@ public class RobotContainer {
     //         new LoadAndPutUp(
     //             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem,
     // ElevatorPositions.L3));
+    autoChooser.setDefaultOption("Nothing", 0);
+    autoChooser.addOption("Processor Side Start", 1);
+    autoChooser.addOption("Clear Side Start (No Processor)", 2);
+    autoChooser.addOption("Leave Only", 3);
   }
 
   public static void setAlliance() {
@@ -448,7 +462,17 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    return new AutoRedProcessor3L4(
-        driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem);
+    if (autoChooser.getSelected() == 0) {
+        return new WaitCommand(12);
+    }
+    else if (autoChooser.getSelected() == 1) {
+        return ((redside.getAsBoolean()) ? (new AutoRedProcessor3L4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)) : (new AutoBlueProcessor3L4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)));
+    }
+    else if (autoChooser.getSelected() == 2) {
+        return ((redside.getAsBoolean()) ? (new AutoRedClear3L4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)) : (new AutoBlueClear3L4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)));
+    }
+    else {
+        return ((redside.getAsBoolean()) ? (new AutoRedLeaveOnly(driveTrain)) : (new AutoBlueLeaveOnly(driveTrain)));
+    }
   }
 }
