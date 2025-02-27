@@ -25,8 +25,8 @@ public class AutoRedClear3L4 extends SequentialCommandGroup {
       FunnelSubsystem funnel) {
     addCommands(
         new InstantCommand(() -> driveTrain.resetPose(Constants.Landmarks.redClearSideAutoStart)),
-        new JamesHardenScoreClosest(
-            elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, true),
+        JamesHardenMovement.toSpecificRightBranch(driveTrain, () -> true, true, 2),
+        new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
         new JamesHardenMovement(driveTrain, Constants.Landmarks.redClearSideHPS, true)
             .withTimeout(3),

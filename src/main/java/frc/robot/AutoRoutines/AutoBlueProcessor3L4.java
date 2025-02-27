@@ -25,8 +25,8 @@ public class AutoBlueProcessor3L4 extends SequentialCommandGroup {
       FunnelSubsystem funnel) {
     addCommands(
         new InstantCommand(() -> driveTrain.resetPose(Constants.Landmarks.blueProcessorSideHPS)),
-        new JamesHardenScoreClosest(
-            elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, false, true),
+        JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> false, true, 2),
+        new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
         new JamesHardenMovement(driveTrain, Constants.Landmarks.blueProcessorSideHPS, true)
             .withTimeout(3),
