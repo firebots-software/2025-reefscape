@@ -41,6 +41,8 @@ import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.ElevatorCommands.ZeroElevator;
+import frc.robot.commands.ElevatorCommands.ZeroElevatorAcrossTimeframe;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
@@ -268,7 +270,7 @@ public class RobotContainer {
                     CoralPosition.isCoralInFunnel()
                         && elevatorSubsystem.atIntake()
                         && elevatorSubsystem.isAtPosition())
-            .and(RobotModeTriggers.teleop())
+            // .and(RobotModeTriggers.teleop())
             .and(RobotModeTriggers.teleop());
     funnelCheckout.onTrue(
         new TransferPieceBetweenFunnelAndElevator(
@@ -372,9 +374,11 @@ public class RobotContainer {
         .whileTrue(
             new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
     
-    joystick.x().whileTrue(
-        JamesHardenMovement.toClosestRightBranch(driveTrain, redside, true)
-    );
+    // joystick.x().whileTrue(
+    //     JamesHardenMovement.toClosestRightBranch(driveTrain, redside, true)
+    // );
+
+    joystick.x().whileTrue(new ZeroElevatorAcrossTimeframe(elevatorSubsystem));
 
     joystick
         .a()

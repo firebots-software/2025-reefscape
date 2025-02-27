@@ -133,7 +133,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       posInHeight
             * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
     DogLog.log(
-        "subsystems/Elevator/resetElevatorPosition",
+        "subsystems/Elevator/resetElevatorPositionTimeframe",
         posInHeight
             * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
