@@ -16,6 +16,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -79,7 +80,7 @@ public class RobotContainer {
   private final CommandXboxController debugJoystick = new CommandXboxController(3);
   private final CustomController customController = new CustomController(4);
 
-  private SendableChooser<Integer> autoChooser;
+  private static SendableChooser<Integer> autoChooser = new SendableChooser<>();
 
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
@@ -94,6 +95,11 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
+    autoChooser.setDefaultOption("Nothing", 0);
+    autoChooser.addOption("Processor Side Start", 1);
+    autoChooser.addOption("Clear Side Start (No Processor)", 2);
+    autoChooser.addOption("Leave Only", 3);
+    SmartDashboard.putData("Auto Side Choices", autoChooser);
     configureBindings();
   }
 
@@ -447,10 +453,6 @@ public class RobotContainer {
     //         new LoadAndPutUp(
     //             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem,
     // ElevatorPositions.L3));
-    autoChooser.setDefaultOption("Nothing", 0);
-    autoChooser.addOption("Processor Side Start", 1);
-    autoChooser.addOption("Clear Side Start (No Processor)", 2);
-    autoChooser.addOption("Leave Only", 3);
   }
 
   public static void setAlliance() {
