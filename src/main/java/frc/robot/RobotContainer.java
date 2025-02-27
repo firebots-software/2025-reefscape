@@ -477,19 +477,19 @@ public class RobotContainer {
     } else if (autoChooser.getSelected() == 1) {
       return ((redside.getAsBoolean())
           ? (new AutoRedProcessor3L4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem))
+              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
           : (new AutoBlueProcessor3L4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)));
+              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem)));
     } else if (autoChooser.getSelected() == 2) {
       return ((redside.getAsBoolean())
           ? (new AutoRedClear3L4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem))
+              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
           : (new AutoBlueClear3L4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)));
+              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem)));
     } else {
       return ((redside.getAsBoolean())
-          ? (new AutoRedLeaveOnly(driveTrain))
-          : (new AutoBlueLeaveOnly(driveTrain)));
+          ? (new AutoRedLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem))
+          : (new AutoBlueLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem)));
     }
   }
 }
