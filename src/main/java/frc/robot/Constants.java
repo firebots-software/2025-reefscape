@@ -74,17 +74,17 @@ public final class Constants {
     public static final Pose2d redClearSideAutoStart =
         new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d());
 
-    public static final Pose2d blueMidAutoStart = new Pose2d(
-      new Translation2d(7.11305570602417, 4.050836891), new Rotation2d(Math.PI));
+    public static final Pose2d blueMidAutoStart =
+        new Pose2d(new Translation2d(7.11305570602417, 4.050836891), new Rotation2d(Math.PI));
 
-    public static final Pose2d redMidAutoStart = new Pose2d(
-      new Translation2d(10.441716194152832, 4.050836891), new Rotation2d());
+    public static final Pose2d redMidAutoStart =
+        new Pose2d(new Translation2d(10.441716194152832, 4.050836891), new Rotation2d());
 
     public static final Pose2d closerBlueProcessorSideAutoStart =
-        new Pose2d(
-            new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI));
+        new Pose2d(new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI));
     public static final Pose2d closerBlueClearSideAutoStart =
-        new Pose2d(new Translation2d(7.113824844360352, 6.167776107788086), new Rotation2d(Math.PI));
+        new Pose2d(
+            new Translation2d(7.113824844360352, 6.167776107788086), new Rotation2d(Math.PI));
     public static final Pose2d closerRedProcessorSideAutoStart =
         new Pose2d(new Translation2d(10.441716194152832, 6.167776107788086), new Rotation2d());
     public static final Pose2d closerRedClearSideAutoStart =
@@ -106,7 +106,7 @@ public final class Constants {
         new Pose2d(
             new Translation2d(16.39461326599121, 1.0060197114944458),
             new Rotation2d(2.1932607985206625));
-    
+
     public static final Rotation2d[] reefFacingAngleBlue = {
       new Rotation2d(Degrees.of(0)),
       new Rotation2d(Degrees.of(60)),

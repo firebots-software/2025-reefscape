@@ -4,7 +4,6 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.Constants.Landmarks;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScoreClosest;
@@ -25,8 +24,7 @@ public class AutoBlueProcessor3L4 extends SequentialCommandGroup {
       ElevatorSubsystem elevator,
       FunnelSubsystem funnel) {
     addCommands(
-        new InstantCommand(
-            () -> driveTrain.resetPose(Constants.Landmarks.blueProcessorSideHPS)),
+        new InstantCommand(() -> driveTrain.resetPose(Constants.Landmarks.blueProcessorSideHPS)),
         new JamesHardenScoreClosest(
             elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, false, true),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
