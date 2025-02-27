@@ -9,8 +9,11 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScoreClosest;
 import frc.robot.commandGroups.PutUpAndShoot;
+import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.ElevatorCommands.ZeroElevator;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -23,10 +26,12 @@ public class AutoBlueClear3L4 extends SequentialCommandGroup {
       SwerveSubsystem driveTrain,
       TootsieSlideSubsystem shooter,
       ElevatorSubsystem elevator,
-      FunnelSubsystem funnel) {
+      FunnelSubsystem funnel,
+      ArmSubsystem arm) {
     addCommands(
+        new ZeroElevator(elevator),
         new InstantCommand(
-            () -> driveTrain.resetPose(Constants.Landmarks.blueClearSideAutoStart)),
+            () -> driveTrain.resetPose(Constants.Landmarks.blueClearSideAutoStart)).alongWith((new ZeroArm(arm))),
         (new Intake(elevator, funnel, shooter).alongWith(JamesHardenMovement.toSpecificRightBranch(driveTrain, () -> false, true, 4))),
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
