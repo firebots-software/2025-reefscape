@@ -26,8 +26,8 @@ public class AutoRedProcessor3L4 extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> driveTrain.resetPose(Constants.Landmarks.redProcessorSideAutoStart)),
-        new JamesHardenScoreClosest(
-            elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, false, true),
+        JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> true, true, 4),
+        new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
         new JamesHardenMovement(driveTrain, Constants.Landmarks.redProcessorSideHPS, true)
             .withTimeout(3),
