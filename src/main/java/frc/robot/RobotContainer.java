@@ -465,16 +465,23 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
     if (autoChooser.getSelected() == 0) {
-        return new WaitCommand(12);
-    }
-    else if (autoChooser.getSelected() == 1) {
-        return ((redside.getAsBoolean()) ? (new AutoRedProcessor3L4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)) : (new AutoBlueProcessor3L4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)));
-    }
-    else if (autoChooser.getSelected() == 2) {
-        return ((redside.getAsBoolean()) ? (new AutoRedClear3L4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)) : (new AutoBlueClear3L4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)));
-    }
-    else {
-        return ((redside.getAsBoolean()) ? (new AutoRedLeaveOnly(driveTrain)) : (new AutoBlueLeaveOnly(driveTrain)));
+      return new WaitCommand(12);
+    } else if (autoChooser.getSelected() == 1) {
+      return ((redside.getAsBoolean())
+          ? (new AutoRedProcessor3L4(
+              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem))
+          : (new AutoBlueProcessor3L4(
+              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)));
+    } else if (autoChooser.getSelected() == 2) {
+      return ((redside.getAsBoolean())
+          ? (new AutoRedClear3L4(
+              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem))
+          : (new AutoBlueClear3L4(
+              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem)));
+    } else {
+      return ((redside.getAsBoolean())
+          ? (new AutoRedLeaveOnly(driveTrain))
+          : (new AutoBlueLeaveOnly(driveTrain)));
     }
   }
 }
