@@ -1,16 +1,13 @@
 package frc.robot.commands.ElevatorCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ZeroElevator extends Command {
   private final ElevatorSubsystem elevatorSubsystem;
-  private final ElevatorPositions pos;
 
-  public ZeroElevator(ElevatorSubsystem subsystem, ElevatorPositions pos) {
+  public ZeroElevator(ElevatorSubsystem subsystem) {
     elevatorSubsystem = subsystem;
-    this.pos = pos;
     addRequirements(elevatorSubsystem);
   }
 
