@@ -1,8 +1,10 @@
-package frc.robot;
+package frc.robot.AutoRoutines;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
+import frc.robot.Constants.Landmarks;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScoreClosest;
@@ -26,7 +28,7 @@ public class AutoRedProcessor3L4 extends SequentialCommandGroup {
         new InstantCommand(
             () -> driveTrain.resetPose(Constants.Landmarks.redProcessorSideAutoStart)),
         new JamesHardenScoreClosest(
-            elevator, shooter, driveTrain, ElevatorPositions.L3, () -> true, false, true),
+            elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, false, true),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
         new JamesHardenMovement(driveTrain, Constants.Landmarks.redProcessorSideHPS, true)
             .withTimeout(3),
@@ -48,28 +50,4 @@ public class AutoRedProcessor3L4 extends SequentialCommandGroup {
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake));
   }
-
-  // public SequentialCommandGroup redProcessor3L4() {
-  //   return new SequentialCommandGroup(
-  //     new InstantCommand(
-  //             () ->
-  //                 driveTrain.resetPose(Constants.Landmarks.redProcessorSideAutoStart)),
-  //         new JamesHardenScoreClosest(elevator, shooter, driveTrain, ElevatorPositions.L3, () ->
-  // true, false, true),
-  //         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
-  //         new JamesHardenMovement(driveTrain, Constants.Landmarks.redProcessorSideHPS,
-  // true).withTimeout(3),
-  //         (new Intake(elevator, funnel, shooter)).alongWith((driveTrain.applyRequest(() ->
-  // brake).withTimeout(0.1)).andThen(JamesHardenMovement.toSpecificRightBranch(driveTrain,
-  // ()->true, true, 5))),
-  //         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
-  //         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
-  //         new JamesHardenMovement(driveTrain, Constants.Landmarks.redProcessorSideHPS,
-  // true).withTimeout(3),
-  //         (new Intake(elevator, funnel, shooter)).alongWith((driveTrain.applyRequest(() ->
-  // brake).withTimeout(0.1)).andThen(JamesHardenMovement.toSpecificLeftBranch(driveTrain, ()->true,
-  // true, 5))),
-  //         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
-  //         new SetElevatorLevel(elevator, ElevatorPositions.Intake));
-  // }
 }
