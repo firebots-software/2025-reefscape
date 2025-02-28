@@ -28,14 +28,13 @@ public class ZeroElevatorAcrossTimeframe extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    elevatorSubsystem.resetPosition(sumOverWindow/(double)steps);
+    elevatorSubsystem.resetPosition(sumOverWindow / (double) steps);
   }
 
   @Override
   public boolean isFinished() {
     if (steps >= 20) {
       return true;
-    }
-    else return false;
+    } else return false;
   }
 }
