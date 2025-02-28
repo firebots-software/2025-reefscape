@@ -9,7 +9,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.DaleCommands.ArmToAngleAndSpinFlywheel;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevelInstant;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 

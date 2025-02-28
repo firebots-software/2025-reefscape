@@ -28,7 +28,11 @@ public class AutoBlueProcessor3L4 extends SequentialCommandGroup {
       ArmSubsystem arm) {
     addCommands(
         new ZeroElevator(elevator),
-        new InstantCommand(() -> driveTrain.resetPose(Constants.Landmarks.blueProcessorSideAutoStart)) // fixed this starting location
+        new InstantCommand(
+                () ->
+                    driveTrain.resetPose(
+                        Constants.Landmarks
+                            .blueProcessorSideAutoStart)) // fixed this starting location
             .alongWith((new ZeroArm(arm))),
         (new Intake(elevator, funnel, shooter))
             .alongWith(JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> false, true, 2)),
@@ -41,7 +45,7 @@ public class AutoBlueProcessor3L4 extends SequentialCommandGroup {
                 (driveTrain.applyRequest(() -> brake).withTimeout(0.1))
                     .andThen(
                         JamesHardenMovement.toSpecificRightBranch(
-                            driveTrain, () -> true, true, 1))),
+                            driveTrain, () -> false, true, 1))),
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
         new JamesHardenMovement(driveTrain, Constants.Landmarks.blueProcessorSideHPS, true)
@@ -50,7 +54,7 @@ public class AutoBlueProcessor3L4 extends SequentialCommandGroup {
             .alongWith(
                 (driveTrain.applyRequest(() -> brake).withTimeout(0.1))
                     .andThen(
-                        JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> true, true, 1))),
+                        JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> false, true, 1))),
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake));
   }

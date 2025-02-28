@@ -45,7 +45,6 @@ import frc.robot.commands.ElevatorCommands.ZeroElevator;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
-import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
@@ -385,7 +384,7 @@ public class RobotContainer {
         .onTrue(
             driveTrain.runOnce(
                 () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
-    
+
     joystick.x().onTrue(new ZeroElevator(elevatorSubsystem));
     // new InstantCommand()
 
