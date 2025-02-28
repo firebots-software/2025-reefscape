@@ -19,24 +19,26 @@ public class DefaultElevator extends Command {
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
     if (elevatorSubsystem.isAtPosition()
         && elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake)) {
       windowAverage.addValue(elevatorSubsystem.getToFDistance());
-      if(currentAverage != windowAverage.getAverage()) {
+      if (currentAverage != windowAverage.getAverage()) {
         currentAverage = windowAverage.getAverage();
-      elevatorSubsystem.resetPosition(windowAverage.getAverage());
+        elevatorSubsystem.resetPosition(windowAverage.getAverage());
       }
       DogLog.log("mattcs/average", windowAverage.getAverage());
-    } else if (!elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake) && !CoralPosition.isCoralInFunnel() && !FunnelSubsystem.getInstance().isCoralCheckedIn() && !FunnelSubsystem.getInstance().isCoralCheckedOut()) {
-      DogLog.log("mattcs/level",elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake) );
-      DogLog.log("mattcs/isCoralInFunnel",CoralPosition.isCoralInFunnel() );
-      DogLog.log("mattcs/isCoralCheckedIn",FunnelSubsystem.getInstance().isCoralCheckedIn() );
-      DogLog.log("mattcs/isCoralCheckedOut",FunnelSubsystem.getInstance().isCoralCheckedOut());
+    } else if (!elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake)
+        && !CoralPosition.isCoralInFunnel()
+        && !FunnelSubsystem.getInstance().isCoralCheckedIn()
+        && !FunnelSubsystem.getInstance().isCoralCheckedOut()) {
+      DogLog.log("mattcs/level", elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake));
+      DogLog.log("mattcs/isCoralInFunnel", CoralPosition.isCoralInFunnel());
+      DogLog.log("mattcs/isCoralCheckedIn", FunnelSubsystem.getInstance().isCoralCheckedIn());
+      DogLog.log("mattcs/isCoralCheckedOut", FunnelSubsystem.getInstance().isCoralCheckedOut());
       windowAverage.clearWindow();
     }
     if (!CoralPosition.isCoralInTootsieSlide()) {

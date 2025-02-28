@@ -42,7 +42,7 @@ public class AutoBlueClear3L4 extends SequentialCommandGroup {
                 (driveTrain.applyRequest(() -> brake).withTimeout(0.1))
                     .andThen(
                         JamesHardenMovement.toSpecificRightBranch(
-                            driveTrain, () -> true, true, 5))),
+                            driveTrain, () -> false, true, 5))),
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
         new JamesHardenMovement(driveTrain, Constants.Landmarks.blueProcessorSideHPS, true)
@@ -51,7 +51,7 @@ public class AutoBlueClear3L4 extends SequentialCommandGroup {
             .alongWith(
                 (driveTrain.applyRequest(() -> brake).withTimeout(0.1))
                     .andThen(
-                        JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> true, true, 5))),
+                        JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> false, true, 5))),
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake));
   }

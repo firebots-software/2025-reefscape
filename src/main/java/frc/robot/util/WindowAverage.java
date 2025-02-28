@@ -1,11 +1,10 @@
 package frc.robot.util;
 
+import dev.doglog.DogLog;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import dev.doglog.DogLog;
 
 public class WindowAverage {
   private Queue<Double> averageWindow;
@@ -24,7 +23,7 @@ public class WindowAverage {
     if (averageWindow.size() < MAX_WINDOW_SIZE) {
       DogLog.log("mattcs/averaging", true);
       return averageWindow.peek();
-      }
+    }
 
     double sum = 0.0;
     DogLog.log("mattcs/averaging", true);
@@ -38,13 +37,15 @@ public class WindowAverage {
   public void addValue(double value) {
     if (averageWindow.size() == MAX_WINDOW_SIZE) {
       DogLog.log("mattcs/max_size_reached", true);
-      return;};
-      DogLog.log("mattcs/max_size_reached", false);
-      DogLog.log("mattcs/size", averageWindow.size());
+      return;
+    }
+    ;
+    DogLog.log("mattcs/max_size_reached", false);
+    DogLog.log("mattcs/size", averageWindow.size());
 
-    if(!replacedFirstValue) {
-        averageWindow.poll();
-        replacedFirstValue = true;
+    if (!replacedFirstValue) {
+      averageWindow.poll();
+      replacedFirstValue = true;
     }
 
     averageWindow.add(value);
@@ -52,9 +53,10 @@ public class WindowAverage {
 
   public void clearWindow() {
     if (averageWindow.size() == 1) {
-      DogLog.log("mattcs/skipping_clear", true);      
-      return;}
-      DogLog.log("mattcs/skipping_clear", false);      
+      DogLog.log("mattcs/skipping_clear", true);
+      return;
+    }
+    DogLog.log("mattcs/skipping_clear", false);
 
     averageWindow.clear();
     averageWindow.add(FIRST_VALUE);
