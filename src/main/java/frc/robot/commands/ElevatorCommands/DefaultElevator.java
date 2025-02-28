@@ -4,13 +4,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.util.WindowAverage;
 
 public class DefaultElevator extends Command {
   private final ElevatorSubsystem elevatorSubsystem;
-  boolean hasReset;
+  private WindowAverage windowAverage = new WindowAverage();
+
   public DefaultElevator(ElevatorSubsystem subsystem) {
     elevatorSubsystem = subsystem;
-    hasReset = false;
     addRequirements(elevatorSubsystem);
   }
 
@@ -19,11 +20,12 @@ public class DefaultElevator extends Command {
 
   @Override
   public void execute() {
-    if(elevatorSubsystem.isAtPosition() && elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake) && !hasReset){
-      elevatorSubsystem.resetPosition();
-      hasReset = true;
-    } else if(!elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake) && hasReset) {
-      hasReset = false;
+    if (elevatorSubsystem.isAtPosition()
+        && elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake)) {
+      windowAverage.addValue(elevatorSubsystem.getToFDistance());
+      elevatorSubsystem.resetPosition(windowAverage.getAverage());
+    } else if (!elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake)) {
+      windowAverage.clearWindow();
     }
     if (!CoralPosition.isCoralInTootsieSlide()) {
       elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
