@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Intake;
-import frc.robot.commandGroups.JamesHardenScoreClosest;
 import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -30,8 +29,10 @@ public class AutoRedProcessor3L4 extends SequentialCommandGroup {
     addCommands(
         new ZeroElevator(elevator),
         new InstantCommand(
-            () -> driveTrain.resetPose(Constants.Landmarks.redProcessorSideAutoStart)).alongWith((new ZeroArm(arm))),
-        (new Intake(elevator, funnel, shooter)).alongWith(JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> true, true, 4)),
+                () -> driveTrain.resetPose(Constants.Landmarks.redProcessorSideAutoStart))
+            .alongWith((new ZeroArm(arm))),
+        (new Intake(elevator, funnel, shooter))
+            .alongWith(JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> true, true, 4)),
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
         new JamesHardenMovement(driveTrain, Constants.Landmarks.redProcessorSideHPS, true)
