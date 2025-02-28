@@ -7,9 +7,10 @@ import frc.robot.subsystems.ElevatorSubsystem;
 
 public class DefaultElevator extends Command {
   private final ElevatorSubsystem elevatorSubsystem;
-
+  boolean hasReset;
   public DefaultElevator(ElevatorSubsystem subsystem) {
     elevatorSubsystem = subsystem;
+    hasReset = false;
     addRequirements(elevatorSubsystem);
   }
 
@@ -18,6 +19,12 @@ public class DefaultElevator extends Command {
 
   @Override
   public void execute() {
+    if(elevatorSubsystem.isAtPosition() && elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake) && !hasReset){
+      elevatorSubsystem.resetPosition();
+      hasReset = true;
+    } else if(!elevatorSubsystem.getLevel().equals(ElevatorPositions.Intake) && hasReset) {
+      hasReset = false;
+    }
     if (!CoralPosition.isCoralInTootsieSlide()) {
       elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
     }

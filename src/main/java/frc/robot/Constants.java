@@ -766,10 +766,10 @@ public final class Constants {
         1d / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
     public static final double ELEVATOR_TORQUE = 32;
     public static final double ELEVATOR_DUTY_CYCLE = 0.4;
-
+    public static final double elevatorRecalibration = 0;
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.071),
+      Intake(0, 0.071+elevatorRecalibration),
       safePosition(0, 0.3),
       L1(1, 0.657),
       L2DALE(0, 0.493), // 0.8636 - 0.379
