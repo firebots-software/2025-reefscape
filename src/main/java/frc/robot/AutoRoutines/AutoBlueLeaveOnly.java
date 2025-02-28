@@ -17,10 +17,12 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AutoBlueLeaveOnly extends SequentialCommandGroup {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
-  public AutoBlueLeaveOnly(SwerveSubsystem driveTrain, ElevatorSubsystem elevator, ArmSubsystem arm) {
+  public AutoBlueLeaveOnly(
+      SwerveSubsystem driveTrain, ElevatorSubsystem elevator, ArmSubsystem arm) {
     addCommands(
         new ZeroElevator(elevator),
-        new InstantCommand(() -> driveTrain.resetPose(Constants.Landmarks.blueMidAutoStart)).alongWith((new ZeroArm(arm))),
+        new InstantCommand(() -> driveTrain.resetPose(Constants.Landmarks.blueMidAutoStart))
+            .alongWith((new ZeroArm(arm))),
         new JamesHardenMovement(
             driveTrain,
             new Pose2d(new Translation2d(6.11305570602417, 4.050836891), new Rotation2d(Math.PI)),

@@ -357,7 +357,6 @@ public class RobotContainer {
     //             redside,
     //             false));
 
-
     // uncomment these shooter commands later
     joystick
         .b()
@@ -371,19 +370,14 @@ public class RobotContainer {
         .povDown()
         .whileTrue(
             new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
-    
-    joystick.x().whileTrue(
-        JamesHardenMovement.toClosestRightBranch(driveTrain, redside, true)
-    );
+
+    joystick.x().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside, true));
 
     joystick
         .a()
         .onTrue(
             driveTrain.runOnce(
-                () ->
-                    driveTrain.resetPose(
-                        new Pose2d(
-                            new Translation2d(0, 0), new Rotation2d()))));
+                () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
     // new InstantCommand()
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
@@ -479,13 +473,21 @@ public class RobotContainer {
           ? (new AutoRedProcessor3L4(
               driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
           : (new AutoBlueProcessor3L4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem)));
+              driveTrain,
+              tootsieSlideSubsystem,
+              elevatorSubsystem,
+              funnelSubsystem,
+              armSubsystem)));
     } else if (autoChooser.getSelected() == 2) {
       return ((redside.getAsBoolean())
           ? (new AutoRedClear3L4(
               driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
           : (new AutoBlueClear3L4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem)));
+              driveTrain,
+              tootsieSlideSubsystem,
+              elevatorSubsystem,
+              funnelSubsystem,
+              armSubsystem)));
     } else {
       return ((redside.getAsBoolean())
           ? (new AutoRedLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem))
