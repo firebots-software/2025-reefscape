@@ -124,9 +124,13 @@ public class FunnelSubsystem extends SubsystemBase {
   }
 
   public void maintainCurrentPosition() {
-    coralCheckedOutPosition =
-        rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
-    rightMotor.setControl(controlRequest.withPosition(coralCheckedOutPosition).withSlot(0));
+    //TODO: This code should maintain the current position of the elevator
+    rightMotor.setPosition(0);
+    rightMotor.setControl(controlRequest.withPosition(0).withSlot(0));
+    rightMotor.setPosition(0);
+    // coralCheckedOutPosition =
+    //     rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
+    // rightMotor.setControl(controlRequest.withPosition(coralCheckedOutPosition).withSlot(0));
   }
 
   public void spinBackSlowly() {

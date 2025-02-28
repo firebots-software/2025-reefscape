@@ -105,6 +105,11 @@ public class RobotContainer {
     configureBindings();
   }
 
+  public void teleopInit(){
+    // CoralPosition.setCoralInTootsieSlide(funnelSubsystem.drakeTripped());
+    CoralPosition.setCoralInFunnel(funnelSubsystem.isCoralCheckedIn() || funnelSubsystem.isCoralCheckedOut());
+  }
+
   private void configureBindings() {
 
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
