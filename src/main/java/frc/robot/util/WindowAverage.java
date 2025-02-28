@@ -51,7 +51,8 @@ public class WindowAverage {
       replacedFirstValue = true;
     }
     
-    if ((value <= 0.03) && (value >= 0.02)) {
+    DogLog.log("mattcs/value", value);
+    if ((value <= 0.03) && (value >= 0.01)) {
       averageWindow.add(value);
     }
     else {
