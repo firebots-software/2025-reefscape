@@ -51,8 +51,14 @@ public class WindowAverage {
       replacedFirstValue = true;
     }
     
-    if ((value <= 0.03) && (value >= 0)) {
+    if ((value <= 0.03) && (value >= 0.02)) {
       averageWindow.add(value);
+    }
+    else {
+      if (averageWindow.size() == 0) {
+        averageWindow.add(FIRST_VALUE);
+        replacedFirstValue = false;
+      }
     }
     
   }
