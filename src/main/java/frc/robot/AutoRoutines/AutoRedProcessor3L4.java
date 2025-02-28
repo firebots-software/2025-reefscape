@@ -8,6 +8,7 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commands.DaleCommands.ZeroArm;
+import frc.robot.commands.ElevatorCommands.ElevatorHoldL4;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevator;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
@@ -32,29 +33,32 @@ public class AutoRedProcessor3L4 extends SequentialCommandGroup {
         new InstantCommand(
                 () -> driveTrain.resetPose(Constants.Landmarks.closerRedProcessorSideAutoStart))
             .alongWith((new ZeroArm(arm))),
-        (new Intake(elevator, funnel, shooter).andThen(new ElevatorL4(elevator)))
+        (new Intake(elevator, funnel, shooter).andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4)))
             .alongWith(JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> true, true, 4)),
+        new ElevatorHoldL4(elevator),
         new ShootTootsieSlide(shooter).withTimeout(0.5),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake)
             .alongWith(
                 new JamesHardenMovement(driveTrain, Constants.Landmarks.redProcessorSideHPS, true)
                     .withTimeout(3)),
-        (new Intake(elevator, funnel, shooter).andThen(new ElevatorL4(elevator)))
+        (new Intake(elevator, funnel, shooter).andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4)))
             .alongWith(
                 (driveTrain.applyRequest(() -> brake).withTimeout(0.1))
                     .andThen(
                         JamesHardenMovement.toSpecificRightBranch(
                             driveTrain, () -> true, true, 5))),
+        new ElevatorHoldL4(elevator),
         new ShootTootsieSlide(shooter).withTimeout(0.5),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake)
             .alongWith(
                 new JamesHardenMovement(driveTrain, Constants.Landmarks.redProcessorSideHPS, true)
                     .withTimeout(3)),
-        (new Intake(elevator, funnel, shooter).andThen(new ElevatorL4(elevator)))
+        (new Intake(elevator, funnel, shooter).andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4)))
             .alongWith(
                 (driveTrain.applyRequest(() -> brake).withTimeout(0.1))
                     .andThen(
                         JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> true, true, 5))),
+        new ElevatorHoldL4(elevator),
         new ShootTootsieSlide(shooter).withTimeout(0.5),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake));
   }
