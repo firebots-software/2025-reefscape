@@ -10,6 +10,7 @@ import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevator;
+import frc.robot.commands.ElevatorCommands.ZeroElevatorAcrossTimeframe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -27,7 +28,7 @@ public class AutoBlueProcessor3L4 extends SequentialCommandGroup {
       FunnelSubsystem funnel,
       ArmSubsystem arm) {
     addCommands(
-        new ZeroElevator(elevator),
+        new ZeroElevatorAcrossTimeframe(elevator),
         new InstantCommand(
                 () ->
                     driveTrain.resetPose(

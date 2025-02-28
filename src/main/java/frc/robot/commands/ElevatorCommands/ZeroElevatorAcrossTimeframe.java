@@ -16,7 +16,10 @@ public class ZeroElevatorAcrossTimeframe extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    steps = 0;
+    sumOverWindow = 0; 
+  }
 
   @Override
   public void execute() {
