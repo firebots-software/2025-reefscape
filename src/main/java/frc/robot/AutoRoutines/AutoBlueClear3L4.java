@@ -31,9 +31,8 @@ public class AutoBlueClear3L4 extends SequentialCommandGroup {
     addCommands(
         new ZeroElevator(elevator),
         new InstantCommand(
-                () -> driveTrain.resetPose(Constants.Landmarks.closerBlueClearSideAutoStart))
-            .alongWith((new ZeroArm(arm))),
-        ((new Intake(elevator, funnel, shooter).andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4)))
+                () -> driveTrain.resetPose(Constants.Landmarks.closerBlueClearSideAutoStart)),
+        (((new Intake(elevator, funnel, shooter).andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4))).alongWith(new ZeroArm(arm)))
             .alongWith(
                 JamesHardenMovement.toSpecificRightBranch(driveTrain, () -> false, true, 4))),
         new ElevatorHoldL4(elevator),

@@ -31,9 +31,8 @@ public class AutoRedClear3L4 extends SequentialCommandGroup {
     addCommands(
         new ZeroElevator(elevator),
         new InstantCommand(
-                () -> driveTrain.resetPose(Constants.Landmarks.closerRedClearSideAutoStart))
-            .alongWith((new ZeroArm(arm))),
-        (new Intake(elevator, funnel, shooter).andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4)))
+                () -> driveTrain.resetPose(Constants.Landmarks.closerRedClearSideAutoStart)),
+        ((new Intake(elevator, funnel, shooter).andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4))).alongWith(new ZeroArm(arm)))
             .alongWith(JamesHardenMovement.toSpecificRightBranch(driveTrain, () -> true, true, 2)),
         new ElevatorHoldL4(elevator),
         new ShootTootsieSlide(shooter).withTimeout(0.5),
