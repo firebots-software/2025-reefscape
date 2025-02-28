@@ -29,7 +29,8 @@ public class AutoBlueProcessor3L4 extends SequentialCommandGroup {
       ArmSubsystem arm) {
     addCommands(
         new ZeroElevator(elevator),
-        new InstantCommand(() -> driveTrain.resetPose(Constants.Landmarks.blueProcessorSideHPS)).alongWith((new ZeroArm(arm))),
+        new InstantCommand(() -> driveTrain.resetPose(Constants.Landmarks.blueProcessorSideAutoStart
+        )).alongWith((new ZeroArm(arm))),
         (new Intake(elevator, funnel, shooter)).alongWith(JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> false, true, 2)),
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake),
