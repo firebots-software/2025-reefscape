@@ -775,7 +775,7 @@ public final class Constants {
       L2DALE(0, 0.493), // 0.8636 - 0.379
       L2(2, 0.9036),
       L3DALE(0, 0.91), // 1.27 - 0.379
-      L3(3, 1.32), // 1.27
+      L3(3, 1.31), // 1.27 // KALASH wants 1cm lower //old value 1.32
       L4(4, 1.81),
       LIMIT_OF_TRAVEL(1, 1.825);
 
