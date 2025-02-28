@@ -3,17 +3,21 @@ package frc.robot.commands.DaleCommands;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ArmToAngleAndSpinFlywheel extends Command {
   private final ArmSubsystem armPlusFlywheel;
   private double angle;
   private double tolerance = 5;
+  private ElevatorSubsystem elevatorSubsystem;
 
-  public ArmToAngleAndSpinFlywheel(double angle, ArmSubsystem armSub) {
+  public ArmToAngleAndSpinFlywheel(double angle, ArmSubsystem armSub, ElevatorSubsystem elevatorSubsystem) {
     armPlusFlywheel = armSub;
     this.angle = angle;
-    addRequirements(armPlusFlywheel);
+    this.elevatorSubsystem = elevatorSubsystem; 
+    addRequirements(armPlusFlywheel,elevatorSubsystem);
   }
 
   @Override
@@ -29,6 +33,7 @@ public class ArmToAngleAndSpinFlywheel extends Command {
   @Override
   public void end(boolean interrupted) {
     armPlusFlywheel.stopFlywheel(); // Stop the flywheel
+    elevatorSubsystem.elevateTo(ElevatorPositions.safePosition);
   }
 
   @Override

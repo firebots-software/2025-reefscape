@@ -1,6 +1,7 @@
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
@@ -33,6 +34,9 @@ public class RunFunnelAndTootsieInCommand extends Command {
   public void end(boolean interrupted) {
     funnelSubsystem.stopFunnel();
     shooter.stopTootsie();
+    if(funnelSubsystem.drakeTripped()){
+      CoralPosition.setCoralInTootsieSlide(true);
+    }
   }
 
   // Returns true when the command should end.
