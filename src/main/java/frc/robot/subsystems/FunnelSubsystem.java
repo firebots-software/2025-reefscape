@@ -124,7 +124,7 @@ public class FunnelSubsystem extends SubsystemBase {
   }
 
   public void maintainCurrentPosition() {
-    //TODO: This code should maintain the current position of the elevator
+    // TODO: This code should maintain the current position of the elevator
     rightMotor.setPosition(0);
     rightMotor.setControl(controlRequest.withPosition(0).withSlot(0));
     rightMotor.setPosition(0);
