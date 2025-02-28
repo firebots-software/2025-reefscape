@@ -13,7 +13,10 @@ public class WindowAverage {
   private final double FIRST_VALUE =
       ElevatorPositions.Intake.height / Constants.ElevatorConstants.CARRAIGE_UPDUCTION;
   private boolean replacedFirstValue = false;
-
+//HIGH:0.03
+//LOW: 0.01
+//In Code: 
+//
   public WindowAverage() {
     averageWindow = new LinkedList<Double>();
     averageWindow.add(FIRST_VALUE);
@@ -47,8 +50,11 @@ public class WindowAverage {
       averageWindow.poll();
       replacedFirstValue = true;
     }
-
-    averageWindow.add(value);
+    
+    if ((value <= 0.03) && (value >= 0)) {
+      averageWindow.add(value);
+    }
+    
   }
 
   public void clearWindow() {
