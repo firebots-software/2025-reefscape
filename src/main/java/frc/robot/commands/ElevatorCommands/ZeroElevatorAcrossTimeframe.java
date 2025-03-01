@@ -24,8 +24,10 @@ public class ZeroElevatorAcrossTimeframe extends Command {
   @Override
   public void execute() {
     if (elevatorSubsystem.tofIsConnected()) {
-      sumOverWindow += elevatorSubsystem.getToFDistance();
-      steps++;
+      if ((elevatorSubsystem.getToFDistance() <= 0.03) && (elevatorSubsystem.getToFDistance() >= 0.01)) {
+        sumOverWindow += elevatorSubsystem.getToFDistance();
+        steps++;
+      }
     }
   }
 
@@ -36,7 +38,7 @@ public class ZeroElevatorAcrossTimeframe extends Command {
 
   @Override
   public boolean isFinished() {
-    if (steps >= 20) {
+    if (steps >= 40) {
       return true;
     } else return false;
   }
