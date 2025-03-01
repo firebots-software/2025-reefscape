@@ -32,7 +32,7 @@ public class AutoBlueMidL4 extends SequentialCommandGroup {
             .alongWith((new ZeroArm(arm))),
         (new Intake(elevator, funnel, shooter)
             .alongWith(
-                JamesHardenMovement.toSpecificRightBranch(driveTrain, () -> false, false, 3))),
+                JamesHardenMovement.toSpecificRightBranch(driveTrain, () -> false, false, 3)).withTimeout(8.0)),
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake));
   }
