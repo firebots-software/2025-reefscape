@@ -25,9 +25,11 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.AutoRoutines.AutoBlueClear3L4;
 import frc.robot.AutoRoutines.AutoBlueLeaveOnly;
+import frc.robot.AutoRoutines.AutoBlueMidL4;
 import frc.robot.AutoRoutines.AutoBlueProcessor3L4;
 import frc.robot.AutoRoutines.AutoRedClear3L4;
 import frc.robot.AutoRoutines.AutoRedLeaveOnly;
+import frc.robot.AutoRoutines.AutoRedMidL4;
 import frc.robot.AutoRoutines.AutoRedProcessor3L4;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.D2Intake;
@@ -101,6 +103,7 @@ public class RobotContainer {
     autoChooser.addOption("Processor Side Start", 1);
     autoChooser.addOption("Clear Side Start (No Processor)", 2);
     autoChooser.addOption("Leave Only", 3);
+    autoChooser.addOption("Mid 1 L4", 4);
     SmartDashboard.putData("Auto Side Choices", autoChooser);
     configureBindings();
   }
@@ -474,9 +477,13 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
+    DogLog.log("auto/runningCommand", true);
+    DogLog.log("auto/selectedauto", autoChooser.getSelected());
     if (autoChooser.getSelected() == 0) {
+        DogLog.log("auto/whichline", 1);
       return new WaitCommand(12);
     } else if (autoChooser.getSelected() == 1) {
+        DogLog.log("auto/whichline", 2);
       return ((redside.getAsBoolean())
           ? (new AutoRedProcessor3L4(
               driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
@@ -487,6 +494,7 @@ public class RobotContainer {
               funnelSubsystem,
               armSubsystem)));
     } else if (autoChooser.getSelected() == 2) {
+        DogLog.log("auto/whichline", 3);
       return ((redside.getAsBoolean())
           ? (new AutoRedClear3L4(
               driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
@@ -496,7 +504,12 @@ public class RobotContainer {
               elevatorSubsystem,
               funnelSubsystem,
               armSubsystem)));
-    } else {
+    } 
+    else if (autoChooser.getSelected() == 4) {
+        return (redside.getAsBoolean()) ? (new AutoRedMidL4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem)) : (new AutoBlueMidL4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem));
+    }
+    else {
+        DogLog.log("auto/whichline", 4);
       return ((redside.getAsBoolean())
           ? (new AutoRedLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem))
           : (new AutoBlueLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem)));
