@@ -770,15 +770,17 @@ public final class Constants {
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.057 + elevatorRecalibration), // 0.71 really high but we were using before // 0.0685 //0.065 still too high
+      Intake(
+          0, 0.057 + elevatorRecalibration), // 0.71 really high but we were using before // 0.0685
+      // //0.065 still too high
       safePosition(0, 0.3),
       L1(1, 0.657),
       L2DALE(0, 0.493), // 0.8636 - 0.379
       L2(2, 0.9036),
       L3DALE(0, 0.91), // 1.27 - 0.379
-      L3(3, 1.31), // 1.27 // KALASH wants 1cm lower //old value 1.32
-      L4(4, 1.81),
-      LIMIT_OF_TRAVEL(1, 1.825);
+      L3(3, 1.285), // 1.27 // KALASH wants 1cm lower //old value 1.32
+      L4(4, 1.81), // 1.81
+      LIMIT_OF_TRAVEL(1, 1.825); // 1.825
 
       public final int position;
       public final double height;

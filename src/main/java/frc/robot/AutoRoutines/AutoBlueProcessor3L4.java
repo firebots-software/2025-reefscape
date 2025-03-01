@@ -9,7 +9,6 @@ import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.ElevatorCommands.ZeroElevator;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorAcrossTimeframe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.subsystems.ArmSubsystem;
@@ -55,7 +54,8 @@ public class AutoBlueProcessor3L4 extends SequentialCommandGroup {
             .alongWith(
                 (driveTrain.applyRequest(() -> brake).withTimeout(0.1))
                     .andThen(
-                        JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> false, true, 1))),
+                        JamesHardenMovement.toSpecificLeftBranch(
+                            driveTrain, () -> false, true, 1))),
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
         new SetElevatorLevel(elevator, ElevatorPositions.Intake));
   }

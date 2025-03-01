@@ -70,18 +70,14 @@ public class Robot extends TimedRobot {
     Optional<EstimatedRobotPose> leftRobotPose;
 
     if (visionRight.getPipelineResult() != null) {
-      rightRobotPose =
-        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
-    }
-    else {
+      rightRobotPose = visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+    } else {
       return;
     }
-    
+
     if (visionLeft.getPipelineResult() != null) {
-      leftRobotPose =
-      visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
-    }
-    else {
+      leftRobotPose = visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
+    } else {
       return;
     }
 
@@ -115,7 +111,8 @@ public class Robot extends TimedRobot {
           "KalmanDebug/rightRobotPoseTheta",
           rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
 
-    } else if (((pipelineRight != null) && visionRight.hasTarget(pipelineRight)) && rightRobotPose.isPresent()) {
+    } else if (((pipelineRight != null) && visionRight.hasTarget(pipelineRight))
+        && rightRobotPose.isPresent()) {
       DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
       DogLog.log("KalmanDebug/rightestimatedpose", rightRobotPose.get().estimatedPose.toPose2d());
       DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
@@ -129,7 +126,8 @@ public class Robot extends TimedRobot {
       DogLog.log("KalmanDebug/bestestimatedpose", bestRobotPose.get().estimatedPose.toPose2d());
       DogLog.log("KalmanDebug/leastPoseAmbDist", leastPoseAmbDist);
 
-    } else if (((pipelineLeft != null) && visionLeft.hasTarget(pipelineLeft)) && leftRobotPose.isPresent()) {
+    } else if (((pipelineLeft != null) && visionLeft.hasTarget(pipelineLeft))
+        && leftRobotPose.isPresent()) {
       leastPoseAmbDist = visionLeft.getDistance();
       bestRobotPose = leftRobotPose;
     } else {
