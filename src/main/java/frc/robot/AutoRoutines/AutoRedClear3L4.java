@@ -8,6 +8,7 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commands.DaleCommands.ZeroArm;
+import frc.robot.commands.DebugCommands.DogLogCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorAcrossTimeframe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
@@ -27,9 +28,12 @@ public class AutoRedClear3L4 extends SequentialCommandGroup {
       FunnelSubsystem funnel,
       ArmSubsystem arm) {
     addCommands(
+        new DogLogCmd("auto/beforezeroElevatorworked", true),
         new ZeroElevatorAcrossTimeframe(elevator),
+        new DogLogCmd("auto/zeroElevatorworked", true),
         new InstantCommand(() -> driveTrain.resetPose(Constants.Landmarks.redClearSideAutoStart))
             .alongWith((new ZeroArm(arm))),
+        new DogLogCmd("auto/resetodo", true),
         (new Intake(elevator, funnel, shooter))
             .alongWith(JamesHardenMovement.toSpecificRightBranch(driveTrain, () -> true, true, 2)),
         new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
