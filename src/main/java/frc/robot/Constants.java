@@ -75,10 +75,10 @@ public final class Constants {
         new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d());
 
     public static final Pose2d blueMidAutoStart =
-        new Pose2d(new Translation2d(7.11305570602417, 4.050836891), new Rotation2d(Math.PI));
+        new Pose2d(new Translation2d(7.11305570602417, 4.19448), new Rotation2d(Math.PI));
 
     public static final Pose2d redMidAutoStart =
-        new Pose2d(new Translation2d(10.441716194152832, 4.050836891), new Rotation2d());
+        new Pose2d(new Translation2d(10.441716194152832, 3.85728), new Rotation2d());
 
     public static final Pose2d closerBlueProcessorSideAutoStart =
         new Pose2d(new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI));
