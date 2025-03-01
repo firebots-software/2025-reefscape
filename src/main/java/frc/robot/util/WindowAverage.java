@@ -13,10 +13,11 @@ public class WindowAverage {
   private final double FIRST_VALUE =
       ElevatorPositions.Intake.height / Constants.ElevatorConstants.CARRAIGE_UPDUCTION;
   private boolean replacedFirstValue = false;
-//HIGH:0.03
-//LOW: 0.01
-//In Code: 
-//
+
+  // HIGH:0.03
+  // LOW: 0.01
+  // In Code:
+  //
   public WindowAverage() {
     averageWindow = new LinkedList<Double>();
     averageWindow.add(FIRST_VALUE);
@@ -50,18 +51,16 @@ public class WindowAverage {
       averageWindow.poll();
       replacedFirstValue = true;
     }
-    
+
     DogLog.log("mattcs/value", value);
     if ((value <= 0.03) && (value >= 0.01)) {
       averageWindow.add(value);
-    }
-    else {
+    } else {
       if (averageWindow.size() == 0) {
         averageWindow.add(FIRST_VALUE);
         replacedFirstValue = false;
       }
     }
-    
   }
 
   public void clearWindow() {

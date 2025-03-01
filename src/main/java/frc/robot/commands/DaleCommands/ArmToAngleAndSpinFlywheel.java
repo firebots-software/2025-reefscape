@@ -13,11 +13,12 @@ public class ArmToAngleAndSpinFlywheel extends Command {
   private double tolerance = 5;
   private ElevatorSubsystem elevatorSubsystem;
 
-  public ArmToAngleAndSpinFlywheel(double angle, ArmSubsystem armSub, ElevatorSubsystem elevatorSubsystem) {
+  public ArmToAngleAndSpinFlywheel(
+      double angle, ArmSubsystem armSub, ElevatorSubsystem elevatorSubsystem) {
     armPlusFlywheel = armSub;
     this.angle = angle;
-    this.elevatorSubsystem = elevatorSubsystem; 
-    addRequirements(armPlusFlywheel,elevatorSubsystem);
+    this.elevatorSubsystem = elevatorSubsystem;
+    addRequirements(armPlusFlywheel, elevatorSubsystem);
   }
 
   @Override
