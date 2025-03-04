@@ -74,8 +74,8 @@ public class Robot extends TimedRobot {
 
     if (visionRight.getPipelineResult() != null) {
       rightRobotPose = visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
-      if(rightRobotPose != null){
-      DogLog.log("KalmanDebug/rightRobotPoseisPresent", rightRobotPose.isPresent());
+      if (rightRobotPose != null) {
+        DogLog.log("KalmanDebug/rightRobotPoseisPresent", rightRobotPose.isPresent());
       }
     } else {
       return;
@@ -83,8 +83,8 @@ public class Robot extends TimedRobot {
 
     if (visionLeft.getPipelineResult() != null) {
       leftRobotPose = visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
-      if(leftRobotPose != null){
-      DogLog.log("KalmanDebug/leftRobotPoseisPresent", leftRobotPose.isPresent());
+      if (leftRobotPose != null) {
+        DogLog.log("KalmanDebug/leftRobotPoseisPresent", leftRobotPose.isPresent());
       }
     } else {
       return;

@@ -28,15 +28,16 @@ public class ZeroElevatorAcrossTimeframe extends Command {
   public void execute() {
     DogLog.log("auto/tofisconnected", elevatorSubsystem.tofIsConnected());
     if (elevatorSubsystem.tofIsConnected()) {
-    DogLog.log("auto/gettofdistance", elevatorSubsystem.getToFDistance());
-      if ((elevatorSubsystem.getToFDistance() <= 0.04) && (elevatorSubsystem.getToFDistance() >= -0.01)) {
+      DogLog.log("auto/gettofdistance", elevatorSubsystem.getToFDistance());
+      if ((elevatorSubsystem.getToFDistance() <= 0.04)
+          && (elevatorSubsystem.getToFDistance() >= -0.01)) {
         sumOverWindow += elevatorSubsystem.getToFDistance();
         steps++;
       } else {
         tossedOut++;
       }
-    DogLog.log("auto/steps", steps);
-    DogLog.log("auto/tossedOut", tossedOut);
+      DogLog.log("auto/steps", steps);
+      DogLog.log("auto/tossedOut", tossedOut);
     }
   }
 
