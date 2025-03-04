@@ -480,10 +480,10 @@ public class RobotContainer {
     DogLog.log("auto/runningCommand", true);
     DogLog.log("auto/selectedauto", autoChooser.getSelected());
     if (autoChooser.getSelected() == 0) {
-        DogLog.log("auto/whichline", 1);
+      DogLog.log("auto/whichline", 1);
       return new WaitCommand(12);
     } else if (autoChooser.getSelected() == 1) {
-        DogLog.log("auto/whichline", 2);
+      DogLog.log("auto/whichline", 2);
       return ((redside.getAsBoolean())
           ? (new AutoRedProcessor3L4(
               driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
@@ -494,7 +494,7 @@ public class RobotContainer {
               funnelSubsystem,
               armSubsystem)));
     } else if (autoChooser.getSelected() == 2) {
-        DogLog.log("auto/whichline", 3);
+      DogLog.log("auto/whichline", 3);
       return ((redside.getAsBoolean())
           ? (new AutoRedClear3L4(
               driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
@@ -504,12 +504,14 @@ public class RobotContainer {
               elevatorSubsystem,
               funnelSubsystem,
               armSubsystem)));
-    } 
-    else if (autoChooser.getSelected() == 4) {
-        return (redside.getAsBoolean()) ? (new AutoRedMidL4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem)) : (new AutoBlueMidL4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem));
-    }
-    else {
-        DogLog.log("auto/whichline", 4);
+    } else if (autoChooser.getSelected() == 4) {
+      return (redside.getAsBoolean())
+          ? (new AutoRedMidL4(
+              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
+          : (new AutoBlueMidL4(
+              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem));
+    } else {
+      DogLog.log("auto/whichline", 4);
       return ((redside.getAsBoolean())
           ? (new AutoRedLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem))
           : (new AutoBlueLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem)));
