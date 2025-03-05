@@ -110,9 +110,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     return instance;
   }
 
+  public boolean tofIsConnected() {
+    return distance.isConnected();
+  }
+
   public void resetPosition() {
     // TODO: add constant to convert distance to encoder values
-    if (distance.isConnected()) {
+    if (tofIsConnected()) {
       master.setPosition(
           this.getToFDistance()
               * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
@@ -121,6 +125,15 @@ public class ElevatorSubsystem extends SubsystemBase {
           this.getToFDistance()
               * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
     }
+  }
+
+  public void resetPosition(double posInHeight) {
+    // TODO: add constant to convert distance to encoder values
+    master.setPosition(
+        posInHeight * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+    DogLog.log(
+        "subsystems/Elevator/resetElevatorPosition",
+        posInHeight * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
 
   public double getError() {
@@ -178,12 +191,15 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double getToFDistance() {
     // 0.11 is the sensor offset
+    DogLog.log(
+        "subsystems/Elevator/ToF/DistanceNoOffset", distance.getDistance().getValueAsDouble());
     return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
   }
 
   @Override
   public void periodic() {
     // Time of Flight Sensor
+    DogLog.log("subsystems/Elevator/getError", getError());
     DogLog.log("subsystems/Elevator/ToF/Distance", getToFDistance());
     DogLog.log("subsystems/Elevator/ToF/Connected", distance.isConnected());
 
@@ -200,6 +216,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     DogLog.log(
         "subsystems/Elevator/command",
         this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
+    DogLog.log(
+        "subsystems/Elevator/resetPositionBoolean",
+        this.isAtPosition() && this.getLevel().equals(ElevatorPositions.Intake));
+    DogLog.log(
+        "subsystems/Elevator/targetisIntake", this.getLevel().equals(ElevatorPositions.Intake));
+    DogLog.log("subsystems/Elevator/targetLevel", this.getLevel().toString());
   }
 
   @Override

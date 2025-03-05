@@ -66,26 +66,52 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
 
-    Optional<EstimatedRobotPose> rightRobotPose =
-        visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
-    Optional<EstimatedRobotPose> leftRobotPose =
-        visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
+    Optional<EstimatedRobotPose> rightRobotPose;
+    Optional<EstimatedRobotPose> leftRobotPose;
+
+    DogLog.log("KalmanDebug/rightpiplinenull", visionRight.getPipelineResult() == null);
+    DogLog.log("KalmanDebug/leftpiplinenull", visionLeft.getPipelineResult() == null);
+
+    if (visionRight.getPipelineResult() != null) {
+      rightRobotPose = visionRight.getMultiTagPose3d(driveTrain.getState().Pose);
+      if (rightRobotPose != null) {
+        DogLog.log("KalmanDebug/rightRobotPoseisPresent", rightRobotPose.isPresent());
+      }
+    } else {
+      return;
+    }
+
+    if (visionLeft.getPipelineResult() != null) {
+      leftRobotPose = visionLeft.getMultiTagPose3d(driveTrain.getState().Pose);
+      if (leftRobotPose != null) {
+        DogLog.log("KalmanDebug/leftRobotPoseisPresent", leftRobotPose.isPresent());
+      }
+    } else {
+      return;
+    }
 
     Optional<EstimatedRobotPose> bestRobotPose;
 
     PhotonPipelineResult pipelineRight = visionRight.getPipelineResult();
     PhotonPipelineResult pipelineLeft = visionLeft.getPipelineResult();
 
-    DogLog.log("KalmanDebug/rightpipelinehastarget", visionRight.hasTarget(pipelineRight));
-    DogLog.log("KalmanDebug/leftpipelinehastarget", visionLeft.hasTarget(pipelineLeft));
-    DogLog.log("KalmanDebug/rightposeispresent", rightRobotPose.isPresent());
-    DogLog.log("KalmanDebug/leftposeispresent", leftRobotPose.isPresent());
+    // DogLog.log("KalmanDebug/rightpipelinehastarget", visionRight.hasTarget(pipelineRight));
+    // DogLog.log("KalmanDebug/leftpipelinehastarget", visionLeft.hasTarget(pipelineLeft));
+    // DogLog.log("KalmanDebug/rightposeispresent", rightRobotPose.isPresent());
+    // DogLog.log("KalmanDebug/leftposeispresent", leftRobotPose.isPresent());
 
     // if both present, else if right present, else if left present
-    if (visionRight.hasTarget(pipelineRight)
+    DogLog.log("KalmanDebug/rightPiplineNull", pipelineRight == null);
+    DogLog.log("KalmanDebug/leftPiplineNull", pipelineLeft == null);
+    if (((pipelineRight != null) && visionRight.hasTarget(pipelineRight))
         && rightRobotPose.isPresent()
-        && visionLeft.hasTarget(pipelineLeft)
+        && ((pipelineLeft != null) && visionLeft.hasTarget(pipelineLeft))
         && leftRobotPose.isPresent()) {
+      DogLog.log("KalmanDebug/rightpipelinehastarget", visionRight.hasTarget(pipelineRight));
+      DogLog.log("KalmanDebug/leftpipelinehastarget", visionLeft.hasTarget(pipelineLeft));
+      DogLog.log("KalmanDebug/rightposeispresent", rightRobotPose.isPresent());
+      DogLog.log("KalmanDebug/leftposeispresent", leftRobotPose.isPresent());
+
       double leftPoseAmb = pipelineLeft.getBestTarget().getPoseAmbiguity();
       double rightPoseAmb = pipelineRight.getBestTarget().getPoseAmbiguity();
       if (leftPoseAmb < rightPoseAmb) {
@@ -101,7 +127,8 @@ public class Robot extends TimedRobot {
           "KalmanDebug/rightRobotPoseTheta",
           rightRobotPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
 
-    } else if (visionRight.hasTarget(pipelineRight) && rightRobotPose.isPresent()) {
+    } else if (((pipelineRight != null) && visionRight.hasTarget(pipelineRight))
+        && rightRobotPose.isPresent()) {
       DogLog.log("KalmanDebug/rightDistToAprilTag", rightDistToAprilTag);
       DogLog.log("KalmanDebug/rightestimatedpose", rightRobotPose.get().estimatedPose.toPose2d());
       DogLog.log("KalmanDebug/rightRobotPoseX", rightRobotPose.get().estimatedPose.getX());
@@ -115,7 +142,8 @@ public class Robot extends TimedRobot {
       DogLog.log("KalmanDebug/bestestimatedpose", bestRobotPose.get().estimatedPose.toPose2d());
       DogLog.log("KalmanDebug/leastPoseAmbDist", leastPoseAmbDist);
 
-    } else if (visionLeft.hasTarget(pipelineLeft) && leftRobotPose.isPresent()) {
+    } else if (((pipelineLeft != null) && visionLeft.hasTarget(pipelineLeft))
+        && leftRobotPose.isPresent()) {
       leastPoseAmbDist = visionLeft.getDistance();
       bestRobotPose = leftRobotPose;
     } else {
@@ -186,6 +214,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    m_robotContainer.teleopInit();
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

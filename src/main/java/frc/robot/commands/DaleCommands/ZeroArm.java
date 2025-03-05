@@ -28,7 +28,7 @@ public class ZeroArm extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.moveMuyNegative();
+    arm.moveMuyNegative(); // this works no, it just hits dale against the hardstop
   }
 
   // Called once the command ends or is interrupted.

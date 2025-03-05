@@ -41,3 +41,6 @@ public class ShootTootsieSlide extends Command {
     return false;
   }
 }
+// adjust intake posotion
+// try to reproduce the issue
+// go into auto and then teleop

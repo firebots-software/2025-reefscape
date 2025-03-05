@@ -16,16 +16,20 @@ public class JamesHardenMovement extends Command {
 
   private Supplier<Pose2d> targetPoseSupplier = null;
   private Pose2d targetPose = null;
+  private boolean isInAuto;
 
-  public JamesHardenMovement(SwerveSubsystem swerve, Supplier<Pose2d> targetPoseSupplier) {
+  public JamesHardenMovement(
+      SwerveSubsystem swerve, Supplier<Pose2d> targetPoseSupplier, boolean isInAuto) {
     this.swerve = swerve;
     this.targetPoseSupplier = targetPoseSupplier;
+    this.isInAuto = isInAuto;
     addRequirements(swerve);
   }
 
-  public JamesHardenMovement(SwerveSubsystem swerve, Pose2d targetPose) {
+  public JamesHardenMovement(SwerveSubsystem swerve, Pose2d targetPose, boolean isInAuto) {
     this.swerve = swerve;
     this.targetPose = targetPose;
+    this.isInAuto = isInAuto;
     addRequirements(swerve);
   }
 
@@ -39,7 +43,10 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public void execute() {
-    ChassisSpeeds speeds = swerve.calculateRequiredComponentChassisSpeeds(targetPose);
+    ChassisSpeeds speeds =
+        (isInAuto)
+            ? swerve.calculateRequiredComponentChassisSpeeds_AUTO_VERSION(targetPose)
+            : swerve.calculateRequiredComponentChassisSpeeds(targetPose);
 
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
@@ -71,8 +78,46 @@ public class JamesHardenMovement extends Command {
     swerve.setRobotSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
+  public static JamesHardenMovement toSpecificLeftBranch(
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, int reefSideIndex) {
+    if (redSide.getAsBoolean()) {
+      return new JamesHardenMovement(
+          swerve,
+          new Pose2d(
+              Constants.Landmarks.LEFT_LINEUP_RED[reefSideIndex],
+              Constants.Landmarks.reefFacingAngleRed[reefSideIndex]),
+          isInAuto);
+    } else {
+      return new JamesHardenMovement(
+          swerve,
+          new Pose2d(
+              Constants.Landmarks.LEFT_LINEUP_BLUE[reefSideIndex],
+              Constants.Landmarks.reefFacingAngleBlue[reefSideIndex]),
+          isInAuto);
+    }
+  }
+
+  public static JamesHardenMovement toSpecificRightBranch(
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, int reefSideIndex) {
+    if (redSide.getAsBoolean()) {
+      return new JamesHardenMovement(
+          swerve,
+          new Pose2d(
+              Constants.Landmarks.RIGHT_LINEUP_RED[reefSideIndex],
+              Constants.Landmarks.reefFacingAngleRed[reefSideIndex]),
+          isInAuto);
+    } else {
+      return new JamesHardenMovement(
+          swerve,
+          new Pose2d(
+              Constants.Landmarks.RIGHT_LINEUP_BLUE[reefSideIndex],
+              Constants.Landmarks.reefFacingAngleBlue[reefSideIndex]),
+          isInAuto);
+    }
+  }
+
   public static JamesHardenMovement toClosestLeftBranch(
-      SwerveSubsystem swerve, BooleanSupplier redSide) {
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
 
     Supplier<Pose2d> targetPose =
         () -> {
@@ -118,11 +163,11 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return new JamesHardenMovement(swerve, targetPose);
+    return new JamesHardenMovement(swerve, targetPose, isInAuto);
   }
 
   public static JamesHardenMovement toClosestRightBranch(
-      SwerveSubsystem swerve, BooleanSupplier redSide) {
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
     Supplier<Pose2d> targetPose =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
@@ -167,11 +212,11 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return new JamesHardenMovement(swerve, targetPose);
+    return new JamesHardenMovement(swerve, targetPose, isInAuto);
   }
 
   public static JamesHardenMovement toClosestLeftOutpost(
-      SwerveSubsystem swerve, BooleanSupplier redSide) {
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
 
     Supplier<Pose2d> targetPose =
         () -> {
@@ -217,11 +262,11 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return new JamesHardenMovement(swerve, targetPose);
+    return new JamesHardenMovement(swerve, targetPose, isInAuto);
   }
 
   public static JamesHardenMovement toClosestRightOutpost(
-      SwerveSubsystem swerve, BooleanSupplier redSide) {
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
     Supplier<Pose2d> targetPose =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
@@ -265,6 +310,6 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return new JamesHardenMovement(swerve, targetPose);
+    return new JamesHardenMovement(swerve, targetPose, isInAuto);
   }
 }

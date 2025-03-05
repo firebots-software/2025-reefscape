@@ -123,6 +123,9 @@ public class VisionSystem extends SubsystemBase {
   }
 
   public boolean hasTarget(PhotonPipelineResult pipeline) {
+    if (pipeline == null) {
+      return false;
+    }
     return pipeline.hasTargets();
   }
 

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.SwerveCommands.EdwardMovement;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -12,32 +11,33 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
 
-public class EdwardScore extends SequentialCommandGroup {
-  public EdwardScore(
+public class JamesHardenScoreClosest extends SequentialCommandGroup {
+  public JamesHardenScoreClosest(
       ElevatorSubsystem elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
       ElevatorPositions height,
       BooleanSupplier redSide,
-      boolean moveRight) {
+      boolean moveRight,
+      boolean isInAuto) {
 
-    Command outpostMovement;
+    Command movementCommand;
     if (moveRight) {
-      outpostMovement = JamesHardenMovement.toClosestRightOutpost(swerveSubsystem, redSide);
+      movementCommand =
+          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto);
     } else {
-      outpostMovement = JamesHardenMovement.toClosestLeftOutpost(swerveSubsystem, redSide);
+      movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto);
     }
-
-    Command qDirectionalMovement;
-    if (moveRight) {
-      qDirectionalMovement = EdwardMovement.toClosestRightBranch(swerveSubsystem, redSide);
+    Command elevateCommand;
+    if (height.equals(ElevatorPositions.L4)) {
+      elevateCommand = new ElevatorL4(elevatorSubsystem);
     } else {
-      qDirectionalMovement = EdwardMovement.toClosestLeftBranch(swerveSubsystem, redSide);
+      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height);
     }
 
     addCommands(
-        outpostMovement,
-        new SetElevatorLevel(elevatorSubsystem, height).alongWith(qDirectionalMovement),
-        new ShootTootsieSlide(tootsieSlideSubsystem));
+        movementCommand,
+        elevateCommand,
+        new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5));
   }
 }

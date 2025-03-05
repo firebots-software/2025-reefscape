@@ -12,6 +12,7 @@ import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -63,6 +64,49 @@ public final class Constants {
   public static class Landmarks {
     // midline constant
     public static final double MIDLINE_X = 8.7741125;
+    public static final Pose2d blueProcessorSideAutoStart =
+        new Pose2d(
+            new Translation2d(7.11305570602417, 0.4940316081047058), new Rotation2d(Math.PI));
+    public static final Pose2d blueClearSideAutoStart =
+        new Pose2d(new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI));
+    public static final Pose2d redProcessorSideAutoStart =
+        new Pose2d(new Translation2d(10.441716194152832, 7.607936382293701), new Rotation2d());
+    public static final Pose2d redClearSideAutoStart =
+        new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d());
+
+    public static final Pose2d blueMidAutoStart =
+        new Pose2d(new Translation2d(7.11305570602417, 4.19448), new Rotation2d(Math.PI));
+
+    public static final Pose2d redMidAutoStart =
+        new Pose2d(new Translation2d(10.441716194152832, 3.85728), new Rotation2d());
+
+    public static final Pose2d closerBlueProcessorSideAutoStart =
+        new Pose2d(new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI));
+    public static final Pose2d closerBlueClearSideAutoStart =
+        new Pose2d(
+            new Translation2d(7.113824844360352, 6.167776107788086), new Rotation2d(Math.PI));
+    public static final Pose2d closerRedProcessorSideAutoStart =
+        new Pose2d(new Translation2d(10.441716194152832, 6.167776107788086), new Rotation2d());
+    public static final Pose2d closerRedClearSideAutoStart =
+        new Pose2d(new Translation2d(10.441716194152832, 1.898607850074768), new Rotation2d());
+
+    public static final Pose2d blueProcessorSideHPS =
+        new Pose2d(
+            new Translation2d(1.118087887763977, 1.0306631326675415),
+            new Rotation2d(0.9334126223560425));
+    public static final Pose2d blueClearSideHPS =
+        new Pose2d(
+            new Translation2d(1.1465998888015747, 7.014684677124023),
+            new Rotation2d(-0.9419997588093272));
+    public static final Pose2d redProcessorSideHPS =
+        new Pose2d(
+            new Translation2d(16.341829299926758, 7.0662689208984375),
+            new Rotation2d(-2.1939969266716175));
+    public static final Pose2d redClearSideHPS =
+        new Pose2d(
+            new Translation2d(16.39461326599121, 1.0060197114944458),
+            new Rotation2d(2.1932607985206625));
+
     public static final Rotation2d[] reefFacingAngleBlue = {
       new Rotation2d(Degrees.of(0)),
       new Rotation2d(Degrees.of(60)),
@@ -689,26 +733,26 @@ public final class Constants {
     public static final int MOTOR2_PORT = 12; // TODO: change port
     public static final int CANRANGE_PORT = 41; // TODO: change port
     public static final int kDriverControllerPort = 0; // todo: change port
-    public static final double STATOR_CURRENT_LIMIT = 40.0; // TODO: change for actual match
-    public static final double SUPPLY_CURRENT_LIMIT = 10.0; // TODO: change for actual match
+    public static final double STATOR_CURRENT_LIMIT = 50.0; // TODO: change for actual match
+    public static final double SUPPLY_CURRENT_LIMIT = 30.0; // TODO: change for actual match
 
     public static double S0C_KP = 2.0;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.005;
     public static double S0C_KS = 0.0;
-    public static double S0C_KG = 0.28;
+    public static double S0C_KG = 0.29;
     public static double S0C_KA = 0.0004657452997; // 0.04
     public static double S0C_KV = 0.124; // 10.66
 
-    public static final double MOTIONMAGIC_MAX_VELOCITY = 50;
-    public static final double MOTIONMAGIC_MAX_ACCELERATION = 100;
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 60;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 125;
 
     public static double SENSOR_OFFSET = 0.11;
     // public static final double MOTIONMAGIC_KG = 0.28;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0.2; // To-do
-    public static final double MAX_POSITIONAL_ERROR = 0.05;
+    public static final double MAX_POSITIONAL_ERROR = 0.02;
     public static final double SPROCKET_CIRCUM_INCHES =
         1.751 * Math.PI; // TODO: change 0 to radius/diameter
     public static final double GEAR_RATIO = 1d / 12d;
@@ -722,18 +766,21 @@ public final class Constants {
         1d / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
     public static final double ELEVATOR_TORQUE = 32;
     public static final double ELEVATOR_DUTY_CYCLE = 0.4;
+    public static final double elevatorRecalibration = 0;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
-      Intake(0, 0.069),
+      Intake(
+          0, 0.057 + elevatorRecalibration), // 0.71 really high but we were using before // 0.0685
+      // //0.065 still too high
       safePosition(0, 0.3),
       L1(1, 0.657),
       L2DALE(0, 0.493), // 0.8636 - 0.379
-      L2(2, 0.9036),
+      L2(2, 0.9036 - 0.02),
       L3DALE(0, 0.91), // 1.27 - 0.379
-      L3(3, 1.32), // 1.27
-      L4(4, 1.81),
-      LIMIT_OF_TRAVEL(1, 1.825);
+      L3(3, 1.285 - 0.02), // 1.27 // KALASH wants 1cm lower //old value 1.32
+      L4(4, 1.81), // 1.81
+      LIMIT_OF_TRAVEL(1, 1.825); // 1.825
 
       public final int position;
       public final double height;

@@ -17,13 +17,15 @@ public class JamesHardenElevator extends SequentialCommandGroup {
       SwerveSubsystem swerveSubsystem,
       ElevatorPositions height,
       BooleanSupplier redSide,
-      boolean moveRight) {
+      boolean moveRight,
+      boolean isInAuto) {
 
     Command movementCommand;
     if (moveRight) {
-      movementCommand = JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide);
+      movementCommand =
+          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto);
     } else {
-      movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide);
+      movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto);
     }
 
     Command elevatorCommand;
