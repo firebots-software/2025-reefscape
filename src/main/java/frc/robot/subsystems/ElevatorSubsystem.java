@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
@@ -31,6 +32,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   private LoggedTalonFX motor2;
   public LoggedTalonFX master;
 
+  private LinearFilter elevatorFilter;
+  private double currentHeightToF;
+
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
   private CANrange distance; // Time of Flight (ToF) sensor
@@ -40,7 +44,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private ElevatorSubsystem() {
     // Initialize motors
-
+    elevatorFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
+    
     distance =
         new CANrange(
             ElevatorConstants.CANRANGE_PORT, Constants.Swerve.WHICH_SWERVE_ROBOT.CANBUS_NAME);
@@ -99,7 +104,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     m2Config.apply(moc);
 
     master = motor1;
-    resetPosition();
+    currentHeightToF = elevatorFilter.calculate(getToFDistance());
+    resetPosition(currentHeightToF);
   }
 
   // instance for elevator subsystem
@@ -198,10 +204,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    currentHeightToF = elevatorFilter.calculate(getToFDistance());
     // Time of Flight Sensor
     DogLog.log("subsystems/Elevator/getError", getError());
     DogLog.log("subsystems/Elevator/ToF/Distance", getToFDistance());
     DogLog.log("subsystems/Elevator/ToF/Connected", distance.isConnected());
+    DogLog.log("subsystems/Elevator/ToF/LinearFilterDistance", currentHeightToF);
 
     DogLog.log("subsystems/Elevator/isAtPosition", this.isAtPosition());
     DogLog.log("subsystems/Elevator/targetPosition", currentLevel.getPosition());
