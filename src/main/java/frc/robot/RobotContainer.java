@@ -217,7 +217,7 @@ public class RobotContainer {
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
     customController
         .In()
-        .onTrue(
+        .whileTrue(
             new UnjamFunnelAndIntake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem));
 
