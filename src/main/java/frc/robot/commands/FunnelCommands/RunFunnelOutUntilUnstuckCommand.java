@@ -3,8 +3,8 @@ package frc.robot.commands.FunnelCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.FunnelSubsystem;
 
-public class RunFunnelOutUntilUnstuckCommand extends Command{
-    private FunnelSubsystem funnelSubsystem;
+public class RunFunnelOutUntilUnstuckCommand extends Command {
+  private FunnelSubsystem funnelSubsystem;
 
   public RunFunnelOutUntilUnstuckCommand(FunnelSubsystem funnelSubsystem) {
     this.funnelSubsystem = funnelSubsystem;
