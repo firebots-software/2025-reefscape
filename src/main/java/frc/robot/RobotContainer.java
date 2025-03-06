@@ -39,6 +39,7 @@ import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScoreClosest;
 import frc.robot.commandGroups.PutUpAndShoot;
+import frc.robot.commandGroups.UnjamFunnelAndIntake;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
@@ -217,7 +218,7 @@ public class RobotContainer {
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
     customController
         .In()
-        .whileTrue(new RunFunnelAndTootsieInCommand(funnelSubsystem, tootsieSlideSubsystem));
+        .onTrue(new UnjamFunnelAndIntake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem));
 
     // Joystick 1:
