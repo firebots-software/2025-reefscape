@@ -162,8 +162,8 @@ public class FunnelSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Funnel/FunnelVelocity", rightMotor.getVelocity().getValueAsDouble());
     DogLog.log("subsystems/Funnel/AbsPositionalError", getAbsolutePositionalError());
     DogLog.log(
-      "subsystems/Funnel/command",
-      this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
+        "subsystems/Funnel/command",
+        this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 
   @Override

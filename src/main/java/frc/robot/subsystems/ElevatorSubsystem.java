@@ -43,10 +43,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
+
   private ElevatorSubsystem() {
     // Initialize motors
     elevatorFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
-    
+
     distance =
         new CANrange(
             ElevatorConstants.CANRANGE_PORT, Constants.Swerve.WHICH_SWERVE_ROBOT.CANBUS_NAME);
@@ -121,14 +122,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     return distance.isConnected();
   }
 
-  public void resetPositionFiltered(){
+  public void resetPositionFiltered() {
     master.setPosition(
-      currentHeightToF
-              * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
-      DogLog.log(
-          "subsystems/Elevator/resetElevatorPosition",
-          currentHeightToF
-              * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+        currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+    DogLog.log(
+        "subsystems/Elevator/resetElevatorPosition",
+        currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
 
   public void resetPosition() {
@@ -152,12 +151,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         posInHeight * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
 
-  //Hardstop Zeroing functions:
+  // Hardstop Zeroing functions:
   public void moveElevatorNegative() {
     master.setControl(velocityRequest.withVelocity(-5).withSlot(0));
   }
 
-  public void resetElevatorPositionToZero(){
+  public void resetElevatorPositionToZero() {
     master.setPosition(0);
     master.setControl(controlRequest.withPosition(0));
     master.setPosition(0);

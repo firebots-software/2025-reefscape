@@ -1,15 +1,13 @@
 package frc.robot.commands.ElevatorCommands;
 
-import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.FunnelSubsystem;
-import frc.robot.util.WindowAverage;
 
 public class DefaultElevator extends Command {
   private final ElevatorSubsystem elevatorSubsystem;
+
   // private WindowAverage windowAverage = new WindowAverage();
   // private double currentAverage = 0.0;
 
@@ -41,7 +39,7 @@ public class DefaultElevator extends Command {
     //   DogLog.log("mattcs/isCoralCheckedOut", FunnelSubsystem.getInstance().isCoralCheckedOut());
     //   windowAverage.clearWindow();
     // }
-    
+
     if (!CoralPosition.isCoralInTootsieSlide()) {
       elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
     }

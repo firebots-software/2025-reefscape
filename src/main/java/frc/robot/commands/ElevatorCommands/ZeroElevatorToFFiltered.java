@@ -6,6 +6,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class ZeroElevatorToFFiltered extends Command {
   private final ElevatorSubsystem elevatorSubsystem;
   private double ticksAtPosition;
+
   public ZeroElevatorToFFiltered(ElevatorSubsystem subsystem) {
     elevatorSubsystem = subsystem;
     addRequirements(elevatorSubsystem);
@@ -26,13 +27,13 @@ public class ZeroElevatorToFFiltered extends Command {
 
   @Override
   public boolean isFinished() {
-    if(elevatorSubsystem.isAtPosition() && elevatorSubsystem.atIntake()){
-        ticksAtPosition++;
+    if (elevatorSubsystem.isAtPosition() && elevatorSubsystem.atIntake()) {
+      ticksAtPosition++;
     } else {
-        ticksAtPosition = 0;
+      ticksAtPosition = 0;
     }
-    if(ticksAtPosition >= 5){
-    return true;
+    if (ticksAtPosition >= 5) {
+      return true;
     }
     return false;
   }

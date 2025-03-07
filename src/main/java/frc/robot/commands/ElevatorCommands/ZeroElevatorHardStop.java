@@ -6,10 +6,12 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class ZeroElevatorHardStop extends Command {
   private final ElevatorSubsystem elevatorSubsystem;
   private double timesExceededCurrent;
+
   public ZeroElevatorHardStop(ElevatorSubsystem subsystem) {
     elevatorSubsystem = subsystem;
     addRequirements(elevatorSubsystem);
   }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -19,14 +21,15 @@ public class ZeroElevatorHardStop extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorSubsystem.moveElevatorNegative(); // this works no, it just hits dale against the hardstop
+    elevatorSubsystem
+        .moveElevatorNegative(); // this works no, it just hits dale against the hardstop
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     if (!interrupted) {
-        elevatorSubsystem.resetElevatorPositionToZero();
+      elevatorSubsystem.resetElevatorPositionToZero();
     }
   }
 
@@ -41,5 +44,4 @@ public class ZeroElevatorHardStop extends Command {
 
     return timesExceededCurrent >= 10;
   }
-
 }
