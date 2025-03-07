@@ -31,6 +31,7 @@ public class ZeroElevatorHardStop extends Command {
     if (!interrupted) {
       elevatorSubsystem.resetElevatorPositionToZero();
     }
+    elevatorSubsystem.resetCurrentLimits();
   }
 
   // Returns true when the command should end.

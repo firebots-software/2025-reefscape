@@ -156,6 +156,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     master.setControl(velocityRequest.withVelocity(-5).withSlot(0));
   }
 
+  public void reduceCurrentLimits(){
+    master.updateCurrentLimits(20, 20);
+  }
+
+  public void resetCurrentLimits(){
+    master.updateCurrentLimits(Constants.ElevatorConstants.STATOR_CURRENT_LIMIT, Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+  }
+
   public void resetElevatorPositionToZero() {
     master.setPosition(0);
     master.setControl(controlRequest.withPosition(0));
@@ -164,7 +172,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public boolean checkCurrent() {
     double current = Math.abs(master.getStatorCurrent().getValue().magnitude());
-    if (current > 20) {
+    if (current > 15) {
       return true;
     }
     return false;
