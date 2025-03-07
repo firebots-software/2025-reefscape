@@ -106,7 +106,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     master = motor1;
     currentHeightToF = elevatorFilter.calculate(getToFDistance());
-    resetPosition(currentHeightToF);
+    resetPositionFiltered();
   }
 
   // instance for elevator subsystem
@@ -121,8 +121,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     return distance.isConnected();
   }
 
+  public void resetPositionFiltered(){
+    master.setPosition(
+      currentHeightToF
+              * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+      DogLog.log(
+          "subsystems/Elevator/resetElevatorPosition",
+          currentHeightToF
+              * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+  }
+
   public void resetPosition() {
-    // TODO: add constant to convert distance to encoder values
     if (tofIsConnected()) {
       master.setPosition(
           this.getToFDistance()
@@ -145,7 +154,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   //Hardstop Zeroing functions:
   public void moveElevatorNegative() {
-    master.setControl(velocityRequest.withVelocity(-10));
+    master.setControl(velocityRequest.withVelocity(-5).withSlot(0));
   }
 
   public void resetElevatorPositionToZero(){
