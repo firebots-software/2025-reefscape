@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -41,7 +42,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
-
+  private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
   private ElevatorSubsystem() {
     // Initialize motors
     elevatorFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
@@ -140,6 +141,25 @@ public class ElevatorSubsystem extends SubsystemBase {
     DogLog.log(
         "subsystems/Elevator/resetElevatorPosition",
         posInHeight * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+  }
+
+  //Hardstop Zeroing functions:
+  public void moveElevatorNegative() {
+    master.setControl(velocityRequest.withVelocity(-10));
+  }
+
+  public void resetElevatorPositionToZero(){
+    master.setPosition(0);
+    master.setControl(controlRequest.withPosition(0));
+    master.setPosition(0);
+  }
+
+  public boolean checkCurrent() {
+    double current = Math.abs(master.getStatorCurrent().getValue().magnitude());
+    if (current > 20) {
+      return true;
+    }
+    return false;
   }
 
   public double getError() {
