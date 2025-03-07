@@ -157,7 +157,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void reduceCurrentLimits(){
-    master.updateCurrentLimits(20, 20);
+    master.updateCurrentLimits(20, 10);
   }
 
   public void resetCurrentLimits(){
@@ -171,8 +171,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean checkCurrent() {
-    double current = Math.abs(master.getStatorCurrent().getValue().magnitude());
-    if (current > 15) {
+    double current = Math.abs(master.getSupplyCurrent().getValue().magnitude());
+    if (current > 9) {
       return true;
     }
     return false;

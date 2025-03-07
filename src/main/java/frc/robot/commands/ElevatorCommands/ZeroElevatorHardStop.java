@@ -43,6 +43,6 @@ public class ZeroElevatorHardStop extends Command {
       timesExceededCurrent = 0;
     }
 
-    return timesExceededCurrent >= 10;
+    return timesExceededCurrent >= 25;
   }
 }
