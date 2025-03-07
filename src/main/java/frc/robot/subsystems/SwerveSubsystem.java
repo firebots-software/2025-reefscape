@@ -481,5 +481,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     DogLog.log("subsystems/swerve/bl_angle", drivetrainState.ModuleStates[2].angle.getDegrees());
     DogLog.log("subsystems/swerve/br_speed", drivetrainState.ModuleStates[3].speedMetersPerSecond);
     DogLog.log("subsystems/swerve/br_angle", drivetrainState.ModuleStates[3].angle.getDegrees());
+    DogLog.log(
+      "subsystems/swerve/command",
+      this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 }
