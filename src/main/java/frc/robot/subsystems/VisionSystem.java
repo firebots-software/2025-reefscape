@@ -212,7 +212,7 @@ public class VisionSystem extends SubsystemBase {
 
         //Changed to not use rotationless
         driveTrain.addVisionMeasurement(
-            bestRobotPose2d, pipelineResult.getTimestampSeconds(), visionMatrix);
+            rotationLess, pipelineResult.getTimestampSeconds(), visionMatrix);
         DogLog.log("KalmanDebug/visionUsed", true);
       }
       else{
