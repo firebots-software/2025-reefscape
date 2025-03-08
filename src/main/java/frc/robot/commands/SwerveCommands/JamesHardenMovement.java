@@ -83,16 +83,12 @@ public class JamesHardenMovement extends Command {
     if (redSide.getAsBoolean()) {
       return new JamesHardenMovement(
           swerve,
-          new Pose2d(
               Constants.Landmarks.LEFT_LINEUP_RED[reefSideIndex],
-              Constants.Landmarks.reefFacingAngleRed[reefSideIndex]),
           isInAuto);
     } else {
       return new JamesHardenMovement(
           swerve,
-          new Pose2d(
               Constants.Landmarks.LEFT_LINEUP_BLUE[reefSideIndex],
-              Constants.Landmarks.reefFacingAngleBlue[reefSideIndex]),
           isInAuto);
     }
   }
@@ -106,16 +102,12 @@ public class JamesHardenMovement extends Command {
     if (redSide.getAsBoolean()) {
       return new JamesHardenMovement(
           swerve,
-          new Pose2d(
-              Constants.Landmarks.RIGHT_LINEUP_RED[reefSideIndex],
-              Constants.Landmarks.reefFacingAngleRed[reefSideIndex]),
+          Constants.Landmarks.RIGHT_LINEUP_RED[reefSideIndex],
           isInAuto);
     } else {
       return new JamesHardenMovement(
           swerve,
-          new Pose2d(
               Constants.Landmarks.RIGHT_LINEUP_BLUE[reefSideIndex],
-              Constants.Landmarks.reefFacingAngleBlue[reefSideIndex]),
           isInAuto);
     }
   }
@@ -127,22 +119,22 @@ public class JamesHardenMovement extends Command {
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[0]);
+            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[0].getTranslation());
             int sideOfMinDist = 0;
             for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[i]);
+              if (currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[i].getTranslation()) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[i].getTranslation());
                 sideOfMinDist = i;
               }
             }
 
             return sideOfMinDist;
           } else {
-            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[0]);
+            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[0].getTranslation());
             int sideOfMinDist = 0;
             for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[i]);
+              if (currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[i].getTranslation()) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[i].getTranslation());
                 sideOfMinDist = i;
               }
             }
@@ -159,22 +151,22 @@ public class JamesHardenMovement extends Command {
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[0]);
+            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[0].getTranslation());
             int sideOfMinDist = 0;
             for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[i]);
+              if (currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[i].getTranslation()) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[i].getTranslation());
                 sideOfMinDist = i;
               }
             }
 
             return sideOfMinDist;
           } else {
-            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[0]);
+            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[0].getTranslation());
             int sideOfMinDist = 0;
             for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[i]);
+              if (currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[i].getTranslation()) < minDist) {
+                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[i].getTranslation());
                 sideOfMinDist = i;
               }
             }

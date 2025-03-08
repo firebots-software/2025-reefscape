@@ -91,6 +91,10 @@ public final class Constants {
     AutoInformation(int encodedValue) {
       this.encodedValue = encodedValue;
     }
+
+    public int getEncodedValue() {
+      return encodedValue;
+    }
   }
 
   public static class AutoRoutines {
@@ -113,6 +117,10 @@ public final class Constants {
             RED_CLEAR_2 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R2, AutoInformation.L1),
             RED_CLEAR_1 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R2),
             RED_MID_1 = Arrays.asList(AutoInformation.L3);
+  }
+
+  public static enum ReefLineupTranslation {
+
   }
 
   public static class Landmarks {
@@ -161,95 +169,41 @@ public final class Constants {
             new Translation2d(16.39461326599121, 1.0060197114944458),
             new Rotation2d(2.1932607985206625));
 
-    public static final Rotation2d[] reefFacingAngleBlue = {
-      new Rotation2d(Degrees.of(0)),
-      new Rotation2d(Degrees.of(60)),
-      new Rotation2d(Degrees.of(120)),
-      new Rotation2d(Degrees.of(180)),
-      new Rotation2d(Degrees.of(-120)),
-      new Rotation2d(Degrees.of(-60))
-    };
-
-    public static final Rotation2d[] reefFacingAngleRed = {
-      new Rotation2d(Degrees.of(180)),
-      new Rotation2d(Degrees.of(120)),
-      new Rotation2d(Degrees.of(60)),
-      new Rotation2d(Degrees.of(0)),
-      new Rotation2d(Degrees.of(-60)),
-      new Rotation2d(Degrees.of(-120))
-    };
     // Blue Lineup Translations
-    public static final Translation2d[] LEFT_LINEUP_BLUE = {
-      new Translation2d(3.14058, 4.19448),
-      new Translation2d(3.66895, 2.94212),
-      new Translation2d(5.0177, 2.77352),
-      new Translation2d(5.83809, 3.85728),
-      new Translation2d(5.30973, 5.10963),
-      new Translation2d(3.96097, 5.27823)
+    public static final Pose2d[] LEFT_LINEUP_BLUE = {
+      new Pose2d(new Translation2d(3.14058, 4.19448), new Rotation2d(Degrees.of(0))),
+      new Pose2d(new Translation2d(3.66895, 2.94212), new Rotation2d(Degrees.of(60))),
+      new Pose2d(new Translation2d(5.0177, 2.77352), new Rotation2d(Degrees.of(120))),
+      new Pose2d(new Translation2d(5.83809, 3.85728), new Rotation2d(Degrees.of(180))),
+      new Pose2d(new Translation2d(5.30973, 5.10963), new Rotation2d(Degrees.of(-120))),
+      new Pose2d(new Translation2d(3.96097, 5.27823), new Rotation2d(Degrees.of(-60)))
     };
 
-    public static final Translation2d[] RIGHT_LINEUP_BLUE = {
-      new Translation2d(3.14058, 3.85728),
-      new Translation2d(3.96097, 2.77352),
-      new Translation2d(5.30973, 2.94212),
-      new Translation2d(5.83809, 4.19448),
-      new Translation2d(5.0177, 5.27823),
-      new Translation2d(3.66895, 5.10963)
+    public static final Pose2d[] RIGHT_LINEUP_BLUE = {
+      new Pose2d(new Translation2d(3.14058, 3.85728), new Rotation2d(Degrees.of(0))),
+      new Pose2d(new Translation2d(3.96097, 2.77352), new Rotation2d(Degrees.of(60))),
+      new Pose2d(new Translation2d(5.30973, 2.94212), new Rotation2d(Degrees.of(120))),
+      new Pose2d(new Translation2d(5.83809, 4.19448), new Rotation2d(Degrees.of(180))),
+      new Pose2d(new Translation2d(5.0177, 5.27823), new Rotation2d(Degrees.of(-120))),
+      new Pose2d(new Translation2d(3.66895, 5.10963), new Rotation2d(Degrees.of(-60)))
     };
 
-    // Blue Outpost Translations
-    public static final Translation2d[] LEFT_OUTPOST_BLUE = {
-      new Translation2d(3.14058, 4.94706),
-      new Translation2d(3.0172, 3.31841),
-      new Translation2d(4.36595, 2.39723),
-      new Translation2d(5.83809, 3.1047),
-      new Translation2d(5.96148, 4.73334),
-      new Translation2d(4.61272, 5.65452)
+    public static final Pose2d[] RIGHT_LINEUP_RED = {
+      new Pose2d(new Translation2d(14.4076704, 4.19448), new Rotation2d(Degrees.of(180))),
+      new Pose2d(new Translation2d(13.8793004, 2.94212), new Rotation2d(Degrees.of(120))),
+      new Pose2d(new Translation2d(12.5305504, 2.77352), new Rotation2d(Degrees.of(60))),
+      new Pose2d(new Translation2d(11.7101604, 3.85728), new Rotation2d(Degrees.of(0))),
+      new Pose2d(new Translation2d(12.2385204, 5.10963), new Rotation2d(Degrees.of(-60))),
+      new Pose2d(new Translation2d(13.5872804, 5.27823), new Rotation2d(Degrees.of(-120))) 
     };
 
-    public static final Translation2d[] RIGHT_OUTPOST_BLUE = {
-      new Translation2d(3.14058, 3.1047),
-      new Translation2d(4.61272, 2.39723),
-      new Translation2d(5.96148, 3.31841),
-      new Translation2d(5.83809, 4.94706),
-      new Translation2d(4.36595, 5.65452),
-      new Translation2d(3.0172, 4.73334)
-    };
-
-    public static final Translation2d[] RIGHT_LINEUP_RED = {
-      new Translation2d(14.4076704, 4.19448), // 17.5482504 - 3.14058
-      new Translation2d(13.8793004, 2.94212), // 17.5482504 - 3.66895
-      new Translation2d(12.5305504, 2.77352), // 17.5482504 - 5.0177
-      new Translation2d(11.7101604, 3.85728), // 17.5482504 - 5.83809
-      new Translation2d(12.2385204, 5.10963), // 17.5482504 - 5.30973
-      new Translation2d(13.5872804, 5.27823) // 17.5482504 - 3.96097
-    };
-
-    public static final Translation2d[] LEFT_LINEUP_RED = {
-      new Translation2d(14.4076704, 3.85728), // 17.5482504 - 3.14058
-      new Translation2d(13.5872804, 2.77352), // 17.5482504 - 3.96097
-      new Translation2d(12.2385204, 2.94212), // 17.5482504 - 5.30973
-      new Translation2d(11.7101604, 4.19448), // 17.5482504 - 5.83809
-      new Translation2d(12.5305504, 5.27823), // 17.5482504 - 5.0177
-      new Translation2d(13.8793004, 5.10963) // 17.5482504 - 3.66895
-    };
-
-    public static final Translation2d[] RIGHT_OUTPOST_RED = {
-      new Translation2d(14.4076704, 4.94706), // 17.5482504 - 3.14058
-      new Translation2d(14.5310504, 3.31841), // 17.5482504 - 3.0172
-      new Translation2d(13.1823004, 2.39723), // 17.5482504 - 4.36595
-      new Translation2d(11.7101604, 3.10470), // 17.5482504 - 5.83809
-      new Translation2d(11.5867704, 4.73334), // 17.5482504 - 5.96148
-      new Translation2d(12.9355304, 5.65452) // 17.5482504 - 4.61272
-    };
-
-    public static final Translation2d[] LEFT_OUTPOST_RED = {
-      new Translation2d(14.4076704, 3.10470), // 17.5482504 - 3.14058
-      new Translation2d(12.9355304, 2.39723), // 17.5482504 - 4.61272
-      new Translation2d(11.5867704, 3.31841), // 17.5482504 - 5.96148
-      new Translation2d(11.7101604, 4.94706), // 17.5482504 - 5.83809
-      new Translation2d(13.1823004, 5.65452), // 17.5482504 - 4.36595
-      new Translation2d(14.5310504, 4.73334) // 17.5482504 - 3.0172
+    public static final Pose2d[] LEFT_LINEUP_RED = {
+      new Pose2d(new Translation2d(14.4076704, 3.85728), new Rotation2d(Degrees.of(180))),
+      new Pose2d(new Translation2d(13.5872804, 2.77352), new Rotation2d(Degrees.of(120))),
+      new Pose2d(new Translation2d(12.2385204, 2.94212), new Rotation2d(Degrees.of(60))),
+      new Pose2d(new Translation2d(11.7101604, 4.19448), new Rotation2d(Degrees.of(0))),
+      new Pose2d(new Translation2d(12.5305504, 5.27823), new Rotation2d(Degrees.of(-60))),
+      new Pose2d(new Translation2d(13.8793004, 5.10963), new Rotation2d(Degrees.of(-120))) 
     };
   }
 
