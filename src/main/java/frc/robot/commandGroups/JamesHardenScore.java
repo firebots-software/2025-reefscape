@@ -3,6 +3,7 @@ package frc.robot.commandGroups;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.Constants.LandmarkPose;
 import frc.robot.commands.EndWhenCloseEnough;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
@@ -11,6 +12,8 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
+
+import dev.doglog.DogLog;
 
 public class JamesHardenScore extends SequentialCommandGroup {
   public JamesHardenScore(
@@ -46,18 +49,16 @@ public class JamesHardenScore extends SequentialCommandGroup {
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
       ElevatorPositions height,
-      BooleanSupplier redSide,
-      boolean moveRight,
       boolean isInAuto,
-      int reefSideIndex) {
+      LandmarkPose branch) {
 
     JamesHardenMovement movementCommand;
-    if (moveRight) {
-      movementCommand =
-          JamesHardenMovement.toSpecificRightBranch(swerveSubsystem, redSide, isInAuto, reefSideIndex);
-    } else {
-      movementCommand = JamesHardenMovement.toSpecificLeftBranch(swerveSubsystem, redSide, isInAuto, reefSideIndex);
+    if (!branch.isBranch()) {
+      DogLog.log("JamesHardenScore/Errors", "called without real branch");
+      return;
     }
+   
+    movementCommand = JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, branch);
 
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
