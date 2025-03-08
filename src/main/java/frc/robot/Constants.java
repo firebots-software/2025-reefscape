@@ -75,33 +75,6 @@ public final class Constants {
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-40);
   }
 
-  public static enum AutoInformation {
-    L0(0),
-    L1(1),
-    L2(2),
-    L3(3),
-    L4(4),
-    L5(5),
-    R0(8),
-    R1(9),
-    R2(10),
-    R3(11),
-    R4(12),
-    R5(13),
-    PROCESSOR_SIDE(6),
-    CLEAR_SIDE(7);
-
-    public final int encodedValue;
-
-    AutoInformation(int encodedValue) {
-      this.encodedValue = encodedValue;
-    }
-
-    public int getEncodedValue() {
-      return encodedValue;
-    }
-  }
-
   public static class AutoRoutines {
     List<LandmarkPose> BLUE_PROCESSOR_3 =
         Arrays.asList(
@@ -139,7 +112,7 @@ public final class Constants {
         }
         return false;
     }
-    
+
     default boolean endsWithHPS() {
       if (this instanceof Enum<?>) {
            String name = ((Enum<?>)this).name();
