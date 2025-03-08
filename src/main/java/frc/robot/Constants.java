@@ -739,6 +739,11 @@ public final class Constants {
     public static double S0C_KP = 2.0;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.005;
+
+    public static double S1C_KP = 0.5;
+    public static double S1C_KI = 0.0;
+    public static double S1C_KD = 0.0;
+     
     public static double S0C_KS = 0.0;
     public static double S0C_KG = 0.29;
     public static double S0C_KA = 0.0004657452997; // 0.04

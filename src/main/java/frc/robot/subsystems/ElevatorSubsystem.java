@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -69,6 +70,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     Follower follower = new Follower(ElevatorConstants.MOTOR1_PORT, false);
     motor2.setControl(follower);
 
+    Slot1Configs s1c = new Slot1Configs()
+        .withKP(ElevatorConstants.S1C_KP)
+        .withKI(ElevatorConstants.S1C_KI)
+        .withKD(ElevatorConstants.S1C_KD)
+        .withKS(ElevatorConstants.S0C_KS)
+        .withKG(ElevatorConstants.S0C_KG)
+        .withKA(ElevatorConstants.S0C_KA)
+        .withKV(ElevatorConstants.S0C_KV)
+        .withGravityType(GravityTypeValue.Elevator_Static)
+        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+    
     Slot0Configs s0c =
         new Slot0Configs()
             .withKP(ElevatorConstants.S0C_KP)
@@ -91,6 +103,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     m1Config.apply(s0c);
     m2Config.apply(s0c);
+    m1Config.apply(s1c);
+    m2Config.apply(s1c);
+     
 
     MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
 
@@ -153,7 +168,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // Hardstop Zeroing functions:
   public void moveElevatorNegative() {
-    master.setControl(velocityRequest.withVelocity(-5).withSlot(0));
+    master.setControl(velocityRequest.withVelocity(-5).withSlot(1));
   }
 
   public void reduceCurrentLimits(){
@@ -166,7 +181,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void resetElevatorPositionToZero() {
     master.setPosition(0);
-    master.setControl(controlRequest.withPosition(0));
+    master.setControl(controlRequest.withPosition(0).withSlot(0));
     master.setPosition(0);
   }
 
@@ -203,7 +218,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         controlRequest.withPosition(
             height
                 * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
-                / ElevatorConstants.CARRAIGE_UPDUCTION));
+                / ElevatorConstants.CARRAIGE_UPDUCTION).withSlot(0));
     DogLog.log(
         "subsystems/Elevator/elevatorSetpoint(rot)",
         height
