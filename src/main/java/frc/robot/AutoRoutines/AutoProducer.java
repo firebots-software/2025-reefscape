@@ -34,30 +34,31 @@ public class AutoProducer extends SequentialCommandGroup {
 
     addCommands(
         new ParallelCommandGroup(
-            new ZeroElevatorAcrossTimeframe(elevator),
+            // new ZeroElevatorAcrossTimeframe(elevator),
             new InstantCommand(() -> driveTrain.resetPose(autoInformation.get(0).getPose())),
             new ZeroArm(arm)));
 
     // first score
     addCommands(
         new ParallelDeadlineGroup(
-            new Intake(elevator, funnel, shooter),
-            JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(1))),
-        new JamesHardenScore(
-            elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(1)),
-        new SetElevatorLevel(elevator, ElevatorPositions.Intake));
+            new SequentialCommandGroup(
+                new ZeroElevatorAcrossTimeframe(elevator), new Intake(elevator, funnel, shooter)),
+            JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(1)),
+            new JamesHardenScore(
+                elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(1)),
+            new SetElevatorLevel(elevator, ElevatorPositions.Intake)));
 
     // first hps visit, second score
     if (autoInformation.size() > 2) {
       addCommands(
-          new JamesHardenMovement(
-                  driveTrain, autoInformation.get(autoInformation.size() - 1).getPose(), false)
-              .withTimeout(2.0),
-          new ParallelDeadlineGroup(
+          new ParallelCommandGroup(
               new Intake(elevator, funnel, shooter),
-              new SequentialCommandGroup(
-                  driveTrain.applyRequest(() -> brake).withTimeout(0.1),
-                  JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(2)))),
+              new JamesHardenMovement(
+                      driveTrain, autoInformation.get(autoInformation.size() - 1).getPose(), false)
+                  .withTimeout(2.0)),
+          new SequentialCommandGroup(
+              driveTrain.applyRequest(() -> brake).withTimeout(0.1),
+              JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(2))),
           new JamesHardenScore(
               elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(2)),
           new SetElevatorLevel(elevator, ElevatorPositions.L4));
@@ -65,14 +66,14 @@ public class AutoProducer extends SequentialCommandGroup {
 
     if (autoInformation.size() > 3) {
       addCommands(
-          new JamesHardenMovement(
-                  driveTrain, autoInformation.get(autoInformation.size() - 1).getPose(), false)
-              .withTimeout(2.0),
-          new ParallelDeadlineGroup(
+          new ParallelCommandGroup(
               new Intake(elevator, funnel, shooter),
-              new SequentialCommandGroup(
-                  driveTrain.applyRequest(() -> brake).withTimeout(0.1),
-                  JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(3)))),
+              new JamesHardenMovement(
+                      driveTrain, autoInformation.get(autoInformation.size() - 1).getPose(), false)
+                  .withTimeout(2.0)),
+          new SequentialCommandGroup(
+              driveTrain.applyRequest(() -> brake).withTimeout(0.1),
+              JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(3))),
           new JamesHardenScore(
               elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(3)),
           new SetElevatorLevel(elevator, ElevatorPositions.L4));
