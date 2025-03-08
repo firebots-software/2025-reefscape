@@ -97,6 +97,10 @@ public class JamesHardenMovement extends Command {
     }
   }
 
+  public Pose2d getTargetPose2d() {
+    return targetPose;
+  }
+
   public static JamesHardenMovement toSpecificRightBranch(
       SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, int reefSideIndex) {
     if (redSide.getAsBoolean()) {

@@ -39,6 +39,13 @@ public final class Constants {
     public static final Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
     public static final Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
   }
+  
+  public static class HardenConstants {
+    public static class EndWhenCloseEnough {
+      public static final double translationalTolerance = 0.43105229381;
+      public static final double headingTolerance = 0.7853975; // Math.PI/4
+    }
+  }
 
   public static class Vision {
 
