@@ -1,6 +1,8 @@
 package frc.robot.AutoRoutines;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -31,7 +33,7 @@ public class AutoProducer extends SequentialCommandGroup {
       ArmSubsystem arm,
       List<LandmarkPose> autoInformation) {
     // initializing commands
-
+    
     addCommands(
         new ParallelCommandGroup(
             new ZeroElevatorAcrossTimeframe(elevator),

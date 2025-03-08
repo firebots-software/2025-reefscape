@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.AutoRoutines.AutoRedClear3L4;
+import frc.robot.AutoRoutines.AutoProducer;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.D2Intake;
 import frc.robot.commandGroups.Dealgaenate;
@@ -50,6 +50,8 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import choreo.auto.AutoChooser;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -91,10 +93,13 @@ public class RobotContainer {
 
   public RobotContainer() {
     autoChooser.setDefaultOption("Nothing", 0);
-    autoChooser.addOption("Processor Side Start", 1);
-    autoChooser.addOption("Clear Side Start (No Processor)", 2);
-    autoChooser.addOption("Leave Only", 3);
-    autoChooser.addOption("Mid 1 L4", 4);
+    autoChooser.addOption("Processor 3", 1);
+    autoChooser.addOption("Processor 2", 2);
+    autoChooser.addOption("Processor 1", 3);
+    autoChooser.addOption("Clear 3", 4);
+    autoChooser.addOption("Clear 2", 5);
+    autoChooser.addOption("Clear 1", 6);
+    autoChooser.addOption("Mid 1", 7);
     SmartDashboard.putData("Auto Side Choices", autoChooser);
     configureBindings();
   }
@@ -468,44 +473,35 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    DogLog.log("auto/runningCommand", true);
-    DogLog.log("auto/selectedauto", autoChooser.getSelected());
-    if (autoChooser.getSelected() == 0) {
-      DogLog.log("auto/whichline", 1);
-      return new WaitCommand(12);
-    } else if (autoChooser.getSelected() == 1) {
-      DogLog.log("auto/whichline", 2);
-      return ((redside.getAsBoolean())
-          ? (new AutoRedProcessor3L4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
-          : (new AutoBlueProcessor3L4(
-              driveTrain,
-              tootsieSlideSubsystem,
-              elevatorSubsystem,
-              funnelSubsystem,
-              armSubsystem)));
-    } else if (autoChooser.getSelected() == 2) {
-      DogLog.log("auto/whichline", 3);
-      return ((redside.getAsBoolean())
-          ? (new AutoRedClear3L4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
-          : (new AutoBlueClear3L4(
-              driveTrain,
-              tootsieSlideSubsystem,
-              elevatorSubsystem,
-              funnelSubsystem,
-              armSubsystem)));
-    } else if (autoChooser.getSelected() == 4) {
-      return (redside.getAsBoolean())
-          ? (new AutoRedMidL4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
-          : (new AutoBlueMidL4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem));
-    } else {
-      DogLog.log("auto/whichline", 4);
-      return ((redside.getAsBoolean())
-          ? (new AutoRedLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem))
-          : (new AutoBlueLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem)));
+    int autoValue = autoChooser.getSelected();
+    Command autoCommand;
+    DogLog.log("auto/selected", autoValue);
+    switch (autoValue) {
+        case 1:
+            autoCommand = redside.getAsBoolean() ? new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.RED_PROCESSOR_3) : new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.BLUE_PROCESSOR_3);
+            break;
+        case 2:
+            autoCommand = redside.getAsBoolean() ? new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.RED_PROCESSOR_2) : new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.BLUE_PROCESSOR_2);
+            break;
+        case 3:
+            autoCommand = redside.getAsBoolean() ? new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.RED_PROCESSOR_1) : new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.BLUE_PROCESSOR_1);
+            break;
+        case 4:
+            autoCommand = redside.getAsBoolean() ? new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.RED_CLEAR_3) : new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.BLUE_CLEAR_3);
+            break;
+        case 5:
+            autoCommand = redside.getAsBoolean() ? new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.RED_CLEAR_2) : new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.BLUE_CLEAR_2);
+            break;
+        case 6:
+            autoCommand = redside.getAsBoolean() ? new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.RED_CLEAR_1) : new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.BLUE_CLEAR_1);
+            break;
+        case 7:
+            autoCommand = redside.getAsBoolean() ? new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.RED_MID_1) : new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, Constants.AutoRoutines.BLUE_MID_1);
+            break;
+        default:
+            autoCommand = null;
+            break;
     }
+    return autoCommand;
   }
 }

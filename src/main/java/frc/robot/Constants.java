@@ -76,7 +76,7 @@ public final class Constants {
   }
 
   public static class AutoRoutines {
-    List<LandmarkPose>
+    public static List<LandmarkPose>
         BLUE_PROCESSOR_3 =
             Arrays.asList(
                 BlueLandmarkPose.PROCESSOR_AUTO_START,
