@@ -103,25 +103,26 @@ public final class Constants {
   }
 
   public static class AutoRoutines {
-    List<AutoInformation> BLUE_PROCESSOR_3 =
+    List<LandmarkPose> BLUE_PROCESSOR_3 =
         Arrays.asList(
-            AutoInformation.PROCESSOR_SIDE,
-            AutoInformation.L2,
-            AutoInformation.R1,
-            AutoInformation.L1),
-            BLUE_PROCESSOR_2 = Arrays.asList(AutoInformation.PROCESSOR_SIDE, AutoInformation.L2, AutoInformation.R1),
-            BLUE_PROCESSOR_1 = Arrays.asList(AutoInformation.PROCESSOR_SIDE, AutoInformation.L2),
-            BLUE_CLEAR_3 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R4, AutoInformation.R5, AutoInformation.L5),
-            BLUE_CLEAR_2 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R4, AutoInformation.R5),
-            BLUE_CLEAR_1 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R4),
-            BLUE_MID_1 = Arrays.asList(AutoInformation.L3),
-            RED_PROCESSOR_3 = Arrays.asList(AutoInformation.PROCESSOR_SIDE, AutoInformation.L4, AutoInformation.R5, AutoInformation.L5),
-            RED_PROCESSOR_2 = Arrays.asList(AutoInformation.PROCESSOR_SIDE, AutoInformation.L4, AutoInformation.R5),
-            RED_PROCESSOR_1 = Arrays.asList(AutoInformation.PROCESSOR_SIDE, AutoInformation.L4),
-            RED_CLEAR_3 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R2, AutoInformation.L1, AutoInformation.R1),
-            RED_CLEAR_2 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R2, AutoInformation.L1),
-            RED_CLEAR_1 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R2),
-            RED_MID_1 = Arrays.asList(AutoInformation.L3);
+            BlueLandmarkPose.PROCESSOR_AUTO_START,
+            BlueLandmarkPose.PROCESSOR_HPS, 
+            BlueLandmarkPose.L2,
+            BlueLandmarkPose.R1,
+            BlueLandmarkPose.L1),
+            BLUE_PROCESSOR_2 = Arrays.asList(BlueLandmarkPose.PROCESSOR_AUTO_START, BlueLandmarkPose.PROCESSOR_HPS, BlueLandmarkPose.L2, BlueLandmarkPose.R1),
+            BLUE_PROCESSOR_1 = Arrays.asList(BlueLandmarkPose.PROCESSOR_AUTO_START, BlueLandmarkPose.PROCESSOR_HPS, BlueLandmarkPose.L2),
+            BLUE_CLEAR_3 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.CLEAR_HPS, BlueLandmarkPose.R4, BlueLandmarkPose.R5, BlueLandmarkPose.L5),
+            BLUE_CLEAR_2 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.CLEAR_HPS, BlueLandmarkPose.R4, BlueLandmarkPose.R5),
+            BLUE_CLEAR_1 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.CLEAR_HPS, BlueLandmarkPose.R4),
+            BLUE_MID_1 = Arrays.asList(BlueLandmarkPose.MID_AUTO_START, BlueLandmarkPose.L3),
+            RED_PROCESSOR_3 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5, RedLandmarkPose.L5),
+            RED_PROCESSOR_2 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5),
+            RED_PROCESSOR_1 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4),
+            RED_CLEAR_3 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.R2, RedLandmarkPose.L1, RedLandmarkPose.R1),
+            RED_CLEAR_2 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.R2, RedLandmarkPose.L1),
+            RED_CLEAR_1 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.R2),
+            RED_MID_1 = Arrays.asList(RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.L3);
   }
 
   public static class Landmarks {
@@ -138,17 +139,27 @@ public final class Constants {
         }
         return false;
     }
+    
+    default boolean endsWithHPS() {
+      if (this instanceof Enum<?>) {
+           String name = ((Enum<?>)this).name();
+           if (name.length() >= 3) {
+               return name.endsWith("HPS");
+           }
+      }
+      return false;
+    }
   }
 
   public static enum BlueLandmarkPose implements LandmarkPose {
-    BLUE_PROCESSOR_AUTO_START(new Pose2d(
+    PROCESSOR_AUTO_START(new Pose2d(
             new Translation2d(7.11305570602417, 0.4940316081047058), new Rotation2d(Math.PI))),
-    BLUE_CLEAR_AUTO_START(new Pose2d(new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI))),
-    BLUE_MID_AUTO_START(new Pose2d(new Translation2d(7.11305570602417, 4.19448), new Rotation2d(Math.PI))),
-    CLOSER_BLUE_PROCESSOR_AUTO_START(new Pose2d(new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI))),
-    CLOSER_BLUE_CLEAR_AUTO_START(new Pose2d(new Translation2d(7.113824844360352, 6.167776107788086), new Rotation2d(Math.PI))),
-    BLUE_PROCESSOR_HPS(new Pose2d(new Translation2d(1.118087887763977, 1.0306631326675415), new Rotation2d(0.9334126223560425))),
-    BLUE_CLEAR_HPS(new Pose2d(new Translation2d(1.1465998888015747, 7.014684677124023), new Rotation2d(-0.9419997588093272))),
+    CLEAR_AUTO_START(new Pose2d(new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI))),
+    MID_AUTO_START(new Pose2d(new Translation2d(7.11305570602417, 4.19448), new Rotation2d(Math.PI))),
+    CLOSER_PROCESSOR_AUTO_START(new Pose2d(new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI))),
+    CLOSER_CLEAR_AUTO_START(new Pose2d(new Translation2d(7.113824844360352, 6.167776107788086), new Rotation2d(Math.PI))),
+    PROCESSOR_HPS(new Pose2d(new Translation2d(1.118087887763977, 1.0306631326675415), new Rotation2d(0.9334126223560425))),
+    CLEAR_HPS(new Pose2d(new Translation2d(1.1465998888015747, 7.014684677124023), new Rotation2d(-0.9419997588093272))),
     L0(new Pose2d(new Translation2d(3.14058, 4.19448), new Rotation2d(Degrees.of(0)))),
     L1(new Pose2d(new Translation2d(3.66895, 2.94212), new Rotation2d(Degrees.of(60)))),
     L2(new Pose2d(new Translation2d(5.0177, 2.77352), new Rotation2d(Degrees.of(120)))),

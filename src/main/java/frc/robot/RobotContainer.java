@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -23,14 +21,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.AutoRoutines.AutoBlueClear3L4;
-import frc.robot.AutoRoutines.AutoBlueLeaveOnly;
-import frc.robot.AutoRoutines.AutoBlueMidL4;
-import frc.robot.AutoRoutines.AutoBlueProcessor3L4;
 import frc.robot.AutoRoutines.AutoRedClear3L4;
-import frc.robot.AutoRoutines.AutoRedLeaveOnly;
-import frc.robot.AutoRoutines.AutoRedMidL4;
-import frc.robot.AutoRoutines.AutoRedProcessor3L4;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.D2Intake;
 import frc.robot.commandGroups.Dealgaenate;
