@@ -37,7 +37,7 @@ import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
-import frc.robot.commandGroups.JamesHardenScoreClosest;
+import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
@@ -125,7 +125,7 @@ public class RobotContainer {
     customController
         .LeftL1()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -136,7 +136,7 @@ public class RobotContainer {
     customController
         .LeftL2()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -147,7 +147,7 @@ public class RobotContainer {
     customController
         .LeftL3()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -158,7 +158,7 @@ public class RobotContainer {
     customController
         .LeftL4()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -171,7 +171,7 @@ public class RobotContainer {
     customController
         .RightL1()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -182,7 +182,7 @@ public class RobotContainer {
     customController
         .RightL2()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -193,7 +193,7 @@ public class RobotContainer {
     customController
         .RightL3()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
@@ -204,7 +204,7 @@ public class RobotContainer {
     customController
         .RightL4()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
