@@ -45,7 +45,6 @@ import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevator;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
-import frc.robot.commands.ElevatorCommands.ZeroElevatorToFFiltered;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
@@ -357,6 +356,17 @@ public class RobotContainer {
     // // joystick.b().onTrue(new Intake(elevatorSubsystem, funnelSubsystem,
     // tootsieSlideSubsystem));
 
+    // joystick
+    //     .y()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L4,
+    //             redside,
+    //             false));
+
     // uncomment these shooter commands later
     joystick
         .b()
@@ -371,10 +381,15 @@ public class RobotContainer {
         .whileTrue(
             new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
 
-    joystick.x().whileTrue(new ZeroElevatorHardStop(elevatorSubsystem));
-    
-    joystick.a().whileTrue(new ZeroElevatorToFFiltered(elevatorSubsystem));
+    // joystick.x().whileTrue(JamesHardenMovement.toClosestRightBranch(driveTrain, redside, true));
 
+    joystick
+        .a()
+        .onTrue(
+            driveTrain.runOnce(
+                () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
+
+    joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
     // new InstantCommand()
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));

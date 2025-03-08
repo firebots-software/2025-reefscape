@@ -172,7 +172,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void reduceCurrentLimits(){
-    master.updateCurrentLimits(20, 10);
+    master.updateCurrentLimits(30, 10);
   }
 
   public void resetCurrentLimits(){
@@ -186,8 +186,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean checkCurrent() {
-    double current = Math.abs(master.getSupplyCurrent().getValue().magnitude());
-    if (current > 9) {
+    double Supplycurrent = Math.abs(master.getSupplyCurrent().getValue().magnitude());
+    double Statorcurrent = Math.abs(master.getStatorCurrent().getValue().magnitude());
+    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/supply", Supplycurrent);
+    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/stator", Statorcurrent);
+
+    if (Supplycurrent > 1.0 && Statorcurrent > 20) {
       return true;
     }
     return false;
