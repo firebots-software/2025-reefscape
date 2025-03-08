@@ -131,6 +131,13 @@ public final class Constants {
   public interface LandmarkPose {
       Pose2d getPose();
       boolean isRed();
+      default boolean isBranch() {
+        if (this instanceof Enum<?>) {
+            String name = ((Enum<?>) this).name();
+            return name.matches("^[LR][0-5]$");
+        }
+        return false;
+    }
   }
 
   public static enum BlueLandmarkPose implements LandmarkPose {
@@ -169,6 +176,8 @@ public final class Constants {
     public boolean isRed() {
       return false;
     }
+
+
   }
 
   public static enum RedLandmarkPose implements LandmarkPose {
