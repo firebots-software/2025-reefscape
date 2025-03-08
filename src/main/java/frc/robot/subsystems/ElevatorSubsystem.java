@@ -36,6 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private LinearFilter elevatorFilter;
   private double currentHeightToF;
+  private boolean elevatorZeroed;
 
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
@@ -45,8 +46,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
+
   private ElevatorSubsystem() {
     // Initialize motors
+    elevatorZeroed = false;
     elevatorFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
 
     distance =
@@ -255,6 +258,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     DogLog.log(
         "subsystems/Elevator/ToF/DistanceNoOffset", distance.getDistance().getValueAsDouble());
     return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
+  }
+
+  public boolean isElevatorZeroed(){
+    return elevatorZeroed;
+  }
+
+  public void elevatorHasBeenZeroed(){
+    elevatorZeroed = true;
   }
 
   @Override
