@@ -79,22 +79,22 @@ public final class Constants {
     List<LandmarkPose> BLUE_PROCESSOR_3 =
         Arrays.asList(
             BlueLandmarkPose.PROCESSOR_AUTO_START,
-            BlueLandmarkPose.PROCESSOR_HPS, 
             BlueLandmarkPose.L2,
             BlueLandmarkPose.R1,
-            BlueLandmarkPose.L1),
-            BLUE_PROCESSOR_2 = Arrays.asList(BlueLandmarkPose.PROCESSOR_AUTO_START, BlueLandmarkPose.PROCESSOR_HPS, BlueLandmarkPose.L2, BlueLandmarkPose.R1),
-            BLUE_PROCESSOR_1 = Arrays.asList(BlueLandmarkPose.PROCESSOR_AUTO_START, BlueLandmarkPose.PROCESSOR_HPS, BlueLandmarkPose.L2),
-            BLUE_CLEAR_3 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.CLEAR_HPS, BlueLandmarkPose.R4, BlueLandmarkPose.R5, BlueLandmarkPose.L5),
-            BLUE_CLEAR_2 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.CLEAR_HPS, BlueLandmarkPose.R4, BlueLandmarkPose.R5),
-            BLUE_CLEAR_1 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.CLEAR_HPS, BlueLandmarkPose.R4),
+            BlueLandmarkPose.L1,
+            BlueLandmarkPose.PROCESSOR_HPS),
+            BLUE_PROCESSOR_2 = Arrays.asList(BlueLandmarkPose.PROCESSOR_AUTO_START, BlueLandmarkPose.L2, BlueLandmarkPose.R1, BlueLandmarkPose.PROCESSOR_HPS),
+            BLUE_PROCESSOR_1 = Arrays.asList(BlueLandmarkPose.PROCESSOR_AUTO_START, BlueLandmarkPose.L2),
+            BLUE_CLEAR_3 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START,  BlueLandmarkPose.R4, BlueLandmarkPose.R5, BlueLandmarkPose.L5, BlueLandmarkPose.CLEAR_HPS),
+            BLUE_CLEAR_2 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.R4, BlueLandmarkPose.R5, BlueLandmarkPose.CLEAR_HPS),
+            BLUE_CLEAR_1 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.R4),
             BLUE_MID_1 = Arrays.asList(BlueLandmarkPose.MID_AUTO_START, BlueLandmarkPose.L3),
-            RED_PROCESSOR_3 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5, RedLandmarkPose.L5),
-            RED_PROCESSOR_2 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5),
-            RED_PROCESSOR_1 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4),
-            RED_CLEAR_3 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.R2, RedLandmarkPose.L1, RedLandmarkPose.R1),
-            RED_CLEAR_2 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.R2, RedLandmarkPose.L1),
-            RED_CLEAR_1 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.R2),
+            RED_PROCESSOR_3 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5, RedLandmarkPose.L5, RedLandmarkPose.PROCESSOR_HPS),
+            RED_PROCESSOR_2 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5),
+            RED_PROCESSOR_1 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.PROCESSOR_HPS),
+            RED_CLEAR_3 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.R2, RedLandmarkPose.L1, RedLandmarkPose.R1, RedLandmarkPose.CLEAR_HPS),
+            RED_CLEAR_2 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.R2, RedLandmarkPose.L1, RedLandmarkPose.CLEAR_HPS),
+            RED_CLEAR_1 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.R2),
             RED_MID_1 = Arrays.asList(RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.L3);
   }
 
@@ -107,7 +107,7 @@ public final class Constants {
       boolean isRed();
       default boolean isBranch() {
         if (this instanceof Enum<?>) {
-            String name = ((Enum<?>) this).name();
+            String name = ((Enum<?>)this).name();
             return ((name.charAt(0) == 'L' || name.charAt(0) == 'R') && ((name.charAt(1) >= '0') && (name.charAt(1)) <= '5'));
         }
         return false;
