@@ -134,7 +134,7 @@ public final class Constants {
       default boolean isBranch() {
         if (this instanceof Enum<?>) {
             String name = ((Enum<?>) this).name();
-            return name.matches("^[LR][0-5]$");
+            return ((name.charAt(0) == 'L' || name.charAt(0) == 'R') && ((name.charAt(1) >= '0') && (name.charAt(1)) <= '5'));
         }
         return false;
     }
