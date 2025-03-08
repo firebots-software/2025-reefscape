@@ -1,17 +1,15 @@
 package frc.robot.AutoRoutines;
 
-import java.util.List;
-
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.Constants.LandmarkPose;
 import frc.robot.commandGroups.Intake;
-import frc.robot.commandGroups.PutUpAndShoot;
+import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.DaleCommands.ZeroArm;
-import frc.robot.commands.DebugCommands.DogLogCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorAcrossTimeframe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
@@ -20,6 +18,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
+import java.util.List;
 
 public class AutoProducer extends SequentialCommandGroup {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
@@ -31,33 +30,50 @@ public class AutoProducer extends SequentialCommandGroup {
       FunnelSubsystem funnel,
       ArmSubsystem arm,
       List<LandmarkPose> autoInformation) {
+    // initializing commands
 
     addCommands(
-        new ZeroElevatorAcrossTimeframe(elevator),
-        new InstantCommand(() -> driveTrain.resetPose(autoInformation.get(0).getPose()))
-            .alongWith((new ZeroArm(arm))),
-        // (new Intake(elevator, funnel, shooter))
-        //     .alongWith(JamesHardenMovement.toSpecificRightBranch(driveTrain, () -> true, true, 2)),
-        // new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
-        // new SetElevatorLevel(elevator, ElevatorPositions.Intake),
-        // new JamesHardenMovement(driveTrain, Constants.Landmarks.redClearSideHPS, true)
-        //     .withTimeout(3),
-        // (new Intake(elevator, funnel, shooter))
-        //     .alongWith(
-        //         (driveTrain.applyRequest(() -> brake).withTimeout(0.1))
-        //             .andThen(
-        //                 JamesHardenMovement.toSpecificLeftBranch(driveTrain, () -> true, true, 1))),
-        // new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
-        // new SetElevatorLevel(elevator, ElevatorPositions.Intake),
-        // new JamesHardenMovement(driveTrain, Constants.Landmarks.redClearSideHPS, true)
-        //     .withTimeout(3),
-        // (new Intake(elevator, funnel, shooter))
-        //     .alongWith(
-        //         (driveTrain.applyRequest(() -> brake).withTimeout(0.1))
-        //             .andThen(
-        //                 JamesHardenMovement.toSpecificRightBranch(
-        //                     driveTrain, () -> true, true, 1))),
-        // new PutUpAndShoot(elevator, shooter, ElevatorPositions.L4),
-        // new SetElevatorLevel(elevator, ElevatorPositions.Intake));
+        new ParallelCommandGroup(
+            new ZeroElevatorAcrossTimeframe(elevator),
+            new InstantCommand(() -> driveTrain.resetPose(autoInformation.get(0).getPose())),
+            new ZeroArm(arm)));
+
+    // first score
+    addCommands(
+        new ParallelDeadlineGroup(
+            new Intake(elevator, funnel, shooter),
+            JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(1))),
+        new JamesHardenScore(
+            elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(1)),
+        new SetElevatorLevel(elevator, ElevatorPositions.Intake));
+
+    // first hps visit, second score
+    if (autoInformation.size() > 2) {
+      addCommands(
+          new JamesHardenMovement(
+              driveTrain, autoInformation.get(autoInformation.size() - 1).getPose(), false),
+          new ParallelDeadlineGroup(
+              new Intake(elevator, funnel, shooter),
+              new SequentialCommandGroup(
+                  driveTrain.applyRequest(() -> brake).withTimeout(0.1),
+                  JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(2)))),
+          new JamesHardenScore(
+              elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(2)),
+          new SetElevatorLevel(elevator, ElevatorPositions.L4));
+    }
+
+    if (autoInformation.size() > 3) {
+      addCommands(
+          new JamesHardenMovement(
+              driveTrain, autoInformation.get(autoInformation.size() - 1).getPose(), false),
+          new ParallelDeadlineGroup(
+              new Intake(elevator, funnel, shooter),
+              new SequentialCommandGroup(
+                  driveTrain.applyRequest(() -> brake).withTimeout(0.1),
+                  JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(3)))),
+          new JamesHardenScore(
+              elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(3)),
+          new SetElevatorLevel(elevator, ElevatorPositions.L4));
+    }
   }
 }

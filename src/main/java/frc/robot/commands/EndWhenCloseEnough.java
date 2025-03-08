@@ -1,15 +1,15 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
+import java.util.function.Supplier;
 
 public class EndWhenCloseEnough extends Command {
   SwerveSubsystem driveTrain;
   Supplier<Pose2d> poseSupplier;
+
   public EndWhenCloseEnough(Supplier<Pose2d> targetTranslation) {
     driveTrain = SwerveSubsystem.getInstance();
     poseSupplier = targetTranslation;
@@ -21,8 +21,7 @@ public class EndWhenCloseEnough extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -36,8 +35,15 @@ public class EndWhenCloseEnough extends Command {
     double targetRot = poseSupplier.get().getRotation().getRadians();
     targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
 
-    if ((Math.abs(driveTrain.getCurrentState().Pose.getTranslation().getDistance(poseSupplier.get().getTranslation())) <= Constants.HardenConstants.EndWhenCloseEnough.translationalTolerance)
-        && (Math.abs(targetRot - currRot) <= Constants.HardenConstants.EndWhenCloseEnough.headingTolerance)) {
+    if ((Math.abs(
+                driveTrain
+                    .getCurrentState()
+                    .Pose
+                    .getTranslation()
+                    .getDistance(poseSupplier.get().getTranslation()))
+            <= Constants.HardenConstants.EndWhenCloseEnough.translationalTolerance)
+        && (Math.abs(targetRot - currRot)
+            <= Constants.HardenConstants.EndWhenCloseEnough.headingTolerance)) {
       return true;
     } else return false;
   }

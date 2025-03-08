@@ -10,7 +10,6 @@ import frc.robot.Constants.BlueLandmarkPose;
 import frc.robot.Constants.LandmarkPose;
 import frc.robot.Constants.RedLandmarkPose;
 import frc.robot.subsystems.SwerveSubsystem;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.BooleanSupplier;
@@ -20,41 +19,45 @@ public class JamesHardenMovement extends Command {
 
   private final SwerveSubsystem swerve;
 
-  private static final ArrayList<RedLandmarkPose> redBranchesL = new ArrayList<>(Arrays.asList(
-    RedLandmarkPose.L0,
-    RedLandmarkPose.L1,
-    RedLandmarkPose.L2,
-    RedLandmarkPose.L3,
-    RedLandmarkPose.L4,
-    RedLandmarkPose.L5
-  ));
+  private static final ArrayList<RedLandmarkPose> redBranchesL =
+      new ArrayList<>(
+          Arrays.asList(
+              RedLandmarkPose.L0,
+              RedLandmarkPose.L1,
+              RedLandmarkPose.L2,
+              RedLandmarkPose.L3,
+              RedLandmarkPose.L4,
+              RedLandmarkPose.L5));
 
-  private static final ArrayList<RedLandmarkPose> redBranchesR = new ArrayList<>(Arrays.asList(
-    RedLandmarkPose.R0,
-    RedLandmarkPose.R1,
-    RedLandmarkPose.R2,
-    RedLandmarkPose.R3,
-    RedLandmarkPose.R4,
-    RedLandmarkPose.R5
-  ));
+  private static final ArrayList<RedLandmarkPose> redBranchesR =
+      new ArrayList<>(
+          Arrays.asList(
+              RedLandmarkPose.R0,
+              RedLandmarkPose.R1,
+              RedLandmarkPose.R2,
+              RedLandmarkPose.R3,
+              RedLandmarkPose.R4,
+              RedLandmarkPose.R5));
 
-  private static final ArrayList<BlueLandmarkPose> blueBranchesL = new ArrayList<>(Arrays.asList(
-    BlueLandmarkPose.L0,
-    BlueLandmarkPose.L1,
-    BlueLandmarkPose.L2,
-    BlueLandmarkPose.L3,
-    BlueLandmarkPose.L4,
-    BlueLandmarkPose.L5
-  ));
+  private static final ArrayList<BlueLandmarkPose> blueBranchesL =
+      new ArrayList<>(
+          Arrays.asList(
+              BlueLandmarkPose.L0,
+              BlueLandmarkPose.L1,
+              BlueLandmarkPose.L2,
+              BlueLandmarkPose.L3,
+              BlueLandmarkPose.L4,
+              BlueLandmarkPose.L5));
 
-  private static final ArrayList<BlueLandmarkPose> blueBranchesR = new ArrayList<>(Arrays.asList(
-    BlueLandmarkPose.R0,
-    BlueLandmarkPose.R1,
-    BlueLandmarkPose.R2,
-    BlueLandmarkPose.R3,
-    BlueLandmarkPose.R4,
-    BlueLandmarkPose.R5
-  ));
+  private static final ArrayList<BlueLandmarkPose> blueBranchesR =
+      new ArrayList<>(
+          Arrays.asList(
+              BlueLandmarkPose.R0,
+              BlueLandmarkPose.R1,
+              BlueLandmarkPose.R2,
+              BlueLandmarkPose.R3,
+              BlueLandmarkPose.R4,
+              BlueLandmarkPose.R5));
 
   private Supplier<Pose2d> targetPoseSupplier = null;
   private Pose2d targetPose = null;
@@ -108,9 +111,12 @@ public class JamesHardenMovement extends Command {
     double targetRot = targetPose.getRotation().getRadians();
     targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
 
-    if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX()) < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
-        && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY()) < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
-        && (Math.abs(targetRot - currRot) < Constants.HardenConstants.RegularCommand.headingTolerance)) {
+    if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
+            < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+        && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
+            < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+        && (Math.abs(targetRot - currRot)
+            < Constants.HardenConstants.RegularCommand.headingTolerance)) {
       return true;
     } else return false;
   }
@@ -126,7 +132,8 @@ public class JamesHardenMovement extends Command {
     return targetPose;
   }
 
-  public static JamesHardenMovement toSpecificBranch(SwerveSubsystem swerve, boolean isInAuto, LandmarkPose branch){
+  public static JamesHardenMovement toSpecificBranch(
+      SwerveSubsystem swerve, boolean isInAuto, LandmarkPose branch) {
     return new JamesHardenMovement(swerve, branch.getPose(), isInAuto);
   }
 
@@ -137,7 +144,8 @@ public class JamesHardenMovement extends Command {
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(RedLandmarkPose.L0.getPose().getTranslation());
+            double minDist =
+                currPosition.getDistance(RedLandmarkPose.L0.getPose().getTranslation());
             RedLandmarkPose branchOfMinDist = RedLandmarkPose.L0;
             for (RedLandmarkPose branch : redBranchesL) {
               if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
@@ -147,7 +155,8 @@ public class JamesHardenMovement extends Command {
             }
             return branchOfMinDist;
           } else {
-            double minDist = currPosition.getDistance(BlueLandmarkPose.L0.getPose().getTranslation());
+            double minDist =
+                currPosition.getDistance(BlueLandmarkPose.L0.getPose().getTranslation());
             BlueLandmarkPose branchOfMinDist = BlueLandmarkPose.L0;
             for (BlueLandmarkPose branch : blueBranchesL) {
               if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
@@ -169,7 +178,8 @@ public class JamesHardenMovement extends Command {
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(RedLandmarkPose.R0.getPose().getTranslation());
+            double minDist =
+                currPosition.getDistance(RedLandmarkPose.R0.getPose().getTranslation());
             RedLandmarkPose branchOfMinDist = RedLandmarkPose.R0;
             for (RedLandmarkPose branch : redBranchesR) {
               if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
@@ -179,7 +189,8 @@ public class JamesHardenMovement extends Command {
             }
             return branchOfMinDist;
           } else {
-            double minDist = currPosition.getDistance(BlueLandmarkPose.R0.getPose().getTranslation());
+            double minDist =
+                currPosition.getDistance(BlueLandmarkPose.R0.getPose().getTranslation());
             BlueLandmarkPose branchOfMinDist = BlueLandmarkPose.R0;
             for (BlueLandmarkPose branch : blueBranchesR) {
               if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {

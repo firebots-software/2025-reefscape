@@ -39,7 +39,7 @@ public final class Constants {
     public static final Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
     public static final Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
   }
-  
+
   public static class HardenConstants {
     public static class EndWhenCloseEnough {
       public static final double translationalTolerance = 0.43105229381;
@@ -76,26 +76,67 @@ public final class Constants {
   }
 
   public static class AutoRoutines {
-    List<LandmarkPose> BLUE_PROCESSOR_3 =
-        Arrays.asList(
-            BlueLandmarkPose.PROCESSOR_AUTO_START,
-            BlueLandmarkPose.L2,
-            BlueLandmarkPose.R1,
-            BlueLandmarkPose.L1,
-            BlueLandmarkPose.PROCESSOR_HPS),
-            BLUE_PROCESSOR_2 = Arrays.asList(BlueLandmarkPose.PROCESSOR_AUTO_START, BlueLandmarkPose.L2, BlueLandmarkPose.R1, BlueLandmarkPose.PROCESSOR_HPS),
-            BLUE_PROCESSOR_1 = Arrays.asList(BlueLandmarkPose.PROCESSOR_AUTO_START, BlueLandmarkPose.L2),
-            BLUE_CLEAR_3 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START,  BlueLandmarkPose.R4, BlueLandmarkPose.R5, BlueLandmarkPose.L5, BlueLandmarkPose.CLEAR_HPS),
-            BLUE_CLEAR_2 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.R4, BlueLandmarkPose.R5, BlueLandmarkPose.CLEAR_HPS),
-            BLUE_CLEAR_1 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.R4),
-            BLUE_MID_1 = Arrays.asList(BlueLandmarkPose.MID_AUTO_START, BlueLandmarkPose.L3),
-            RED_PROCESSOR_3 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5, RedLandmarkPose.L5, RedLandmarkPose.PROCESSOR_HPS),
-            RED_PROCESSOR_2 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5),
-            RED_PROCESSOR_1 = Arrays.asList(RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.PROCESSOR_HPS),
-            RED_CLEAR_3 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.R2, RedLandmarkPose.L1, RedLandmarkPose.R1, RedLandmarkPose.CLEAR_HPS),
-            RED_CLEAR_2 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.R2, RedLandmarkPose.L1, RedLandmarkPose.CLEAR_HPS),
-            RED_CLEAR_1 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.R2),
-            RED_MID_1 = Arrays.asList(RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.L3);
+    List<LandmarkPose>
+        BLUE_PROCESSOR_3 =
+            Arrays.asList(
+                BlueLandmarkPose.PROCESSOR_AUTO_START,
+                BlueLandmarkPose.L2,
+                BlueLandmarkPose.R1,
+                BlueLandmarkPose.L1,
+                BlueLandmarkPose.PROCESSOR_HPS),
+        BLUE_PROCESSOR_2 =
+            Arrays.asList(
+                BlueLandmarkPose.PROCESSOR_AUTO_START,
+                BlueLandmarkPose.L2,
+                BlueLandmarkPose.R1,
+                BlueLandmarkPose.PROCESSOR_HPS),
+        BLUE_PROCESSOR_1 =
+            Arrays.asList(BlueLandmarkPose.PROCESSOR_AUTO_START, BlueLandmarkPose.L2),
+        BLUE_CLEAR_3 =
+            Arrays.asList(
+                BlueLandmarkPose.CLEAR_AUTO_START,
+                BlueLandmarkPose.R4,
+                BlueLandmarkPose.R5,
+                BlueLandmarkPose.L5,
+                BlueLandmarkPose.CLEAR_HPS),
+        BLUE_CLEAR_2 =
+            Arrays.asList(
+                BlueLandmarkPose.CLEAR_AUTO_START,
+                BlueLandmarkPose.R4,
+                BlueLandmarkPose.R5,
+                BlueLandmarkPose.CLEAR_HPS),
+        BLUE_CLEAR_1 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.R4),
+        BLUE_MID_1 = Arrays.asList(BlueLandmarkPose.MID_AUTO_START, BlueLandmarkPose.L3),
+        RED_PROCESSOR_3 =
+            Arrays.asList(
+                RedLandmarkPose.PROCESSOR_AUTO_START,
+                RedLandmarkPose.L4,
+                RedLandmarkPose.R5,
+                RedLandmarkPose.L5,
+                RedLandmarkPose.PROCESSOR_HPS),
+        RED_PROCESSOR_2 =
+            Arrays.asList(
+                RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5),
+        RED_PROCESSOR_1 =
+            Arrays.asList(
+                RedLandmarkPose.PROCESSOR_AUTO_START,
+                RedLandmarkPose.L4,
+                RedLandmarkPose.PROCESSOR_HPS),
+        RED_CLEAR_3 =
+            Arrays.asList(
+                RedLandmarkPose.CLEAR_AUTO_START,
+                RedLandmarkPose.R2,
+                RedLandmarkPose.L1,
+                RedLandmarkPose.R1,
+                RedLandmarkPose.CLEAR_HPS),
+        RED_CLEAR_2 =
+            Arrays.asList(
+                RedLandmarkPose.CLEAR_AUTO_START,
+                RedLandmarkPose.R2,
+                RedLandmarkPose.L1,
+                RedLandmarkPose.CLEAR_HPS),
+        RED_CLEAR_1 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.R2),
+        RED_MID_1 = Arrays.asList(RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.L3);
   }
 
   public static class Landmarks {
@@ -103,36 +144,53 @@ public final class Constants {
   }
 
   public interface LandmarkPose {
-      Pose2d getPose();
-      boolean isRed();
-      default boolean isBranch() {
-        if (this instanceof Enum<?>) {
-            String name = ((Enum<?>)this).name();
-            return ((name.charAt(0) == 'L' || name.charAt(0) == 'R') && ((name.charAt(1) >= '0') && (name.charAt(1)) <= '5'));
-        }
-        return false;
+    Pose2d getPose();
+
+    boolean isRed();
+
+    default boolean isBranch() {
+      if (this instanceof Enum<?>) {
+        String name = ((Enum<?>) this).name();
+        return ((name.charAt(0) == 'L' || name.charAt(0) == 'R')
+            && ((name.charAt(1) >= '0') && (name.charAt(1)) <= '5'));
+      }
+      return false;
     }
 
     default boolean endsWithHPS() {
       if (this instanceof Enum<?>) {
-           String name = ((Enum<?>)this).name();
-           if (name.length() >= 3) {
-               return name.endsWith("HPS");
-           }
+        String name = ((Enum<?>) this).name();
+        if (name.length() >= 3) {
+          return name.endsWith("HPS");
+        }
       }
       return false;
     }
   }
 
   public static enum BlueLandmarkPose implements LandmarkPose {
-    PROCESSOR_AUTO_START(new Pose2d(
+    PROCESSOR_AUTO_START(
+        new Pose2d(
             new Translation2d(7.11305570602417, 0.4940316081047058), new Rotation2d(Math.PI))),
-    CLEAR_AUTO_START(new Pose2d(new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI))),
-    MID_AUTO_START(new Pose2d(new Translation2d(7.11305570602417, 4.19448), new Rotation2d(Math.PI))),
-    CLOSER_PROCESSOR_AUTO_START(new Pose2d(new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI))),
-    CLOSER_CLEAR_AUTO_START(new Pose2d(new Translation2d(7.113824844360352, 6.167776107788086), new Rotation2d(Math.PI))),
-    PROCESSOR_HPS(new Pose2d(new Translation2d(1.118087887763977, 1.0306631326675415), new Rotation2d(0.9334126223560425))),
-    CLEAR_HPS(new Pose2d(new Translation2d(1.1465998888015747, 7.014684677124023), new Rotation2d(-0.9419997588093272))),
+    CLEAR_AUTO_START(
+        new Pose2d(
+            new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI))),
+    MID_AUTO_START(
+        new Pose2d(new Translation2d(7.11305570602417, 4.19448), new Rotation2d(Math.PI))),
+    CLOSER_PROCESSOR_AUTO_START(
+        new Pose2d(
+            new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI))),
+    CLOSER_CLEAR_AUTO_START(
+        new Pose2d(
+            new Translation2d(7.113824844360352, 6.167776107788086), new Rotation2d(Math.PI))),
+    PROCESSOR_HPS(
+        new Pose2d(
+            new Translation2d(1.118087887763977, 1.0306631326675415),
+            new Rotation2d(0.9334126223560425))),
+    CLEAR_HPS(
+        new Pose2d(
+            new Translation2d(1.1465998888015747, 7.014684677124023),
+            new Rotation2d(-0.9419997588093272))),
     L0(new Pose2d(new Translation2d(3.14058, 4.19448), new Rotation2d(Degrees.of(0)))),
     L1(new Pose2d(new Translation2d(3.66895, 2.94212), new Rotation2d(Degrees.of(60)))),
     L2(new Pose2d(new Translation2d(5.0177, 2.77352), new Rotation2d(Degrees.of(120)))),
@@ -160,18 +218,26 @@ public final class Constants {
     public boolean isRed() {
       return false;
     }
-
-
   }
 
   public static enum RedLandmarkPose implements LandmarkPose {
-    PROCESSOR_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 7.607936382293701), new Rotation2d())),
-    CLEAR_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d())),
+    PROCESSOR_AUTO_START(
+        new Pose2d(new Translation2d(10.441716194152832, 7.607936382293701), new Rotation2d())),
+    CLEAR_AUTO_START(
+        new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d())),
     MID_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 3.85728), new Rotation2d())),
-    CLOSER_PROCESSOR_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 6.167776107788086), new Rotation2d())),
-    CLOSER_CLEAR_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 1.898607850074768), new Rotation2d())),
-    PROCESSOR_HPS(new Pose2d(new Translation2d(16.341829299926758, 7.0662689208984375), new Rotation2d(-2.1939969266716175))),
-    CLEAR_HPS(new Pose2d(new Translation2d(16.39461326599121, 1.0060197114944458),new Rotation2d(2.1932607985206625))),
+    CLOSER_PROCESSOR_AUTO_START(
+        new Pose2d(new Translation2d(10.441716194152832, 6.167776107788086), new Rotation2d())),
+    CLOSER_CLEAR_AUTO_START(
+        new Pose2d(new Translation2d(10.441716194152832, 1.898607850074768), new Rotation2d())),
+    PROCESSOR_HPS(
+        new Pose2d(
+            new Translation2d(16.341829299926758, 7.0662689208984375),
+            new Rotation2d(-2.1939969266716175))),
+    CLEAR_HPS(
+        new Pose2d(
+            new Translation2d(16.39461326599121, 1.0060197114944458),
+            new Rotation2d(2.1932607985206625))),
     R0(new Pose2d(new Translation2d(14.4076704, 4.19448), new Rotation2d(Degrees.of(180)))),
     R1(new Pose2d(new Translation2d(13.8793004, 2.94212), new Rotation2d(Degrees.of(120)))),
     R2(new Pose2d(new Translation2d(12.5305504, 2.77352), new Rotation2d(Degrees.of(60)))),
