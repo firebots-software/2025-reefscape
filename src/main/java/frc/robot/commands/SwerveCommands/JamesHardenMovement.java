@@ -119,7 +119,7 @@ public class JamesHardenMovement extends Command {
   public static JamesHardenMovement toClosestLeftBranch(
       SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
 
-    Supplier<Pose2d> targetPose =
+    Supplier<Integer> targetSide =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
@@ -132,15 +132,7 @@ public class JamesHardenMovement extends Command {
               }
             }
 
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.LEFT_LINEUP_RED[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
-
-            return target;
+            return sideOfMinDist;
           } else {
             double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[0]);
             int sideOfMinDist = 0;
@@ -150,25 +142,16 @@ public class JamesHardenMovement extends Command {
                 sideOfMinDist = i;
               }
             }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.LEFT_LINEUP_BLUE[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
-
-            return target;
+            return sideOfMinDist;
           }
         };
 
-    return new JamesHardenMovement(swerve, targetPose, isInAuto);
+    return JamesHardenMovement.toSpecificLeftBranch(swerve, redSide, isInAuto, targetSide.get());
   }
 
   public static JamesHardenMovement toClosestRightBranch(
       SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
-    Supplier<Pose2d> targetPose =
+    Supplier<Integer> targetSide =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
@@ -181,15 +164,7 @@ public class JamesHardenMovement extends Command {
               }
             }
 
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.RIGHT_LINEUP_RED[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
-
-            return target;
+            return sideOfMinDist;
           } else {
             double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[0]);
             int sideOfMinDist = 0;
@@ -199,117 +174,10 @@ public class JamesHardenMovement extends Command {
                 sideOfMinDist = i;
               }
             }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.RIGHT_LINEUP_BLUE[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
-
-            return target;
+            return sideOfMinDist;
           }
         };
 
-    return new JamesHardenMovement(swerve, targetPose, isInAuto);
-  }
-
-  public static JamesHardenMovement toClosestLeftOutpost(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
-
-    Supplier<Pose2d> targetPose =
-        () -> {
-          Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
-          if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_RED[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_RED[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_RED[i]);
-                sideOfMinDist = i;
-              }
-            }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.LEFT_OUTPOST_RED[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestLeftOutpost/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestLeftOutpost/minDist(m)", minDist);
-
-            return target;
-          } else {
-            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_BLUE[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_BLUE[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_BLUE[i]);
-                sideOfMinDist = i;
-              }
-            }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.LEFT_OUTPOST_BLUE[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestLeftOutpost/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestLeftOutpost/minDist(m)", minDist);
-
-            return target;
-          }
-        };
-
-    return new JamesHardenMovement(swerve, targetPose, isInAuto);
-  }
-
-  public static JamesHardenMovement toClosestRightOutpost(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
-    Supplier<Pose2d> targetPose =
-        () -> {
-          Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
-          if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_RED[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_RED[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_RED[i]);
-                sideOfMinDist = i;
-              }
-            }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.RIGHT_OUTPOST_RED[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
-            DogLog.log("JamesHardenMovement/toClosestRightOutpost/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestRightOutpost/minDist(m)", minDist);
-
-            return target;
-          } else {
-            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_BLUE[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_BLUE[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_BLUE[i]);
-                sideOfMinDist = i;
-              }
-            }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.RIGHT_OUTPOST_BLUE[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestRightOutpost/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestRightOutpost/minDist(m)", minDist);
-
-            return target;
-          }
-        };
-
-    return new JamesHardenMovement(swerve, targetPose, isInAuto);
+    return JamesHardenMovement.toSpecificRightBranch(swerve, redSide, isInAuto, targetSide.get());
   }
 }
