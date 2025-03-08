@@ -11,11 +11,13 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
@@ -31,15 +33,20 @@ public class ElevatorSubsystem extends SubsystemBase {
   private LoggedTalonFX motor2;
   public LoggedTalonFX master;
 
+  private LinearFilter elevatorFilter;
+  private double currentHeightToF;
+
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
   private CANrange distance; // Time of Flight (ToF) sensor
 
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
+  private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
   private ElevatorSubsystem() {
     // Initialize motors
+    elevatorFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
 
     distance =
         new CANrange(
@@ -99,7 +106,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     m2Config.apply(moc);
 
     master = motor1;
-    resetPosition();
+    currentHeightToF = elevatorFilter.calculate(getToFDistance());
+    resetPositionFiltered();
   }
 
   // instance for elevator subsystem
@@ -114,8 +122,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     return distance.isConnected();
   }
 
+  public void resetPositionFiltered() {
+    master.setPosition(
+        currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+    DogLog.log(
+        "subsystems/Elevator/resetElevatorPosition",
+        currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+  }
+
   public void resetPosition() {
-    // TODO: add constant to convert distance to encoder values
     if (tofIsConnected()) {
       master.setPosition(
           this.getToFDistance()
@@ -134,6 +149,33 @@ public class ElevatorSubsystem extends SubsystemBase {
     DogLog.log(
         "subsystems/Elevator/resetElevatorPosition",
         posInHeight * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+  }
+
+  // Hardstop Zeroing functions:
+  public void moveElevatorNegative() {
+    master.setControl(velocityRequest.withVelocity(-5).withSlot(0));
+  }
+
+  public void reduceCurrentLimits(){
+    master.updateCurrentLimits(20, 20);
+  }
+
+  public void resetCurrentLimits(){
+    master.updateCurrentLimits(Constants.ElevatorConstants.STATOR_CURRENT_LIMIT, Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+  }
+
+  public void resetElevatorPositionToZero() {
+    master.setPosition(0);
+    master.setControl(controlRequest.withPosition(0));
+    master.setPosition(0);
+  }
+
+  public boolean checkCurrent() {
+    double current = Math.abs(master.getStatorCurrent().getValue().magnitude());
+    if (current > 15) {
+      return true;
+    }
+    return false;
   }
 
   public double getError() {
@@ -198,10 +240,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    currentHeightToF = elevatorFilter.calculate(getToFDistance());
     // Time of Flight Sensor
     DogLog.log("subsystems/Elevator/getError", getError());
     DogLog.log("subsystems/Elevator/ToF/Distance", getToFDistance());
     DogLog.log("subsystems/Elevator/ToF/Connected", distance.isConnected());
+    DogLog.log("subsystems/Elevator/ToF/LinearFilterDistance", currentHeightToF);
 
     DogLog.log("subsystems/Elevator/isAtPosition", this.isAtPosition());
     DogLog.log("subsystems/Elevator/targetPosition", currentLevel.getPosition());

@@ -200,6 +200,9 @@ public class ArmSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
     DogLog.log(
         "subsystems/Dale/Flywheel Speed", flywheelMotor.getVelocity(false).getValueAsDouble());
+    DogLog.log(
+        "subsystems/Dale/command",
+        this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 
   public double getEncoderDegrees() {
