@@ -42,7 +42,7 @@ public class EndWhenCloseEnough extends Command {
                     .getTranslation()
                     .getDistance(poseSupplier.get().getTranslation()))
             <= Constants.HardenConstants.EndWhenCloseEnough.translationalTolerance)
-        && (Math.abs(targetRot - currRot)
+        && (Math.min(Math.abs(targetRot - currRot), (Math.PI*2)-Math.abs(targetRot - currRot))
             <= Constants.HardenConstants.EndWhenCloseEnough.headingTolerance)) {
       return true;
     } else return false;

@@ -115,7 +115,7 @@ public class JamesHardenMovement extends Command {
             < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
         && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
             < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
-        && (Math.abs(targetRot - currRot)
+        && (Math.min(Math.abs(targetRot - currRot), (Math.PI*2)-Math.abs(targetRot-currRot))
             < Constants.HardenConstants.RegularCommand.headingTolerance)) {
       return true;
     } else return false;
@@ -133,8 +133,8 @@ public class JamesHardenMovement extends Command {
   }
 
   public static JamesHardenMovement toSpecificBranch(
-      SwerveSubsystem swerve, boolean isInAuto, LandmarkPose branch) {
-    return new JamesHardenMovement(swerve, branch.getPose(), isInAuto);
+      SwerveSubsystem swerve, boolean isInAuto, Supplier<LandmarkPose> branch) {
+    return new JamesHardenMovement(swerve, () -> branch.get().getPose(), isInAuto);
   }
 
   public static JamesHardenMovement toClosestLeftBranch(
@@ -168,7 +168,7 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch.get());
+    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch);
   }
 
   public static JamesHardenMovement toClosestRightBranch(
@@ -177,6 +177,10 @@ public class JamesHardenMovement extends Command {
     Supplier<LandmarkPose> targetBranch =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
+          DogLog.log("currPositionX", currPosition.getX());
+          DogLog.log("currPositionY", currPosition.getY());
+          DogLog.log("currPositionTheta", currPosition.getAngle().getRadians());
+          DogLog.log("hardenRed", redSide.getAsBoolean());
           if (redSide.getAsBoolean()) {
             double minDist =
                 currPosition.getDistance(RedLandmarkPose.R0.getPose().getTranslation());
@@ -202,6 +206,6 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch.get());
+    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch);
   }
 }

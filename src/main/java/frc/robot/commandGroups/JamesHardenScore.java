@@ -59,7 +59,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
       return;
     }
 
-    movementCommand = JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, branch);
+    movementCommand = JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch);
 
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {

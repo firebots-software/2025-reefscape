@@ -11,6 +11,7 @@ import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.ElevatorCommands.SetElevatorLevelInstant;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.subsystems.ArmSubsystem;
@@ -42,10 +43,10 @@ public class AutoProducer extends SequentialCommandGroup {
     addCommands(
         new ParallelDeadlineGroup(
             new Intake(elevator, funnel, shooter),
-            JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(1))),
+            JamesHardenMovement.toSpecificBranch(driveTrain, false, () -> autoInformation.get(1))),
         new JamesHardenScore(
             elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(1)),
-        new SetElevatorLevel(elevator, ElevatorPositions.Intake));
+        new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
 
     // first hps visit, second score
     if (autoInformation.size() > 2) {
@@ -56,10 +57,10 @@ public class AutoProducer extends SequentialCommandGroup {
               new Intake(elevator, funnel, shooter),
               new SequentialCommandGroup(
                   driveTrain.applyRequest(() -> brake).withTimeout(0.1),
-                  JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(2)))),
+                  JamesHardenMovement.toSpecificBranch(driveTrain, false, () -> autoInformation.get(2)))),
           new JamesHardenScore(
               elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(2)),
-          new SetElevatorLevel(elevator, ElevatorPositions.L4));
+          new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
     }
 
     if (autoInformation.size() > 3) {
@@ -70,10 +71,10 @@ public class AutoProducer extends SequentialCommandGroup {
               new Intake(elevator, funnel, shooter),
               new SequentialCommandGroup(
                   driveTrain.applyRequest(() -> brake).withTimeout(0.1),
-                  JamesHardenMovement.toSpecificBranch(driveTrain, false, autoInformation.get(3)))),
+                  JamesHardenMovement.toSpecificBranch(driveTrain, false, () -> autoInformation.get(3)))),
           new JamesHardenScore(
               elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(3)),
-          new SetElevatorLevel(elevator, ElevatorPositions.L4));
+          new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
     }
   }
 }
