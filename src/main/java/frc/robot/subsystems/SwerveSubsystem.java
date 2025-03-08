@@ -248,13 +248,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   // Resets PID controllers
   public void resetProfiledPIDs() {
-    xProfiledPIDController.reset(currentState.Pose.getX());
-    yProfiledPIDController.reset(currentState.Pose.getY());
-    headingProfiledPIDController.reset(currentState.Pose.getRotation().getRadians());
+    // ChassisSpeeds fieldCentricChassisSpeeds = currentState.Speeds.fromRobotRelativeSpeeds(getState().Speeds, getState().Pose.getRotation());
+    xProfiledPIDController.reset(currentState.Pose.getX(), getFieldSpeeds().vxMetersPerSecond);
+    yProfiledPIDController.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
+    headingProfiledPIDController.reset(currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);
 
-    autoProfiledPID_X.reset(currentState.Pose.getX());
-    autoProfiledPID_Y.reset(currentState.Pose.getY());
-    autoProfiledPID_HEADING.reset(currentState.Pose.getRotation().getRadians());
+    autoProfiledPID_X.reset(currentState.Pose.getX(),getFieldSpeeds().vxMetersPerSecond);
+    autoProfiledPID_Y.reset(currentState.Pose.getY(),getFieldSpeeds().vyMetersPerSecond);
+    autoProfiledPID_HEADING.reset(currentState.Pose.getRotation().getRadians(),getFieldSpeeds().vxMetersPerSecond);
   }
 
   /* Swerve requests to apply during SysId characterization */
