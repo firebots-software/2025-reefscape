@@ -14,9 +14,6 @@ import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
-import java.util.Optional;
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -65,14 +62,9 @@ public class Robot extends TimedRobot {
     LoggedTalonFX.periodic_static();
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
-    
-
-
-
 
     visionRight.addFilteredPose();
     visionLeft.addFilteredPose();
-
 
     DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
 

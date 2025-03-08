@@ -156,12 +156,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     master.setControl(velocityRequest.withVelocity(-5).withSlot(0));
   }
 
-  public void reduceCurrentLimits(){
+  public void reduceCurrentLimits() {
     master.updateCurrentLimits(20, 20);
   }
 
-  public void resetCurrentLimits(){
-    master.updateCurrentLimits(Constants.ElevatorConstants.STATOR_CURRENT_LIMIT, Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+  public void resetCurrentLimits() {
+    master.updateCurrentLimits(
+        Constants.ElevatorConstants.STATOR_CURRENT_LIMIT,
+        Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
   }
 
   public void resetElevatorPositionToZero() {

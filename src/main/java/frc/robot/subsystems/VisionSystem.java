@@ -19,14 +19,10 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.MiscUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import javax.imageio.plugins.tiff.ExifTIFFTagSet;
-
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -170,7 +166,7 @@ public class VisionSystem extends SubsystemBase {
       double targetSize = pipelineResult.getBestTarget().area;
       double distance = getDistance();
       Optional<EstimatedRobotPose> estPose = getMultiTagPose3d(driveTrain.getState().Pose);
-      if (estPose != null) {
+      if (estPose.isPresent()) {
         DogLog.log("KalmanDebug/rightRobotPoseisPresent", estPose.isPresent());
         DogLog.log("KalmanDebug/rightRobotPoseX", estPose.get().estimatedPose.getX());
         DogLog.log("KalmanDebug/rightRobotPoseY", estPose.get().estimatedPose.getY());
@@ -193,15 +189,14 @@ public class VisionSystem extends SubsystemBase {
           hasReefTag = false;
         }
       }
-        
 
       if (hasReefTag) {
-        DogLog.log("KalmanDebug/rightpiplinenull",  pipelineResult == null);
+        DogLog.log("KalmanDebug/rightpiplinenull", pipelineResult == null);
         DogLog.log("KalmanDebug/leftpiplinenull", pipelineResult == null);
 
         double xKalman = 0.1 * Math.pow(1.15, poseAmbiguity);
         double yKalman = 0.1 * Math.pow(1.4, poseAmbiguity);
-        double rotationKalman = MiscUtils.lerp(1-distance, 0.4, 1000);
+        double rotationKalman = MiscUtils.lerp((distance-0.6)/1.4, 0.4, 1000)/10;
         DogLog.log("KalmanDebug/rotationStandardDeviation", rotationKalman);
 
         Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, rotationKalman);
@@ -210,15 +205,14 @@ public class VisionSystem extends SubsystemBase {
             new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
         DogLog.log("KalmanDebug/rotationless", rotationLess);
 
-        //Changed to not use rotationless
+        // Changed to not use rotationless
         driveTrain.addVisionMeasurement(
-            rotationLess, pipelineResult.getTimestampSeconds(), visionMatrix);
+            bestRobotPose2d, pipelineResult.getTimestampSeconds(), visionMatrix);
         DogLog.log("KalmanDebug/visionUsed", true);
-      }
-      else{
+      } else {
         DogLog.log("KalmanDebug/visionUsed", false);
       }
-    }else{
+    } else {
       DogLog.log("KalmanDebug/visionUsed", false);
     }
   }
