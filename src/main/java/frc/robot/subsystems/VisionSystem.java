@@ -18,6 +18,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.MiscUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -199,15 +201,18 @@ public class VisionSystem extends SubsystemBase {
 
         double xKalman = 0.1 * Math.pow(1.15, poseAmbiguity);
         double yKalman = 0.1 * Math.pow(1.4, poseAmbiguity);
+        double rotationKalman = MiscUtils.lerp(1-distance, 0.4, 1000);
+        DogLog.log("KalmanDebug/rotationStandardDeviation", rotationKalman);
 
-        Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, 100d);
+        Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, rotationKalman);
         Pose2d bestRobotPose2d = getPose2d();
         Pose2d rotationLess =
             new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
         DogLog.log("KalmanDebug/rotationless", rotationLess);
 
+        //Changed to not use rotationless
         driveTrain.addVisionMeasurement(
-            rotationLess, pipelineResult.getTimestampSeconds(), visionMatrix);
+            bestRobotPose2d, pipelineResult.getTimestampSeconds(), visionMatrix);
         DogLog.log("KalmanDebug/visionUsed", true);
       }
       else{

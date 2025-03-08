@@ -34,4 +34,10 @@ public class MiscUtils {
     return new Pose2d(
         a.getX() + b.getX(), a.getY() + b.getY(), new Rotation2d(a.getRotation().getRadians()));
   }
+
+  public static double lerp(double t, double a, double b){
+    t = Math.max(0, Math.min(1, t));
+
+    return a + (t * (b-a));
+  }
 }
