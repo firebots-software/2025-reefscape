@@ -45,6 +45,11 @@ public final class Constants {
       public static final double translationalTolerance = 0.43105229381;
       public static final double headingTolerance = 0.7853975; // Math.PI/4
     }
+
+    public static class RegularCommand {
+      public static final double xyIndividualTolerance = 0.02;
+      public static final double headingTolerance = 0.0075;
+    }
   }
 
   public static class Vision {
@@ -119,92 +124,89 @@ public final class Constants {
             RED_MID_1 = Arrays.asList(AutoInformation.L3);
   }
 
-  public static enum ReefLineupTranslation {
-
+  public static class Landmarks {
+    public static final double MIDLINE_X = 8.7741125;
   }
 
-  public static class Landmarks {
-    // midline constant
-    public static final double MIDLINE_X = 8.7741125;
-    public static final Pose2d blueProcessorSideAutoStart =
-        new Pose2d(
-            new Translation2d(7.11305570602417, 0.4940316081047058), new Rotation2d(Math.PI));
-    public static final Pose2d blueClearSideAutoStart =
-        new Pose2d(new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI));
-    public static final Pose2d redProcessorSideAutoStart =
-        new Pose2d(new Translation2d(10.441716194152832, 7.607936382293701), new Rotation2d());
-    public static final Pose2d redClearSideAutoStart =
-        new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d());
+  public interface LandmarkPose {
+      Pose2d getPose();
+      boolean isRed();
+  }
 
-    public static final Pose2d blueMidAutoStart =
-        new Pose2d(new Translation2d(7.11305570602417, 4.19448), new Rotation2d(Math.PI));
+  public static enum BlueLandmarkPose implements LandmarkPose {
+    BLUE_PROCESSOR_AUTO_START(new Pose2d(
+            new Translation2d(7.11305570602417, 0.4940316081047058), new Rotation2d(Math.PI))),
+    BLUE_CLEAR_AUTO_START(new Pose2d(new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI))),
+    BLUE_MID_AUTO_START(new Pose2d(new Translation2d(7.11305570602417, 4.19448), new Rotation2d(Math.PI))),
+    CLOSER_BLUE_PROCESSOR_AUTO_START(new Pose2d(new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI))),
+    CLOSER_BLUE_CLEAR_AUTO_START(new Pose2d(new Translation2d(7.113824844360352, 6.167776107788086), new Rotation2d(Math.PI))),
+    BLUE_PROCESSOR_HPS(new Pose2d(new Translation2d(1.118087887763977, 1.0306631326675415), new Rotation2d(0.9334126223560425))),
+    BLUE_CLEAR_HPS(new Pose2d(new Translation2d(1.1465998888015747, 7.014684677124023), new Rotation2d(-0.9419997588093272))),
+    L0(new Pose2d(new Translation2d(3.14058, 4.19448), new Rotation2d(Degrees.of(0)))),
+    L1(new Pose2d(new Translation2d(3.66895, 2.94212), new Rotation2d(Degrees.of(60)))),
+    L2(new Pose2d(new Translation2d(5.0177, 2.77352), new Rotation2d(Degrees.of(120)))),
+    L3(new Pose2d(new Translation2d(5.83809, 3.85728), new Rotation2d(Degrees.of(180)))),
+    L4(new Pose2d(new Translation2d(5.30973, 5.10963), new Rotation2d(Degrees.of(-120)))),
+    L5(new Pose2d(new Translation2d(3.96097, 5.27823), new Rotation2d(Degrees.of(-60)))),
+    R0(new Pose2d(new Translation2d(3.14058, 3.85728), new Rotation2d(Degrees.of(0)))),
+    R1(new Pose2d(new Translation2d(3.96097, 2.77352), new Rotation2d(Degrees.of(60)))),
+    R2(new Pose2d(new Translation2d(5.30973, 2.94212), new Rotation2d(Degrees.of(120)))),
+    R3(new Pose2d(new Translation2d(5.83809, 4.19448), new Rotation2d(Degrees.of(180)))),
+    R4(new Pose2d(new Translation2d(5.0177, 5.27823), new Rotation2d(Degrees.of(-120)))),
+    R5(new Pose2d(new Translation2d(3.66895, 5.10963), new Rotation2d(Degrees.of(-60))));
+    public final Pose2d pose;
 
-    public static final Pose2d redMidAutoStart =
-        new Pose2d(new Translation2d(10.441716194152832, 3.85728), new Rotation2d());
+    BlueLandmarkPose(Pose2d pose) {
+      this.pose = pose;
+    }
 
-    public static final Pose2d closerBlueProcessorSideAutoStart =
-        new Pose2d(new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI));
-    public static final Pose2d closerBlueClearSideAutoStart =
-        new Pose2d(
-            new Translation2d(7.113824844360352, 6.167776107788086), new Rotation2d(Math.PI));
-    public static final Pose2d closerRedProcessorSideAutoStart =
-        new Pose2d(new Translation2d(10.441716194152832, 6.167776107788086), new Rotation2d());
-    public static final Pose2d closerRedClearSideAutoStart =
-        new Pose2d(new Translation2d(10.441716194152832, 1.898607850074768), new Rotation2d());
+    @Override
+    public Pose2d getPose() {
+      return this.pose;
+    }
 
-    public static final Pose2d blueProcessorSideHPS =
-        new Pose2d(
-            new Translation2d(1.118087887763977, 1.0306631326675415),
-            new Rotation2d(0.9334126223560425));
-    public static final Pose2d blueClearSideHPS =
-        new Pose2d(
-            new Translation2d(1.1465998888015747, 7.014684677124023),
-            new Rotation2d(-0.9419997588093272));
-    public static final Pose2d redProcessorSideHPS =
-        new Pose2d(
-            new Translation2d(16.341829299926758, 7.0662689208984375),
-            new Rotation2d(-2.1939969266716175));
-    public static final Pose2d redClearSideHPS =
-        new Pose2d(
-            new Translation2d(16.39461326599121, 1.0060197114944458),
-            new Rotation2d(2.1932607985206625));
+    @Override
+    public boolean isRed() {
+      return false;
+    }
+  }
 
-    // Blue Lineup Translations
-    public static final Pose2d[] LEFT_LINEUP_BLUE = {
-      new Pose2d(new Translation2d(3.14058, 4.19448), new Rotation2d(Degrees.of(0))),
-      new Pose2d(new Translation2d(3.66895, 2.94212), new Rotation2d(Degrees.of(60))),
-      new Pose2d(new Translation2d(5.0177, 2.77352), new Rotation2d(Degrees.of(120))),
-      new Pose2d(new Translation2d(5.83809, 3.85728), new Rotation2d(Degrees.of(180))),
-      new Pose2d(new Translation2d(5.30973, 5.10963), new Rotation2d(Degrees.of(-120))),
-      new Pose2d(new Translation2d(3.96097, 5.27823), new Rotation2d(Degrees.of(-60)))
-    };
+  public static enum RedLandmarkPose implements LandmarkPose {
+    PROCESSOR_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 7.607936382293701), new Rotation2d())),
+    CLEAR_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d())),
+    MID_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 3.85728), new Rotation2d())),
+    CLOSER_PROCESSOR_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 6.167776107788086), new Rotation2d())),
+    CLOSER_CLEAR_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 1.898607850074768), new Rotation2d())),
+    PROCESSOR_HPS(new Pose2d(new Translation2d(16.341829299926758, 7.0662689208984375), new Rotation2d(-2.1939969266716175))),
+    CLEAR_HPS(new Pose2d(new Translation2d(16.39461326599121, 1.0060197114944458),new Rotation2d(2.1932607985206625))),
+    R0(new Pose2d(new Translation2d(14.4076704, 4.19448), new Rotation2d(Degrees.of(180)))),
+    R1(new Pose2d(new Translation2d(13.8793004, 2.94212), new Rotation2d(Degrees.of(120)))),
+    R2(new Pose2d(new Translation2d(12.5305504, 2.77352), new Rotation2d(Degrees.of(60)))),
+    R3(new Pose2d(new Translation2d(11.7101604, 3.85728), new Rotation2d(Degrees.of(0)))),
+    R4(new Pose2d(new Translation2d(12.2385204, 5.10963), new Rotation2d(Degrees.of(-60)))),
+    R5(new Pose2d(new Translation2d(13.5872804, 5.27823), new Rotation2d(Degrees.of(-120)))),
+    L0(new Pose2d(new Translation2d(14.4076704, 3.85728), new Rotation2d(Degrees.of(180)))),
+    L1(new Pose2d(new Translation2d(13.5872804, 2.77352), new Rotation2d(Degrees.of(120)))),
+    L2(new Pose2d(new Translation2d(12.2385204, 2.94212), new Rotation2d(Degrees.of(60)))),
+    L3(new Pose2d(new Translation2d(11.7101604, 4.19448), new Rotation2d(Degrees.of(0)))),
+    L4(new Pose2d(new Translation2d(12.5305504, 5.27823), new Rotation2d(Degrees.of(-60)))),
+    L5(new Pose2d(new Translation2d(13.8793004, 5.10963), new Rotation2d(Degrees.of(-120))));
 
-    public static final Pose2d[] RIGHT_LINEUP_BLUE = {
-      new Pose2d(new Translation2d(3.14058, 3.85728), new Rotation2d(Degrees.of(0))),
-      new Pose2d(new Translation2d(3.96097, 2.77352), new Rotation2d(Degrees.of(60))),
-      new Pose2d(new Translation2d(5.30973, 2.94212), new Rotation2d(Degrees.of(120))),
-      new Pose2d(new Translation2d(5.83809, 4.19448), new Rotation2d(Degrees.of(180))),
-      new Pose2d(new Translation2d(5.0177, 5.27823), new Rotation2d(Degrees.of(-120))),
-      new Pose2d(new Translation2d(3.66895, 5.10963), new Rotation2d(Degrees.of(-60)))
-    };
+    public final Pose2d pose;
 
-    public static final Pose2d[] RIGHT_LINEUP_RED = {
-      new Pose2d(new Translation2d(14.4076704, 4.19448), new Rotation2d(Degrees.of(180))),
-      new Pose2d(new Translation2d(13.8793004, 2.94212), new Rotation2d(Degrees.of(120))),
-      new Pose2d(new Translation2d(12.5305504, 2.77352), new Rotation2d(Degrees.of(60))),
-      new Pose2d(new Translation2d(11.7101604, 3.85728), new Rotation2d(Degrees.of(0))),
-      new Pose2d(new Translation2d(12.2385204, 5.10963), new Rotation2d(Degrees.of(-60))),
-      new Pose2d(new Translation2d(13.5872804, 5.27823), new Rotation2d(Degrees.of(-120))) 
-    };
+    RedLandmarkPose(Pose2d pose) {
+      this.pose = pose;
+    }
 
-    public static final Pose2d[] LEFT_LINEUP_RED = {
-      new Pose2d(new Translation2d(14.4076704, 3.85728), new Rotation2d(Degrees.of(180))),
-      new Pose2d(new Translation2d(13.5872804, 2.77352), new Rotation2d(Degrees.of(120))),
-      new Pose2d(new Translation2d(12.2385204, 2.94212), new Rotation2d(Degrees.of(60))),
-      new Pose2d(new Translation2d(11.7101604, 4.19448), new Rotation2d(Degrees.of(0))),
-      new Pose2d(new Translation2d(12.5305504, 5.27823), new Rotation2d(Degrees.of(-60))),
-      new Pose2d(new Translation2d(13.8793004, 5.10963), new Rotation2d(Degrees.of(-120))) 
-    };
+    @Override
+    public Pose2d getPose() {
+      return this.pose;
+    }
+
+    @Override
+    public boolean isRed() {
+      return true;
+    }
   }
 
   public static final class Arm {
