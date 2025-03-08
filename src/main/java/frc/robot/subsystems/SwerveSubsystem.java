@@ -133,9 +133,9 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     xProfiledPIDController.setIZone(0.5);
     yProfiledPIDController.setIZone(0.5);
 
-    xProfiledPIDController.setIntegratorRange(0.0,0.2);
-    xProfiledPIDController.setIntegratorRange(0.0,0.2);
-    
+    xProfiledPIDController.setIntegratorRange(0.0, 0.2);
+    xProfiledPIDController.setIntegratorRange(0.0, 0.2);
+
     autoProfiledPID_HEADING.enableContinuousInput(-Math.PI, Math.PI);
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     configureAutoBuilder();
@@ -254,14 +254,18 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   // Resets PID controllers
   public void resetProfiledPIDs() {
-    // ChassisSpeeds fieldCentricChassisSpeeds = currentState.Speeds.fromRobotRelativeSpeeds(getState().Speeds, getState().Pose.getRotation());
+    // ChassisSpeeds fieldCentricChassisSpeeds =
+    // currentState.Speeds.fromRobotRelativeSpeeds(getState().Speeds,
+    // getState().Pose.getRotation());
     xProfiledPIDController.reset(currentState.Pose.getX(), getFieldSpeeds().vxMetersPerSecond);
     yProfiledPIDController.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
-    headingProfiledPIDController.reset(currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);
+    headingProfiledPIDController.reset(
+        currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);
 
-    autoProfiledPID_X.reset(currentState.Pose.getX(),getFieldSpeeds().vxMetersPerSecond);
-    autoProfiledPID_Y.reset(currentState.Pose.getY(),getFieldSpeeds().vyMetersPerSecond);
-    autoProfiledPID_HEADING.reset(currentState.Pose.getRotation().getRadians(),getFieldSpeeds().vxMetersPerSecond);
+    autoProfiledPID_X.reset(currentState.Pose.getX(), getFieldSpeeds().vxMetersPerSecond);
+    autoProfiledPID_Y.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
+    autoProfiledPID_HEADING.reset(
+        currentState.Pose.getRotation().getRadians(), getFieldSpeeds().vxMetersPerSecond);
   }
 
   /* Swerve requests to apply during SysId characterization */

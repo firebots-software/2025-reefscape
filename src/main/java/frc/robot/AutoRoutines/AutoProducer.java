@@ -1,8 +1,6 @@
 package frc.robot.AutoRoutines;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
-import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -13,7 +11,7 @@ import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.ElevatorCommands.ZeroElevatorAcrossTimeframe;
+import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -33,10 +31,10 @@ public class AutoProducer extends SequentialCommandGroup {
       ArmSubsystem arm,
       List<LandmarkPose> autoInformation) {
     // initializing commands
-    
+
     addCommands(
         new ParallelCommandGroup(
-            new ZeroElevatorAcrossTimeframe(elevator),
+            new ZeroElevatorHardStop(elevator),
             new InstantCommand(() -> driveTrain.resetPose(autoInformation.get(0).getPose())),
             new ZeroArm(arm)));
 

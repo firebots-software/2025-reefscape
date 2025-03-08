@@ -46,7 +46,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
-
   private ElevatorSubsystem() {
     // Initialize motors
     elevatorZeroed = false;
@@ -73,17 +72,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     Follower follower = new Follower(ElevatorConstants.MOTOR1_PORT, false);
     motor2.setControl(follower);
 
-    Slot1Configs s1c = new Slot1Configs()
-        .withKP(ElevatorConstants.S1C_KP)
-        .withKI(ElevatorConstants.S1C_KI)
-        .withKD(ElevatorConstants.S1C_KD)
-        .withKS(ElevatorConstants.S0C_KS)
-        .withKG(ElevatorConstants.S0C_KG)
-        .withKA(ElevatorConstants.S0C_KA)
-        .withKV(ElevatorConstants.S0C_KV)
-        .withGravityType(GravityTypeValue.Elevator_Static)
-        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
-    
+    Slot1Configs s1c =
+        new Slot1Configs()
+            .withKP(ElevatorConstants.S1C_KP)
+            .withKI(ElevatorConstants.S1C_KI)
+            .withKD(ElevatorConstants.S1C_KD)
+            .withKS(ElevatorConstants.S0C_KS)
+            .withKG(ElevatorConstants.S0C_KG)
+            .withKA(ElevatorConstants.S0C_KA)
+            .withKV(ElevatorConstants.S0C_KV)
+            .withGravityType(GravityTypeValue.Elevator_Static)
+            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+
     Slot0Configs s0c =
         new Slot0Configs()
             .withKP(ElevatorConstants.S0C_KP)
@@ -108,7 +108,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     m2Config.apply(s0c);
     m1Config.apply(s1c);
     m2Config.apply(s1c);
-     
 
     MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
 
@@ -174,12 +173,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     master.setControl(velocityRequest.withVelocity(-5).withSlot(1));
   }
 
-  public void reduceCurrentLimits(){
+  public void reduceCurrentLimits() {
     master.updateCurrentLimits(30, 10);
   }
 
-  public void resetCurrentLimits(){
-    master.updateCurrentLimits(Constants.ElevatorConstants.STATOR_CURRENT_LIMIT, Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+  public void resetCurrentLimits() {
+    master.updateCurrentLimits(
+        Constants.ElevatorConstants.STATOR_CURRENT_LIMIT,
+        Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
   }
 
   public void resetElevatorPositionToZero() {
@@ -222,10 +223,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void setPosition(double height) {
     master.setControl(
-        controlRequest.withPosition(
-            height
-                * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
-                / ElevatorConstants.CARRAIGE_UPDUCTION).withSlot(0));
+        controlRequest
+            .withPosition(
+                height
+                    * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
+                    / ElevatorConstants.CARRAIGE_UPDUCTION)
+            .withSlot(0));
     DogLog.log(
         "subsystems/Elevator/elevatorSetpoint(rot)",
         height
@@ -260,11 +263,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
   }
 
-  public boolean isElevatorZeroed(){
+  public boolean isElevatorZeroed() {
     return elevatorZeroed;
   }
 
-  public void elevatorHasBeenZeroed(){
+  public void elevatorHasBeenZeroed() {
     elevatorZeroed = true;
   }
 
