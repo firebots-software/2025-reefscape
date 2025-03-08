@@ -68,7 +68,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       startSimThread();
     }
 
-    currentState = getCurrentState();
+    currentState = getState();//getCurrentState
     xRegularPIDController = new PIDController(8, 0, 0);
     yRegularPIDController = new PIDController(8, 0, 0);
     headingRegularPIDController = new PIDController(8, 0, 0);
