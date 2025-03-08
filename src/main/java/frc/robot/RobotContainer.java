@@ -35,6 +35,7 @@ import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevator;
+import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
@@ -384,7 +385,7 @@ public class RobotContainer {
             driveTrain.runOnce(
                 () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
 
-    joystick.x().onTrue(new ZeroElevator(elevatorSubsystem));
+    joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
     // new InstantCommand()
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));

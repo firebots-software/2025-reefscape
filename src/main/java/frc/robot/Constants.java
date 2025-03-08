@@ -788,8 +788,8 @@ public final class Constants {
     public static final double ACCELERATION = 10.0; // TODO
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
-    public static final double SPEED_RPS = 5.0; // TODO
-    public static final double GEAR_RATIO = 1d / 9d;
+    public static final double SPEED_RPS = 10.0;
+    public static final double GEAR_RATIO = 1d / 5d;
 
     public static final int CHECK_IN_PORT = 1;
     public static final int CHECK_OUT_PORT = 0;
@@ -808,6 +808,11 @@ public final class Constants {
     public static double S0C_KP = 2.0;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.005;
+
+    public static double S1C_KP = 0.3501;
+    public static double S1C_KI = 0.0;
+    public static double S1C_KD = 0.0;
+     
     public static double S0C_KS = 0.0;
     public static double S0C_KG = 0.29;
     public static double S0C_KA = 0.0004657452997; // 0.04
@@ -835,21 +840,21 @@ public final class Constants {
         1d / CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
     public static final double ELEVATOR_TORQUE = 32;
     public static final double ELEVATOR_DUTY_CYCLE = 0.4;
-    public static final double elevatorRecalibration = 0;
+    public static final double elevatorRecalibration = 0.04;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
       Intake(
           0, 0.057 + elevatorRecalibration), // 0.71 really high but we were using before // 0.0685
       // //0.065 still too high
-      safePosition(0, 0.3),
-      L1(1, 0.657),
-      L2DALE(0, 0.493), // 0.8636 - 0.379
-      L2(2, 0.9036 - 0.02),
-      L3DALE(0, 0.91), // 1.27 - 0.379
-      L3(3, 1.285 - 0.02), // 1.27 // KALASH wants 1cm lower //old value 1.32
-      L4(4, 1.81), // 1.81
-      LIMIT_OF_TRAVEL(1, 1.825); // 1.825
+      safePosition(0, 0.3+elevatorRecalibration),
+      L1(1, 0.657+elevatorRecalibration+0.05),
+      L2DALE(0, 0.493+elevatorRecalibration), // 0.8636 - 0.379
+      L2(2, 0.9036 - 0.02+elevatorRecalibration),
+      L3DALE(0, 0.91+elevatorRecalibration), // 1.27 - 0.379
+      L3(3, 1.285 - 0.02+elevatorRecalibration), // 1.27 // KALASH wants 1cm lower //old value 1.32
+      L4(4, 1.83), // 1.81
+      LIMIT_OF_TRAVEL(1, 1.825+0.02); // 1.825
 
       public final int position;
       public final double height;

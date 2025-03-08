@@ -77,14 +77,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     xProfiledPIDController =
         new ProfiledPIDController(
             3.75, // 3.75 was good
-            0,
+            0.3,
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
     yProfiledPIDController =
         new ProfiledPIDController(
             3.75,
-            0,
+            0.3,
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
@@ -130,6 +130,12 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE - 5,
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND - 10));
 
+    xProfiledPIDController.setIZone(0.5);
+    yProfiledPIDController.setIZone(0.5);
+
+    xProfiledPIDController.setIntegratorRange(0.0,0.2);
+    xProfiledPIDController.setIntegratorRange(0.0,0.2);
+    
     autoProfiledPID_HEADING.enableContinuousInput(-Math.PI, Math.PI);
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     configureAutoBuilder();
@@ -482,5 +488,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     DogLog.log("subsystems/swerve/bl_angle", drivetrainState.ModuleStates[2].angle.getDegrees());
     DogLog.log("subsystems/swerve/br_speed", drivetrainState.ModuleStates[3].speedMetersPerSecond);
     DogLog.log("subsystems/swerve/br_angle", drivetrainState.ModuleStates[3].angle.getDegrees());
+    DogLog.log(
+        "subsystems/swerve/command",
+        this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 }
