@@ -1,8 +1,6 @@
 package frc.robot.AutoRoutines;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
-import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -33,7 +31,7 @@ public class AutoProducer extends SequentialCommandGroup {
       ArmSubsystem arm,
       List<LandmarkPose> autoInformation) {
     // initializing commands
-    
+
     addCommands(
         new ParallelCommandGroup(
             new ZeroElevatorAcrossTimeframe(elevator),
@@ -53,7 +51,8 @@ public class AutoProducer extends SequentialCommandGroup {
     if (autoInformation.size() > 2) {
       addCommands(
           new JamesHardenMovement(
-              driveTrain, autoInformation.get(autoInformation.size() - 1).getPose(), false),
+                  driveTrain, autoInformation.get(autoInformation.size() - 1).getPose(), false)
+              .withTimeout(2.0),
           new ParallelDeadlineGroup(
               new Intake(elevator, funnel, shooter),
               new SequentialCommandGroup(
@@ -67,7 +66,8 @@ public class AutoProducer extends SequentialCommandGroup {
     if (autoInformation.size() > 3) {
       addCommands(
           new JamesHardenMovement(
-              driveTrain, autoInformation.get(autoInformation.size() - 1).getPose(), false),
+                  driveTrain, autoInformation.get(autoInformation.size() - 1).getPose(), false)
+              .withTimeout(2.0),
           new ParallelDeadlineGroup(
               new Intake(elevator, funnel, shooter),
               new SequentialCommandGroup(
