@@ -117,7 +117,9 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    swerve.setRobotSpeeds(new ChassisSpeeds(0, 0, 0));
+    if (!interrupted) {
+      swerve.setRobotSpeeds(new ChassisSpeeds(0, 0, 0));
+    }
   }
 
   public Pose2d getTargetPose2d() {
