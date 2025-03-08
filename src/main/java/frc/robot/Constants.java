@@ -19,6 +19,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -59,6 +61,51 @@ public final class Constants {
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(-12.5);
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-40);
+  }
+
+  public static enum AutoInformation {
+    L0(0),
+    L1(1),
+    L2(2),
+    L3(3),
+    L4(4),
+    L5(5),
+    R0(8),
+    R1(9),
+    R2(10),
+    R3(11),
+    R4(12),
+    R5(13),
+    PROCESSOR_SIDE(6),
+    CLEAR_SIDE(7);
+
+    public final int encodedValue;
+
+    AutoInformation(int encodedValue) {
+      this.encodedValue = encodedValue;
+    }
+  }
+
+  public static class AutoRoutines {
+    List<AutoInformation> BLUE_PROCESSOR_3 =
+        Arrays.asList(
+            AutoInformation.PROCESSOR_SIDE,
+            AutoInformation.L2,
+            AutoInformation.R1,
+            AutoInformation.L1),
+            BLUE_PROCESSOR_2 = Arrays.asList(AutoInformation.PROCESSOR_SIDE, AutoInformation.L2, AutoInformation.R1),
+            BLUE_PROCESSOR_1 = Arrays.asList(AutoInformation.PROCESSOR_SIDE, AutoInformation.L2),
+            BLUE_CLEAR_3 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R4, AutoInformation.R5, AutoInformation.L5),
+            BLUE_CLEAR_2 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R4, AutoInformation.R5),
+            BLUE_CLEAR_1 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R4),
+            BLUE_MID_1 = Arrays.asList(AutoInformation.L3),
+            RED_PROCESSOR_3 = Arrays.asList(AutoInformation.PROCESSOR_SIDE, AutoInformation.L4, AutoInformation.R5, AutoInformation.L5),
+            RED_PROCESSOR_2 = Arrays.asList(AutoInformation.PROCESSOR_SIDE, AutoInformation.L4, AutoInformation.R5),
+            RED_PROCESSOR_1 = Arrays.asList(AutoInformation.PROCESSOR_SIDE, AutoInformation.L4),
+            RED_CLEAR_3 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R2, AutoInformation.L1, AutoInformation.R1),
+            RED_CLEAR_2 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R2, AutoInformation.L1),
+            RED_CLEAR_1 = Arrays.asList(AutoInformation.CLEAR_SIDE, AutoInformation.R2),
+            RED_MID_1 = Arrays.asList(AutoInformation.L3);
   }
 
   public static class Landmarks {
