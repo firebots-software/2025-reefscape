@@ -271,7 +271,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     autoProfiledPID_HEADING.reset(
         currentState.Pose.getRotation().getRadians(), getFieldSpeeds().vxMetersPerSecond);
 
-    // My changes:
     double deltax =
         MathUtil.clamp(Math.abs(targetPose.getX() - currentState.Pose.getX()), 10e-4, 100);
     double deltay =
@@ -286,7 +285,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     xProfiledPIDController.setConstraints(new Constraints(maxXVelo, maxXAcc));
     yProfiledPIDController.setConstraints(new Constraints(maxYVelo, maxYAcc));
-    // End of my changes
   }
 
   /* Swerve requests to apply during SysId characterization */
