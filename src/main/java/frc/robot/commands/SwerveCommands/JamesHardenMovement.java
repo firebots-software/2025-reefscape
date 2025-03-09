@@ -90,7 +90,7 @@ public class JamesHardenMovement extends Command {
     if (targetPoseSupplier != null) {
       targetPose = targetPoseSupplier.get();
     }
-    swerve.resetProfiledPIDs();
+    swerve.resetProfiledPIDs(targetPose);
   }
 
   @Override
