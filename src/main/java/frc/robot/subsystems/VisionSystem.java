@@ -184,6 +184,7 @@ public class VisionSystem extends SubsystemBase {
       List<PhotonTrackedTarget> targets = pipelineResult.getTargets();
       boolean hasReefTag = true;
       double poseAmbiguity = pipelineResult.getBestTarget().poseAmbiguity;
+      DogLog.log("KalmanDebug/poseAmbiguity", poseAmbiguity);
       DogLog.log("KalmanDebug/rightDistToAprilTag", distance);
       for (PhotonTrackedTarget target : targets) {
         if (!reefIDs.contains(target.getFiducialId())) {
@@ -194,11 +195,16 @@ public class VisionSystem extends SubsystemBase {
       if (hasReefTag) {
         DogLog.log("KalmanDebug/rightpiplinenull", pipelineResult == null);
         DogLog.log("KalmanDebug/leftpiplinenull", pipelineResult == null);
-
-        double xKalman = 0.1 * Math.pow(1.15, poseAmbiguity);
-        double yKalman = 0.1 * Math.pow(1.4, poseAmbiguity);
+        double speedMultiplier = 1;
+        if(Math.sqrt(Math.pow(driveTrain.getRobotSpeeds().vxMetersPerSecond,2) + Math.pow(driveTrain.getRobotSpeeds().vyMetersPerSecond,2)) > 0.5){
+          speedMultiplier = 2;
+        }
+        double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
+        double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
         double rotationKalman = MiscUtils.lerp((distance - 0.6) / 1.4, 0.4, 1000) / 10;
+        DogLog.log("KalmanDebug/translationStandardDeviation", xKalman);
         DogLog.log("KalmanDebug/rotationStandardDeviation", rotationKalman);
+
 
         Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, rotationKalman);
         Pose2d bestRobotPose2d = getPose2d();
@@ -219,7 +225,7 @@ public class VisionSystem extends SubsystemBase {
 
         // Changed to not use rotationless
         driveTrain.addVisionMeasurement(
-            bestRobotPose2d, pipelineResult.getTimestampSeconds(), visionMatrix);
+            rotationLess, pipelineResult.getTimestampSeconds(), visionMatrix);
         DogLog.log("KalmanDebug/visionUsed", true);
       } else {
         DogLog.log("KalmanDebug/visionUsed", false);
