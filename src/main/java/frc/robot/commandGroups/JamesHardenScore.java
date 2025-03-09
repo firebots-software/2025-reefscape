@@ -2,6 +2,7 @@ package frc.robot.commandGroups;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.Constants.LandmarkPose;
@@ -24,12 +25,16 @@ public class JamesHardenScore extends SequentialCommandGroup {
       boolean moveRight,
       boolean isInAuto) {
 
-    JamesHardenMovement movementCommand;
+    JamesHardenMovement movementCommand, maintainCommand;
+
     if (moveRight) {
       movementCommand =
-          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto);
+          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto, false);
+      maintainCommand =
+          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto, true);
     } else {
-      movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto);
+      movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto, false);
+      maintainCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto, true);
     }
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
@@ -42,7 +47,8 @@ public class JamesHardenScore extends SequentialCommandGroup {
         movementCommand.alongWith(
             (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
                 .andThen(elevateCommand)),
-        new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5));
+        new ParallelDeadlineGroup(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand)
+        );
   }
 
   public JamesHardenScore(
@@ -53,13 +59,14 @@ public class JamesHardenScore extends SequentialCommandGroup {
       boolean isInAuto,
       LandmarkPose branch) {
 
-    JamesHardenMovement movementCommand;
+    JamesHardenMovement movementCommand, maintainCommand;
     if (!branch.isBranch()) {
       DogLog.log("JamesHardenScore/Errors", "called without real branch");
       return;
     }
 
-    movementCommand = JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch);
+    movementCommand = JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch, false);
+    maintainCommand = JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch, true);
 
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
@@ -72,6 +79,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
         movementCommand.alongWith(
             (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
                 .andThen(elevateCommand)),
-        new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5));
+        new ParallelDeadlineGroup(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand)
+        );
   }
 }

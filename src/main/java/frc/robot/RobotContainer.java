@@ -131,7 +131,7 @@ public class RobotContainer {
         .LeftL1()
         .whileTrue(
             new JamesHardenMovement(
-                driveTrain, () -> (new Pose2d(new Translation2d(13, 6.5), new Rotation2d(Math.PI/2.0))),false));
+                driveTrain, () -> (new Pose2d(new Translation2d(13, 6.5), new Rotation2d(Math.PI/2.0))),false, false));
 
     customController
         .LeftL2()

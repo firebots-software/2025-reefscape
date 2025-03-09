@@ -77,14 +77,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     xProfiledPIDController =
         new ProfiledPIDController(
             3.75, // 3.75 was good
-            0.3,
+            0.4, //0.3 before 
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
     yProfiledPIDController =
         new ProfiledPIDController(
             3.75,
-            0.3,
+            0.4,
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
@@ -100,7 +100,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     headingProfiledPIDController =
         new ProfiledPIDController(
             4,
-            0,
+            0.4,
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE,
@@ -130,11 +130,13 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE - 5,
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND - 10));
 
-    xProfiledPIDController.setIZone(0.5);
-    yProfiledPIDController.setIZone(0.5);
+    xProfiledPIDController.setIZone(0.3);
+    yProfiledPIDController.setIZone(0.3); // 0.5 before just like above
+    headingProfiledPIDController.setIZone(0.5);
 
     xProfiledPIDController.setIntegratorRange(0.0, 0.2);
     xProfiledPIDController.setIntegratorRange(0.0, 0.2);
+    headingProfiledPIDController.setIntegratorRange(0.0, 0.35);
 
     autoProfiledPID_HEADING.enableContinuousInput(-Math.PI, Math.PI);
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);

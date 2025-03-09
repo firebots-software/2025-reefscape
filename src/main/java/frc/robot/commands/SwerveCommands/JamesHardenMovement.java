@@ -62,19 +62,22 @@ public class JamesHardenMovement extends Command {
   private Supplier<Pose2d> targetPoseSupplier = null;
   private Pose2d targetPose = null;
   private boolean isInAuto;
+  private boolean noTolerance;
 
   public JamesHardenMovement(
-      SwerveSubsystem swerve, Supplier<Pose2d> targetPoseSupplier, boolean isInAuto) {
+      SwerveSubsystem swerve, Supplier<Pose2d> targetPoseSupplier, boolean isInAuto, boolean noTolerance) {
     this.swerve = swerve;
     this.targetPoseSupplier = targetPoseSupplier;
     this.isInAuto = isInAuto;
+    this.noTolerance = noTolerance;
     addRequirements(swerve);
   }
 
-  public JamesHardenMovement(SwerveSubsystem swerve, Pose2d targetPose, boolean isInAuto) {
+  public JamesHardenMovement(SwerveSubsystem swerve, Pose2d targetPose, boolean isInAuto, boolean noTolerance) {
     this.swerve = swerve;
     this.targetPose = targetPose;
     this.isInAuto = isInAuto;
+    this.noTolerance = noTolerance;
     addRequirements(swerve);
   }
 
@@ -106,19 +109,24 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public boolean isFinished() {
-    double currRot = swerve.getCurrentState().Pose.getRotation().getRadians();
-    currRot = ((2.0 * Math.PI) + (currRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
-    double targetRot = targetPose.getRotation().getRadians();
-    targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
+    if (noTolerance) {
+      return false;
+    }
+    else {
+      double currRot = swerve.getCurrentState().Pose.getRotation().getRadians();
+      currRot = ((2.0 * Math.PI) + (currRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
+      double targetRot = targetPose.getRotation().getRadians();
+      targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
 
-    if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
-            < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
-        && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
-            < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
-        && (Math.min(Math.abs(targetRot - currRot), (Math.PI*2)-Math.abs(targetRot-currRot))
-            < Constants.HardenConstants.RegularCommand.headingTolerance)) {
-      return true;
-    } else return false;
+      if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+          && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+          && (Math.min(Math.abs(targetRot - currRot), (Math.PI*2)-Math.abs(targetRot-currRot))
+              < Constants.HardenConstants.RegularCommand.headingTolerance)) {
+        return true;
+      } else return false;
+    }
   }
 
   @Override
@@ -133,12 +141,12 @@ public class JamesHardenMovement extends Command {
   }
 
   public static JamesHardenMovement toSpecificBranch(
-      SwerveSubsystem swerve, boolean isInAuto, Supplier<LandmarkPose> branch) {
-    return new JamesHardenMovement(swerve, () -> branch.get().getPose(), isInAuto);
+      SwerveSubsystem swerve, boolean isInAuto, Supplier<LandmarkPose> branch, boolean noTolerance) {
+    return new JamesHardenMovement(swerve, () -> branch.get().getPose(), isInAuto, noTolerance);
   }
 
   public static JamesHardenMovement toClosestLeftBranch(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, boolean noTolerance) {
 
     Supplier<LandmarkPose> targetBranch =
         () -> {
@@ -168,11 +176,11 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch);
+    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch, noTolerance);
   }
 
   public static JamesHardenMovement toClosestRightBranch(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, boolean noTolerance) {
 
     Supplier<LandmarkPose> targetBranch =
         () -> {
@@ -206,6 +214,6 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch);
+    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch, noTolerance);
   }
 }
