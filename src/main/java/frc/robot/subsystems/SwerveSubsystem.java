@@ -270,17 +270,23 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     autoProfiledPID_Y.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
     autoProfiledPID_HEADING.reset(
         currentState.Pose.getRotation().getRadians(), getFieldSpeeds().vxMetersPerSecond);
-    
-    double deltax = MathUtil.clamp(Math.abs(targetPose.getX()-currentState.Pose.getX()),10e-4,100);
-    double deltay = MathUtil.clamp(Math.abs(targetPose.getY()-currentState.Pose.getY()),10e-4,100);
-    double angle = Math.tan(deltay/deltax);
+
+    // My changes:
+    double deltax =
+        MathUtil.clamp(Math.abs(targetPose.getX() - currentState.Pose.getX()), 10e-4, 100);
+    double deltay =
+        MathUtil.clamp(Math.abs(targetPose.getY() - currentState.Pose.getY()), 10e-4, 100);
+    double angle = Math.tan(deltay / deltax);
     double maxXVelo = Math.cos(angle) * Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND;
     double maxYVelo = Math.sin(angle) * Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND;
-    double maxXAcc = Math.cos(angle) * Constants.Swerve.PHYSICAL_MAX_ACCELERATION_METERS_PER_SECOND_PER_SECOND;
-    double maxYAcc = Math.sin(angle) * Constants.Swerve.PHYSICAL_MAX_ACCELERATION_METERS_PER_SECOND_PER_SECOND;
+    double maxXAcc =
+        Math.cos(angle) * Constants.Swerve.PHYSICAL_MAX_ACCELERATION_METERS_PER_SECOND_PER_SECOND;
+    double maxYAcc =
+        Math.sin(angle) * Constants.Swerve.PHYSICAL_MAX_ACCELERATION_METERS_PER_SECOND_PER_SECOND;
 
     xProfiledPIDController.setConstraints(new Constraints(maxXVelo, maxXAcc));
     yProfiledPIDController.setConstraints(new Constraints(maxYVelo, maxYAcc));
+    // End of my changes
   }
 
   /* Swerve requests to apply during SysId characterization */
@@ -390,7 +396,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   public ChassisSpeeds calculateRequiredComponentChassisSpeeds(Pose2d targetPose) {
 
-     
     double xFeedback =
         xProfiledPIDController.calculate(currentState.Pose.getX(), targetPose.getX());
     double yFeedback =
