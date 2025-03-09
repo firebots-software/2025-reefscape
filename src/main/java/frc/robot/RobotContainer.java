@@ -37,6 +37,7 @@ import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
+import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
@@ -115,17 +116,23 @@ public class RobotContainer {
     // Custom Controller:
 
     // Left Elevator Levels
+    // customController
+    //     .LeftL1()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L1,
+    //             redside,
+    //             false,
+    //             false));
     customController
         .LeftL1()
         .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L1,
-                redside,
-                false,
-                false));
+            new JamesHardenMovement(
+                driveTrain, () -> (new Pose2d(new Translation2d(13, 6.5), new Rotation2d(Math.PI/2.0))),false));
+
     customController
         .LeftL2()
         .whileTrue(
