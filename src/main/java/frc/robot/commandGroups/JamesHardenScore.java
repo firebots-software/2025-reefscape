@@ -33,8 +33,10 @@ public class JamesHardenScore extends SequentialCommandGroup {
       maintainCommand =
           JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto, true);
     } else {
-      movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto, false);
-      maintainCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto, true);
+      movementCommand =
+          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto, false);
+      maintainCommand =
+          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto, true);
     }
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
@@ -47,8 +49,8 @@ public class JamesHardenScore extends SequentialCommandGroup {
         movementCommand.alongWith(
             (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
                 .andThen(elevateCommand)),
-        new ParallelDeadlineGroup(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand)
-        );
+        new ParallelDeadlineGroup(
+            new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
   }
 
   public JamesHardenScore(
@@ -65,8 +67,10 @@ public class JamesHardenScore extends SequentialCommandGroup {
       return;
     }
 
-    movementCommand = JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch, false);
-    maintainCommand = JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch, true);
+    movementCommand =
+        JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch, false);
+    maintainCommand =
+        JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch, true);
 
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
@@ -79,7 +83,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
         movementCommand.alongWith(
             (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
                 .andThen(elevateCommand)),
-        new ParallelDeadlineGroup(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand)
-        );
+        new ParallelDeadlineGroup(
+            new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
   }
 }

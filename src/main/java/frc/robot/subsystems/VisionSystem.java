@@ -196,7 +196,10 @@ public class VisionSystem extends SubsystemBase {
         DogLog.log("KalmanDebug/rightpiplinenull", pipelineResult == null);
         DogLog.log("KalmanDebug/leftpiplinenull", pipelineResult == null);
         double speedMultiplier = 1;
-        if(Math.sqrt(Math.pow(driveTrain.getRobotSpeeds().vxMetersPerSecond,2) + Math.pow(driveTrain.getRobotSpeeds().vyMetersPerSecond,2)) > 0.5){
+        if (Math.sqrt(
+                Math.pow(driveTrain.getRobotSpeeds().vxMetersPerSecond, 2)
+                    + Math.pow(driveTrain.getRobotSpeeds().vyMetersPerSecond, 2))
+            > 0.5) {
           speedMultiplier = 2;
         }
         double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
@@ -204,7 +207,6 @@ public class VisionSystem extends SubsystemBase {
         double rotationKalman = MiscUtils.lerp((distance - 0.6) / 1.4, 0.4, 1000) / 10;
         DogLog.log("KalmanDebug/translationStandardDeviation", xKalman);
         DogLog.log("KalmanDebug/rotationStandardDeviation", rotationKalman);
-
 
         Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, rotationKalman);
         Pose2d bestRobotPose2d = getPose2d();
@@ -215,7 +217,10 @@ public class VisionSystem extends SubsystemBase {
 
         double xDifference = Math.abs(driveTrain.getPose().getX() - bestRobotPose2d.getX());
         double yDifference = Math.abs(driveTrain.getPose().getY() - bestRobotPose2d.getY());
-        double rotDifference = Math.abs(driveTrain.getPose().getRotation().getDegrees() - bestRobotPose2d.getRotation().getDegrees());
+        double rotDifference =
+            Math.abs(
+                driveTrain.getPose().getRotation().getDegrees()
+                    - bestRobotPose2d.getRotation().getDegrees());
         Translation2d transDifference = new Translation2d(xDifference, yDifference);
         Rotation2d rot2dDifference = new Rotation2d(rotDifference);
 

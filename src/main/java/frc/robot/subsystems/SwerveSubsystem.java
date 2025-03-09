@@ -68,7 +68,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       startSimThread();
     }
 
-    currentState = getState();//getCurrentState
+    currentState = getState(); // getCurrentState
     xRegularPIDController = new PIDController(8, 0, 0);
     yRegularPIDController = new PIDController(8, 0, 0);
     headingRegularPIDController = new PIDController(8, 0, 0);
@@ -77,7 +77,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     xProfiledPIDController =
         new ProfiledPIDController(
             3.75, // 3.75 was good
-            0.4, //0.3 before 
+            0.4, // 0.3 before
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
