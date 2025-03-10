@@ -390,8 +390,10 @@ public class RobotContainer {
         .onTrue(
             driveTrain.runOnce(
                 () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
+    // TODO: REMOVE COMMENT
+    // joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
 
-    joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
+    joystick.x().onTrue(new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(3, 3), new Rotation2d(Math.PI/2.0)), true, false));
     // new InstantCommand()
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
