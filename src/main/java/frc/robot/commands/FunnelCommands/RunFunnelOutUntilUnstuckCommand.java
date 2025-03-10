@@ -26,7 +26,7 @@ public class RunFunnelOutUntilUnstuckCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    funnelSubsystem.stopFunnel();
+    funnelSubsystem.maintainCurrentPosition();
   }
 
   // Returns true when the command should end.

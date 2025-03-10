@@ -16,7 +16,7 @@ public class UnjamFunnelAndIntake extends SequentialCommandGroup {
       TootsieSlideSubsystem tootsieSlideSubsystem) {
     addCommands(
         new RunFunnelOutUntilUnstuckCommand(funnelSubsystem)
-            .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake))
+            .alongWith(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake))
             .andThen(
                 new TransferPieceBetweenFunnelAndElevator(
                     elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem)));
