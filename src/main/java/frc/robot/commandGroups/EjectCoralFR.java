@@ -8,10 +8,10 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
 public class EjectCoralFR extends SequentialCommandGroup {
-  public EjectCoralFR(
-      ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem) {
+  public EjectCoralFR(ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem) {
     addCommands(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1)
-            .andThen(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5)));
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1),
+        new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5)
+    );
   }
 }
