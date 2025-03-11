@@ -9,8 +9,6 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.AbstractedPID.IncreasePArm;
-import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
@@ -57,8 +55,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
-    DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
     LoggedTalonFX.periodic_static();
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
@@ -67,9 +63,6 @@ public class Robot extends TimedRobot {
     visionLeft.addFilteredPose();
 
     DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
-
-    DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
-    DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -112,7 +105,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.setAlliance();
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -138,14 +130,11 @@ public class Robot extends TimedRobot {
     }
 
     // CommandScheduler.getInstance();
-    // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    DogLog.log("PID Constant", IncreasePArm.broomIndex());
-    DogLog.log("Mechanism Type", IncreasePArm.mechIndex());
   }
 
   @Override
