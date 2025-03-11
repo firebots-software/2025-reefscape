@@ -77,44 +77,44 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     xProfiledPIDController =
         new ProfiledPIDController(
             3.75, // 3.75 was good
-            0.4, // 0.3 before
+            0.35, // 0.3 before
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
     yProfiledPIDController =
         new ProfiledPIDController(
             3.75,
-            0.4,
+            0.35,
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
 
     qProfiledPIDController =
         new ProfiledPIDController(
-          5.3033008589,
-            0.6,
-            0,
+          3.1, //3.4 not bad
+            0.3,
+            0.0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 8));
 
     headingProfiledPIDController =
         new ProfiledPIDController(
-            4,
+            3.5, // 4 was good
             0.4,
             0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE,
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND));
+                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE-1,
+                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND-5));
 
     xProfiledPIDController.setIZone(0.3);
     yProfiledPIDController.setIZone(0.3); // 0.5 before just like above
-    qProfiledPIDController.setIZone(0.42);
+    qProfiledPIDController.setIZone(0.35);
     headingProfiledPIDController.setIZone(0.5);
 
     xProfiledPIDController.setIntegratorRange(0.0, 0.2);
     xProfiledPIDController.setIntegratorRange(0.0, 0.2);
     qProfiledPIDController.setIntegratorRange(0, 0.2);
-    headingProfiledPIDController.setIntegratorRange(0.0, 0.35);
+    headingProfiledPIDController.setIntegratorRange(0.0, 0.3);
 
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     configureAutoBuilder();

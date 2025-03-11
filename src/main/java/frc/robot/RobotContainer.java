@@ -131,11 +131,7 @@ public class RobotContainer {
     customController
         .LeftL1()
         .whileTrue(
-            new JamesHardenMovement(
-                driveTrain,
-                () -> (new Pose2d(new Translation2d(13, 6.5), new Rotation2d(Math.PI / 2.0))),
-                false,
-                false));
+            new JamesHardenMovement(driveTrain, () -> new Pose2d(new Translation2d(13, 6), new Rotation2d(Math.PI/2.0)), true, false));
 
     customController
         .LeftL2()
@@ -147,7 +143,7 @@ public class RobotContainer {
                 ElevatorPositions.L2,
                 redside,
                 false,
-                false));
+                true));
     customController
         .LeftL3()
         .whileTrue(
@@ -158,7 +154,7 @@ public class RobotContainer {
                 ElevatorPositions.L3,
                 redside,
                 false,
-                false));
+                true));
     customController
         .LeftL4()
         .whileTrue(
@@ -169,7 +165,7 @@ public class RobotContainer {
                 ElevatorPositions.L4,
                 redside,
                 false,
-                false));
+                true));
 
     // Right Elevator Levels
     customController
@@ -182,7 +178,7 @@ public class RobotContainer {
                 ElevatorPositions.L1,
                 redside,
                 true,
-                false));
+                true));
     customController
         .RightL2()
         .whileTrue(
@@ -193,7 +189,7 @@ public class RobotContainer {
                 ElevatorPositions.L2,
                 redside,
                 true,
-                false));
+                true));
     customController
         .RightL3()
         .whileTrue(
@@ -204,7 +200,7 @@ public class RobotContainer {
                 ElevatorPositions.L3,
                 redside,
                 true,
-                false));
+                true));
     customController
         .RightL4()
         .whileTrue(
@@ -215,7 +211,7 @@ public class RobotContainer {
                 ElevatorPositions.L4,
                 redside,
                 true,
-                false));
+                true));
 
     // Bottom Three Buttons
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
@@ -391,10 +387,9 @@ public class RobotContainer {
         .onTrue(
             driveTrain.runOnce(
                 () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
-    // TODO: REMOVE COMMENT
-    // joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
 
-    joystick.x().onTrue(new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(3, 3), new Rotation2d(Math.PI/2.0)), true, false));
+    joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
+
     // new InstantCommand()
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
