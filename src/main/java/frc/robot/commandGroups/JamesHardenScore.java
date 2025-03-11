@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.Constants.LandmarkPose;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.ElevatorCommands.CheckingSetElevatorLevel;
 import frc.robot.commands.EndWhenCloseEnough;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
@@ -42,7 +43,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
     if (height.equals(ElevatorPositions.L4)) {
       elevateCommand = new ElevatorL4(elevatorSubsystem);
     } else {
-      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height);
+      elevateCommand = new CheckingSetElevatorLevel(elevatorSubsystem, height);
     }
 
     addCommands(
@@ -76,7 +77,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
     if (height.equals(ElevatorPositions.L4)) {
       elevateCommand = new ElevatorL4(elevatorSubsystem);
     } else {
-      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height);
+      elevateCommand = new CheckingSetElevatorLevel(elevatorSubsystem, height);
     }
 
     addCommands(
