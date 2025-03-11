@@ -104,9 +104,9 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    // CoralPosition.setCoralInTootsieSlide(funnelSubsystem.drakeTripped());
-    CoralPosition.setCoralInFunnel(
-        funnelSubsystem.isCoralCheckedIn() || funnelSubsystem.isCoralCheckedOut());
+    // // CoralPosition.setCoralInTootsieSlide(funnelSubsystem.drakeTripped());
+    // CoralPosition.setCoralInFunnel(
+    //     funnelSubsystem.isCoralCheckedIn() || funnelSubsystem.isCoralCheckedOut());
   }
 
   private void configureBindings() {

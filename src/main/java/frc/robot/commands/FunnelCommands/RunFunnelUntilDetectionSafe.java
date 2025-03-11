@@ -45,7 +45,9 @@ public class RunFunnelUntilDetectionSafe extends Command {
   @Override
   public void end(boolean interrupted) {
     funnelSubsystem.maintainCurrentPosition();
-    CoralPosition.setCoralInFunnel(true);
+    if(!interrupted){
+      CoralPosition.setCoralInFunnel(true);
+    }
   }
 
   // Returns true when the command should end.
