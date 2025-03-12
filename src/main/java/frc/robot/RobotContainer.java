@@ -25,6 +25,7 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.D2Intake;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
+import frc.robot.commandGroups.EjectCoralThenZero;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
@@ -391,7 +392,7 @@ public class RobotContainer {
             driveTrain.runOnce(
                 () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
 
-    joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
+    joystick.x().onTrue(new EjectCoralThenZero(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
     // new InstantCommand()
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));

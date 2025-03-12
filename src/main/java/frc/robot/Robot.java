@@ -9,6 +9,8 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commandGroups.EjectCoralFR;
+import frc.robot.commandGroups.EjectCoralThenZero;
 import frc.robot.commands.AbstractedPID.IncreasePArm;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.subsystems.CoralPosition;
@@ -134,13 +136,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    absoluteInit();
+    absoluteInit(); 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
     if (ElevatorSubsystem.getInstance().isElevatorZeroed() == false) {
       CommandScheduler.getInstance()
-          .schedule(new ZeroElevatorHardStop(ElevatorSubsystem.getInstance()));
+          .schedule(new EjectCoralThenZero(ElevatorSubsystem.getInstance(), null, null));
     }
 
     // CommandScheduler.getInstance();
