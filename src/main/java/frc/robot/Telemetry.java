@@ -2,6 +2,8 @@ package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
+
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -29,7 +31,7 @@ public class Telemetry {
    */
   public Telemetry(double maxSpeed) {
     MaxSpeed = maxSpeed;
-    SignalLogger.start();
+    // SignalLogger.start();
   }
 
   /* What to publish over networktables for telemetry */
@@ -125,9 +127,13 @@ public class Telemetry {
     }
 
     // SignalLogger.writeDoubleArray("DriveState/Pose", state.Pose);
-    SignalLogger.writeDoubleArray("DriveState/ModuleStates", m_moduleStatesArray);
-    SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
-    SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
+    // SignalLogger.writeDoubleArray("DriveState/ModuleStates", m_moduleStatesArray);
+    // SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
+    // SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
+
+    DogLog.log("DriveState/ModuleStatesDogLog",m_moduleStatesArray);
+    DogLog.log("DriveState/ModuleTargetsDogLog",m_moduleStatesArray);
+    DogLog.log("DriveState/OdometryPeriodDogLog",state.OdometryPeriod);
     publisher.set(state.Pose);
     /* Telemeterize the pose to a Field2d */
     fieldTypePub.set("Field2d");
