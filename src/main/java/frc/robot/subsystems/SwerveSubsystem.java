@@ -68,7 +68,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       startSimThread();
     }
 
-    currentState = getCurrentState();
+    currentState = getState(); // getCurrentState
     xRegularPIDController = new PIDController(8, 0, 0);
     yRegularPIDController = new PIDController(8, 0, 0);
     headingRegularPIDController = new PIDController(8, 0, 0);
@@ -77,14 +77,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     xProfiledPIDController =
         new ProfiledPIDController(
             3.75, // 3.75 was good
-            0,
+            0.4, // 0.3 before
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
     yProfiledPIDController =
         new ProfiledPIDController(
             3.75,
-            0,
+            0.4,
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
@@ -100,7 +100,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     headingProfiledPIDController =
         new ProfiledPIDController(
             4,
-            0,
+            0.4,
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE,
@@ -129,6 +129,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE - 5,
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND - 10));
+
+    xProfiledPIDController.setIZone(0.3);
+    yProfiledPIDController.setIZone(0.3); // 0.5 before just like above
+    headingProfiledPIDController.setIZone(0.5);
+
+    xProfiledPIDController.setIntegratorRange(0.0, 0.2);
+    xProfiledPIDController.setIntegratorRange(0.0, 0.2);
+    headingProfiledPIDController.setIntegratorRange(0.0, 0.35);
 
     autoProfiledPID_HEADING.enableContinuousInput(-Math.PI, Math.PI);
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -248,13 +256,18 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   // Resets PID controllers
   public void resetProfiledPIDs() {
-    xProfiledPIDController.reset(currentState.Pose.getX());
-    yProfiledPIDController.reset(currentState.Pose.getY());
-    headingProfiledPIDController.reset(currentState.Pose.getRotation().getRadians());
+    // ChassisSpeeds fieldCentricChassisSpeeds =
+    // currentState.Speeds.fromRobotRelativeSpeeds(getState().Speeds,
+    // getState().Pose.getRotation());
+    xProfiledPIDController.reset(currentState.Pose.getX(), getFieldSpeeds().vxMetersPerSecond);
+    yProfiledPIDController.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
+    headingProfiledPIDController.reset(
+        currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);
 
-    autoProfiledPID_X.reset(currentState.Pose.getX());
-    autoProfiledPID_Y.reset(currentState.Pose.getY());
-    autoProfiledPID_HEADING.reset(currentState.Pose.getRotation().getRadians());
+    autoProfiledPID_X.reset(currentState.Pose.getX(), getFieldSpeeds().vxMetersPerSecond);
+    autoProfiledPID_Y.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
+    autoProfiledPID_HEADING.reset(
+        currentState.Pose.getRotation().getRadians(), getFieldSpeeds().vxMetersPerSecond);
   }
 
   /* Swerve requests to apply during SysId characterization */
@@ -481,5 +494,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     DogLog.log("subsystems/swerve/bl_angle", drivetrainState.ModuleStates[2].angle.getDegrees());
     DogLog.log("subsystems/swerve/br_speed", drivetrainState.ModuleStates[3].speedMetersPerSecond);
     DogLog.log("subsystems/swerve/br_angle", drivetrainState.ModuleStates[3].angle.getDegrees());
+    DogLog.log(
+        "subsystems/swerve/command",
+        this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 }

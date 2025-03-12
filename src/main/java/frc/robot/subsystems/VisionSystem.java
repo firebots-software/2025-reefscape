@@ -13,11 +13,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -156,16 +158,34 @@ public class VisionSystem extends SubsystemBase {
     double translationStdDevs = 1000;
     double rotationStdDevs = 1000;
     PhotonPipelineResult pipelineResult = getPipelineResult();
-
-    if (hasTarget(pipelineResult)) {
+    DogLog.log("KalmanDebug/rightPiplineNull", pipelineResult == null);
+    DogLog.log("KalmanDebug/rightpipelinehastarget", hasTarget(pipelineResult));
+    if (pipelineResult != null && hasTarget(pipelineResult)) {
       Optional<MultiTargetPNPResult> multitagresult = pipelineResult.getMultiTagResult();
       boolean hasMultitags = !multitagresult.isEmpty();
       double timestamp = pipelineResult.getTimestampSeconds();
       double targetSize = pipelineResult.getBestTarget().area;
+      double distance = getDistance();
       Optional<EstimatedRobotPose> estPose = getMultiTagPose3d(driveTrain.getState().Pose);
+      if (estPose.isPresent()) {
+        DogLog.log("KalmanDebug/rightRobotPoseisPresent", estPose.isPresent());
+        DogLog.log("KalmanDebug/rightRobotPoseX", estPose.get().estimatedPose.getX());
+        DogLog.log("KalmanDebug/rightRobotPoseY", estPose.get().estimatedPose.getY());
+        DogLog.log(
+            "KalmanDebug/rightRobotPoseTheta",
+            estPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
+        DogLog.log("KalmanDebug/rightestimatedpose", estPose.get().estimatedPose.toPose2d());
+        DogLog.log("KalmanDebug/rightRobotPoseX", estPose.get().estimatedPose.getX());
+        DogLog.log("KalmanDebug/rightRobotPoseY", estPose.get().estimatedPose.getY());
+        DogLog.log(
+            "KalmanDebug/rightRobotPoseTheta",
+            estPose.get().estimatedPose.toPose2d().getRotation().getDegrees());
+      }
       List<PhotonTrackedTarget> targets = pipelineResult.getTargets();
       boolean hasReefTag = true;
       double poseAmbiguity = pipelineResult.getBestTarget().poseAmbiguity;
+      DogLog.log("KalmanDebug/poseAmbiguity", poseAmbiguity);
+      DogLog.log("KalmanDebug/rightDistToAprilTag", distance);
       for (PhotonTrackedTarget target : targets) {
         if (!reefIDs.contains(target.getFiducialId())) {
           hasReefTag = false;
@@ -173,18 +193,50 @@ public class VisionSystem extends SubsystemBase {
       }
 
       if (hasReefTag) {
-        double xKalman = 0.1 * Math.pow(1.15, poseAmbiguity);
-        double yKalman = 0.1 * Math.pow(1.4, poseAmbiguity);
+        DogLog.log("KalmanDebug/rightpiplinenull", pipelineResult == null);
+        DogLog.log("KalmanDebug/leftpiplinenull", pipelineResult == null);
+        double speedMultiplier = 1;
+        if (Math.sqrt(
+                Math.pow(driveTrain.getRobotSpeeds().vxMetersPerSecond, 2)
+                    + Math.pow(driveTrain.getRobotSpeeds().vyMetersPerSecond, 2))
+            > 0.5) {
+          speedMultiplier = 2;
+        }
+        double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
+        double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
+        double rotationKalman = MiscUtils.lerp((distance - 0.6) / 1.4, 0.4, 1000) / 10;
+        DogLog.log("KalmanDebug/translationStandardDeviation", xKalman);
+        DogLog.log("KalmanDebug/rotationStandardDeviation", rotationKalman);
 
-        Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, 100d);
+        Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, rotationKalman);
         Pose2d bestRobotPose2d = getPose2d();
         Pose2d rotationLess =
             new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
         DogLog.log("KalmanDebug/rotationless", rotationLess);
+        DogLog.log("KalmanDebug/visionPose", bestRobotPose2d);
 
+        double xDifference = Math.abs(driveTrain.getPose().getX() - bestRobotPose2d.getX());
+        double yDifference = Math.abs(driveTrain.getPose().getY() - bestRobotPose2d.getY());
+        double rotDifference =
+            Math.abs(
+                driveTrain.getPose().getRotation().getDegrees()
+                    - bestRobotPose2d.getRotation().getDegrees());
+        Translation2d transDifference = new Translation2d(xDifference, yDifference);
+        Rotation2d rot2dDifference = new Rotation2d(rotDifference);
+
+        Pose2d visionDiff = new Pose2d(transDifference, rot2dDifference);
+
+        DogLog.log("KalmanDebug/visionDiff", visionDiff);
+
+        // Changed to not use rotationless
         driveTrain.addVisionMeasurement(
-            rotationLess, pipelineResult.getTimestampSeconds(), visionMatrix);
+            bestRobotPose2d, pipelineResult.getTimestampSeconds(), visionMatrix);
+        DogLog.log("KalmanDebug/visionUsed", true);
+      } else {
+        DogLog.log("KalmanDebug/visionUsed", false);
       }
+    } else {
+      DogLog.log("KalmanDebug/visionUsed", false);
     }
   }
 

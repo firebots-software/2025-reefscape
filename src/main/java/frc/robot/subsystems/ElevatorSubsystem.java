@@ -7,15 +7,18 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
@@ -31,15 +34,22 @@ public class ElevatorSubsystem extends SubsystemBase {
   private LoggedTalonFX motor2;
   public LoggedTalonFX master;
 
+  private LinearFilter elevatorFilter;
+  private double currentHeightToF;
+  private boolean elevatorZeroed;
+
   private MotionMagicConfigs mmc;
   private ElevatorPositions currentLevel;
   private CANrange distance; // Time of Flight (ToF) sensor
 
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
+  private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
   private ElevatorSubsystem() {
     // Initialize motors
+    elevatorZeroed = false;
+    elevatorFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
 
     distance =
         new CANrange(
@@ -61,6 +71,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Set up motor followers and deal with inverted motors
     Follower follower = new Follower(ElevatorConstants.MOTOR1_PORT, false);
     motor2.setControl(follower);
+
+    Slot1Configs s1c =
+        new Slot1Configs()
+            .withKP(ElevatorConstants.S1C_KP)
+            .withKI(ElevatorConstants.S1C_KI)
+            .withKD(ElevatorConstants.S1C_KD)
+            .withKS(ElevatorConstants.S0C_KS)
+            .withKG(ElevatorConstants.S0C_KG)
+            .withKA(ElevatorConstants.S0C_KA)
+            .withKV(ElevatorConstants.S0C_KV)
+            .withGravityType(GravityTypeValue.Elevator_Static)
+            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
 
     Slot0Configs s0c =
         new Slot0Configs()
@@ -84,6 +106,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     m1Config.apply(s0c);
     m2Config.apply(s0c);
+    m1Config.apply(s1c);
+    m2Config.apply(s1c);
 
     MotorOutputConfigs moc = new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake);
 
@@ -99,7 +123,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     m2Config.apply(moc);
 
     master = motor1;
-    resetPosition();
+    currentHeightToF = elevatorFilter.calculate(getToFDistance());
+    resetPositionFiltered();
   }
 
   // instance for elevator subsystem
@@ -114,8 +139,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     return distance.isConnected();
   }
 
+  public void resetPositionFiltered() {
+    master.setPosition(
+        currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+    DogLog.log(
+        "subsystems/Elevator/resetElevatorPosition",
+        currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+  }
+
   public void resetPosition() {
-    // TODO: add constant to convert distance to encoder values
     if (tofIsConnected()) {
       master.setPosition(
           this.getToFDistance()
@@ -134,6 +166,39 @@ public class ElevatorSubsystem extends SubsystemBase {
     DogLog.log(
         "subsystems/Elevator/resetElevatorPosition",
         posInHeight * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+  }
+
+  // Hardstop Zeroing functions:
+  public void moveElevatorNegative() {
+    master.setControl(velocityRequest.withVelocity(-5).withSlot(1));
+  }
+
+  public void reduceCurrentLimits() {
+    master.updateCurrentLimits(30, 10);
+  }
+
+  public void resetCurrentLimits() {
+    master.updateCurrentLimits(
+        Constants.ElevatorConstants.STATOR_CURRENT_LIMIT,
+        Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+  }
+
+  public void resetElevatorPositionToZero() {
+    master.setPosition(0);
+    master.setControl(controlRequest.withPosition(0).withSlot(0));
+    master.setPosition(0);
+  }
+
+  public boolean checkCurrent() {
+    double Supplycurrent = Math.abs(master.getSupplyCurrent().getValue().magnitude());
+    double Statorcurrent = Math.abs(master.getStatorCurrent().getValue().magnitude());
+    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/supply", Supplycurrent);
+    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/stator", Statorcurrent);
+
+    if (Supplycurrent > 1.0 && Statorcurrent > 20) {
+      return true;
+    }
+    return false;
   }
 
   public double getError() {
@@ -158,10 +223,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void setPosition(double height) {
     master.setControl(
-        controlRequest.withPosition(
-            height
-                * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
-                / ElevatorConstants.CARRAIGE_UPDUCTION));
+        controlRequest
+            .withPosition(
+                height
+                    * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
+                    / ElevatorConstants.CARRAIGE_UPDUCTION)
+            .withSlot(0));
     DogLog.log(
         "subsystems/Elevator/elevatorSetpoint(rot)",
         height
@@ -196,12 +263,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
   }
 
+  public boolean isElevatorZeroed() {
+    return elevatorZeroed;
+  }
+
+  public void elevatorHasBeenZeroed() {
+    elevatorZeroed = true;
+  }
+
   @Override
   public void periodic() {
+    currentHeightToF = elevatorFilter.calculate(getToFDistance());
     // Time of Flight Sensor
     DogLog.log("subsystems/Elevator/getError", getError());
     DogLog.log("subsystems/Elevator/ToF/Distance", getToFDistance());
     DogLog.log("subsystems/Elevator/ToF/Connected", distance.isConnected());
+    DogLog.log("subsystems/Elevator/ToF/LinearFilterDistance", currentHeightToF);
 
     DogLog.log("subsystems/Elevator/isAtPosition", this.isAtPosition());
     DogLog.log("subsystems/Elevator/targetPosition", currentLevel.getPosition());

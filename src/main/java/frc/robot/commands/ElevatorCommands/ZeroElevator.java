@@ -13,7 +13,6 @@ public class ZeroElevator extends Command {
 
   @Override
   public void initialize() {
-
     elevatorSubsystem.resetPosition();
   }
 

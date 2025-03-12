@@ -6,7 +6,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.BlueLandmarkPose;
+import frc.robot.Constants.LandmarkPose;
+import frc.robot.Constants.RedLandmarkPose;
 import frc.robot.subsystems.SwerveSubsystem;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -14,22 +19,69 @@ public class JamesHardenMovement extends Command {
 
   private final SwerveSubsystem swerve;
 
+  private static final ArrayList<RedLandmarkPose> redBranchesL =
+      new ArrayList<>(
+          Arrays.asList(
+              RedLandmarkPose.L0,
+              RedLandmarkPose.L1,
+              RedLandmarkPose.L2,
+              RedLandmarkPose.L3,
+              RedLandmarkPose.L4,
+              RedLandmarkPose.L5));
+
+  private static final ArrayList<RedLandmarkPose> redBranchesR =
+      new ArrayList<>(
+          Arrays.asList(
+              RedLandmarkPose.R0,
+              RedLandmarkPose.R1,
+              RedLandmarkPose.R2,
+              RedLandmarkPose.R3,
+              RedLandmarkPose.R4,
+              RedLandmarkPose.R5));
+
+  private static final ArrayList<BlueLandmarkPose> blueBranchesL =
+      new ArrayList<>(
+          Arrays.asList(
+              BlueLandmarkPose.L0,
+              BlueLandmarkPose.L1,
+              BlueLandmarkPose.L2,
+              BlueLandmarkPose.L3,
+              BlueLandmarkPose.L4,
+              BlueLandmarkPose.L5));
+
+  private static final ArrayList<BlueLandmarkPose> blueBranchesR =
+      new ArrayList<>(
+          Arrays.asList(
+              BlueLandmarkPose.R0,
+              BlueLandmarkPose.R1,
+              BlueLandmarkPose.R2,
+              BlueLandmarkPose.R3,
+              BlueLandmarkPose.R4,
+              BlueLandmarkPose.R5));
+
   private Supplier<Pose2d> targetPoseSupplier = null;
   private Pose2d targetPose = null;
   private boolean isInAuto;
+  private boolean noTolerance;
 
   public JamesHardenMovement(
-      SwerveSubsystem swerve, Supplier<Pose2d> targetPoseSupplier, boolean isInAuto) {
+      SwerveSubsystem swerve,
+      Supplier<Pose2d> targetPoseSupplier,
+      boolean isInAuto,
+      boolean noTolerance) {
     this.swerve = swerve;
     this.targetPoseSupplier = targetPoseSupplier;
     this.isInAuto = isInAuto;
+    this.noTolerance = noTolerance;
     addRequirements(swerve);
   }
 
-  public JamesHardenMovement(SwerveSubsystem swerve, Pose2d targetPose, boolean isInAuto) {
+  public JamesHardenMovement(
+      SwerveSubsystem swerve, Pose2d targetPose, boolean isInAuto, boolean noTolerance) {
     this.swerve = swerve;
     this.targetPose = targetPose;
     this.isInAuto = isInAuto;
+    this.noTolerance = noTolerance;
     addRequirements(swerve);
   }
 
@@ -61,255 +113,113 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public boolean isFinished() {
-    double currRot = swerve.getCurrentState().Pose.getRotation().getRadians();
-    currRot = ((2.0 * Math.PI) + (currRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
-    double targetRot = targetPose.getRotation().getRadians();
-    targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
+    if (noTolerance) {
+      return false;
+    } else {
+      double currRot = swerve.getCurrentState().Pose.getRotation().getRadians();
+      currRot = ((2.0 * Math.PI) + (currRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
+      double targetRot = targetPose.getRotation().getRadians();
+      targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
 
-    if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX()) < 0.02)
-        && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY()) < 0.02)
-        && (Math.abs(targetRot - currRot) < 0.0075)) {
-      return true;
-    } else return false;
+      if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+          && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+          && (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot - currRot))
+              < Constants.HardenConstants.RegularCommand.headingTolerance)) {
+        return true;
+      } else return false;
+    }
   }
 
   @Override
   public void end(boolean interrupted) {
-    swerve.setRobotSpeeds(new ChassisSpeeds(0, 0, 0));
-  }
-
-  public static JamesHardenMovement toSpecificLeftBranch(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, int reefSideIndex) {
-    if (redSide.getAsBoolean()) {
-      return new JamesHardenMovement(
-          swerve,
-          new Pose2d(
-              Constants.Landmarks.LEFT_LINEUP_RED[reefSideIndex],
-              Constants.Landmarks.reefFacingAngleRed[reefSideIndex]),
-          isInAuto);
-    } else {
-      return new JamesHardenMovement(
-          swerve,
-          new Pose2d(
-              Constants.Landmarks.LEFT_LINEUP_BLUE[reefSideIndex],
-              Constants.Landmarks.reefFacingAngleBlue[reefSideIndex]),
-          isInAuto);
+    if (!interrupted) {
+      swerve.setRobotSpeeds(new ChassisSpeeds(0, 0, 0));
     }
   }
 
-  public static JamesHardenMovement toSpecificRightBranch(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, int reefSideIndex) {
-    if (redSide.getAsBoolean()) {
-      return new JamesHardenMovement(
-          swerve,
-          new Pose2d(
-              Constants.Landmarks.RIGHT_LINEUP_RED[reefSideIndex],
-              Constants.Landmarks.reefFacingAngleRed[reefSideIndex]),
-          isInAuto);
-    } else {
-      return new JamesHardenMovement(
-          swerve,
-          new Pose2d(
-              Constants.Landmarks.RIGHT_LINEUP_BLUE[reefSideIndex],
-              Constants.Landmarks.reefFacingAngleBlue[reefSideIndex]),
-          isInAuto);
-    }
+  public Pose2d getTargetPose2d() {
+    return targetPose;
+  }
+
+  public static JamesHardenMovement toSpecificBranch(
+      SwerveSubsystem swerve,
+      boolean isInAuto,
+      Supplier<LandmarkPose> branch,
+      boolean noTolerance) {
+    return new JamesHardenMovement(swerve, () -> branch.get().getPose(), isInAuto, noTolerance);
   }
 
   public static JamesHardenMovement toClosestLeftBranch(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, boolean noTolerance) {
 
-    Supplier<Pose2d> targetPose =
+    Supplier<LandmarkPose> targetBranch =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
           if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_RED[i]);
-                sideOfMinDist = i;
+            double minDist =
+                currPosition.getDistance(RedLandmarkPose.L0.getPose().getTranslation());
+            RedLandmarkPose branchOfMinDist = RedLandmarkPose.L0;
+            for (RedLandmarkPose branch : redBranchesL) {
+              if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
+                minDist = currPosition.getDistance(branch.getPose().getTranslation());
+                branchOfMinDist = branch;
               }
             }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.LEFT_LINEUP_RED[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
-
-            return target;
+            return branchOfMinDist;
           } else {
-            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_LINEUP_BLUE[i]);
-                sideOfMinDist = i;
+            double minDist =
+                currPosition.getDistance(BlueLandmarkPose.L0.getPose().getTranslation());
+            BlueLandmarkPose branchOfMinDist = BlueLandmarkPose.L0;
+            for (BlueLandmarkPose branch : blueBranchesL) {
+              if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
+                minDist = currPosition.getDistance(branch.getPose().getTranslation());
+                branchOfMinDist = branch;
               }
             }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.LEFT_LINEUP_BLUE[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestLeftBranch/minDist(m)", minDist);
-
-            return target;
+            return branchOfMinDist;
           }
         };
 
-    return new JamesHardenMovement(swerve, targetPose, isInAuto);
+    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch, noTolerance);
   }
 
   public static JamesHardenMovement toClosestRightBranch(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
-    Supplier<Pose2d> targetPose =
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, boolean noTolerance) {
+
+    Supplier<LandmarkPose> targetBranch =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
+          DogLog.log("currPositionX", currPosition.getX());
+          DogLog.log("currPositionY", currPosition.getY());
+          DogLog.log("currPositionTheta", currPosition.getAngle().getRadians());
+          DogLog.log("hardenRed", redSide.getAsBoolean());
           if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_RED[i]);
-                sideOfMinDist = i;
+            double minDist =
+                currPosition.getDistance(RedLandmarkPose.R0.getPose().getTranslation());
+            RedLandmarkPose branchOfMinDist = RedLandmarkPose.R0;
+            for (RedLandmarkPose branch : redBranchesR) {
+              if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
+                minDist = currPosition.getDistance(branch.getPose().getTranslation());
+                branchOfMinDist = branch;
               }
             }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.RIGHT_LINEUP_RED[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
-
-            return target;
+            return branchOfMinDist;
           } else {
-            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_LINEUP_BLUE[i]);
-                sideOfMinDist = i;
+            double minDist =
+                currPosition.getDistance(BlueLandmarkPose.R0.getPose().getTranslation());
+            BlueLandmarkPose branchOfMinDist = BlueLandmarkPose.R0;
+            for (BlueLandmarkPose branch : blueBranchesR) {
+              if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
+                minDist = currPosition.getDistance(branch.getPose().getTranslation());
+                branchOfMinDist = branch;
               }
             }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.RIGHT_LINEUP_BLUE[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestRightBranch/minDist(m)", minDist);
-
-            return target;
+            return branchOfMinDist;
           }
         };
 
-    return new JamesHardenMovement(swerve, targetPose, isInAuto);
-  }
-
-  public static JamesHardenMovement toClosestLeftOutpost(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
-
-    Supplier<Pose2d> targetPose =
-        () -> {
-          Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
-          if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_RED[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_RED[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_RED[i]);
-                sideOfMinDist = i;
-              }
-            }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.LEFT_OUTPOST_RED[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestLeftOutpost/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestLeftOutpost/minDist(m)", minDist);
-
-            return target;
-          } else {
-            double minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_BLUE[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_BLUE[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.LEFT_OUTPOST_BLUE[i]);
-                sideOfMinDist = i;
-              }
-            }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.LEFT_OUTPOST_BLUE[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestLeftOutpost/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestLeftOutpost/minDist(m)", minDist);
-
-            return target;
-          }
-        };
-
-    return new JamesHardenMovement(swerve, targetPose, isInAuto);
-  }
-
-  public static JamesHardenMovement toClosestRightOutpost(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto) {
-    Supplier<Pose2d> targetPose =
-        () -> {
-          Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
-          if (redSide.getAsBoolean()) {
-            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_RED[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_RED[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_RED[i]);
-                sideOfMinDist = i;
-              }
-            }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.RIGHT_OUTPOST_RED[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleRed[sideOfMinDist]);
-            DogLog.log("JamesHardenMovement/toClosestRightOutpost/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestRightOutpost/minDist(m)", minDist);
-
-            return target;
-          } else {
-            double minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_BLUE[0]);
-            int sideOfMinDist = 0;
-            for (int i = 1; i < 6; i++) {
-              if (currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_BLUE[i]) < minDist) {
-                minDist = currPosition.getDistance(Constants.Landmarks.RIGHT_OUTPOST_BLUE[i]);
-                sideOfMinDist = i;
-              }
-            }
-
-            Pose2d target =
-                new Pose2d(
-                    Constants.Landmarks.RIGHT_OUTPOST_BLUE[sideOfMinDist],
-                    Constants.Landmarks.reefFacingAngleBlue[sideOfMinDist]);
-
-            DogLog.log("JamesHardenMovement/toClosestRightOutpost/sideOfMinDist(m)", sideOfMinDist);
-            DogLog.log("JamesHardenMovement/toClosestRightOutpost/minDist(m)", minDist);
-
-            return target;
-          }
-        };
-
-    return new JamesHardenMovement(swerve, targetPose, isInAuto);
+    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch, noTolerance);
   }
 }
