@@ -42,9 +42,9 @@ public class AutoProducer extends SequentialCommandGroup {
                 new SequentialCommandGroup(
                     new ZeroElevatorHardStop(elevator), new Intake(elevator, funnel, shooter)),
                 JamesHardenMovement.toSpecificBranch(
-                    driveTrain, false, () -> autoInformation.get(1), false))),
+                    driveTrain, true, () -> autoInformation.get(1), false))),
         new JamesHardenScore(
-            elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(1)),
+            elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(1)),
         new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
 
     // first hps visit, second score
@@ -55,14 +55,14 @@ public class AutoProducer extends SequentialCommandGroup {
               new JamesHardenMovement(
                   driveTrain,
                   autoInformation.get(autoInformation.size() - 1).getPose(),
-                  false,
+                  true,
                   false)),
           new SequentialCommandGroup(
               driveTrain.applyRequest(() -> brake).withTimeout(0.1),
               JamesHardenMovement.toSpecificBranch(
-                  driveTrain, false, () -> autoInformation.get(2), false)),
+                  driveTrain, true, () -> autoInformation.get(2), false)),
           new JamesHardenScore(
-              elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(2)),
+              elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(2)),
           new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
     }
 
@@ -73,14 +73,14 @@ public class AutoProducer extends SequentialCommandGroup {
               new JamesHardenMovement(
                   driveTrain,
                   autoInformation.get(autoInformation.size() - 1).getPose(),
-                  false,
+                  true,
                   false)),
           new SequentialCommandGroup(
               driveTrain.applyRequest(() -> brake).withTimeout(0.1),
               JamesHardenMovement.toSpecificBranch(
-                  driveTrain, false, () -> autoInformation.get(3), false)),
+                  driveTrain, true, () -> autoInformation.get(3), false)),
           new JamesHardenScore(
-              elevator, shooter, driveTrain, ElevatorPositions.L4, false, autoInformation.get(3)),
+              elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(3)),
           new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
     }
   }
