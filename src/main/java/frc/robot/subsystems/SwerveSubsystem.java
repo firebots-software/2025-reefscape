@@ -457,15 +457,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
               });
     }
 
-    var drivetrainState = getState();
-    DogLog.log("subsystems/swerve/fl_speed", drivetrainState.ModuleStates[0].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/fl_angle", drivetrainState.ModuleStates[0].angle.getDegrees());
-    DogLog.log("subsystems/swerve/fr_speed", drivetrainState.ModuleStates[1].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/fr_angle", drivetrainState.ModuleStates[1].angle.getDegrees());
-    DogLog.log("subsystems/swerve/bl_speed", drivetrainState.ModuleStates[2].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/bl_angle", drivetrainState.ModuleStates[2].angle.getDegrees());
-    DogLog.log("subsystems/swerve/br_speed", drivetrainState.ModuleStates[3].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/br_angle", drivetrainState.ModuleStates[3].angle.getDegrees());
+    DogLog.log("subsystems/swerve/fl_speed", currentState.ModuleStates[0].speedMetersPerSecond);
+    DogLog.log("subsystems/swerve/fl_angle", currentState.ModuleStates[0].angle.getDegrees());
+    DogLog.log("subsystems/swerve/fr_speed", currentState.ModuleStates[1].speedMetersPerSecond);
+    DogLog.log("subsystems/swerve/fr_angle", currentState.ModuleStates[1].angle.getDegrees());
+    DogLog.log("subsystems/swerve/bl_speed", currentState.ModuleStates[2].speedMetersPerSecond);
+    DogLog.log("subsystems/swerve/bl_angle", currentState.ModuleStates[2].angle.getDegrees());
+    DogLog.log("subsystems/swerve/br_speed", currentState.ModuleStates[3].speedMetersPerSecond);
+    DogLog.log("subsystems/swerve/br_angle", currentState.ModuleStates[3].angle.getDegrees());
     DogLog.log(
         "subsystems/swerve/command",
         this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());

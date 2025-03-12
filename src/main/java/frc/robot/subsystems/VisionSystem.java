@@ -89,7 +89,7 @@ public class VisionSystem extends SubsystemBase {
         .getTranslation()
         .getDistance(
             new Translation3d(
-                driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+                driveTrain.getCurrentState().Pose.getX(), driveTrain.getCurrentState().Pose.getY(), 0.0));
   }
 
   public static VisionSystem getInstance(Constants.Vision.Cameras name) {
@@ -166,7 +166,7 @@ public class VisionSystem extends SubsystemBase {
       double timestamp = pipelineResult.getTimestampSeconds();
       double targetSize = pipelineResult.getBestTarget().area;
       double distance = getDistance();
-      Optional<EstimatedRobotPose> estPose = getMultiTagPose3d(driveTrain.getState().Pose);
+      Optional<EstimatedRobotPose> estPose = getMultiTagPose3d(driveTrain.getCurrentState().Pose);
       if (estPose.isPresent()) {
         DogLog.log("KalmanDebug/rightRobotPoseisPresent", estPose.isPresent());
         DogLog.log("KalmanDebug/rightRobotPoseX", estPose.get().estimatedPose.getX());
@@ -205,7 +205,7 @@ public class VisionSystem extends SubsystemBase {
         else {
           speedMultiplier = 1.5;
         }
-        
+
         double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
         double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
         double rotationKalman = MiscUtils.lerp((distance - 0.6) / 1.4, 0.4, 1000) / 10;
@@ -215,7 +215,7 @@ public class VisionSystem extends SubsystemBase {
         Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, rotationKalman);
         Pose2d bestRobotPose2d = getPose2d();
         Pose2d rotationLess =
-            new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
+            new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getCurrentState().Pose.getRotation());
         DogLog.log("KalmanDebug/rotationless", rotationLess);
         DogLog.log("KalmanDebug/visionPose", bestRobotPose2d);
 
