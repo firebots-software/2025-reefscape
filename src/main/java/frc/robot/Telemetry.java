@@ -1,8 +1,6 @@
 package frc.robot;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -131,9 +129,9 @@ public class Telemetry {
     // SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
     // SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
 
-    DogLog.log("DriveState/ModuleStatesDogLog",m_moduleStatesArray);
-    DogLog.log("DriveState/ModuleTargetsDogLog",m_moduleStatesArray);
-    DogLog.log("DriveState/OdometryPeriodDogLog",state.OdometryPeriod);
+    DogLog.log("DriveState/ModuleStatesDogLog", m_moduleStatesArray);
+    DogLog.log("DriveState/ModuleTargetsDogLog", m_moduleStatesArray);
+    DogLog.log("DriveState/OdometryPeriodDogLog", state.OdometryPeriod);
     publisher.set(state.Pose);
     /* Telemeterize the pose to a Field2d */
     fieldTypePub.set("Field2d");
