@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -19,35 +17,28 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.AutoRoutines.AutoBlueClear3L4;
-import frc.robot.AutoRoutines.AutoBlueLeaveOnly;
-import frc.robot.AutoRoutines.AutoBlueMidL4;
-import frc.robot.AutoRoutines.AutoBlueProcessor3L4;
-import frc.robot.AutoRoutines.AutoRedClear3L4;
-import frc.robot.AutoRoutines.AutoRedLeaveOnly;
-import frc.robot.AutoRoutines.AutoRedMidL4;
-import frc.robot.AutoRoutines.AutoRedProcessor3L4;
+import frc.robot.AutoRoutines.AutoProducer;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.D2Intake;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
-import frc.robot.commandGroups.JamesHardenScoreClosest;
+import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commandGroups.PutUpAndShoot;
+import frc.robot.commandGroups.UnjamFunnelAndIntake;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.ElevatorCommands.ZeroElevator;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
+import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
@@ -101,18 +92,21 @@ public class RobotContainer {
 
   public RobotContainer() {
     autoChooser.setDefaultOption("Nothing", 0);
-    autoChooser.addOption("Processor Side Start", 1);
-    autoChooser.addOption("Clear Side Start (No Processor)", 2);
-    autoChooser.addOption("Leave Only", 3);
-    autoChooser.addOption("Mid 1 L4", 4);
+    autoChooser.addOption("Processor 3", 1);
+    autoChooser.addOption("Processor 2", 2);
+    autoChooser.addOption("Processor 1", 3);
+    autoChooser.addOption("Clear 3", 4);
+    autoChooser.addOption("Clear 2", 5);
+    autoChooser.addOption("Clear 1", 6);
+    autoChooser.addOption("Mid 1", 7);
     SmartDashboard.putData("Auto Side Choices", autoChooser);
     configureBindings();
   }
 
   public void teleopInit() {
-    // CoralPosition.setCoralInTootsieSlide(funnelSubsystem.drakeTripped());
-    CoralPosition.setCoralInFunnel(
-        funnelSubsystem.isCoralCheckedIn() || funnelSubsystem.isCoralCheckedOut());
+    // // CoralPosition.setCoralInTootsieSlide(funnelSubsystem.drakeTripped());
+    // CoralPosition.setCoralInFunnel(
+    //     funnelSubsystem.isCoralCheckedIn() || funnelSubsystem.isCoralCheckedOut());
   }
 
   private void configureBindings() {
@@ -123,102 +117,107 @@ public class RobotContainer {
     // Custom Controller:
 
     // Left Elevator Levels
+    // customController
+    //     .LeftL1()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L1,
+    //             redside,
+    //             false,
+    //             false));
     customController
         .LeftL1()
         .whileTrue(
-            new JamesHardenScoreClosest(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L1,
-                redside,
-                false,
-                false));
+            new JamesHardenMovement(driveTrain, () -> new Pose2d(new Translation2d(13, 6), new Rotation2d(Math.PI/2.0)), true, false));
+
     customController
         .LeftL2()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
                 ElevatorPositions.L2,
                 redside,
                 false,
-                false));
+                true));
     customController
         .LeftL3()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
                 ElevatorPositions.L3,
                 redside,
                 false,
-                false));
+                true));
     customController
         .LeftL4()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
                 ElevatorPositions.L4,
                 redside,
                 false,
-                false));
+                true));
 
     // Right Elevator Levels
     customController
         .RightL1()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
                 ElevatorPositions.L1,
                 redside,
                 true,
-                false));
+                true));
     customController
         .RightL2()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
                 ElevatorPositions.L2,
                 redside,
                 true,
-                false));
+                true));
     customController
         .RightL3()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
                 ElevatorPositions.L3,
                 redside,
                 true,
-                false));
+                true));
     customController
         .RightL4()
         .whileTrue(
-            new JamesHardenScoreClosest(
+            new JamesHardenScore(
                 elevatorSubsystem,
                 tootsieSlideSubsystem,
                 driveTrain,
                 ElevatorPositions.L4,
                 redside,
                 true,
-                false));
+                true));
 
     // Bottom Three Buttons
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
     customController
         .In()
-        .whileTrue(new RunFunnelAndTootsieInCommand(funnelSubsystem, tootsieSlideSubsystem));
+        .whileTrue(new UnjamFunnelAndIntake(elevatorSubsystem, funnelSubsystem,tootsieSlideSubsystem));//RunFunnelAndTootsieInCommand(funnelSubsystem, tootsieSlideSubsystem));
     customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem));
 
     // Joystick 1:
@@ -390,6 +389,7 @@ public class RobotContainer {
                 () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
 
     joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
+
     // new InstantCommand()
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
@@ -478,44 +478,140 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
-    DogLog.log("auto/runningCommand", true);
-    DogLog.log("auto/selectedauto", autoChooser.getSelected());
-    if (autoChooser.getSelected() == 0) {
-      DogLog.log("auto/whichline", 1);
-      return new WaitCommand(12);
-    } else if (autoChooser.getSelected() == 1) {
-      DogLog.log("auto/whichline", 2);
-      return ((redside.getAsBoolean())
-          ? (new AutoRedProcessor3L4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
-          : (new AutoBlueProcessor3L4(
-              driveTrain,
-              tootsieSlideSubsystem,
-              elevatorSubsystem,
-              funnelSubsystem,
-              armSubsystem)));
-    } else if (autoChooser.getSelected() == 2) {
-      DogLog.log("auto/whichline", 3);
-      return ((redside.getAsBoolean())
-          ? (new AutoRedClear3L4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
-          : (new AutoBlueClear3L4(
-              driveTrain,
-              tootsieSlideSubsystem,
-              elevatorSubsystem,
-              funnelSubsystem,
-              armSubsystem)));
-    } else if (autoChooser.getSelected() == 4) {
-      return (redside.getAsBoolean())
-          ? (new AutoRedMidL4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem))
-          : (new AutoBlueMidL4(
-              driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem));
-    } else {
-      DogLog.log("auto/whichline", 4);
-      return ((redside.getAsBoolean())
-          ? (new AutoRedLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem))
-          : (new AutoBlueLeaveOnly(driveTrain, elevatorSubsystem, armSubsystem)));
+    int autoValue = autoChooser.getSelected();
+    Command autoCommand;
+    DogLog.log("auto/selected", autoValue);
+    switch (autoValue) {
+      case 1:
+        autoCommand =
+            redside.getAsBoolean()
+                ? new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.RED_PROCESSOR_3)
+                : new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.BLUE_PROCESSOR_3);
+        break;
+      case 2:
+        autoCommand =
+            redside.getAsBoolean()
+                ? new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.RED_PROCESSOR_2)
+                : new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.BLUE_PROCESSOR_2);
+        break;
+      case 3:
+        autoCommand =
+            redside.getAsBoolean()
+                ? new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.RED_PROCESSOR_1)
+                : new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.BLUE_PROCESSOR_1);
+        break;
+      case 4:
+        autoCommand =
+            redside.getAsBoolean()
+                ? new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.RED_CLEAR_3)
+                : new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.BLUE_CLEAR_3);
+        break;
+      case 5:
+        autoCommand =
+            redside.getAsBoolean()
+                ? new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.RED_CLEAR_2)
+                : new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.BLUE_CLEAR_2);
+        break;
+      case 6:
+        autoCommand =
+            redside.getAsBoolean()
+                ? new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.RED_CLEAR_1)
+                : new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.BLUE_CLEAR_1);
+        break;
+      case 7:
+        autoCommand =
+            redside.getAsBoolean()
+                ? new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.RED_MID_1)
+                : new AutoProducer(
+                    driveTrain,
+                    tootsieSlideSubsystem,
+                    elevatorSubsystem,
+                    funnelSubsystem,
+                    armSubsystem,
+                    Constants.AutoRoutines.BLUE_MID_1);
+        break;
+      default:
+        autoCommand = null;
+        break;
     }
+    return autoCommand;
   }
 }

@@ -138,8 +138,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    if(ElevatorSubsystem.getInstance().isElevatorZeroed() == false){
-      CommandScheduler.getInstance().schedule(new ZeroElevatorHardStop(ElevatorSubsystem.getInstance()));
+    if (ElevatorSubsystem.getInstance().isElevatorZeroed() == false) {
+      CommandScheduler.getInstance()
+          .schedule(new ZeroElevatorHardStop(ElevatorSubsystem.getInstance()));
     }
 
     // CommandScheduler.getInstance();

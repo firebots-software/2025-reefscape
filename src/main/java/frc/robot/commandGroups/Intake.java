@@ -5,7 +5,8 @@
 package frc.robot.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.ElevatorCommands.ElevatorIntakeLevel;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -24,8 +25,8 @@ public class Intake extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new ElevatorIntakeLevel(elevatorSubsystem, funnelSubsystem)
-            .andThen(new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem)));
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
+            .alongWith(new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem)));
     addCommands(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));

@@ -1,19 +1,14 @@
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.FunnelSubsystem;
-import frc.robot.subsystems.TootsieSlideSubsystem;
 
-public class RunFunnelAndTootsieInCommand extends Command {
+public class RunFunnelOutUntilUnstuckCommand extends Command {
   private FunnelSubsystem funnelSubsystem;
-  private TootsieSlideSubsystem shooter;
 
-  public RunFunnelAndTootsieInCommand(
-      FunnelSubsystem funnelSubsystem, TootsieSlideSubsystem shooter) {
+  public RunFunnelOutUntilUnstuckCommand(FunnelSubsystem funnelSubsystem) {
     this.funnelSubsystem = funnelSubsystem;
-    this.shooter = shooter;
-    addRequirements(funnelSubsystem, shooter);
+    addRequirements(funnelSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -25,23 +20,18 @@ public class RunFunnelAndTootsieInCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    funnelSubsystem.spinFunnel();
-    shooter.intakeCoral();
+    funnelSubsystem.debugSpinBack();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    funnelSubsystem.stopFunnel();
-    shooter.stopTootsie();
-    if (funnelSubsystem.drakeTripped()) {
-      CoralPosition.setCoralInTootsieSlide(true);
-    }
+    funnelSubsystem.maintainCurrentPosition();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return funnelSubsystem.drakeTripped();
+    return !funnelSubsystem.isCoralCheckedOut();
   }
 }
