@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
-import frc.robot.commands.AutoCommands.SetIsAutoRunningToFalse;
+//import frc.robot.commands.AutoCommands.SetIsAutoRunningToFalse;
 import frc.robot.commands.DebugCommands.DogLogCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
+//import frc.robot.commands.FunnelCommands.RunFunnelUntilCheckedIn;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -194,7 +194,7 @@ public class AutoRoutines {
     }
 
     // Set isAutoRunning to false when auto routine finishes
-    autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
+    //autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
 
     // Bind the Auto SequentialCommandGroup to run when the routine is activated
     routine.active().onTrue(autoCommandGroup);
@@ -295,31 +295,31 @@ public class AutoRoutines {
     DogLog.log("Auto/pathGoesToHPS", pathGoesToHPS.getAsBoolean());
 
     // See Structure description comment above for a sort-of better explanation
-    Command newStructure2 =
-        Commands.sequence(
-            new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem)
-                .onlyIf(startOrLeavingHPS),
-            new SetElevatorLevel(
-                elevatorSubsystem,
-                ElevatorPositions
-                    .safePosition), // using L1 as the Safe Position because not sure if the "pos"
-            // value in
-            // the Constants Enum should be 0 or 1
-            trajectory
-                .cmd()
-                .alongWith(new DogLogCmd("Auto/CurrTrajRunning", trajName))
-                .andThen(new DogLogCmd("Auto/CurrTrajRunning", "none")), // actual robot movement
-            (pathGoesToHPS.getAsBoolean()
-                ? new ParallelCommandGroup(
-                    new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
-                    new RunFunnelUntilCheckedIn(funnelSubsystem))
-                : new JamesHardenScore(
-                    elevatorSubsystem,
-                    tootsieSlideSubsystem,
-                    driveTrain,
-                    ElevatorPositions.L4,
-                    redside,
-                    goRightBranch)));
+    Command newStructure2 = trajectory.cmd();
+        // Commands.sequence(
+        //     new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem)
+        //         .onlyIf(startOrLeavingHPS),
+        //     new SetElevatorLevel(
+        //         elevatorSubsystem,
+        //         ElevatorPositions
+        //             .safePosition), // using L1 as the Safe Position because not sure if the "pos"
+        //     // value in
+        //     // the Constants Enum should be 0 or 1
+        //     trajectory
+        //         .cmd()
+        //         .alongWith(new DogLogCmd("Auto/CurrTrajRunning", trajName))
+        //         .andThen(new DogLogCmd("Auto/CurrTrajRunning", "none")), // actual robot movement
+        //     (pathGoesToHPS.getAsBoolean()
+        //         ? new ParallelCommandGroup(
+        //             new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+        //             new RunFunnelUntilCheckedIn(funnelSubsystem))
+        //         : new JamesHardenScore(
+        //             elevatorSubsystem,
+        //             tootsieSlideSubsystem,
+        //             driveTrain,
+        //             ElevatorPositions.L4,
+        //             redside,
+        //             goRightBranch)));
 
     // Command oldStructure =  Commands.parallel(
     //         trajectory.cmd(),
