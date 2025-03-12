@@ -91,11 +91,11 @@ public class JamesHardenMovement extends Command {
     if (targetPoseSupplier != null) {
       targetPose = targetPoseSupplier.get();
     }
-    initialPathDistance = targetPose.getTranslation().getDistance(swerve.getCurrentState().Pose.getTranslation());
+    initialPathDistance =
+        targetPose.getTranslation().getDistance(swerve.getCurrentState().Pose.getTranslation());
     if (edwardVersion) {
       swerve.resetProfiledPIDs(swerve.travelAngleTo(targetPose));
-    }
-    else {
+    } else {
       swerve.resetProfiledPIDs();
     }
   }
@@ -155,7 +155,8 @@ public class JamesHardenMovement extends Command {
       boolean edwardVersion,
       Supplier<LandmarkPose> branch,
       boolean noTolerance) {
-    return new JamesHardenMovement(swerve, () -> branch.get().getPose(), edwardVersion, noTolerance);
+    return new JamesHardenMovement(
+        swerve, () -> branch.get().getPose(), edwardVersion, noTolerance);
   }
 
   public static JamesHardenMovement toClosestLeftBranch(

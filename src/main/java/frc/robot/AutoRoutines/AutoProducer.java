@@ -9,13 +9,10 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.Constants.LandmarkPose;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
-import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.commands.DaleCommands.ZeroArm;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevelInstant;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.commands.FunnelCommands.CoralCheckedIn;
-import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -55,20 +52,19 @@ public class AutoProducer extends SequentialCommandGroup {
     if (autoInformation.size() > 2) {
       addCommands(
           new ParallelCommandGroup(
-            new Intake(elevator, funnel, shooter),
-            new SequentialCommandGroup(
-                new CoralCheckedIn(funnel).deadlineFor(
-                    new JamesHardenMovement(
-                    driveTrain,
-                    autoInformation.get(autoInformation.size() - 1).getPose(),
-                    true,
-                    false)
-                ),
+              new Intake(elevator, funnel, shooter),
+              new SequentialCommandGroup(
+                  new CoralCheckedIn(funnel)
+                      .deadlineFor(
+                          new JamesHardenMovement(
+                              driveTrain,
+                              autoInformation.get(autoInformation.size() - 1).getPose(),
+                              true,
+                              false)),
                   JamesHardenMovement.toSpecificBranch(
-                    driveTrain, true, () -> autoInformation.get(2), false))
-                  ),
-              JamesHardenMovement.toSpecificBranch(
-                  driveTrain, true, () -> autoInformation.get(2), false),
+                      driveTrain, true, () -> autoInformation.get(2), false))),
+          JamesHardenMovement.toSpecificBranch(
+              driveTrain, true, () -> autoInformation.get(2), false),
           new JamesHardenScore(
               elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(2)),
           new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));

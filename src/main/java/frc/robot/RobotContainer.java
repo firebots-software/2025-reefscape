@@ -35,7 +35,6 @@ import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
-import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
@@ -131,7 +130,11 @@ public class RobotContainer {
     customController
         .LeftL1()
         .whileTrue(
-            new JamesHardenMovement(driveTrain, () -> new Pose2d(new Translation2d(13, 6), new Rotation2d(Math.PI/2.0)), true, false));
+            new JamesHardenMovement(
+                driveTrain,
+                () -> new Pose2d(new Translation2d(13, 6), new Rotation2d(Math.PI / 2.0)),
+                true,
+                false));
 
     customController
         .LeftL2()
@@ -217,7 +220,12 @@ public class RobotContainer {
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
     customController
         .In()
-        .whileTrue(new UnjamFunnelAndIntake(elevatorSubsystem, funnelSubsystem,tootsieSlideSubsystem));//RunFunnelAndTootsieInCommand(funnelSubsystem, tootsieSlideSubsystem));
+        .whileTrue(
+            new UnjamFunnelAndIntake(
+                elevatorSubsystem,
+                funnelSubsystem,
+                tootsieSlideSubsystem)); // RunFunnelAndTootsieInCommand(funnelSubsystem,
+    // tootsieSlideSubsystem));
     customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem));
 
     // Joystick 1:
