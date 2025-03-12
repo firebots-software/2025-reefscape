@@ -184,9 +184,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void resetElevatorPositionToZero() {
-    master.setPosition(0);
-    master.setControl(controlRequest.withPosition(0).withSlot(0));
-    master.setPosition(0);
+    master.setControl(controlRequest.withPosition(master.getPosition().getValueAsDouble()).withSlot(0));
+    // master.setPosition(0);
+    // master.setControl(controlRequest.withPosition(0).withSlot(0));
+    // master.setPosition(0);
   }
 
   public boolean checkCurrent() {
