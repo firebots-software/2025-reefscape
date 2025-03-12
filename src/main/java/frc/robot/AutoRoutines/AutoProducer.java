@@ -55,20 +55,20 @@ public class AutoProducer extends SequentialCommandGroup {
     if (autoInformation.size() > 2) {
       addCommands(
           new ParallelCommandGroup(
-                new SetElevatorLevel(elevator, ElevatorPositions.Intake),
-                
-                new CoralCheckedIn(funnel).deadlineFor(new RunFunnelUntilDetectionSafe(funnel, elevator)),
-            //   new Intake(elevator, funnel, shooter),
-              new JamesHardenMovement(
-                  driveTrain,
-                  autoInformation.get(autoInformation.size() - 1).getPose(),
-                  true,
-                  false)),
-          new ParallelCommandGroup(
-            //   driveTrain.applyRequest(() -> brake).withTimeout(0.1),
-            new RunFunnelUntilDetectionSafe(funnel, elevator).andThen(new TransferPieceBetweenFunnelAndElevator(elevator, funnel, shooter)),
+            new Intake(elevator, funnel, shooter),
+            new SequentialCommandGroup(
+                new CoralCheckedIn(funnel).deadlineFor(
+                    new JamesHardenMovement(
+                    driveTrain,
+                    autoInformation.get(autoInformation.size() - 1).getPose(),
+                    true,
+                    false)
+                ),
+                  JamesHardenMovement.toSpecificBranch(
+                    driveTrain, true, () -> autoInformation.get(2), false))
+                  ),
               JamesHardenMovement.toSpecificBranch(
-                  driveTrain, true, () -> autoInformation.get(2), false)),
+                  driveTrain, true, () -> autoInformation.get(2), false),
           new JamesHardenScore(
               elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(2)),
           new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
