@@ -1,12 +1,11 @@
 package frc.robot.commands;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
-
-import dev.doglog.DogLog;
 
 public class EndWhenCloseEnough extends Command {
   SwerveSubsystem driveTrain;

@@ -35,7 +35,7 @@ public class IntakeTootsieSlide extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(funnelSubsystem.drakeTripped()){
+    if (funnelSubsystem.drakeTripped()) {
       CoralPosition.setCoralInTootsieSlide(true);
     }
     tootsieSlideSubsystem.stopTootsie();
