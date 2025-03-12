@@ -161,7 +161,7 @@ public class FunnelSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Funnel/CheckedInStatus", isCoralCheckedIn());
     DogLog.log("subsystems/Funnel/CheckedOutStatus", isCoralCheckedOut());
     DogLog.log("subsystems/Funnel/DrakeStatus", drakeTripped());
-    DogLog.log("subsystems/Funnel/FunnelVelocity", rightMotor.getVelocity().getValueAsDouble());
+    // DogLog.log("subsystems/Funnel/FunnelVelocity", rightMotor.getVelocity().getValueAsDouble());
     DogLog.log("subsystems/Funnel/AbsPositionalError", getAbsolutePositionalError());
     DogLog.log(
         "subsystems/Funnel/command",

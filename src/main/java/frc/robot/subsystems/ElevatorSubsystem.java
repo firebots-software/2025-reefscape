@@ -285,7 +285,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Elevator/isAtPosition", this.isAtPosition());
     DogLog.log("subsystems/Elevator/targetPosition", currentLevel.getPosition());
     DogLog.log("subsystems/Elevator/targetHeightDist", currentLevel.getHeight());
-    DogLog.log("subsystems/Elevator/targetHeightRot", currentLevel.getHeight());
+    DogLog.log("subsystems/Elevator/targetHeightRot", currentLevel.getHeight() * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS / Constants.ElevatorConstants.CARRAIGE_UPDUCTION);
     DogLog.log(
         "subsystems/Elevator/currentHeightDist",
         master.getPosition().getValueAsDouble()

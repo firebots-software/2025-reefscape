@@ -102,7 +102,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    DogLog.log("subsystems/tootsieslide/tootsieVelocity", master.getVelocity().getValueAsDouble());
+    // DogLog.log("subsystems/tootsieslide/tootsieVelocity", master.getVelocity().getValueAsDouble());
     DogLog.log(
         "subsystems/tootsieslide/command",
         this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
