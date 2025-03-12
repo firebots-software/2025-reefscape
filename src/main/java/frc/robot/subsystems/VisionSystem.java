@@ -199,9 +199,13 @@ public class VisionSystem extends SubsystemBase {
         if (Math.sqrt(
                 Math.pow(driveTrain.getRobotSpeeds().vxMetersPerSecond, 2)
                     + Math.pow(driveTrain.getRobotSpeeds().vyMetersPerSecond, 2))
-            > 0.5) {
+            > 1) {
           speedMultiplier = 2;
         }
+        else {
+          speedMultiplier = 1.5;
+        }
+        
         double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
         double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
         double rotationKalman = MiscUtils.lerp((distance - 0.6) / 1.4, 0.4, 1000) / 10;
