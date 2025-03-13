@@ -42,7 +42,7 @@ public final class Constants {
 
   public static class HardenConstants {
     public static class EndWhenCloseEnough {
-      public static final double translationalTolerance = 0.43105229381;
+      public static final double translationalTolerance = 0.7;// good 0.43105229381;
       // public static final double translationalTolerance = 0.6;
       public static final double headingTolerance = 0.7853975; // Math.PI/4
     }
@@ -110,11 +110,11 @@ public final class Constants {
         BLUE_MID_1 = Arrays.asList(BlueLandmarkPose.MID_AUTO_START, BlueLandmarkPose.L3),
         RED_PROCESSOR_3 =
             Arrays.asList(
-                RedLandmarkPose.PROCESSOR_AUTO_START,
+                RedLandmarkPose.CLOSER_PROCESSOR_AUTO_START,
                 RedLandmarkPose.L4,
                 RedLandmarkPose.R5,
                 RedLandmarkPose.L5,
-                RedLandmarkPose.PROCESSOR_HPS),
+                RedLandmarkPose.CLOSER_PROCESSOR_HPS),
         RED_PROCESSOR_2 =
             Arrays.asList(
                 RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5),
@@ -188,10 +188,12 @@ public final class Constants {
         new Pose2d(
             new Translation2d(1.118087887763977, 1.0306631326675415),
             new Rotation2d(0.9334126223560425))),
+    CLOSER_PROCESSOR_HPS(new Pose2d(new Translation2d(1.6313929557800293, 0.6662082672119141), new Rotation2d(0.9334126223560425))),
     CLEAR_HPS(
         new Pose2d(
             new Translation2d(1.1465998888015747, 7.014684677124023),
             new Rotation2d(-0.9419997588093272))),
+    CLOSER_CLEAR_HPS(new Pose2d(new Translation2d(1.6867308616638184, 7.395046710968018), new Rotation2d(-0.9419997588093272))),
     L0(new Pose2d(new Translation2d(3.14058, 4.19448), new Rotation2d(Degrees.of(0)))),
     L1(new Pose2d(new Translation2d(3.66895, 2.94212), new Rotation2d(Degrees.of(60)))),
     L2(new Pose2d(new Translation2d(5.0177, 2.77352), new Rotation2d(Degrees.of(120)))),
@@ -235,9 +237,17 @@ public final class Constants {
         new Pose2d(
             new Translation2d(16.341829299926758, 7.0662689208984375),
             new Rotation2d(-2.1939969266716175))),
+    CLOSER_PROCESSOR_HPS(
+        new Pose2d(
+            new Translation2d(15.920981407165527, 7.365553379058838),
+            new Rotation2d(-2.1939969266716175))),
     CLEAR_HPS(
         new Pose2d(
             new Translation2d(16.39461326599121, 1.0060197114944458),
+            new Rotation2d(2.1932607985206625))),
+    CLOSER_CLEAR_HPS(
+        new Pose2d(
+            new Translation2d(15.916762351989746, 0.6757827997207642),
             new Rotation2d(2.1932607985206625))),
     R0(new Pose2d(new Translation2d(14.4076704, 4.19448), new Rotation2d(Degrees.of(180)))),
     R1(new Pose2d(new Translation2d(13.8793004, 2.94212), new Rotation2d(Degrees.of(120)))),
