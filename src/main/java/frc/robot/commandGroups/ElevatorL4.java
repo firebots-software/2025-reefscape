@@ -8,10 +8,10 @@ import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ElevatorL4 extends SequentialCommandGroup {
 
-  public ElevatorL4(ElevatorSubsystem elevatorSubsystem) {
+  public ElevatorL4(ElevatorSubsystem elevatorSubsystem, boolean checkIfCoralInTootsie) {
 
     addCommands(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4)
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4, checkIfCoralInTootsie)
             .andThen(new ElevatorHoldL4(elevatorSubsystem).withTimeout(0.25)));
   }
 }

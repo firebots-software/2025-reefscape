@@ -23,7 +23,7 @@ public class Dealgaenate extends SequentialCommandGroup {
 
     // TODO: To whomever reads this, have fun finding actual numbers;
     // Fe fi fo fum, i proclaim that ritvik's a bum
-    addCommands(new SetElevatorLevel(elevator, position));
+    addCommands(new SetElevatorLevel(elevator, position, false));
     addCommands(new ArmToAngleAndSpinFlywheel(Constants.Arm.EXTENDED_ANGLE, arm, elevator));
     // addCommands(new SetElevatorLevelInstant(elevator, ElevatorPositions.safePosition));
   }

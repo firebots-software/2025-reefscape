@@ -40,9 +40,9 @@ public class JamesHardenScore extends SequentialCommandGroup {
     }
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
-      elevateCommand = new ElevatorL4(elevatorSubsystem);
+      elevateCommand = new ElevatorL4(elevatorSubsystem, true);
     } else {
-      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height);
+      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height, true);
     }
 
     addCommands(
@@ -74,9 +74,9 @@ public class JamesHardenScore extends SequentialCommandGroup {
 
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
-      elevateCommand = new ElevatorL4(elevatorSubsystem);
+      elevateCommand = new ElevatorL4(elevatorSubsystem, true);
     } else {
-      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height);
+      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height, true);
     }
 
     addCommands(

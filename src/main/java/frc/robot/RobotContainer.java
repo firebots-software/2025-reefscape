@@ -246,14 +246,15 @@ public class RobotContainer {
 
     // Joystick 2:
     // Elevator
-    joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));
-    joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2));
-    joystick2.y().onTrue(new ElevatorL4(elevatorSubsystem));
-    joystick2.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3));
+    joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false));
+    joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2, false));
+    joystick2.y().onTrue(new ElevatorL4(elevatorSubsystem, false));
+    joystick2.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3, false));
     joystick2
         .rightBumper()
         .onTrue(
-            new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition)); // reset mode
+            new SetElevatorLevel(
+                elevatorSubsystem, ElevatorPositions.safePosition, false)); // reset mode
 
     // Shoot Tootsie Slide
     joystick2.rightTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
@@ -272,7 +273,7 @@ public class RobotContainer {
                 () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()))
             .and(RobotModeTriggers.teleop());
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
-    funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake));
+    funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false));
     funnelCheckin.onTrue(new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
     Trigger funnelCheckout =
         new Trigger(
@@ -287,7 +288,8 @@ public class RobotContainer {
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     Trigger coralInElevator =
         new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
-    coralInElevator.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition));
+    coralInElevator.onTrue(
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition, false));
 
     // // Debugging
     // debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));

@@ -11,7 +11,7 @@ public class EjectCoralFR extends SequentialCommandGroup {
   public EjectCoralFR(
       ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem) {
     addCommands(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1)
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false)
             .andThen(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5)));
   }
 }

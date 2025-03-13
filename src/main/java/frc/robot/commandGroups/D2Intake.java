@@ -15,7 +15,7 @@ public class D2Intake extends SequentialCommandGroup {
       TootsieSlideSubsystem tootsieSlideSubsystem,
       FunnelSubsystem funnelSubsystem) {
     addCommands(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1)
+        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false)
             .alongWith(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5))
             .andThen(
                 new TransferPieceBetweenFunnelAndElevator(

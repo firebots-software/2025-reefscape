@@ -92,43 +92,28 @@ public class AutoProducer extends SequentialCommandGroup {
           new JamesHardenScore(
               elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(3)),
           new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
-
-      // addCommands(
-      //   new ParallelCommandGroup(
-      //       new Intake(elevator, funnel, shooter),
-      //       new SequentialCommandGroup(
-      //           new CoralCheckedIn(funnel)
-      //               .deadlineFor(
-      //                   new JamesHardenMovement(
-      //                       driveTrain,
-      //                       autoInformation.get(autoInformation.size() - 1).getPose(),
-      //                       true,
-      //                       false)),
-      //           JamesHardenMovement.toSpecificBranch(
-      //               driveTrain, true,  () -> autoInformation.get(3), false))),
-      // //   JamesHardenMovement.toSpecificBranch(
-      // //       driveTrain, true, () -> autoInformation.get(3), false),
-      //   new JamesHardenScore(
-      //       elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(3)),
-      //   new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
-
-      //   addCommands(
-      //       new ParallelCommandGroup(
-      //           new Intake(elevator, funnel, shooter),
-      //           new JamesHardenMovement(
-      //               driveTrain,
-      //               autoInformation.get(autoInformation.size() - 1).getPose(),
-      //               true,
-      //               false)),
-      //       new SequentialCommandGroup(
-      //           driveTrain.applyRequest(() -> brake).withTimeout(0.1),
-      //           JamesHardenMovement.toSpecificBranch(
-      //               driveTrain, true, () -> autoInformation.get(3), false)),
-      //       new JamesHardenScore(
-      //           elevator, shooter, driveTrain, ElevatorPositions.L4, true,
-      // autoInformation.get(3)),
-      //       new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
     }
+
+    addCommands(
+        new ParallelCommandGroup(
+            new Intake(elevator, funnel, shooter),
+            new SequentialCommandGroup(
+                new CoralCheckedIn(funnel)
+                    .deadlineFor(
+                        new JamesHardenMovement(
+                            driveTrain,
+                            autoInformation.get(autoInformation.size() - 1).getPose(),
+                            true,
+                            false))
+                    .andThen(
+                        new JamesHardenScore(
+                            elevator,
+                            shooter,
+                            driveTrain,
+                            ElevatorPositions.L4,
+                            true,
+                            autoInformation.get(3))),
+                new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake))));
   }
 }
 // are we sure that the autoinformation.size thing works? I feel like its going to run the 3 every
