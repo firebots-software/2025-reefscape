@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RobotContainer.setAlliance();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    CoralPosition.preLoadedCoral();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
