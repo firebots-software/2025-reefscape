@@ -93,16 +93,17 @@ public class TootsieSlideSubsystem extends SubsystemBase {
   }
 
   public void stopTootsie() {
-    master.setPosition(0);
     master.setControl(voltage.withPosition(0));
     master.setPosition(0);
-
+    // master.setControl(voltage.withPosition(0));
+    // master.setPosition(0);
     m_flywheelSim.setInputVoltage(0);
   }
 
   @Override
   public void periodic() {
-    DogLog.log("subsystems/tootsieslide/tootsieVelocity", master.getVelocity().getValueAsDouble());
+    // DogLog.log("subsystems/tootsieslide/tootsieVelocity",
+    // master.getVelocity().getValueAsDouble());
     DogLog.log(
         "subsystems/tootsieslide/command",
         this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());

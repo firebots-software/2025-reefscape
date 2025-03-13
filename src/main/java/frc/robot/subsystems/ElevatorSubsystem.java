@@ -185,8 +185,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void resetElevatorPositionToZero() {
     master.setPosition(0);
-    master.setControl(controlRequest.withPosition(0).withSlot(0));
-    master.setPosition(0);
+    // master.setControl(controlRequest.withPosition(master.getPosition().getValueAsDouble()).withSlot(0));
+    // master.setPosition(0);
+    // master.setControl(controlRequest.withPosition(0).withSlot(0));
+    // master.setPosition(0);
   }
 
   public boolean checkCurrent() {
@@ -283,7 +285,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Elevator/isAtPosition", this.isAtPosition());
     DogLog.log("subsystems/Elevator/targetPosition", currentLevel.getPosition());
     DogLog.log("subsystems/Elevator/targetHeightDist", currentLevel.getHeight());
-    DogLog.log("subsystems/Elevator/targetHeightRot", currentLevel.getHeight());
+    DogLog.log(
+        "subsystems/Elevator/targetHeightRot",
+        currentLevel.getHeight()
+            * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
+            / Constants.ElevatorConstants.CARRAIGE_UPDUCTION);
     DogLog.log(
         "subsystems/Elevator/currentHeightDist",
         master.getPosition().getValueAsDouble()
