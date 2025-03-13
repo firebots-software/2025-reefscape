@@ -137,19 +137,12 @@ public class AutoProducer extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             new Intake(elevator, funnel, shooter),
-            new SequentialCommandGroup(
-                new CoralCheckedIn(funnel)
-                    .deadlineFor(
-                        new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true, false))
-                    .andThen(
-                        new JamesHardenScore(
-                            elevator,
-                            shooter,
-                            driveTrain,
-                            ElevatorPositions.L4,
-                            true,
-                            scorePosition)),
-                new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake))));
+            new ParallelDeadlineGroup(
+                new CoralCheckedIn(funnel),
+                new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true, false))
+                .andThen(new JamesHardenScore(
+                    elevator, shooter, driveTrain, ElevatorPositions.L4, true, scorePosition))),
+        new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
   }
 }
 // are we sure that the autoinformation.size thing works? I feel like its going to run the 3 every
