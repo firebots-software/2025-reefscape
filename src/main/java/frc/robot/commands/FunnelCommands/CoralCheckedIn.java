@@ -9,13 +9,13 @@ public class CoralCheckedIn extends Command {
 
   public CoralCheckedIn(FunnelSubsystem funnelSubsystem) {
     this.funnelSubsystem = funnelSubsystem;
-    DogLog.log("CoralCheckedIn",false);
+    DogLog.log("CoralCheckedIn", false);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    DogLog.log("CoralCheckedIn",true);
+    DogLog.log("CoralCheckedIn", true);
 
     // Store the position of the coral when it was first checked out.
   }
@@ -27,7 +27,7 @@ public class CoralCheckedIn extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DogLog.log("CoralCheckedIn",false);
+    DogLog.log("CoralCheckedIn", false);
   }
 
   // Returns true when the command should end.

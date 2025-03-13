@@ -42,7 +42,7 @@ public final class Constants {
 
   public static class HardenConstants {
     public static class EndWhenCloseEnough {
-      public static final double translationalTolerance = 0.7;// good 0.43105229381;
+      public static final double translationalTolerance = 0.7; // good 0.43105229381;
       // public static final double translationalTolerance = 0.6;
       public static final double headingTolerance = 0.7853975; // Math.PI/4
     }
@@ -188,12 +188,18 @@ public final class Constants {
         new Pose2d(
             new Translation2d(1.118087887763977, 1.0306631326675415),
             new Rotation2d(0.9334126223560425))),
-    CLOSER_PROCESSOR_HPS(new Pose2d(new Translation2d(1.6313929557800293, 0.6662082672119141), new Rotation2d(0.9334126223560425))),
+    CLOSER_PROCESSOR_HPS(
+        new Pose2d(
+            new Translation2d(1.6313929557800293, 0.6662082672119141),
+            new Rotation2d(0.9334126223560425))),
     CLEAR_HPS(
         new Pose2d(
             new Translation2d(1.1465998888015747, 7.014684677124023),
             new Rotation2d(-0.9419997588093272))),
-    CLOSER_CLEAR_HPS(new Pose2d(new Translation2d(1.6867308616638184, 7.395046710968018), new Rotation2d(-0.9419997588093272))),
+    CLOSER_CLEAR_HPS(
+        new Pose2d(
+            new Translation2d(1.6867308616638184, 7.395046710968018),
+            new Rotation2d(-0.9419997588093272))),
     L0(new Pose2d(new Translation2d(3.14058, 4.19448), new Rotation2d(Degrees.of(0)))),
     L1(new Pose2d(new Translation2d(3.66895, 2.94212), new Rotation2d(Degrees.of(60)))),
     L2(new Pose2d(new Translation2d(5.0177, 2.77352), new Rotation2d(Degrees.of(120)))),
