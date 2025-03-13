@@ -71,21 +71,40 @@ public class AutoProducer extends SequentialCommandGroup {
     }
 
     if (autoInformation.size() > 3) {
-      addCommands(
+        addCommands(
           new ParallelCommandGroup(
               new Intake(elevator, funnel, shooter),
-              new JamesHardenMovement(
-                  driveTrain,
-                  autoInformation.get(autoInformation.size() - 1).getPose(),
-                  true,
-                  false)),
-          new SequentialCommandGroup(
-              driveTrain.applyRequest(() -> brake).withTimeout(0.1),
-              JamesHardenMovement.toSpecificBranch(
-                  driveTrain, true, () -> autoInformation.get(3), false)),
+              new SequentialCommandGroup(
+                  new CoralCheckedIn(funnel)
+                      .deadlineFor(
+                          new JamesHardenMovement(
+                              driveTrain,
+                              autoInformation.get(autoInformation.size() - 1).getPose(),
+                              true,
+                              false)),
+                  JamesHardenMovement.toSpecificBranch(
+                      driveTrain, true,  () -> autoInformation.get(3), false))),
+          JamesHardenMovement.toSpecificBranch(
+              driveTrain, true, () -> autoInformation.get(3), false),
           new JamesHardenScore(
-              elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(3)),
+              elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(2)),
           new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
+
+    //   addCommands(
+    //       new ParallelCommandGroup(
+    //           new Intake(elevator, funnel, shooter),
+    //           new JamesHardenMovement(
+    //               driveTrain,
+    //               autoInformation.get(autoInformation.size() - 1).getPose(),
+    //               true,
+    //               false)),
+    //       new SequentialCommandGroup(
+    //           driveTrain.applyRequest(() -> brake).withTimeout(0.1),
+    //           JamesHardenMovement.toSpecificBranch(
+    //               driveTrain, true, () -> autoInformation.get(3), false)),
+    //       new JamesHardenScore(
+    //           elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(3)),
+    //       new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
     }
   }
 }

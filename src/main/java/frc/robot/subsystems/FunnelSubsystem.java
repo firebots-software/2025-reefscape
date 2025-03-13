@@ -32,8 +32,10 @@ public class FunnelSubsystem extends SubsystemBase {
   private DigitalInput drake;
   private double coralCheckedOutPosition;
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+  private final boolean m;
 
   private FunnelSubsystem() {
+    m=false;
     rightMotor =
         new LoggedTalonFX("subsystems/Funnel/rightMotor", FunnelConstants.RIGHT_MOTOR_PORT);
     leftMotor = new LoggedTalonFX("subsystems/Funnel/leftMotor", FunnelConstants.LEFT_MOTOR_PORT);
