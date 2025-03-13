@@ -10,9 +10,11 @@ import frc.robot.Constants.LandmarkPose;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.DaleCommands.ZeroArm;
+import frc.robot.commands.DebugCommands.DogLogCmd;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevelInstant;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.commands.FunnelCommands.CoralCheckedIn;
+import frc.robot.commands.FunnelCommands.isCoralInTootsieSlide;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -38,20 +40,20 @@ public class AutoProducer extends SequentialCommandGroup {
     // first score
     addCommands(
         new ParallelCommandGroup(
-            new ZeroArm(arm).withTimeout(1.25),
+            new ZeroArm(arm).withTimeout(1.25).alongWith(new DogLogCmd("AutoRunningWhich",0)),
             new ParallelDeadlineGroup(
                 new SequentialCommandGroup(
-                    new ZeroElevatorHardStop(elevator), new Intake(elevator, funnel, shooter)),
+                    new ZeroElevatorHardStop(elevator).alongWith(new DogLogCmd("AutoRunningWhich",1)), new Intake(elevator, funnel, shooter).alongWith(new DogLogCmd("AutoRunningWhich",2))),
                 JamesHardenMovement.toSpecificBranch(
-                    driveTrain, true, () -> autoInformation.get(1), false))),
+                    driveTrain, true, () -> autoInformation.get(1), false).alongWith(new DogLogCmd("AutoRunningWhich",3)))),
         new JamesHardenScore(
-            elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(1)),
-        new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
+            elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(1)).alongWith(new DogLogCmd("AutoRunningWhich",4)),
+        new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake).alongWith(new DogLogCmd("AutoRunningWhich",5)));
 
     // first hps visit, second score
     if (autoInformation.size() > 2) {
       addCommands(
-          new ParallelCommandGroup(
+          new ParallelDeadlineGroup(
               new Intake(elevator, funnel, shooter),
               new SequentialCommandGroup(
                   new CoralCheckedIn(funnel)
@@ -63,8 +65,6 @@ public class AutoProducer extends SequentialCommandGroup {
                               false)),
                   JamesHardenMovement.toSpecificBranch(
                       driveTrain, true, () -> autoInformation.get(2), false))),
-          JamesHardenMovement.toSpecificBranch(
-              driveTrain, true, () -> autoInformation.get(2), false),
           new JamesHardenScore(
               elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(2)),
           new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
@@ -72,23 +72,40 @@ public class AutoProducer extends SequentialCommandGroup {
 
     if (autoInformation.size() > 3) {
         addCommands(
-          new ParallelCommandGroup(
-              new Intake(elevator, funnel, shooter),
-              new SequentialCommandGroup(
-                  new CoralCheckedIn(funnel)
-                      .deadlineFor(
-                          new JamesHardenMovement(
-                              driveTrain,
-                              autoInformation.get(autoInformation.size() - 1).getPose(),
-                              true,
-                              false)),
-                  JamesHardenMovement.toSpecificBranch(
-                      driveTrain, true,  () -> autoInformation.get(3), false))),
-          JamesHardenMovement.toSpecificBranch(
-              driveTrain, true, () -> autoInformation.get(3), false),
-          new JamesHardenScore(
-              elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(2)),
-          new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
+            new ParallelDeadlineGroup(
+                new Intake(elevator, funnel, shooter),
+                new SequentialCommandGroup(
+                    new CoralCheckedIn(funnel)
+                        .deadlineFor(
+                            new JamesHardenMovement(
+                                driveTrain,
+                                autoInformation.get(autoInformation.size() - 1).getPose(),
+                                true,
+                                false)),
+                    JamesHardenMovement.toSpecificBranch(
+                        driveTrain, true, () -> autoInformation.get(3), false))),
+            new JamesHardenScore(
+                elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(3)),
+            new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
+
+        // addCommands(
+        //   new ParallelCommandGroup(
+        //       new Intake(elevator, funnel, shooter),
+        //       new SequentialCommandGroup(
+        //           new CoralCheckedIn(funnel)
+        //               .deadlineFor(
+        //                   new JamesHardenMovement(
+        //                       driveTrain,
+        //                       autoInformation.get(autoInformation.size() - 1).getPose(),
+        //                       true,
+        //                       false)),
+        //           JamesHardenMovement.toSpecificBranch(
+        //               driveTrain, true,  () -> autoInformation.get(3), false))),
+        // //   JamesHardenMovement.toSpecificBranch(
+        // //       driveTrain, true, () -> autoInformation.get(3), false),
+        //   new JamesHardenScore(
+        //       elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(3)),
+        //   new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
 
     //   addCommands(
     //       new ParallelCommandGroup(
@@ -108,3 +125,4 @@ public class AutoProducer extends SequentialCommandGroup {
     }
   }
 }
+// are we sure that the autoinformation.size thing works? I feel like its going to run the 3 every time

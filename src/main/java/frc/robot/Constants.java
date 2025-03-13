@@ -856,8 +856,8 @@ public final class Constants {
       L3(
           3,
           1.285 - 0.02 + elevatorRecalibration), // 1.27 // KALASH wants 1cm lower //old value 1.32
-      L4(4, 1.83), // 1.81
-      LIMIT_OF_TRAVEL(1, 1.825 + 0.02); // 1.825
+      L4(4, 1.835), // 1.81
+      LIMIT_OF_TRAVEL(1, 1.825 + 0.025); // 1.825
 
       public final int position;
       public final double height;
