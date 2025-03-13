@@ -29,12 +29,12 @@ import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commandGroups.PutUpAndShoot;
+import frc.robot.commandGroups.UnjamFunnelAndIntake;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
-import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
@@ -103,9 +103,9 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    // CoralPosition.setCoralInTootsieSlide(funnelSubsystem.drakeTripped());
-    CoralPosition.setCoralInFunnel(
-        funnelSubsystem.isCoralCheckedIn() || funnelSubsystem.isCoralCheckedOut());
+    // // CoralPosition.setCoralInTootsieSlide(funnelSubsystem.drakeTripped());
+    // CoralPosition.setCoralInFunnel(
+    //     funnelSubsystem.isCoralCheckedIn() || funnelSubsystem.isCoralCheckedOut());
   }
 
   private void configureBindings() {
@@ -132,8 +132,8 @@ public class RobotContainer {
         .whileTrue(
             new JamesHardenMovement(
                 driveTrain,
-                () -> (new Pose2d(new Translation2d(13, 6.5), new Rotation2d(Math.PI / 2.0))),
-                false,
+                () -> new Pose2d(new Translation2d(13, 6), new Rotation2d(Math.PI / 2.0)),
+                true,
                 false));
 
     customController
@@ -146,7 +146,7 @@ public class RobotContainer {
                 ElevatorPositions.L2,
                 redside,
                 false,
-                false));
+                true));
     customController
         .LeftL3()
         .whileTrue(
@@ -157,7 +157,7 @@ public class RobotContainer {
                 ElevatorPositions.L3,
                 redside,
                 false,
-                false));
+                true));
     customController
         .LeftL4()
         .whileTrue(
@@ -168,7 +168,7 @@ public class RobotContainer {
                 ElevatorPositions.L4,
                 redside,
                 false,
-                false));
+                true));
 
     // Right Elevator Levels
     customController
@@ -181,7 +181,7 @@ public class RobotContainer {
                 ElevatorPositions.L1,
                 redside,
                 true,
-                false));
+                true));
     customController
         .RightL2()
         .whileTrue(
@@ -192,7 +192,7 @@ public class RobotContainer {
                 ElevatorPositions.L2,
                 redside,
                 true,
-                false));
+                true));
     customController
         .RightL3()
         .whileTrue(
@@ -203,7 +203,7 @@ public class RobotContainer {
                 ElevatorPositions.L3,
                 redside,
                 true,
-                false));
+                true));
     customController
         .RightL4()
         .whileTrue(
@@ -214,13 +214,18 @@ public class RobotContainer {
                 ElevatorPositions.L4,
                 redside,
                 true,
-                false));
+                true));
 
     // Bottom Three Buttons
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
     customController
         .In()
-        .whileTrue(new RunFunnelAndTootsieInCommand(funnelSubsystem, tootsieSlideSubsystem));
+        .whileTrue(
+            new UnjamFunnelAndIntake(
+                elevatorSubsystem,
+                funnelSubsystem,
+                tootsieSlideSubsystem)); // RunFunnelAndTootsieInCommand(funnelSubsystem,
+    // tootsieSlideSubsystem));
     customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem));
 
     // Joystick 1:
@@ -392,6 +397,7 @@ public class RobotContainer {
                 () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
 
     joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
+
     // new InstantCommand()
 
     // joystick.povUp().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1));

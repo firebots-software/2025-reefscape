@@ -43,6 +43,7 @@ public final class Constants {
   public static class HardenConstants {
     public static class EndWhenCloseEnough {
       public static final double translationalTolerance = 0.43105229381;
+      // public static final double translationalTolerance = 0.6;
       public static final double headingTolerance = 0.7853975; // Math.PI/4
     }
 
@@ -55,8 +56,18 @@ public final class Constants {
   public static class Vision {
 
     public static enum Cameras {
-      RIGHT_CAM,
-      LEFT_CAM;
+      RIGHT_CAM("rightCam"),
+      LEFT_CAM("leftCam");
+
+      private String loggingName;
+
+      Cameras(String name){
+        loggingName = name;
+      }
+
+      public String getLoggingName(){
+        return loggingName;
+      }
     }
 
     // TODO: CHANGE FOR NEW ROBOT
@@ -788,7 +799,7 @@ public final class Constants {
     public static final double ACCELERATION = 10.0; // TODO
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
-    public static final double SPEED_RPS = 10.0;
+    public static final double SPEED_RPS = 15.0;
     public static final double GEAR_RATIO = 1d / 5d;
 
     public static final int CHECK_IN_PORT = 1;

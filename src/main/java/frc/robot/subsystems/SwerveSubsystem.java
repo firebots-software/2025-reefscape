@@ -44,7 +44,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       yProfiledPIDController,
       qProfiledPIDController,
       headingProfiledPIDController;
-  private ProfiledPIDController autoProfiledPID_X, autoProfiledPID_Y, autoProfiledPID_HEADING;
   private PIDController xRegularPIDController, yRegularPIDController, headingRegularPIDController;
 
   private SwerveDriveState currentState;
@@ -77,68 +76,45 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     xProfiledPIDController =
         new ProfiledPIDController(
             3.75, // 3.75 was good
-            0.4, // 0.3 before
+            0.35, // 0.3 before
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
     yProfiledPIDController =
         new ProfiledPIDController(
             3.75,
-            0.4,
+            0.35,
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
 
     qProfiledPIDController =
         new ProfiledPIDController(
-            5.5,
-            0,
-            0,
+            3.15, // 3.4 not bad
+            0.345,
+            0.0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 4.5));
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 8.25));
 
     headingProfiledPIDController =
         new ProfiledPIDController(
-            4,
+            3.5, // 4 was good
             0.4,
             0,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE,
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND));
-
-    autoProfiledPID_X =
-        new ProfiledPIDController(
-            2.5, // 3.75 was good
-            0,
-            0,
-            new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
-    autoProfiledPID_Y =
-        new ProfiledPIDController(
-            2.5,
-            0,
-            0,
-            new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
-
-    autoProfiledPID_HEADING =
-        new ProfiledPIDController(
-            4,
-            0,
-            0,
-            new TrapezoidProfile.Constraints(
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE - 5,
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND - 10));
+                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE - 1,
+                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND - 5));
 
     xProfiledPIDController.setIZone(0.3);
     yProfiledPIDController.setIZone(0.3); // 0.5 before just like above
+    qProfiledPIDController.setIZone(0.35);
     headingProfiledPIDController.setIZone(0.5);
 
     xProfiledPIDController.setIntegratorRange(0.0, 0.2);
     xProfiledPIDController.setIntegratorRange(0.0, 0.2);
-    headingProfiledPIDController.setIntegratorRange(0.0, 0.35);
+    qProfiledPIDController.setIntegratorRange(0, 0.2);
+    headingProfiledPIDController.setIntegratorRange(0.0, 0.3);
 
-    autoProfiledPID_HEADING.enableContinuousInput(-Math.PI, Math.PI);
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     configureAutoBuilder();
   }
@@ -256,18 +232,21 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   // Resets PID controllers
   public void resetProfiledPIDs() {
-    // ChassisSpeeds fieldCentricChassisSpeeds =
-    // currentState.Speeds.fromRobotRelativeSpeeds(getState().Speeds,
-    // getState().Pose.getRotation());
     xProfiledPIDController.reset(currentState.Pose.getX(), getFieldSpeeds().vxMetersPerSecond);
     yProfiledPIDController.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
     headingProfiledPIDController.reset(
         currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);
+  }
 
-    autoProfiledPID_X.reset(currentState.Pose.getX(), getFieldSpeeds().vxMetersPerSecond);
-    autoProfiledPID_Y.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
-    autoProfiledPID_HEADING.reset(
-        currentState.Pose.getRotation().getRadians(), getFieldSpeeds().vxMetersPerSecond);
+  public void resetProfiledPIDs(Rotation2d qDirection) {
+    xProfiledPIDController.reset(currentState.Pose.getX(), getFieldSpeeds().vxMetersPerSecond);
+    yProfiledPIDController.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
+    headingProfiledPIDController.reset(
+        currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);
+    qProfiledPIDController.reset(
+        0,
+        (qDirection.getCos() * getFieldSpeeds().vxMetersPerSecond)
+            + (qDirection.getSin() * getFieldSpeeds().vyMetersPerSecond));
   }
 
   /* Swerve requests to apply during SysId characterization */
@@ -365,16 +344,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     return currentState.Pose;
   }
 
-  public ChassisSpeeds calculateRequiredComponentChassisSpeeds_AUTO_VERSION(Pose2d targetPose) {
-    double xFeedback = autoProfiledPID_X.calculate(currentState.Pose.getX(), targetPose.getX());
-    double yFeedback = autoProfiledPID_Y.calculate(currentState.Pose.getY(), targetPose.getY());
-    double thetaFeedback =
-        autoProfiledPID_HEADING.calculate(
-            currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
-
-    return new ChassisSpeeds(xFeedback, yFeedback, thetaFeedback);
-  }
-
   public ChassisSpeeds calculateRequiredComponentChassisSpeeds(Pose2d targetPose) {
     double xFeedback =
         xProfiledPIDController.calculate(currentState.Pose.getX(), targetPose.getX());
@@ -387,20 +356,29 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     return new ChassisSpeeds(xFeedback, yFeedback, thetaFeedback);
   }
 
-  public ChassisSpeeds calculateRequiredOneDirectionalChassisSpeeds(Pose2d targetPose) {
+  public Rotation2d travelAngleTo(Pose2d targetPose) {
+    double deltaX = targetPose.getX() - getCurrentState().Pose.getX();
+    double deltaY = targetPose.getY() - getCurrentState().Pose.getY();
+    return new Rotation2d(Math.atan2(deltaY, deltaX));
+  }
+
+  public ChassisSpeeds calculateRequiredEdwardChassisSpeeds(
+      Pose2d targetPose, double completePathDistance) {
+    double distanceToTarget =
+        getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation());
     double qFeedback =
         qProfiledPIDController.calculate(
-            0, getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation()));
+            completePathDistance - distanceToTarget, completePathDistance);
     double thetaFeedback =
         headingProfiledPIDController.calculate(
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-    double deltaX = targetPose.getX() - getCurrentState().Pose.getX();
-    double deltaY = targetPose.getY() - getCurrentState().Pose.getY();
-    double travelAngleRad = Math.atan2(deltaY, deltaX);
+    Rotation2d travelAngle = travelAngleTo(targetPose);
 
     return new ChassisSpeeds(
-        qFeedback * Math.cos(travelAngleRad), qFeedback * Math.sin(travelAngleRad), thetaFeedback);
+        qFeedback * Math.cos(travelAngle.getRadians()),
+        qFeedback * Math.sin(travelAngle.getRadians()),
+        thetaFeedback);
   }
 
   /**

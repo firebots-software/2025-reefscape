@@ -23,20 +23,20 @@ public class JamesHardenScore extends SequentialCommandGroup {
       ElevatorPositions height,
       BooleanSupplier redSide,
       boolean moveRight,
-      boolean isInAuto) {
+      boolean edwardVersion) {
 
     JamesHardenMovement movementCommand, maintainCommand;
 
     if (moveRight) {
       movementCommand =
-          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto, false);
+          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, edwardVersion, false);
       maintainCommand =
-          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto, true);
+          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, edwardVersion, true);
     } else {
       movementCommand =
-          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto, false);
+          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, edwardVersion, false);
       maintainCommand =
-          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto, true);
+          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, edwardVersion, true);
     }
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
@@ -58,7 +58,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
       ElevatorPositions height,
-      boolean isInAuto,
+      boolean edwardVersion,
       LandmarkPose branch) {
 
     JamesHardenMovement movementCommand, maintainCommand;
@@ -68,9 +68,9 @@ public class JamesHardenScore extends SequentialCommandGroup {
     }
 
     movementCommand =
-        JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch, false);
+        JamesHardenMovement.toSpecificBranch(swerveSubsystem, edwardVersion, () -> branch, false);
     maintainCommand =
-        JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch, true);
+        JamesHardenMovement.toSpecificBranch(swerveSubsystem, edwardVersion, () -> branch, true);
 
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
