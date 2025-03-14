@@ -42,7 +42,8 @@ public final class Constants {
 
   public static class HardenConstants {
     public static class EndWhenCloseEnough {
-      public static final double translationalTolerance = 1; // good 0.43105229381;
+      public static final double translationalToleranceTeleop = 0.43105229381;
+      public static final double translationalToleranceAuto = 1d;
       // public static final double translationalTolerance = 0.6;
       public static final double headingTolerance = 0.7853975; // Math.PI/4
     }
