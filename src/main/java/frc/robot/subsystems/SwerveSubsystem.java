@@ -109,7 +109,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     xProfiledPIDController.setIZone(0.3);
     yProfiledPIDController.setIZone(0.3); // 0.5 before just like above
-    qProfiledPIDController.setIZone(0.3);
+    qProfiledPIDController.setIZone(0.35);
     headingProfiledPIDController.setIZone(0.5);
 
     xProfiledPIDController.setIntegratorRange(0.0, 0.2);
