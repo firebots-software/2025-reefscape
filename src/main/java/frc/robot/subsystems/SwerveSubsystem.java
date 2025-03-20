@@ -376,7 +376,19 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
     Rotation2d travelAngle = travelAngleTo(targetPose);
-
+    
+    DogLog.log("EdwardCalculation/qProfiledPID/CurrentMeasurement", completePathDistance - distanceToTarget);
+    DogLog.log("EdwardCalculation/qProfiledPID/PositionSetpoint", qProfiledPIDController.getSetpoint().position);
+    DogLog.log("EdwardCalculation/qProfiledPID/VelocitySetpoint", qProfiledPIDController.getSetpoint().velocity);
+    DogLog.log("EdwardCalculation/qProfiledPID/PositionError", qProfiledPIDController.getPositionError());
+    DogLog.log("EdwardCalculation/qProfiledPID/VelocityError", qProfiledPIDController.getVelocityError());
+    
+    DogLog.log("EdwardCalculation/headingProfiledPID/CurrentMeasurement", currentState.Pose.getRotation().getRadians());
+    DogLog.log("EdwardCalculation/headingProfiledPID/PositionSetpoint", headingProfiledPIDController.getSetpoint().position);
+    DogLog.log("EdwardCalculation/headingProfiledPID/VelocitySetpoint", headingProfiledPIDController.getSetpoint().velocity);
+    DogLog.log("EdwardCalculation/headingProfiledPID/PositionError", headingProfiledPIDController.getPositionError());
+    DogLog.log("EdwardCalculation/headingProfiledPID/VelocityError", headingProfiledPIDController.getVelocityError());
+    
     return new ChassisSpeeds(
         qFeedback * Math.cos(travelAngle.getRadians()),
         qFeedback * Math.sin(travelAngle.getRadians()),
