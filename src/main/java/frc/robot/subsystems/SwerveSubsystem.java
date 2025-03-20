@@ -388,7 +388,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     DogLog.log("EdwardCalculation/headingProfiledPID/VelocitySetpoint", headingProfiledPIDController.getSetpoint().velocity);
     DogLog.log("EdwardCalculation/headingProfiledPID/PositionError", headingProfiledPIDController.getPositionError());
     DogLog.log("EdwardCalculation/headingProfiledPID/VelocityError", headingProfiledPIDController.getVelocityError());
-    
+
     return new ChassisSpeeds(
         qFeedback * Math.cos(travelAngle.getRadians()),
         qFeedback * Math.sin(travelAngle.getRadians()),

@@ -57,8 +57,18 @@ public final class Constants {
   public static class Vision {
 
     public static enum Cameras {
-      RIGHT_CAM,
-      LEFT_CAM;
+      RIGHT_CAM("rightCam"),
+      LEFT_CAM("leftCam");
+
+      private String loggingName;
+
+      Cameras(String name){
+        loggingName = name;
+      }
+
+      public String getLoggingName(){
+        return loggingName;
+      }
     }
 
     // TODO: CHANGE FOR NEW ROBOT
