@@ -171,36 +171,38 @@ public final class Constants {
   }
 
   public static enum BlueLandmarkPose implements LandmarkPose {
-    PROCESSOR_AUTO_START(
+    PROCESSOR_AUTO_CORNER_START(
         new Pose2d(
-            new Translation2d(7.11305570602417, 0.4940316081047058), new Rotation2d(Math.PI))),
-    CLEAR_AUTO_START(
+            new Translation2d(7.0718560218811035, 0.4940316081047058), new Rotation2d(Math.PI))), // confirmed
+    CLEAR_AUTO_CORNER_START(
         new Pose2d(
-            new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI))),
+            new Translation2d(7.0718560218811035, 7.60764217376709), new Rotation2d(Math.PI))), // confirmed
     MID_AUTO_START(
-        new Pose2d(new Translation2d(7.11305570602417, 4.19448), new Rotation2d(Math.PI))),
-    CLOSER_PROCESSOR_AUTO_START(
+        new Pose2d(new Translation2d(7.0718560218811035, 4.19448), new Rotation2d(Math.PI))), // confirmed
+    PROCESSOR_CLOSER_AUTO_START(
         new Pose2d(
-            new Translation2d(7.11305570602417, 2.3406081199645996), new Rotation2d(Math.PI))),
-    CLOSER_CLEAR_AUTO_START(
+            new Translation2d(7.0718560218811035, 2.3406081199645996), new Rotation2d(Math.PI))), // confirmed
+    CLEAR_CLOSER_AUTO_START(
         new Pose2d(
-            new Translation2d(7.113824844360352, 5.733623504638672), new Rotation2d(Math.PI))),
+            new Translation2d(7.0718560218811035, 5.733623504638672), new Rotation2d(Math.PI))), // confirmed
+    PROCESSOR_OPTIMAL_AUTO_START(new Pose2d(new Translation2d(7.0718560218811035, 2.997816324234009), new Rotation2d(Math.PI))), // confirmed
+    CLEAR_OPTIMAL_AUTO_START(new Pose2d(new Translation2d(7.0718560218811035, 5.072922229766846), new Rotation2d(Math.PI))), // confirmed
     PROCESSOR_HPS(
         new Pose2d(
             new Translation2d(1.118087887763977, 1.0306631326675415),
-            new Rotation2d(0.9334126223560425))),
-    CLOSER_PROCESSOR_HPS(
+            new Rotation2d(0.9334126223560425))), // confirmed
+    PROCESSOR_OPTIMAL_HPS(
         new Pose2d(
             new Translation2d(1.6313929557800293, 0.6662082672119141),
-            new Rotation2d(0.9334126223560425))),
+            new Rotation2d(0.9334126223560425))), // confirmed
     CLEAR_HPS(
         new Pose2d(
             new Translation2d(1.1465998888015747, 7.014684677124023),
-            new Rotation2d(-0.9419997588093272))),
-    CLOSER_CLEAR_HPS(
+            new Rotation2d(-0.9419997588093272))), // confirmed
+    CLEAR_OPTIMAL_HPS(
         new Pose2d(
             new Translation2d(1.6867308616638184, 7.395046710968018),
-            new Rotation2d(-0.9419997588093272))),
+            new Rotation2d(-0.9419997588093272))), // confirmed
     L0(new Pose2d(new Translation2d(3.14058, 4.19448), new Rotation2d(Degrees.of(0)))),
     L1(new Pose2d(new Translation2d(3.66895, 2.94212), new Rotation2d(Degrees.of(60)))),
     L2(new Pose2d(new Translation2d(5.0177, 2.77352), new Rotation2d(Degrees.of(120)))),
