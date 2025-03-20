@@ -15,7 +15,8 @@ public class EndWhenCloseEnough extends Command {
   public EndWhenCloseEnough(Supplier<Pose2d> targetTranslation) {
     driveTrain = SwerveSubsystem.getInstance();
     poseSupplier = targetTranslation;
-    translationalTolerance = Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceTeleop;
+    translationalTolerance =
+        Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceTeleop;
   }
 
   public EndWhenCloseEnough(Supplier<Pose2d> targetTranslation, double translationalTolerance) {

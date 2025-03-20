@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.Constants.LandmarkPose;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
@@ -47,11 +47,13 @@ public class AutoProducer extends SequentialCommandGroup {
             new ZeroArm(arm).withTimeout(1.25),
             new ParallelDeadlineGroup(
                 new SequentialCommandGroup(
-                    new ZeroElevatorHardStop(elevator).withTimeout(1.5), new Intake(elevator, funnel, shooter).withTimeout(2.0)),
+                    new ZeroElevatorHardStop(elevator).withTimeout(1.5),
+                    new Intake(elevator, funnel, shooter).withTimeout(2.0)),
                 JamesHardenMovement.toSpecificBranch(
                     driveTrain, true, () -> autoInformation.get(1), false))),
         new JamesHardenScore(
-            elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(1)).withTimeout(5.0),
+                elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(1))
+            .withTimeout(5.0),
         new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
 
     if (autoInformation.size() > 2) {
@@ -153,9 +155,12 @@ public class AutoProducer extends SequentialCommandGroup {
 
     addCommands(
         new ParallelCommandGroup(
-            //Elevator related
+            // Elevator related
             new Intake(elevator, funnel, shooter)
-                .andThen(new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d(), Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceAuto))
+                .andThen(
+                    new EndWhenCloseEnough(
+                        () -> movementCommand.getTargetPose2d(),
+                        Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceAuto))
                 .andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4, true)),
 
             // Movement related
@@ -164,10 +169,11 @@ public class AutoProducer extends SequentialCommandGroup {
                     new CoralCheckedIn(funnel),
                     new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true, false)),
                 movementCommand)),
-        //When the elevator is up and when the movement command is done, then do the following
+        // When the elevator is up and when the movement command is done, then do the following
         new ElevatorHoldL4(elevator).withTimeout(0.25),
         new ParallelDeadlineGroup(new ShootTootsieSlide(shooter).withTimeout(0.5), maintainCommand),
-        new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake)); //sets elevator back to intake when finished
+        new SetElevatorLevelInstant(
+            elevator, ElevatorPositions.Intake)); // sets elevator back to intake when finished
   }
 }
 

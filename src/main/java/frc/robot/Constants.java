@@ -62,11 +62,11 @@ public final class Constants {
 
       private String loggingName;
 
-      Cameras(String name){
+      Cameras(String name) {
         loggingName = name;
       }
 
-      public String getLoggingName(){
+      public String getLoggingName() {
         return loggingName;
       }
     }
@@ -103,7 +103,8 @@ public final class Constants {
                 BlueLandmarkPose.R1,
                 BlueLandmarkPose.PROCESSOR_OPTIMAL_HPS), // confirmed
         BLUE_PROCESSOR_1 =
-            Arrays.asList(BlueLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START, BlueLandmarkPose.L2), // confirmed
+            Arrays.asList(
+                BlueLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START, BlueLandmarkPose.L2), // confirmed
         BLUE_CLEAR_3 =
             Arrays.asList(
                 BlueLandmarkPose.CLEAR_OPTIMAL_AUTO_START,
@@ -117,8 +118,11 @@ public final class Constants {
                 BlueLandmarkPose.R4,
                 BlueLandmarkPose.L5,
                 BlueLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
-        BLUE_CLEAR_1 = Arrays.asList(BlueLandmarkPose.CLEAR_OPTIMAL_AUTO_START, BlueLandmarkPose.R4), // confirmed
-        BLUE_MID_1 = Arrays.asList(BlueLandmarkPose.MID_AUTO_START, BlueLandmarkPose.R3), // confirmed
+        BLUE_CLEAR_1 =
+            Arrays.asList(
+                BlueLandmarkPose.CLEAR_OPTIMAL_AUTO_START, BlueLandmarkPose.R4), // confirmed
+        BLUE_MID_1 =
+            Arrays.asList(BlueLandmarkPose.MID_AUTO_START, BlueLandmarkPose.R3), // confirmed
         RED_PROCESSOR_3 =
             Arrays.asList(
                 RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
@@ -128,11 +132,13 @@ public final class Constants {
                 RedLandmarkPose.PROCESSOR_OPTIMAL_HPS), // confirmed
         RED_PROCESSOR_2 =
             Arrays.asList(
-                RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5, RedLandmarkPose.PROCESSOR_OPTIMAL_HPS),
+                RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
+                RedLandmarkPose.L4,
+                RedLandmarkPose.R5,
+                RedLandmarkPose.PROCESSOR_OPTIMAL_HPS),
         RED_PROCESSOR_1 =
             Arrays.asList(
-                RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
-                RedLandmarkPose.L4), // confirmed
+                RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START, RedLandmarkPose.L4), // confirmed
         RED_CLEAR_3 =
             Arrays.asList(
                 RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START,
@@ -146,7 +152,9 @@ public final class Constants {
                 RedLandmarkPose.R2,
                 RedLandmarkPose.L1,
                 RedLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
-        RED_CLEAR_1 = Arrays.asList(RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START, RedLandmarkPose.R2), // confirmed
+        RED_CLEAR_1 =
+            Arrays.asList(
+                RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START, RedLandmarkPose.R2), // confirmed
         RED_MID_1 = Arrays.asList(RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.R3); // confirmed
   }
 
@@ -182,20 +190,31 @@ public final class Constants {
   public static enum BlueLandmarkPose implements LandmarkPose {
     PROCESSOR_CORNER_AUTO_START(
         new Pose2d(
-            new Translation2d(7.0718560218811035, 0.4940316081047058), new Rotation2d(Math.PI))), // confirmed
+            new Translation2d(7.0718560218811035, 0.4940316081047058),
+            new Rotation2d(Math.PI))), // confirmed
     CLEAR_CORNER_AUTO_START(
         new Pose2d(
-            new Translation2d(7.0718560218811035, 7.60764217376709), new Rotation2d(Math.PI))), // confirmed
+            new Translation2d(7.0718560218811035, 7.60764217376709),
+            new Rotation2d(Math.PI))), // confirmed
     MID_AUTO_START(
-        new Pose2d(new Translation2d(7.0718560218811035, 4.19448), new Rotation2d(Math.PI))), // confirmed
+        new Pose2d(
+            new Translation2d(7.0718560218811035, 4.19448), new Rotation2d(Math.PI))), // confirmed
     PROCESSOR_CLOSER_AUTO_START(
         new Pose2d(
-            new Translation2d(7.0718560218811035, 2.3406081199645996), new Rotation2d(Math.PI))), // confirmed
+            new Translation2d(7.0718560218811035, 2.3406081199645996),
+            new Rotation2d(Math.PI))), // confirmed
     CLEAR_CLOSER_AUTO_START(
         new Pose2d(
-            new Translation2d(7.0718560218811035, 5.733623504638672), new Rotation2d(Math.PI))), // confirmed
-    PROCESSOR_OPTIMAL_AUTO_START(new Pose2d(new Translation2d(7.0718560218811035, 2.997816324234009), new Rotation2d(Math.PI))), // confirmed
-    CLEAR_OPTIMAL_AUTO_START(new Pose2d(new Translation2d(7.0718560218811035, 5.072922229766846), new Rotation2d(Math.PI))), // confirmed
+            new Translation2d(7.0718560218811035, 5.733623504638672),
+            new Rotation2d(Math.PI))), // confirmed
+    PROCESSOR_OPTIMAL_AUTO_START(
+        new Pose2d(
+            new Translation2d(7.0718560218811035, 2.997816324234009),
+            new Rotation2d(Math.PI))), // confirmed
+    CLEAR_OPTIMAL_AUTO_START(
+        new Pose2d(
+            new Translation2d(7.0718560218811035, 5.072922229766846),
+            new Rotation2d(Math.PI))), // confirmed
     PROCESSOR_HPS(
         new Pose2d(
             new Translation2d(1.118087887763977, 1.0306631326675415),
@@ -243,16 +262,29 @@ public final class Constants {
 
   public static enum RedLandmarkPose implements LandmarkPose {
     PROCESSOR_CORNER_AUTO_START(
-        new Pose2d(new Translation2d(10.486612319946289, 7.554295539855957), new Rotation2d())), // confirmed
+        new Pose2d(
+            new Translation2d(10.486612319946289, 7.554295539855957),
+            new Rotation2d())), // confirmed
     CLEAR_AUTO_START(
-        new Pose2d(new Translation2d(10.486612319946289, 0.47134917974472046), new Rotation2d())), // confirmed
-    MID_AUTO_START(new Pose2d(new Translation2d(10.486612319946289, 3.85728), new Rotation2d())), // confirmed
+        new Pose2d(
+            new Translation2d(10.486612319946289, 0.47134917974472046),
+            new Rotation2d())), // confirmed
+    MID_AUTO_START(
+        new Pose2d(new Translation2d(10.486612319946289, 3.85728), new Rotation2d())), // confirmed
     PROCESSOR_CLOSER_AUTO_START(
-        new Pose2d(new Translation2d(10.486612319946289, 5.733623504638672), new Rotation2d())), // confirmed
+        new Pose2d(
+            new Translation2d(10.486612319946289, 5.733623504638672),
+            new Rotation2d())), // confirmed
     CLOSER_CLEAR_AUTO_START(
         new Pose2d(new Translation2d(10.486612319946289, 2.3406081199645996), new Rotation2d())),
-    PROCESSOR_OPTIMAL_AUTO_START(new Pose2d(new Translation2d(10.486612319946289, 5.072922229766846), new Rotation2d())), // confirmed
-    CLEAR_OPTIMAL_AUTO_START(new Pose2d(new Translation2d(10.486612319946289, 2.997816324234009), new Rotation2d())), // confirmed
+    PROCESSOR_OPTIMAL_AUTO_START(
+        new Pose2d(
+            new Translation2d(10.486612319946289, 5.072922229766846),
+            new Rotation2d())), // confirmed
+    CLEAR_OPTIMAL_AUTO_START(
+        new Pose2d(
+            new Translation2d(10.486612319946289, 2.997816324234009),
+            new Rotation2d())), // confirmed
     PROCESSOR_HPS(
         new Pose2d(
             new Translation2d(16.341829299926758, 7.0662689208984375),
