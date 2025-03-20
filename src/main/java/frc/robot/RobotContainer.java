@@ -126,12 +126,11 @@ public class RobotContainer {
     //             false));
     customController
         .LeftL1()
-        .whileTrue(
-            new JamesHardenMovement(
-                driveTrain,
-                () -> new Pose2d(new Translation2d(13, 6), new Rotation2d(Math.PI / 2.0)),
-                true,
-                false));
+        .whileTrue(JamesHardenMovement.toClearHPS(driveTrain, redside, true, false));
+
+    customController
+        .RightL1()
+        .whileTrue(JamesHardenMovement.toProcessorHPS(driveTrain, redside, true, false));
 
     customController
         .LeftL2()
