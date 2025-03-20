@@ -259,7 +259,7 @@ public final class Constants {
     CLEAR_OPTIMAL_HPS(
         new Pose2d(
             new Translation2d(15.955699920654297, 0.6853934526443481),
-            new Rotation2d(2.1932607985206625))),
+            new Rotation2d(2.1932607985206625))), // confirmed
     R0(new Pose2d(new Translation2d(14.4076704, 4.19448), new Rotation2d(Degrees.of(180)))),
     R1(new Pose2d(new Translation2d(13.8793004, 2.94212), new Rotation2d(Degrees.of(120)))),
     R2(new Pose2d(new Translation2d(12.5305504, 2.77352), new Rotation2d(Degrees.of(60)))),
