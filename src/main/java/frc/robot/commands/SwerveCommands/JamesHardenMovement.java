@@ -230,4 +230,32 @@ public class JamesHardenMovement extends Command {
 
     return JamesHardenMovement.toSpecificBranch(swerve, edwardVersion, targetBranch, noTolerance);
   }
+
+  public static JamesHardenMovement toProcessorHPS(SwerveSubsystem swerve, BooleanSupplier redSide, boolean edwardVersion, boolean noTolerance) {
+    Supplier<LandmarkPose> hpsLineupPosition = () -> {
+      if (redSide.getAsBoolean()) {
+        return RedLandmarkPose.PROCESSOR_HPS;
+      }
+      else {
+        return BlueLandmarkPose.PROCESSOR_HPS;
+      }
+    };
+    
+    return new JamesHardenMovement(
+        swerve, () -> hpsLineupPosition.get().getPose(), edwardVersion, noTolerance);
+  }
+
+  public static JamesHardenMovement toClearHPS(SwerveSubsystem swerve, BooleanSupplier redSide, boolean edwardVersion, boolean noTolerance) {
+    Supplier<LandmarkPose> hpsLineupPosition = () -> {
+      if (redSide.getAsBoolean()) {
+        return RedLandmarkPose.CLEAR_HPS;
+      }
+      else {
+        return BlueLandmarkPose.CLEAR_HPS;
+      }
+    };
+    
+    return new JamesHardenMovement(
+        swerve, () -> hpsLineupPosition.get().getPose(), edwardVersion, noTolerance);
+  }
 }
