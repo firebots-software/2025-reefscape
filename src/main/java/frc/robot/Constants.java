@@ -171,10 +171,10 @@ public final class Constants {
   }
 
   public static enum BlueLandmarkPose implements LandmarkPose {
-    PROCESSOR_AUTO_CORNER_START(
+    PROCESSOR_CORNER_AUTO_START(
         new Pose2d(
             new Translation2d(7.0718560218811035, 0.4940316081047058), new Rotation2d(Math.PI))), // confirmed
-    CLEAR_AUTO_CORNER_START(
+    CLEAR_CORNER_AUTO_START(
         new Pose2d(
             new Translation2d(7.0718560218811035, 7.60764217376709), new Rotation2d(Math.PI))), // confirmed
     MID_AUTO_START(
@@ -233,30 +233,32 @@ public final class Constants {
   }
 
   public static enum RedLandmarkPose implements LandmarkPose {
-    PROCESSOR_AUTO_START(
-        new Pose2d(new Translation2d(10.441716194152832, 7.607936382293701), new Rotation2d())),
+    PROCESSOR_CORNER_AUTO_START(
+        new Pose2d(new Translation2d(10.486612319946289, 7.554295539855957), new Rotation2d())), // confirmed
     CLEAR_AUTO_START(
-        new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d())),
-    MID_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 3.85728), new Rotation2d())),
-    CLOSER_PROCESSOR_AUTO_START(
-        new Pose2d(new Translation2d(10.441716194152832, 5.733623504638672), new Rotation2d())),
+        new Pose2d(new Translation2d(10.486612319946289, 0.47134917974472046), new Rotation2d())), // confirmed
+    MID_AUTO_START(new Pose2d(new Translation2d(10.486612319946289, 3.85728), new Rotation2d())), // confirmed
+    PROCESSOR_CLOSER_AUTO_START(
+        new Pose2d(new Translation2d(10.486612319946289, 5.733623504638672), new Rotation2d())), // confirmed
     CLOSER_CLEAR_AUTO_START(
-        new Pose2d(new Translation2d(10.441716194152832, 2.3406081199645996), new Rotation2d())),
+        new Pose2d(new Translation2d(10.486612319946289, 2.3406081199645996), new Rotation2d())),
+    PROCESSOR_OPTIMAL_AUTO_START(new Pose2d(new Translation2d(10.486612319946289, 5.072922229766846), new Rotation2d())), // confirmed
+    CLEAR_OPTIMAL_AUTO_START(new Pose2d(new Translation2d(10.486612319946289, 2.997816324234009), new Rotation2d())), // confirmed
     PROCESSOR_HPS(
         new Pose2d(
             new Translation2d(16.341829299926758, 7.0662689208984375),
-            new Rotation2d(-2.1939969266716175))),
-    CLOSER_PROCESSOR_HPS(
+            new Rotation2d(-2.1939969266716175))), // confirmed
+    PROCESSOR_OPTIMAL_HPS(
         new Pose2d(
             new Translation2d(15.920981407165527, 7.365553379058838),
-            new Rotation2d(-2.1939969266716175))),
+            new Rotation2d(-2.1939969266716175))), // confirmed
     CLEAR_HPS(
         new Pose2d(
             new Translation2d(16.39461326599121, 1.0060197114944458),
-            new Rotation2d(2.1932607985206625))),
-    CLOSER_CLEAR_HPS(
+            new Rotation2d(2.1932607985206625))), // confirmed
+    CLEAR_OPTIMAL_HPS(
         new Pose2d(
-            new Translation2d(15.916762351989746, 0.6757827997207642),
+            new Translation2d(15.955699920654297, 0.6853934526443481),
             new Rotation2d(2.1932607985206625))),
     R0(new Pose2d(new Translation2d(14.4076704, 4.19448), new Rotation2d(Degrees.of(180)))),
     R1(new Pose2d(new Translation2d(13.8793004, 2.94212), new Rotation2d(Degrees.of(120)))),
