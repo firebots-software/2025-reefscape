@@ -55,7 +55,7 @@ public class AutoProducer extends SequentialCommandGroup {
         new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
 
     if (autoInformation.size() > 2) {
-      autoCycle(
+      settyCycle(
           elevator,
           funnel,
           shooter,
@@ -64,7 +64,7 @@ public class AutoProducer extends SequentialCommandGroup {
           autoInformation.get(autoInformation.size() - 1));
     }
     if (autoInformation.size() > 3) {
-      autoCycle(
+      settyCycle(
           elevator,
           funnel,
           shooter,
@@ -133,7 +133,7 @@ public class AutoProducer extends SequentialCommandGroup {
     //             new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake))));
   }
 
-  private void autoCycle(
+  private void settyCycle(
       ElevatorSubsystem elevator,
       FunnelSubsystem funnel,
       TootsieSlideSubsystem shooter,
