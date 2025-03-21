@@ -39,9 +39,10 @@ public class AutoProducer extends SequentialCommandGroup {
       List<LandmarkPose> autoInformation) {
     // initializing commands
 
+    // set initial robot pose to start of auto path
     addCommands(new InstantCommand(() -> driveTrain.resetPose(autoInformation.get(0).getPose())));
 
-    // first score
+    // first score: move from start pos to 1st branch and score
     addCommands(
         new ParallelCommandGroup(
             new ZeroArm(arm).withTimeout(1.25),
@@ -135,6 +136,12 @@ public class AutoProducer extends SequentialCommandGroup {
     //             new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake))));
   }
 
+    /**
+     * Given a specific branch to score at, settyCycle() does the following:
+     * 1. Assuming robot is at the Reef, go to the HPS and intake a coral
+     * 2. Go to the given next branch and score a coral
+     * 3. End with the robot at the Reef, with its elevator down at intake level
+     */
   private void settyCycle(
       ElevatorSubsystem elevator,
       FunnelSubsystem funnel,
@@ -154,8 +161,9 @@ public class AutoProducer extends SequentialCommandGroup {
         JamesHardenMovement.toSpecificBranch(driveTrain, true, () -> scorePosition, true);
 
     addCommands(
-        new ParallelCommandGroup(
-            // Elevator related
+        new ParallelCommandGroup( // Do Elevator Related and Movement Related commands at the same time.
+
+            // Elevator related: Wait until coral intaken, then raise elevator to L4 when robot is close enough to the branch.
             new Intake(elevator, funnel, shooter)
                 .andThen(
                     new EndWhenCloseEnough(
@@ -163,13 +171,14 @@ public class AutoProducer extends SequentialCommandGroup {
                         Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceAuto))
                 .andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4, true)),
 
-            // Movement related
+            // Movement related: Move to and stay at HPS until coral intaken, then move to the 'scorePosition' branch (from the parameters)
             new SequentialCommandGroup(
-                new ParallelDeadlineGroup(
+                new ParallelDeadlineGroup( // Keep running movement command to HPS until a coral is checked in
                     new CoralCheckedIn(funnel),
                     new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true, false)),
-                movementCommand)),
-        // When the elevator is up and when the movement command is done, then do the following
+                movementCommand)), // After coral is checked in, move to the branch to score
+
+        // When the elevator is up and when the movement command is done, then score the coral
         new ElevatorHoldL4(elevator).withTimeout(0.25),
         new ParallelDeadlineGroup(new ShootTootsieSlide(shooter).withTimeout(0.5), maintainCommand),
         new SetElevatorLevelInstant(

@@ -72,6 +72,7 @@ public class JamesHardenMovement extends Command {
       boolean noTolerance) {
     this.swerve = swerve;
     this.targetPoseSupplier = targetPoseSupplier;
+    this.targetPose = targetPoseSupplier.get();
     this.edwardVersion = edwardVersion;
     this.noTolerance = noTolerance;
     addRequirements(swerve);
