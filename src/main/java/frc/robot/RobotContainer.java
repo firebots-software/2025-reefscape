@@ -113,17 +113,17 @@ public class RobotContainer {
     // Custom Controller:
 
     // Left Elevator Levels
-    // customController
-    //     .LeftL1()
-    //     .whileTrue(
-    //         new JamesHardenScore(
-    //             elevatorSubsystem,
-    //             tootsieSlideSubsystem,
-    //             driveTrain,
-    //             ElevatorPositions.L1,
-    //             redside,
-    //             false,
-    //             false));
+    customController
+        .LeftL1()
+        .whileTrue(
+            new JamesHardenScore(
+                elevatorSubsystem,
+                tootsieSlideSubsystem,
+                driveTrain,
+                ElevatorPositions.L1,
+                redside,
+                false,
+                false));
     customController
         .LeftL1()
         .whileTrue(JamesHardenMovement.toClearHPS(driveTrain, redside, true, false));
@@ -166,7 +166,7 @@ public class RobotContainer {
                 false,
                 true));
 
-    // Right Elevator Levels
+    // // Right Elevator Levels
     customController
         .RightL1()
         .whileTrue(
