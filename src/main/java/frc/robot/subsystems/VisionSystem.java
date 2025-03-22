@@ -207,14 +207,16 @@ public class VisionSystem extends SubsystemBase {
           speedMultiplier = 1.5;
         }
 
-        // double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5, 1.0) * speedMultiplier;
-        // double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5, 1.0) * speedMultiplier;
+        // double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5, 1.0) *
+        // speedMultiplier;
+        // double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5, 1.0) *
+        // speedMultiplier;
         // double rotationKalman = MiscUtils.lerp((distance - 0.6) / 1.4, 0.4, 10, 30) / 10;
 
         double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
         double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5) * speedMultiplier;
         double rotationKalman = MiscUtils.lerp((distance - 0.6) / 1.4, 0.4, 1000) / 10;
-        
+
         DogLog.log("KalmanDebug/translationStandardDeviation", xKalman);
         DogLog.log("KalmanDebug/rotationStandardDeviation", rotationKalman);
 
