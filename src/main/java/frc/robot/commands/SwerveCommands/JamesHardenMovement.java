@@ -121,6 +121,25 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public boolean isFinished() {
+    // if (noTolerance) {
+    //   return false;
+    // } else {
+    //   double currRot = swerve.getCurrentState().Pose.getRotation().getRadians();
+    //   currRot = ((2.0 * Math.PI) + (currRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
+    //   double targetRot = targetPose.getRotation().getRadians();
+    //   targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
+
+    //   if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
+    //           < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+    //       && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
+    //           < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+    //       && (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot -
+    // currRot))
+    //           < Constants.HardenConstants.RegularCommand.headingTolerance)) {
+    //     return true;
+    //   } else return false;
+    // }
+
     if (noTolerance) {
       return false;
     } else {
@@ -128,6 +147,21 @@ public class JamesHardenMovement extends Command {
       currRot = ((2.0 * Math.PI) + (currRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
       double targetRot = targetPose.getRotation().getRadians();
       targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
+      DogLog.log("JamesHardenMovement/currRot(rad)", currRot);
+      DogLog.log("JamesHardenMovement/targetRot(rad)", targetRot);
+      DogLog.log(
+          "JamesHardenMovement/xTolMet",
+          (Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance));
+      DogLog.log(
+          "JamesHardenMovement/yTolMet",
+          (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance));
+      DogLog.log(
+          "JamesHardenMovement/rotTolMet",
+          (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot - currRot))
+              < Constants.HardenConstants.RegularCommand.headingTolerance));
+      DogLog.log("JamesHardenMovement/End", false);
 
       if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
               < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
@@ -135,6 +169,7 @@ public class JamesHardenMovement extends Command {
               < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
           && (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot - currRot))
               < Constants.HardenConstants.RegularCommand.headingTolerance)) {
+        DogLog.log("JamesHardenMovement/End", true);
         return true;
       } else return false;
     }

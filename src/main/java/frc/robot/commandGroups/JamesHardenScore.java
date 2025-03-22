@@ -1,6 +1,7 @@
 package frc.robot.commandGroups;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -78,12 +79,21 @@ public class JamesHardenScore extends SequentialCommandGroup {
     } else {
       elevateCommand = new SetElevatorLevel(elevatorSubsystem, height, true);
     }
-
-    addCommands(
-        movementCommand.alongWith(
-            (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
-                .andThen(elevateCommand)),
-        new ParallelDeadlineGroup(
-            new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
+    if (DriverStation.isTeleop()) {
+      addCommands(
+          movementCommand.alongWith(
+              (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
+                  .andThen(elevateCommand)),
+          new ParallelDeadlineGroup(
+              new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
+    } else {
+      addCommands(
+          movementCommand.alongWith(
+              (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
+                  .andThen(elevateCommand)
+                  .withTimeout(5.0)),
+          new ParallelDeadlineGroup(
+              new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
+    }
   }
 }

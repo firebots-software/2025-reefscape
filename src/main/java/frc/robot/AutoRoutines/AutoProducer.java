@@ -52,8 +52,7 @@ public class AutoProducer extends SequentialCommandGroup {
                 JamesHardenMovement.toSpecificBranch(
                     driveTrain, true, () -> autoInformation.get(1), false))),
         new JamesHardenScore(
-                elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(1))
-            .withTimeout(5.0),
+            elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(1)),
         new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
 
     if (autoInformation.size() > 2) {
