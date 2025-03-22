@@ -91,70 +91,70 @@ public final class Constants {
     public static List<LandmarkPose>
         BLUE_PROCESSOR_3 =
             Arrays.asList(
-                BlueLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
+                BlueLandmarkPose.PROCESSOR_CORNER_AUTO_START,
                 BlueLandmarkPose.L2,
                 BlueLandmarkPose.R1,
                 BlueLandmarkPose.L1,
                 BlueLandmarkPose.PROCESSOR_OPTIMAL_HPS), // confirmed
         BLUE_PROCESSOR_2 =
             Arrays.asList(
-                BlueLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
+                BlueLandmarkPose.PROCESSOR_CORNER_AUTO_START,
                 BlueLandmarkPose.L2,
                 BlueLandmarkPose.R1,
                 BlueLandmarkPose.PROCESSOR_OPTIMAL_HPS), // confirmed
         BLUE_PROCESSOR_1 =
             Arrays.asList(
-                BlueLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START, BlueLandmarkPose.L2), // confirmed
+                BlueLandmarkPose.PROCESSOR_CORNER_AUTO_START, BlueLandmarkPose.L2), // confirmed
         BLUE_CLEAR_3 =
             Arrays.asList(
-                BlueLandmarkPose.CLEAR_OPTIMAL_AUTO_START,
+                BlueLandmarkPose.CLEAR_CORNER_AUTO_START,
                 BlueLandmarkPose.R4,
                 BlueLandmarkPose.L5,
                 BlueLandmarkPose.R5,
                 BlueLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
         BLUE_CLEAR_2 =
             Arrays.asList(
-                BlueLandmarkPose.CLEAR_OPTIMAL_AUTO_START,
+                BlueLandmarkPose.CLEAR_CORNER_AUTO_START,
                 BlueLandmarkPose.R4,
                 BlueLandmarkPose.L5,
                 BlueLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
         BLUE_CLEAR_1 =
             Arrays.asList(
-                BlueLandmarkPose.CLEAR_OPTIMAL_AUTO_START, BlueLandmarkPose.R4), // confirmed
+                BlueLandmarkPose.CLEAR_CORNER_AUTO_START, BlueLandmarkPose.R4), // confirmed
         BLUE_MID_1 =
             Arrays.asList(BlueLandmarkPose.MID_AUTO_START, BlueLandmarkPose.R3), // confirmed
         RED_PROCESSOR_3 =
             Arrays.asList(
-                RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
+                RedLandmarkPose.PROCESSOR_CORNER_AUTO_START,
                 RedLandmarkPose.L4,
                 RedLandmarkPose.R5,
                 RedLandmarkPose.L5,
                 RedLandmarkPose.PROCESSOR_OPTIMAL_HPS), // confirmed
         RED_PROCESSOR_2 =
             Arrays.asList(
-                RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
+                RedLandmarkPose.PROCESSOR_CORNER_AUTO_START,
                 RedLandmarkPose.L4,
                 RedLandmarkPose.R5,
                 RedLandmarkPose.PROCESSOR_OPTIMAL_HPS),
         RED_PROCESSOR_1 =
             Arrays.asList(
-                RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START, RedLandmarkPose.L4), // confirmed
+                RedLandmarkPose.PROCESSOR_CORNER_AUTO_START, RedLandmarkPose.L4), // confirmed
         RED_CLEAR_3 =
             Arrays.asList(
-                RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START,
+                RedLandmarkPose.CLEAR_CORNER_AUTO_START,
                 RedLandmarkPose.R2,
                 RedLandmarkPose.L1,
                 RedLandmarkPose.R1,
                 RedLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
         RED_CLEAR_2 =
             Arrays.asList(
-                RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START,
+                RedLandmarkPose.CLEAR_CORNER_AUTO_START,
                 RedLandmarkPose.R2,
                 RedLandmarkPose.L1,
                 RedLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
         RED_CLEAR_1 =
             Arrays.asList(
-                RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START, RedLandmarkPose.R2), // confirmed
+                RedLandmarkPose.CLEAR_CORNER_AUTO_START, RedLandmarkPose.R2), // confirmed
         RED_MID_1 = Arrays.asList(RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.R3); // confirmed
   }
 
@@ -265,7 +265,7 @@ public final class Constants {
         new Pose2d(
             new Translation2d(10.486612319946289, 7.554295539855957),
             new Rotation2d())), // confirmed
-    CLEAR_AUTO_START(
+    CLEAR_CORNER_AUTO_START(
         new Pose2d(
             new Translation2d(10.486612319946289, 0.47134917974472046),
             new Rotation2d())), // confirmed
