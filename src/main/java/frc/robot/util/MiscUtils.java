@@ -41,4 +41,10 @@ public class MiscUtils {
 
     return a + (t * (b - a));
   }
+
+  public static double lerp(double t, double a, double b) {
+    t = Math.max(0, Math.min(1, t));
+
+    return a + (t * (b - a));
+  }
 }
