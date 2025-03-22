@@ -27,11 +27,11 @@ import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commandGroups.PutUpAndShoot;
-import frc.robot.commandGroups.UnjamFunnelAndIntake;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
+import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
@@ -217,10 +217,12 @@ public class RobotContainer {
     customController
         .In()
         .whileTrue(
-            new UnjamFunnelAndIntake(
-                elevatorSubsystem,
-                funnelSubsystem,
-                tootsieSlideSubsystem)); // RunFunnelAndTootsieInCommand(funnelSubsystem,
+            new RunFunnelAndTootsieInCommand(funnelSubsystem, tootsieSlideSubsystem)
+            // new UnjamFunnelAndIntake(
+            //     elevatorSubsystem,
+            //     funnelSubsystem,
+            //     tootsieSlideSubsystem)
+            ); // RunFunnelAndTootsieInCommand(funnelSubsystem,
     // tootsieSlideSubsystem));
     customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem));
 
