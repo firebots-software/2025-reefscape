@@ -166,7 +166,7 @@ public class AutoProducer extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new ParallelDeadlineGroup(
                     new CoralCheckedIn(funnel),
-                    new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true, false)),
+                    new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true, true)),
                 movementCommand.withTimeout(5.0))), // Added timeout to movement command
         // When the elevator is up and when the movement command is done, then do the following
         new ElevatorHoldL4(elevator).withTimeout(0.25),
