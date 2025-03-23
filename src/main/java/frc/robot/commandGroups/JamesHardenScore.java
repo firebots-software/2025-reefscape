@@ -80,7 +80,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
       elevateCommand = new SetElevatorLevel(elevatorSubsystem, height, true);
     }
     if (DriverStation.isTeleop()) {
-      DogLog.log("JamesHardenScore/Version","teleop");
+      DogLog.log("JamesHardenScore/Version", "teleop");
       addCommands(
           movementCommand.alongWith(
               (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
@@ -88,12 +88,13 @@ public class JamesHardenScore extends SequentialCommandGroup {
           new ParallelDeadlineGroup(
               new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
     } else {
-      DogLog.log("JamesHardenScore/Version","auto");
+      DogLog.log("JamesHardenScore/Version", "auto");
       addCommands(
-          movementCommand.alongWith(
-              (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
-                  .andThen(elevateCommand)
-                  .withTimeout(5.0)),
+          movementCommand
+              .withTimeout(5.0)
+              .alongWith(
+                  (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
+                      .andThen(elevateCommand)),
           new ParallelDeadlineGroup(
               new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
     }

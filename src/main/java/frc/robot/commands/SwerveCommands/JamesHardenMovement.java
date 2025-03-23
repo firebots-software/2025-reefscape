@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 public class JamesHardenMovement extends Command {
 
   private final SwerveSubsystem swerve;
+  private int translationalToleranceMetCycleCounter = 0;
 
   private static final ArrayList<RedLandmarkPose> redBranchesL =
       new ArrayList<>(
@@ -89,6 +90,7 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public void initialize() {
+    this.translationalToleranceMetCycleCounter = 0;
     if (targetPoseSupplier != null) {
       targetPose = targetPoseSupplier.get();
     }
@@ -163,6 +165,21 @@ public class JamesHardenMovement extends Command {
               < Constants.HardenConstants.RegularCommand.headingTolerance));
       DogLog.log("JamesHardenMovement/End", false);
 
+      // translational is met
+      if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+          && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)) {
+        // count the counter
+        translationalToleranceMetCycleCounter++; // one cycle has passed with translational
+        // tolerance met
+        if (translationalToleranceMetCycleCounter >= 35) {
+          return true;
+        }
+      } else {
+        translationalToleranceMetCycleCounter = 0;
+      }
+
       if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
               < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
           && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
@@ -177,6 +194,7 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    this.translationalToleranceMetCycleCounter = 0;
     if (!interrupted) {
       swerve.setRobotSpeeds(new ChassisSpeeds(0, 0, 0));
     }
