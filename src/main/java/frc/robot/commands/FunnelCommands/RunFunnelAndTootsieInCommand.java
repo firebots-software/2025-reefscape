@@ -36,6 +36,7 @@ public class RunFunnelAndTootsieInCommand extends Command {
     shooter.stopTootsie();
     if (funnelSubsystem.drakeTripped()) {
       CoralPosition.setCoralInTootsieSlide(true);
+      CoralPosition.setCoralInFunnel(false);
     }
   }
 
