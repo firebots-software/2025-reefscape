@@ -50,9 +50,9 @@ public class AutoProducer extends SequentialCommandGroup {
                     new ZeroElevatorHardStop(elevator).withTimeout(1.5),
                     new Intake(elevator, funnel, shooter).withTimeout(2.0)),
                 JamesHardenMovement.toSpecificBranch(
-                    driveTrain, true, () -> autoInformation.get(1), false))),
+                    driveTrain, () -> autoInformation.get(1), false))),
         new JamesHardenScore(
-            elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(1)),
+            elevator, shooter, driveTrain, ElevatorPositions.L4, autoInformation.get(1)),
         new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
 
     if (autoInformation.size() > 2) {
@@ -73,66 +73,7 @@ public class AutoProducer extends SequentialCommandGroup {
           autoInformation.get(3),
           autoInformation.get(autoInformation.size() - 1));
     }
-    // first hps visit, second score
-    // if (autoInformation.size() > 2) {
-    //   addCommands(
-    //       new ParallelDeadlineGroup(
-    //           new Intake(elevator, funnel, shooter),
-    //           new SequentialCommandGroup(
-    //               new CoralCheckedIn(funnel)
-    //                   .deadlineFor(
-    //                       new JamesHardenMovement(
-    //                           driveTrain,
-    //                           autoInformation.get(autoInformation.size() - 1).getPose(),
-    //                           true,
-    //                           false)),
-    //               JamesHardenMovement.toSpecificBranch(
-    //                   driveTrain, true, () -> autoInformation.get(2), false))),
-    //       new JamesHardenScore(
-    //           elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(2)),
-    //       new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
-    // }
-
-    // if (autoInformation.size() > 3) {
-    //   addCommands(
-    //       new ParallelDeadlineGroup(
-    //           new Intake(elevator, funnel, shooter),
-    //           new SequentialCommandGroup(
-    //               new CoralCheckedIn(funnel)
-    //                   .deadlineFor(
-    //                       new JamesHardenMovement(
-    //                           driveTrain,
-    //                           autoInformation.get(autoInformation.size() - 1).getPose(),
-    //                           true,
-    //                           false)),
-    //               JamesHardenMovement.toSpecificBranch(
-    //                   driveTrain, true, () -> autoInformation.get(3), false))),
-    //       new JamesHardenScore(
-    //           elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(3)),
-    //       new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
-    // }
-
-    // addCommands(
-    //     new ParallelCommandGroup(
-    //         new Intake(elevator, funnel, shooter),
-    //         new SequentialCommandGroup(
-    //             new CoralCheckedIn(funnel)
-    //                 .deadlineFor(
-    //                     new JamesHardenMovement(
-    //                         driveTrain,
-    //                         autoInformation.get(autoInformation.size() - 1).getPose(),
-    //                         true,
-    //                         false))
-    //                 .andThen(
-    //                     new JamesHardenScore(
-    //                         elevator,
-    //                         shooter,
-    //                         driveTrain,
-    //                         ElevatorPositions.L4,
-    //                         true,
-    //                         autoInformation.get(3))),
-    //             new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake))));
-  }
+}
 
   private void settyCycle(
       ElevatorSubsystem elevator,
@@ -148,9 +89,9 @@ public class AutoProducer extends SequentialCommandGroup {
       return;
     }
     movementCommand =
-        JamesHardenMovement.toSpecificBranch(driveTrain, true, () -> scorePosition, false);
+        JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, false);
     maintainCommand =
-        JamesHardenMovement.toSpecificBranch(driveTrain, true, () -> scorePosition, true);
+        JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, true);
 
     addCommands(
         new ParallelCommandGroup(
@@ -166,7 +107,7 @@ public class AutoProducer extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new ParallelDeadlineGroup(
                     new CoralCheckedIn(funnel),
-                    new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true, true)),
+                    new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true)),
                 movementCommand.withTimeout(5.0))), // Added timeout to movement command
         // When the elevator is up and when the movement command is done, then do the following
         new ElevatorHoldL4(elevator).withTimeout(0.25),

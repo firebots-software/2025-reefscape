@@ -77,7 +77,7 @@ public class JamesHardenMovement extends Command {
   }
 
   public JamesHardenMovement(
-      SwerveSubsystem swerve, Pose2d targetPose, boolean edwardVersion, boolean noTolerance) {
+      SwerveSubsystem swerve, Pose2d targetPose, boolean noTolerance) {
     this.swerve = swerve;
     this.targetPose = targetPose;
     this.noTolerance = noTolerance;
