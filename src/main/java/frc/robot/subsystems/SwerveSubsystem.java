@@ -41,11 +41,9 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     implements Subsystem {
   private static SwerveSubsystem instance;
 
-  private ProfiledPIDController xProfiledPIDController,
-      yProfiledPIDController,
+  private ProfiledPIDController
       qProfiledPIDController,
       headingProfiledPIDController;
-  private PIDController xRegularPIDController, yRegularPIDController, headingRegularPIDController;
 
   private SwerveDriveState currentState;
 
@@ -69,25 +67,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     }
 
     currentState = getState(); // getCurrentState
-    xRegularPIDController = new PIDController(8, 0, 0);
-    yRegularPIDController = new PIDController(8, 0, 0);
-    headingRegularPIDController = new PIDController(8, 0, 0);
-    headingRegularPIDController.enableContinuousInput(-Math.PI, Math.PI);
-
-    xProfiledPIDController =
-        new ProfiledPIDController(
-            3.75, // 3.75 was good
-            0.35, // 0.3 before
-            0,
-            new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
-    yProfiledPIDController =
-        new ProfiledPIDController(
-            3.75,
-            0.35,
-            0,
-            new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 6));
 
     qProfiledPIDController =
         new ProfiledPIDController(
@@ -107,13 +86,9 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND
                     - 16)); // -13 was good
 
-    xProfiledPIDController.setIZone(0.3);
-    yProfiledPIDController.setIZone(0.3); // 0.5 before just like above
     qProfiledPIDController.setIZone(0.35);
     headingProfiledPIDController.setIZone(0.14);
 
-    xProfiledPIDController.setIntegratorRange(0.0, 0.2);
-    xProfiledPIDController.setIntegratorRange(0.0, 0.2);
     qProfiledPIDController.setIntegratorRange(0, 0.2);
     headingProfiledPIDController.setIntegratorRange(0.0, Math.PI / 4); // 0.3 before
 
@@ -234,15 +209,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   // Resets PID controllers
   public void resetProfiledPIDs() {
-    xProfiledPIDController.reset(currentState.Pose.getX(), getFieldSpeeds().vxMetersPerSecond);
-    yProfiledPIDController.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
     headingProfiledPIDController.reset(
         currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);
   }
 
   public void resetProfiledPIDs(Rotation2d qDirection) {
-    xProfiledPIDController.reset(currentState.Pose.getX(), getFieldSpeeds().vxMetersPerSecond);
-    yProfiledPIDController.reset(currentState.Pose.getY(), getFieldSpeeds().vyMetersPerSecond);
     headingProfiledPIDController.reset(
         currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);
     qProfiledPIDController.reset(
@@ -346,18 +317,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     return currentState.Pose;
   }
 
-  public ChassisSpeeds calculateRequiredComponentChassisSpeeds(Pose2d targetPose) {
-    double xFeedback =
-        xProfiledPIDController.calculate(currentState.Pose.getX(), targetPose.getX());
-    double yFeedback =
-        yProfiledPIDController.calculate(currentState.Pose.getY(), targetPose.getY());
-    double thetaFeedback =
-        headingProfiledPIDController.calculate(
-            currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
-
-    return new ChassisSpeeds(xFeedback, yFeedback, thetaFeedback);
-  }
-
   public Rotation2d travelAngleTo(Pose2d targetPose) {
     double deltaX = targetPose.getX() - getCurrentState().Pose.getX();
     double deltaY = targetPose.getY() - getCurrentState().Pose.getY();
@@ -368,10 +327,12 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       Pose2d targetPose, double completePathDistance) {
     double distanceToTarget =
         getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation());
-    double qFeedback =
+    double qSpeed =
+        qProfiledPIDController.getSetpoint().velocity + 
         qProfiledPIDController.calculate(
             completePathDistance - distanceToTarget, completePathDistance);
-    double thetaFeedback =
+    double omega =
+        headingProfiledPIDController.getSetpoint().velocity +
         headingProfiledPIDController.calculate(
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
@@ -408,9 +369,9 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         headingProfiledPIDController.getVelocityError());
 
     return new ChassisSpeeds(
-        qFeedback * Math.cos(travelAngle.getRadians()),
-        qFeedback * Math.sin(travelAngle.getRadians()),
-        thetaFeedback);
+        qSpeed * Math.cos(travelAngle.getRadians()),
+        qSpeed * Math.sin(travelAngle.getRadians()),
+        omega);
   }
 
   /**
