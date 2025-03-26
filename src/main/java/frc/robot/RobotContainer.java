@@ -123,9 +123,7 @@ public class RobotContainer {
     //             ElevatorPositions.L1,
     //             redside,
     //             false));
-    customController
-        .LeftL1()
-        .whileTrue(JamesHardenMovement.toClearHPS(driveTrain, redside, false));
+    customController.LeftL1().whileTrue(JamesHardenMovement.toClearHPS(driveTrain, redside, false));
 
     customController
         .RightL1()

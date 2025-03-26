@@ -28,15 +28,11 @@ public class JamesHardenScore extends SequentialCommandGroup {
     JamesHardenMovement movementCommand, maintainCommand;
 
     if (moveRight) {
-      movementCommand =
-          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide,  false);
-      maintainCommand =
-          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, true);
+      movementCommand = JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, false);
+      maintainCommand = JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, true);
     } else {
-      movementCommand =
-          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide,  false);
-      maintainCommand =
-          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide,  true);
+      movementCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, false);
+      maintainCommand = JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, true);
     }
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
@@ -66,10 +62,8 @@ public class JamesHardenScore extends SequentialCommandGroup {
       return;
     }
 
-    movementCommand =
-        JamesHardenMovement.toSpecificBranch(swerveSubsystem,  () -> branch, false);
-    maintainCommand =
-        JamesHardenMovement.toSpecificBranch(swerveSubsystem, () -> branch, true);
+    movementCommand = JamesHardenMovement.toSpecificBranch(swerveSubsystem, () -> branch, false);
+    maintainCommand = JamesHardenMovement.toSpecificBranch(swerveSubsystem, () -> branch, true);
 
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {

@@ -66,9 +66,7 @@ public class JamesHardenMovement extends Command {
   private double initialPathDistance;
 
   public JamesHardenMovement(
-      SwerveSubsystem swerve,
-      Supplier<Pose2d> targetPoseSupplier,
-      boolean noTolerance) {
+      SwerveSubsystem swerve, Supplier<Pose2d> targetPoseSupplier, boolean noTolerance) {
     this.swerve = swerve;
     this.targetPoseSupplier = targetPoseSupplier;
     this.targetPose = targetPoseSupplier.get();
@@ -76,8 +74,7 @@ public class JamesHardenMovement extends Command {
     addRequirements(swerve);
   }
 
-  public JamesHardenMovement(
-      SwerveSubsystem swerve, Pose2d targetPose, boolean noTolerance) {
+  public JamesHardenMovement(SwerveSubsystem swerve, Pose2d targetPose, boolean noTolerance) {
     this.swerve = swerve;
     this.targetPose = targetPose;
     this.noTolerance = noTolerance;
@@ -92,12 +89,13 @@ public class JamesHardenMovement extends Command {
     }
     initialPathDistance =
         targetPose.getTranslation().getDistance(swerve.getCurrentState().Pose.getTranslation());
-      swerve.resetProfiledPIDs(swerve.travelAngleTo(targetPose));
+    swerve.resetProfiledPIDs(swerve.travelAngleTo(targetPose));
   }
 
   @Override
   public void execute() {
-    ChassisSpeeds speeds = swerve.calculateRequiredEdwardChassisSpeeds(targetPose, initialPathDistance);
+    ChassisSpeeds speeds =
+        swerve.calculateRequiredEdwardChassisSpeeds(targetPose, initialPathDistance);
 
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
@@ -175,11 +173,8 @@ public class JamesHardenMovement extends Command {
   }
 
   public static JamesHardenMovement toSpecificBranch(
-      SwerveSubsystem swerve,
-      Supplier<LandmarkPose> branch,
-      boolean noTolerance) {
-    return new JamesHardenMovement(
-        swerve, () -> branch.get().getPose(), noTolerance);
+      SwerveSubsystem swerve, Supplier<LandmarkPose> branch, boolean noTolerance) {
+    return new JamesHardenMovement(swerve, () -> branch.get().getPose(), noTolerance);
   }
 
   public static JamesHardenMovement toClosestLeftBranch(
@@ -265,8 +260,7 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return new JamesHardenMovement(
-        swerve, () -> hpsLineupPosition.get().getPose(), noTolerance);
+    return new JamesHardenMovement(swerve, () -> hpsLineupPosition.get().getPose(), noTolerance);
   }
 
   public static JamesHardenMovement toClearHPS(
@@ -280,7 +274,6 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return new JamesHardenMovement(
-        swerve, () -> hpsLineupPosition.get().getPose(), noTolerance);
+    return new JamesHardenMovement(swerve, () -> hpsLineupPosition.get().getPose(), noTolerance);
   }
 }

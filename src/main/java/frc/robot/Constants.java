@@ -153,7 +153,8 @@ public final class Constants {
                 RedLandmarkPose.L1,
                 RedLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
         RED_CLEAR_1 =
-            Arrays.asList(RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START, RedLandmarkPose.R2), // confirmed
+            Arrays.asList(
+                RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START, RedLandmarkPose.R2), // confirmed
         RED_MID_1 = Arrays.asList(RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.R3); // confirmed
   }
 

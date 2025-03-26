@@ -73,7 +73,7 @@ public class AutoProducer extends SequentialCommandGroup {
           autoInformation.get(3),
           autoInformation.get(autoInformation.size() - 1));
     }
-}
+  }
 
   private void settyCycle(
       ElevatorSubsystem elevator,
@@ -88,10 +88,8 @@ public class AutoProducer extends SequentialCommandGroup {
       DogLog.log("JamesHardenScore/Errors", "called without real branch");
       return;
     }
-    movementCommand =
-        JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, false);
-    maintainCommand =
-        JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, true);
+    movementCommand = JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, false);
+    maintainCommand = JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, true);
 
     addCommands(
         new ParallelCommandGroup(
