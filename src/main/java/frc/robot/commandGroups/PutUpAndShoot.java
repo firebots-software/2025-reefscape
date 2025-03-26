@@ -15,8 +15,8 @@ public class PutUpAndShoot extends SequentialCommandGroup {
 
     addCommands(
         (height == ElevatorPositions.L4)
-            ? new ElevatorL4(elevatorSubsystem)
-            : new SetElevatorLevel(elevatorSubsystem, height),
+            ? new ElevatorL4(elevatorSubsystem, false)
+            : new SetElevatorLevel(elevatorSubsystem, height, false),
         // new WaitCommand(0.25),
         new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5));
   }

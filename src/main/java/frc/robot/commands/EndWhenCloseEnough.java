@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -9,15 +10,26 @@ import java.util.function.Supplier;
 public class EndWhenCloseEnough extends Command {
   SwerveSubsystem driveTrain;
   Supplier<Pose2d> poseSupplier;
+  double translationalTolerance;
 
   public EndWhenCloseEnough(Supplier<Pose2d> targetTranslation) {
     driveTrain = SwerveSubsystem.getInstance();
     poseSupplier = targetTranslation;
+    translationalTolerance =
+        Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceTeleop;
+  }
+
+  public EndWhenCloseEnough(Supplier<Pose2d> targetTranslation, double translationalTolerance) {
+    driveTrain = SwerveSubsystem.getInstance();
+    poseSupplier = targetTranslation;
+    this.translationalTolerance = translationalTolerance;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    DogLog.log("END_WHEN_CLOSE_ENOUGH", true);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -25,7 +37,9 @@ public class EndWhenCloseEnough extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    DogLog.log("END_WHEN_CLOSE_ENOUGH", false);
+  }
 
   // Returns true when the command should end.
   @Override
@@ -41,7 +55,7 @@ public class EndWhenCloseEnough extends Command {
                     .Pose
                     .getTranslation()
                     .getDistance(poseSupplier.get().getTranslation()))
-            <= Constants.HardenConstants.EndWhenCloseEnough.translationalTolerance)
+            <= translationalTolerance)
         && (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot - currRot))
             <= Constants.HardenConstants.EndWhenCloseEnough.headingTolerance)) {
       return true;

@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 public class JamesHardenMovement extends Command {
 
   private final SwerveSubsystem swerve;
+  private int translationalToleranceMetCycleCounter = 0;
 
   private static final ArrayList<RedLandmarkPose> redBranchesL =
       new ArrayList<>(
@@ -61,43 +62,52 @@ public class JamesHardenMovement extends Command {
 
   private Supplier<Pose2d> targetPoseSupplier = null;
   private Pose2d targetPose = null;
-  private boolean isInAuto;
+  private boolean edwardVersion;
   private boolean noTolerance;
+  private double initialPathDistance;
 
   public JamesHardenMovement(
       SwerveSubsystem swerve,
       Supplier<Pose2d> targetPoseSupplier,
-      boolean isInAuto,
+      boolean edwardVersion,
       boolean noTolerance) {
     this.swerve = swerve;
     this.targetPoseSupplier = targetPoseSupplier;
-    this.isInAuto = isInAuto;
+    this.targetPose = targetPoseSupplier.get();
+    this.edwardVersion = edwardVersion;
     this.noTolerance = noTolerance;
     addRequirements(swerve);
   }
 
   public JamesHardenMovement(
-      SwerveSubsystem swerve, Pose2d targetPose, boolean isInAuto, boolean noTolerance) {
+      SwerveSubsystem swerve, Pose2d targetPose, boolean edwardVersion, boolean noTolerance) {
     this.swerve = swerve;
     this.targetPose = targetPose;
-    this.isInAuto = isInAuto;
+    this.edwardVersion = edwardVersion;
     this.noTolerance = noTolerance;
     addRequirements(swerve);
   }
 
   @Override
   public void initialize() {
+    this.translationalToleranceMetCycleCounter = 0;
     if (targetPoseSupplier != null) {
       targetPose = targetPoseSupplier.get();
     }
-    swerve.resetProfiledPIDs();
+    initialPathDistance =
+        targetPose.getTranslation().getDistance(swerve.getCurrentState().Pose.getTranslation());
+    if (edwardVersion) {
+      swerve.resetProfiledPIDs(swerve.travelAngleTo(targetPose));
+    } else {
+      swerve.resetProfiledPIDs();
+    }
   }
 
   @Override
   public void execute() {
     ChassisSpeeds speeds =
-        (isInAuto)
-            ? swerve.calculateRequiredComponentChassisSpeeds_AUTO_VERSION(targetPose)
+        (edwardVersion)
+            ? swerve.calculateRequiredEdwardChassisSpeeds(targetPose, initialPathDistance)
             : swerve.calculateRequiredComponentChassisSpeeds(targetPose);
 
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
@@ -113,6 +123,25 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public boolean isFinished() {
+    // if (noTolerance) {
+    //   return false;
+    // } else {
+    //   double currRot = swerve.getCurrentState().Pose.getRotation().getRadians();
+    //   currRot = ((2.0 * Math.PI) + (currRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
+    //   double targetRot = targetPose.getRotation().getRadians();
+    //   targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
+
+    //   if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
+    //           < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+    //       && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
+    //           < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+    //       && (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot -
+    // currRot))
+    //           < Constants.HardenConstants.RegularCommand.headingTolerance)) {
+    //     return true;
+    //   } else return false;
+    // }
+
     if (noTolerance) {
       return false;
     } else {
@@ -120,6 +149,36 @@ public class JamesHardenMovement extends Command {
       currRot = ((2.0 * Math.PI) + (currRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
       double targetRot = targetPose.getRotation().getRadians();
       targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
+      DogLog.log("JamesHardenMovement/currRot(rad)", currRot);
+      DogLog.log("JamesHardenMovement/targetRot(rad)", targetRot);
+      DogLog.log(
+          "JamesHardenMovement/xTolMet",
+          (Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance));
+      DogLog.log(
+          "JamesHardenMovement/yTolMet",
+          (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance));
+      DogLog.log(
+          "JamesHardenMovement/rotTolMet",
+          (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot - currRot))
+              < Constants.HardenConstants.RegularCommand.headingTolerance));
+      DogLog.log("JamesHardenMovement/End", false);
+
+      // translational is met
+      if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
+          && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
+              < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)) {
+        // count the counter
+        translationalToleranceMetCycleCounter++; // one cycle has passed with translational
+        // tolerance met
+        if (translationalToleranceMetCycleCounter >= 35) {
+          return true;
+        }
+      } else {
+        translationalToleranceMetCycleCounter = 0;
+      }
 
       if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
               < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
@@ -127,6 +186,7 @@ public class JamesHardenMovement extends Command {
               < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
           && (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot - currRot))
               < Constants.HardenConstants.RegularCommand.headingTolerance)) {
+        DogLog.log("JamesHardenMovement/End", true);
         return true;
       } else return false;
     }
@@ -134,6 +194,7 @@ public class JamesHardenMovement extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    this.translationalToleranceMetCycleCounter = 0;
     if (!interrupted) {
       swerve.setRobotSpeeds(new ChassisSpeeds(0, 0, 0));
     }
@@ -145,14 +206,15 @@ public class JamesHardenMovement extends Command {
 
   public static JamesHardenMovement toSpecificBranch(
       SwerveSubsystem swerve,
-      boolean isInAuto,
+      boolean edwardVersion,
       Supplier<LandmarkPose> branch,
       boolean noTolerance) {
-    return new JamesHardenMovement(swerve, () -> branch.get().getPose(), isInAuto, noTolerance);
+    return new JamesHardenMovement(
+        swerve, () -> branch.get().getPose(), edwardVersion, noTolerance);
   }
 
   public static JamesHardenMovement toClosestLeftBranch(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, boolean noTolerance) {
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean edwardVersion, boolean noTolerance) {
 
     Supplier<LandmarkPose> targetBranch =
         () -> {
@@ -182,11 +244,11 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch, noTolerance);
+    return JamesHardenMovement.toSpecificBranch(swerve, edwardVersion, targetBranch, noTolerance);
   }
 
   public static JamesHardenMovement toClosestRightBranch(
-      SwerveSubsystem swerve, BooleanSupplier redSide, boolean isInAuto, boolean noTolerance) {
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean edwardVersion, boolean noTolerance) {
 
     Supplier<LandmarkPose> targetBranch =
         () -> {
@@ -220,6 +282,36 @@ public class JamesHardenMovement extends Command {
           }
         };
 
-    return JamesHardenMovement.toSpecificBranch(swerve, isInAuto, targetBranch, noTolerance);
+    return JamesHardenMovement.toSpecificBranch(swerve, edwardVersion, targetBranch, noTolerance);
+  }
+
+  public static JamesHardenMovement toProcessorHPS(
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean edwardVersion, boolean noTolerance) {
+    Supplier<LandmarkPose> hpsLineupPosition =
+        () -> {
+          if (redSide.getAsBoolean()) {
+            return RedLandmarkPose.PROCESSOR_HPS;
+          } else {
+            return BlueLandmarkPose.PROCESSOR_HPS;
+          }
+        };
+
+    return new JamesHardenMovement(
+        swerve, () -> hpsLineupPosition.get().getPose(), edwardVersion, noTolerance);
+  }
+
+  public static JamesHardenMovement toClearHPS(
+      SwerveSubsystem swerve, BooleanSupplier redSide, boolean edwardVersion, boolean noTolerance) {
+    Supplier<LandmarkPose> hpsLineupPosition =
+        () -> {
+          if (redSide.getAsBoolean()) {
+            return RedLandmarkPose.CLEAR_HPS;
+          } else {
+            return BlueLandmarkPose.CLEAR_HPS;
+          }
+        };
+
+    return new JamesHardenMovement(
+        swerve, () -> hpsLineupPosition.get().getPose(), edwardVersion, noTolerance);
   }
 }

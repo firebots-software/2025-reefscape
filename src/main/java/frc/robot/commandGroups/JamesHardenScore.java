@@ -1,6 +1,7 @@
 package frc.robot.commandGroups;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -23,26 +24,26 @@ public class JamesHardenScore extends SequentialCommandGroup {
       ElevatorPositions height,
       BooleanSupplier redSide,
       boolean moveRight,
-      boolean isInAuto) {
+      boolean edwardVersion) {
 
     JamesHardenMovement movementCommand, maintainCommand;
 
     if (moveRight) {
       movementCommand =
-          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto, false);
+          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, edwardVersion, false);
       maintainCommand =
-          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, isInAuto, true);
+          JamesHardenMovement.toClosestRightBranch(swerveSubsystem, redSide, edwardVersion, true);
     } else {
       movementCommand =
-          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto, false);
+          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, edwardVersion, false);
       maintainCommand =
-          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, isInAuto, true);
+          JamesHardenMovement.toClosestLeftBranch(swerveSubsystem, redSide, edwardVersion, true);
     }
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
-      elevateCommand = new ElevatorL4(elevatorSubsystem);
+      elevateCommand = new ElevatorL4(elevatorSubsystem, true);
     } else {
-      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height);
+      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height, true);
     }
 
     addCommands(
@@ -58,7 +59,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
       ElevatorPositions height,
-      boolean isInAuto,
+      boolean edwardVersion,
       LandmarkPose branch) {
 
     JamesHardenMovement movementCommand, maintainCommand;
@@ -68,22 +69,34 @@ public class JamesHardenScore extends SequentialCommandGroup {
     }
 
     movementCommand =
-        JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch, false);
+        JamesHardenMovement.toSpecificBranch(swerveSubsystem, edwardVersion, () -> branch, false);
     maintainCommand =
-        JamesHardenMovement.toSpecificBranch(swerveSubsystem, isInAuto, () -> branch, true);
+        JamesHardenMovement.toSpecificBranch(swerveSubsystem, edwardVersion, () -> branch, true);
 
     Command elevateCommand;
     if (height.equals(ElevatorPositions.L4)) {
-      elevateCommand = new ElevatorL4(elevatorSubsystem);
+      elevateCommand = new ElevatorL4(elevatorSubsystem, true);
     } else {
-      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height);
+      elevateCommand = new SetElevatorLevel(elevatorSubsystem, height, true);
     }
-
-    addCommands(
-        movementCommand.alongWith(
-            (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
-                .andThen(elevateCommand)),
-        new ParallelDeadlineGroup(
-            new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
+    if (DriverStation.isTeleop()) {
+      DogLog.log("JamesHardenScore/Version", "teleop");
+      addCommands(
+          movementCommand.alongWith(
+              (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
+                  .andThen(elevateCommand)),
+          new ParallelDeadlineGroup(
+              new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
+    } else {
+      DogLog.log("JamesHardenScore/Version", "auto");
+      addCommands(
+          movementCommand
+              .withTimeout(5.0)
+              .alongWith(
+                  (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
+                      .andThen(elevateCommand)),
+          new ParallelDeadlineGroup(
+              new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
+    }
   }
 }

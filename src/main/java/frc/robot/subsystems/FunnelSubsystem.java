@@ -32,8 +32,10 @@ public class FunnelSubsystem extends SubsystemBase {
   private DigitalInput drake;
   private double coralCheckedOutPosition;
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+  private final boolean m;
 
   private FunnelSubsystem() {
+    m = false;
     rightMotor =
         new LoggedTalonFX("subsystems/Funnel/rightMotor", FunnelConstants.RIGHT_MOTOR_PORT);
     leftMotor = new LoggedTalonFX("subsystems/Funnel/leftMotor", FunnelConstants.LEFT_MOTOR_PORT);
@@ -125,9 +127,11 @@ public class FunnelSubsystem extends SubsystemBase {
 
   public void maintainCurrentPosition() {
     // TODO: This code should maintain the current position of the elevator
-    rightMotor.setPosition(0);
-    rightMotor.setControl(controlRequest.withPosition(0).withSlot(0));
-    rightMotor.setPosition(0);
+    rightMotor.setControl(
+        controlRequest.withPosition(rightMotor.getPosition().getValueAsDouble()).withSlot(0));
+    // rightMotor.setPosition(0);
+    // rightMotor.setControl(controlRequest.withPosition(0).withSlot(0));
+    // rightMotor.setPosition(0);
     // coralCheckedOutPosition =
     //     rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
     // rightMotor.setControl(controlRequest.withPosition(coralCheckedOutPosition).withSlot(0));
@@ -159,7 +163,7 @@ public class FunnelSubsystem extends SubsystemBase {
     DogLog.log("subsystems/Funnel/CheckedInStatus", isCoralCheckedIn());
     DogLog.log("subsystems/Funnel/CheckedOutStatus", isCoralCheckedOut());
     DogLog.log("subsystems/Funnel/DrakeStatus", drakeTripped());
-    DogLog.log("subsystems/Funnel/FunnelVelocity", rightMotor.getVelocity().getValueAsDouble());
+    // DogLog.log("subsystems/Funnel/FunnelVelocity", rightMotor.getVelocity().getValueAsDouble());
     DogLog.log("subsystems/Funnel/AbsPositionalError", getAbsolutePositionalError());
     DogLog.log(
         "subsystems/Funnel/command",

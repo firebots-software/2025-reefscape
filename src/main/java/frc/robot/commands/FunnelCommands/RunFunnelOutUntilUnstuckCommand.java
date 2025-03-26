@@ -1,39 +1,26 @@
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.FunnelSubsystem;
 
-// import edu.wpi.first.wpilibj2.command.CommandBase;
-
-/**
- * Runs the intake and preshooter until IR sensor detects note
- *
- * @param subsystem The subsystem used by this command.
- */
-public class DefaultFunnelCommand extends Command {
+public class RunFunnelOutUntilUnstuckCommand extends Command {
   private FunnelSubsystem funnelSubsystem;
 
-  public DefaultFunnelCommand(FunnelSubsystem funnelSubsystem) {
+  public RunFunnelOutUntilUnstuckCommand(FunnelSubsystem funnelSubsystem) {
     this.funnelSubsystem = funnelSubsystem;
     addRequirements(funnelSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // Store the position of the coral when it was first checked out.
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (funnelSubsystem.getAbsolutePositionalError()
-        > Constants.FunnelConstants.MAX_POSITIONAL_ERROR) {
-      funnelSubsystem.maintainCurrentPosition();
-    } else if (funnelSubsystem.isCoralCheckedOut()) {
-      funnelSubsystem.spinBackSlowly();
-    } else {
-      funnelSubsystem.stopFunnel();
-    }
+    funnelSubsystem.debugSpinBack();
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +32,6 @@ public class DefaultFunnelCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return !funnelSubsystem.isCoralCheckedOut();
   }
 }

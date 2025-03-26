@@ -5,7 +5,8 @@ public class CoralPosition {
   private static boolean coralInTootsieSlide = false;
 
   public static void preLoadedCoral() {
-    coralInTootsieSlide = true;
+    coralInFunnel = true;
+    coralInTootsieSlide = false;
   }
 
   public static boolean isCoralInFunnel() {

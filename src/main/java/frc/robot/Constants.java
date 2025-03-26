@@ -42,7 +42,9 @@ public final class Constants {
 
   public static class HardenConstants {
     public static class EndWhenCloseEnough {
-      public static final double translationalTolerance = 0.43105229381;
+      public static final double translationalToleranceTeleop = 0.43105229381;
+      public static final double translationalToleranceAuto = 1d;
+      // public static final double translationalTolerance = 0.6;
       public static final double headingTolerance = 0.7853975; // Math.PI/4
     }
 
@@ -55,8 +57,18 @@ public final class Constants {
   public static class Vision {
 
     public static enum Cameras {
-      RIGHT_CAM,
-      LEFT_CAM;
+      RIGHT_CAM("rightCam"),
+      LEFT_CAM("leftCam");
+
+      private String loggingName;
+
+      Cameras(String name) {
+        loggingName = name;
+      }
+
+      public String getLoggingName() {
+        return loggingName;
+      }
     }
 
     // TODO: CHANGE FOR NEW ROBOT
@@ -79,64 +91,71 @@ public final class Constants {
     public static List<LandmarkPose>
         BLUE_PROCESSOR_3 =
             Arrays.asList(
-                BlueLandmarkPose.PROCESSOR_AUTO_START,
+                BlueLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
                 BlueLandmarkPose.L2,
                 BlueLandmarkPose.R1,
                 BlueLandmarkPose.L1,
-                BlueLandmarkPose.PROCESSOR_HPS),
+                BlueLandmarkPose.PROCESSOR_OPTIMAL_HPS), // confirmed
         BLUE_PROCESSOR_2 =
             Arrays.asList(
-                BlueLandmarkPose.PROCESSOR_AUTO_START,
+                BlueLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
                 BlueLandmarkPose.L2,
                 BlueLandmarkPose.R1,
-                BlueLandmarkPose.PROCESSOR_HPS),
+                BlueLandmarkPose.PROCESSOR_OPTIMAL_HPS), // confirmed
         BLUE_PROCESSOR_1 =
-            Arrays.asList(BlueLandmarkPose.PROCESSOR_AUTO_START, BlueLandmarkPose.L2),
+            Arrays.asList(
+                BlueLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START, BlueLandmarkPose.L2), // confirmed
         BLUE_CLEAR_3 =
             Arrays.asList(
-                BlueLandmarkPose.CLEAR_AUTO_START,
+                BlueLandmarkPose.CLEAR_OPTIMAL_AUTO_START,
                 BlueLandmarkPose.R4,
-                BlueLandmarkPose.R5,
                 BlueLandmarkPose.L5,
-                BlueLandmarkPose.CLEAR_HPS),
+                BlueLandmarkPose.R5,
+                BlueLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
         BLUE_CLEAR_2 =
             Arrays.asList(
-                BlueLandmarkPose.CLEAR_AUTO_START,
+                BlueLandmarkPose.CLEAR_OPTIMAL_AUTO_START,
                 BlueLandmarkPose.R4,
-                BlueLandmarkPose.R5,
-                BlueLandmarkPose.CLEAR_HPS),
-        BLUE_CLEAR_1 = Arrays.asList(BlueLandmarkPose.CLEAR_AUTO_START, BlueLandmarkPose.R4),
-        BLUE_MID_1 = Arrays.asList(BlueLandmarkPose.MID_AUTO_START, BlueLandmarkPose.L3),
+                BlueLandmarkPose.L5,
+                BlueLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
+        BLUE_CLEAR_1 =
+            Arrays.asList(
+                BlueLandmarkPose.CLEAR_OPTIMAL_AUTO_START, BlueLandmarkPose.R4), // confirmed
+        BLUE_MID_1 =
+            Arrays.asList(BlueLandmarkPose.MID_AUTO_START, BlueLandmarkPose.R3), // confirmed
         RED_PROCESSOR_3 =
             Arrays.asList(
-                RedLandmarkPose.PROCESSOR_AUTO_START,
+                RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
                 RedLandmarkPose.L4,
                 RedLandmarkPose.R5,
                 RedLandmarkPose.L5,
-                RedLandmarkPose.PROCESSOR_HPS),
+                RedLandmarkPose.PROCESSOR_OPTIMAL_HPS), // confirmed
         RED_PROCESSOR_2 =
             Arrays.asList(
-                RedLandmarkPose.PROCESSOR_AUTO_START, RedLandmarkPose.L4, RedLandmarkPose.R5),
+                RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START,
+                RedLandmarkPose.L4,
+                RedLandmarkPose.R5,
+                RedLandmarkPose.PROCESSOR_OPTIMAL_HPS),
         RED_PROCESSOR_1 =
             Arrays.asList(
-                RedLandmarkPose.PROCESSOR_AUTO_START,
-                RedLandmarkPose.L4,
-                RedLandmarkPose.PROCESSOR_HPS),
+                RedLandmarkPose.PROCESSOR_OPTIMAL_AUTO_START, RedLandmarkPose.L4), // confirmed
         RED_CLEAR_3 =
             Arrays.asList(
-                RedLandmarkPose.CLEAR_AUTO_START,
+                RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START,
                 RedLandmarkPose.R2,
                 RedLandmarkPose.L1,
                 RedLandmarkPose.R1,
-                RedLandmarkPose.CLEAR_HPS),
+                RedLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
         RED_CLEAR_2 =
             Arrays.asList(
-                RedLandmarkPose.CLEAR_AUTO_START,
+                RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START,
                 RedLandmarkPose.R2,
                 RedLandmarkPose.L1,
-                RedLandmarkPose.CLEAR_HPS),
-        RED_CLEAR_1 = Arrays.asList(RedLandmarkPose.CLEAR_AUTO_START, RedLandmarkPose.R2),
-        RED_MID_1 = Arrays.asList(RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.L3);
+                RedLandmarkPose.CLEAR_OPTIMAL_HPS), // confirmed
+        RED_CLEAR_1 =
+            Arrays.asList(
+                RedLandmarkPose.CLEAR_OPTIMAL_AUTO_START, RedLandmarkPose.R2), // confirmed
+        RED_MID_1 = Arrays.asList(RedLandmarkPose.MID_AUTO_START, RedLandmarkPose.R3); // confirmed
   }
 
   public static class Landmarks {
@@ -169,28 +188,49 @@ public final class Constants {
   }
 
   public static enum BlueLandmarkPose implements LandmarkPose {
-    PROCESSOR_AUTO_START(
+    PROCESSOR_CORNER_AUTO_START(
         new Pose2d(
-            new Translation2d(7.11305570602417, 0.4940316081047058), new Rotation2d(Math.PI))),
-    CLEAR_AUTO_START(
+            new Translation2d(7.0718560218811035, 0.4940316081047058),
+            new Rotation2d(Math.PI))), // confirmed
+    CLEAR_CORNER_AUTO_START(
         new Pose2d(
-            new Translation2d(7.113824844360352, 7.60764217376709), new Rotation2d(Math.PI))),
+            new Translation2d(7.0718560218811035, 7.60764217376709),
+            new Rotation2d(Math.PI))), // confirmed
     MID_AUTO_START(
-        new Pose2d(new Translation2d(7.11305570602417, 4.19448), new Rotation2d(Math.PI))),
-    CLOSER_PROCESSOR_AUTO_START(
         new Pose2d(
-            new Translation2d(7.11305570602417, 1.898607850074768), new Rotation2d(Math.PI))),
-    CLOSER_CLEAR_AUTO_START(
+            new Translation2d(7.0718560218811035, 4.19448), new Rotation2d(Math.PI))), // confirmed
+    PROCESSOR_CLOSER_AUTO_START(
         new Pose2d(
-            new Translation2d(7.113824844360352, 6.167776107788086), new Rotation2d(Math.PI))),
+            new Translation2d(7.0718560218811035, 2.3406081199645996),
+            new Rotation2d(Math.PI))), // confirmed
+    CLEAR_CLOSER_AUTO_START(
+        new Pose2d(
+            new Translation2d(7.0718560218811035, 5.733623504638672),
+            new Rotation2d(Math.PI))), // confirmed
+    PROCESSOR_OPTIMAL_AUTO_START(
+        new Pose2d(
+            new Translation2d(7.0718560218811035, 2.997816324234009),
+            new Rotation2d(Math.PI))), // confirmed
+    CLEAR_OPTIMAL_AUTO_START(
+        new Pose2d(
+            new Translation2d(7.0718560218811035, 5.072922229766846),
+            new Rotation2d(Math.PI))), // confirmed
     PROCESSOR_HPS(
         new Pose2d(
             new Translation2d(1.118087887763977, 1.0306631326675415),
-            new Rotation2d(0.9334126223560425))),
+            new Rotation2d(0.9334126223560425))), // confirmed
+    PROCESSOR_OPTIMAL_HPS(
+        new Pose2d(
+            new Translation2d(1.6313929557800293, 0.6662082672119141),
+            new Rotation2d(0.9334126223560425))), // confirmed
     CLEAR_HPS(
         new Pose2d(
             new Translation2d(1.1465998888015747, 7.014684677124023),
-            new Rotation2d(-0.9419997588093272))),
+            new Rotation2d(-0.9419997588093272))), // confirmed
+    CLEAR_OPTIMAL_HPS(
+        new Pose2d(
+            new Translation2d(1.6867308616638184, 7.395046710968018),
+            new Rotation2d(-0.9419997588093272))), // confirmed
     L0(new Pose2d(new Translation2d(3.14058, 4.19448), new Rotation2d(Degrees.of(0)))),
     L1(new Pose2d(new Translation2d(3.66895, 2.94212), new Rotation2d(Degrees.of(60)))),
     L2(new Pose2d(new Translation2d(5.0177, 2.77352), new Rotation2d(Degrees.of(120)))),
@@ -221,23 +261,46 @@ public final class Constants {
   }
 
   public static enum RedLandmarkPose implements LandmarkPose {
-    PROCESSOR_AUTO_START(
-        new Pose2d(new Translation2d(10.441716194152832, 7.607936382293701), new Rotation2d())),
-    CLEAR_AUTO_START(
-        new Pose2d(new Translation2d(10.441716194152832, 0.47134917974472046), new Rotation2d())),
-    MID_AUTO_START(new Pose2d(new Translation2d(10.441716194152832, 3.85728), new Rotation2d())),
-    CLOSER_PROCESSOR_AUTO_START(
-        new Pose2d(new Translation2d(10.441716194152832, 6.167776107788086), new Rotation2d())),
+    PROCESSOR_CORNER_AUTO_START(
+        new Pose2d(
+            new Translation2d(10.486612319946289, 7.554295539855957),
+            new Rotation2d())), // confirmed
+    CLEAR_CORNER_AUTO_START(
+        new Pose2d(
+            new Translation2d(10.486612319946289, 0.47134917974472046),
+            new Rotation2d())), // confirmed
+    MID_AUTO_START(
+        new Pose2d(new Translation2d(10.486612319946289, 3.85728), new Rotation2d())), // confirmed
+    PROCESSOR_CLOSER_AUTO_START(
+        new Pose2d(
+            new Translation2d(10.486612319946289, 5.733623504638672),
+            new Rotation2d())), // confirmed
     CLOSER_CLEAR_AUTO_START(
-        new Pose2d(new Translation2d(10.441716194152832, 1.898607850074768), new Rotation2d())),
+        new Pose2d(new Translation2d(10.486612319946289, 2.3406081199645996), new Rotation2d())),
+    PROCESSOR_OPTIMAL_AUTO_START(
+        new Pose2d(
+            new Translation2d(10.486612319946289, 5.072922229766846),
+            new Rotation2d())), // confirmed
+    CLEAR_OPTIMAL_AUTO_START(
+        new Pose2d(
+            new Translation2d(10.486612319946289, 2.997816324234009),
+            new Rotation2d())), // confirmed
     PROCESSOR_HPS(
         new Pose2d(
             new Translation2d(16.341829299926758, 7.0662689208984375),
-            new Rotation2d(-2.1939969266716175))),
+            new Rotation2d(-2.1939969266716175))), // confirmed
+    PROCESSOR_OPTIMAL_HPS(
+        new Pose2d(
+            new Translation2d(15.920981407165527, 7.365553379058838),
+            new Rotation2d(-2.1939969266716175))), // confirmed
     CLEAR_HPS(
         new Pose2d(
             new Translation2d(16.39461326599121, 1.0060197114944458),
-            new Rotation2d(2.1932607985206625))),
+            new Rotation2d(2.1932607985206625))), // confirmed
+    CLEAR_OPTIMAL_HPS(
+        new Pose2d(
+            new Translation2d(15.955699920654297, 0.6853934526443481),
+            new Rotation2d(2.1932607985206625))), // confirmed
     R0(new Pose2d(new Translation2d(14.4076704, 4.19448), new Rotation2d(Degrees.of(180)))),
     R1(new Pose2d(new Translation2d(13.8793004, 2.94212), new Rotation2d(Degrees.of(120)))),
     R2(new Pose2d(new Translation2d(12.5305504, 2.77352), new Rotation2d(Degrees.of(60)))),
@@ -788,7 +851,7 @@ public final class Constants {
     public static final double ACCELERATION = 10.0; // TODO
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
-    public static final double SPEED_RPS = 10.0;
+    public static final double SPEED_RPS = 11d; // 15.0
     public static final double GEAR_RATIO = 1d / 5d;
 
     public static final int CHECK_IN_PORT = 1;
@@ -855,8 +918,8 @@ public final class Constants {
       L3(
           3,
           1.285 - 0.02 + elevatorRecalibration), // 1.27 // KALASH wants 1cm lower //old value 1.32
-      L4(4, 1.83), // 1.81
-      LIMIT_OF_TRAVEL(1, 1.825 + 0.02); // 1.825
+      L4(4, 1.835), // 1.81
+      LIMIT_OF_TRAVEL(1, 1.825 + 0.025); // 1.825
 
       public final int position;
       public final double height;
