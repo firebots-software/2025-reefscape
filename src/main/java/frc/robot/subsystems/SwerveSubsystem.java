@@ -180,32 +180,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     return instance;
   }
 
-  // public void followTrajectory(SwerveSample sample) {
-  //   // Get the current pose of the robot
-  //   Pose2d pose = getCurrentState().Pose;
-  //   // Generate the next speeds for the robot
-  //   ChassisSpeeds speeds =
-  //       new ChassisSpeeds(
-  //           sample.vx + xRegularPIDController.calculate(pose.getX(), sample.x),
-  //           sample.vy + yRegularPIDController.calculate(pose.getY(), sample.y),
-  //           sample.omega
-  //               + headingRegularPIDController.calculate(
-  //                   pose.getRotation().getRadians(), sample.heading));
-
-  //   DogLog.log("followTrajectory/sample.x", sample.x);
-  //   DogLog.log("followTrajectory/sample.y", sample.y);
-  //   DogLog.log("followTrajectory/sample.heading", sample.heading);
-
-  //   DogLog.log(
-  //       "followTrajectory/pidOutputX", xRegularPIDController.calculate(pose.getX(), sample.x));
-  //   DogLog.log("followTrajectory/sample.vx", sample.vx);
-  //   DogLog.log("followTrajectory/sample.vy", sample.vy);
-  //   DogLog.log("followTrajectory/sample.omega", sample.omega);
-
-  //   DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
-  //   // Apply the generated speed
-  //   setFieldSpeeds(speeds);
-  // }
+  public double getDirectionalChassisSpeeds(Rotation2d qDirection) {
+        return (qDirection.getCos() * getFieldSpeeds().vxMetersPerSecond)
+            + (qDirection.getSin() * getFieldSpeeds().vyMetersPerSecond);
+  }
 
   // Resets PID controllers
   public void resetProfiledPIDs() {
@@ -218,8 +196,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);
     qProfiledPIDController.reset(
         0,
-        (qDirection.getCos() * getFieldSpeeds().vxMetersPerSecond)
-            + (qDirection.getSin() * getFieldSpeeds().vyMetersPerSecond));
+        getDirectionalChassisSpeeds(qDirection));
   }
 
   /* Swerve requests to apply during SysId characterization */
