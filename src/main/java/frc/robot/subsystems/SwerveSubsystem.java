@@ -316,11 +316,15 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     Rotation2d travelAngle = travelAngleTo(targetPose);
 
     DogLog.log(
-        "EdwardCalculation/qProfiledPID/CurrentMeasurement",
+        "EdwardCalculation/qProfiledPID/CurrentPositionMeasurement",
         completePathDistance - distanceToTarget);
     DogLog.log(
         "EdwardCalculation/qProfiledPID/PositionSetpoint",
         qProfiledPIDController.getSetpoint().position);
+    DogLog.log(
+        "EdwardCalculation/qProfiledPID/CurrentVelocityMeasurement",
+        getDirectionalChassisSpeeds(travelAngle)
+    );
     DogLog.log(
         "EdwardCalculation/qProfiledPID/VelocitySetpoint",
         qProfiledPIDController.getSetpoint().velocity);
@@ -330,11 +334,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         "EdwardCalculation/qProfiledPID/VelocityError", qProfiledPIDController.getVelocityError());
 
     DogLog.log(
-        "EdwardCalculation/headingProfiledPID/CurrentMeasurement",
+        "EdwardCalculation/headingProfiledPID/CurrentPositionMeasurement",
         currentState.Pose.getRotation().getRadians());
     DogLog.log(
         "EdwardCalculation/headingProfiledPID/PositionSetpoint",
         headingProfiledPIDController.getSetpoint().position);
+    DogLog.log(
+        "EdwardCalculation/headingProfiledPID/CurrentVelocityMeasurement",
+        currentState.Speeds.omegaRadiansPerSecond);
     DogLog.log(
         "EdwardCalculation/headingProfiledPID/VelocitySetpoint",
         headingProfiledPIDController.getSetpoint().velocity);
