@@ -113,24 +113,21 @@ public class RobotContainer {
     // Custom Controller:
 
     // Left Elevator Levels
-    customController
-        .LeftL1()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L1,
-                redside,
-                false,
-                false));
-    customController
-        .LeftL1()
-        .whileTrue(JamesHardenMovement.toClearHPS(driveTrain, redside, true, false));
+    // customController
+    //     .LeftL1()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L1,
+    //             redside,
+    //             false));
+    customController.LeftL1().whileTrue(JamesHardenMovement.toClearHPS(driveTrain, redside, false));
 
     customController
         .RightL1()
-        .whileTrue(JamesHardenMovement.toProcessorHPS(driveTrain, redside, true, false));
+        .whileTrue(JamesHardenMovement.toProcessorHPS(driveTrain, redside, false));
 
     customController
         .LeftL2()
@@ -141,8 +138,7 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L2,
                 redside,
-                false,
-                true));
+                false));
     customController
         .LeftL3()
         .whileTrue(
@@ -152,8 +148,7 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L3,
                 redside,
-                false,
-                true));
+                false));
     customController
         .LeftL4()
         .whileTrue(
@@ -163,8 +158,7 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L4,
                 redside,
-                false,
-                true));
+                false));
 
     // // Right Elevator Levels
     customController
@@ -176,7 +170,6 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L1,
                 redside,
-                true,
                 true));
     customController
         .RightL2()
@@ -187,7 +180,6 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L2,
                 redside,
-                true,
                 true));
     customController
         .RightL3()
@@ -198,7 +190,6 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L3,
                 redside,
-                true,
                 true));
     customController
         .RightL4()
@@ -209,7 +200,6 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L4,
                 redside,
-                true,
                 true));
 
     // Bottom Three Buttons
