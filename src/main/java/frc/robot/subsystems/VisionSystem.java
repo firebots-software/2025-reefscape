@@ -28,7 +28,6 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -97,10 +96,8 @@ public class VisionSystem extends SubsystemBase {
 
   public static VisionSystem getInstance(Constants.Vision.Cameras name) {
     if (systemList[name.ordinal()] == null) {
-      systemList[0] =
-          new VisionSystem(name);
-      systemList[1] =
-          new VisionSystem(name);
+      systemList[0] = new VisionSystem(name);
+      systemList[1] = new VisionSystem(name);
     }
 
     return systemList[name.ordinal()];
@@ -157,18 +154,18 @@ public class VisionSystem extends SubsystemBase {
     String camName = cameraEnum.getLoggingName();
     PhotonPipelineResult pipelineResult = getPipelineResult();
 
-    DogLog.log("KalmanDebug/"+camName+"PiplineNull", pipelineResult == null);
-    DogLog.log("KalmanDebug/"+camName+"PipelineHasTarget", hasTarget(pipelineResult));
+    DogLog.log("KalmanDebug/" + camName + "PiplineNull", pipelineResult == null);
+    DogLog.log("KalmanDebug/" + camName + "PipelineHasTarget", hasTarget(pipelineResult));
 
     if (pipelineResult != null && hasTarget(pipelineResult)) {
       List<PhotonTrackedTarget> targets = pipelineResult.getTargets();
-      
+
       boolean hasReefTag = true;
       double poseAmbiguity = pipelineResult.getBestTarget().poseAmbiguity;
       double distance = getDistance();
 
-      DogLog.log("KalmanDebug/"+camName+"PoseAmbiguity", poseAmbiguity);
-      DogLog.log("KalmanDebug/"+camName+"DistToAprilTag", distance);
+      DogLog.log("KalmanDebug/" + camName + "PoseAmbiguity", poseAmbiguity);
+      DogLog.log("KalmanDebug/" + camName + "DistToAprilTag", distance);
 
       for (PhotonTrackedTarget target : targets) {
         if (!reefIDs.contains(target.getFiducialId())) {
@@ -188,16 +185,16 @@ public class VisionSystem extends SubsystemBase {
         double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.05, 0.5, 1.0) * speedMultiplier;
         double rotationKalman = MiscUtils.lerp((distance - 0.6) / 1.4, 0.4, 5, 30) / 10;
 
-        DogLog.log("KalmanDebug/"+camName+"TranslationStandardDeviation", xKalman);
-        DogLog.log("KalmanDebug/"+camName+"RotationStandardDeviation", rotationKalman);
+        DogLog.log("KalmanDebug/" + camName + "TranslationStandardDeviation", xKalman);
+        DogLog.log("KalmanDebug/" + camName + "RotationStandardDeviation", rotationKalman);
 
         Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, rotationKalman);
         Pose2d bestRobotPose2d = getPose2d();
         Pose2d rotationLess =
             new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
-        DogLog.log("KalmanDebug/"+camName+"Rotationless", rotationLess);
-        DogLog.log("KalmanDebug/"+camName+"RobotPoseIsPresent",bestRobotPose2d != null); 
-        DogLog.log("KalmanDebug/"+camName+"VisionPose", bestRobotPose2d);
+        DogLog.log("KalmanDebug/" + camName + "Rotationless", rotationLess);
+        DogLog.log("KalmanDebug/" + camName + "RobotPoseIsPresent", bestRobotPose2d != null);
+        DogLog.log("KalmanDebug/" + camName + "VisionPose", bestRobotPose2d);
 
         double xDifference = Math.abs(driveTrain.getPose().getX() - bestRobotPose2d.getX());
         double yDifference = Math.abs(driveTrain.getPose().getY() - bestRobotPose2d.getY());
@@ -210,17 +207,17 @@ public class VisionSystem extends SubsystemBase {
 
         Pose2d visionDiff = new Pose2d(transDifference, rot2dDifference);
 
-        DogLog.log("KalmanDebug/"+camName+"visionDiff", visionDiff);
+        DogLog.log("KalmanDebug/" + camName + "visionDiff", visionDiff);
 
         // Changed to not use rotationless
         driveTrain.addVisionMeasurement(
             rotationLess, pipelineResult.getTimestampSeconds(), visionMatrix);
-        DogLog.log("KalmanDebug/"+camName+"VisionUsed", true);
+        DogLog.log("KalmanDebug/" + camName + "VisionUsed", true);
       } else {
-        DogLog.log("KalmanDebug/"+camName+"visionUsed", false);
+        DogLog.log("KalmanDebug/" + camName + "visionUsed", false);
       }
     } else {
-      DogLog.log("KalmanDebug/"+camName+"visionUsed", false);
+      DogLog.log("KalmanDebug/" + camName + "visionUsed", false);
     }
   }
 

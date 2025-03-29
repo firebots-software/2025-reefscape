@@ -61,11 +61,11 @@ public final class Constants {
 
       private String loggingName;
 
-      Cameras(String name){
+      Cameras(String name) {
         loggingName = name;
       }
 
-      public String getLoggingName(){
+      public String getLoggingName() {
         return loggingName;
       }
     }
