@@ -10,12 +10,14 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -32,6 +34,7 @@ public class FunnelSubsystem extends SubsystemBase {
   private DigitalInput drake;
   private double coralCheckedOutPosition;
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+  private final MotionMagicVelocityVoltage velocityRequest = new MotionMagicVelocityVoltage(0);
   private final boolean m;
 
   private FunnelSubsystem() {
@@ -77,11 +80,21 @@ public class FunnelSubsystem extends SubsystemBase {
     m1Config.apply(s0c);
     m2Config.apply(s0c);
 
+
     MotionMagicConfigs mmc =
         new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(Constants.FunnelConstants.CRUISE_VELOCITY)
             .withMotionMagicAcceleration(Constants.FunnelConstants.ACCELERATION);
-    m1Config.apply(mmc);
+
+    
+
+    // mmc.MotionMagicAcceleration = 
+    // MotionMagicConfigs mmcR = 
+    //     new MotionMagicConfigs()
+    //     .withMotionMagicCruiseVelocity(15)
+    //     .withMotionMagicAcceleration(60);
+
+    
     m2Config.apply(mmc);
 
     coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble();
@@ -106,6 +119,12 @@ public class FunnelSubsystem extends SubsystemBase {
     VelocityVoltage m_velocityControlTop =
         new VelocityVoltage(speed / Constants.FunnelConstants.GEAR_RATIO);
     rightMotor.setControl(m_velocityControlTop);
+  }
+
+  public void rampUp(){
+    // velocityRequest.Acceleration = 60;
+    // velocityRequest.Velocity = 15;
+    rightMotor.setControl(velocityRequest.withVelocity(15).withAcceleration(60));
   }
 
   public void spinFunnel() {
