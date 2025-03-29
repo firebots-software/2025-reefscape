@@ -6,7 +6,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 
 public class RampUpFunnel extends Command {
-    private FunnelSubsystem funnelSubsystem;
+  private FunnelSubsystem funnelSubsystem;
   private ElevatorSubsystem elevatorSubsystem;
 
   public RampUpFunnel(FunnelSubsystem funnelSubsystem, ElevatorSubsystem elevator) {

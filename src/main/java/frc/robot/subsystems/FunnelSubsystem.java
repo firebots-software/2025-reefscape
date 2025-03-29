@@ -17,7 +17,6 @@ import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -80,21 +79,17 @@ public class FunnelSubsystem extends SubsystemBase {
     m1Config.apply(s0c);
     m2Config.apply(s0c);
 
-
     MotionMagicConfigs mmc =
         new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(Constants.FunnelConstants.CRUISE_VELOCITY)
             .withMotionMagicAcceleration(Constants.FunnelConstants.ACCELERATION);
 
-    
-
-    // mmc.MotionMagicAcceleration = 
-    // MotionMagicConfigs mmcR = 
+    // mmc.MotionMagicAcceleration =
+    // MotionMagicConfigs mmcR =
     //     new MotionMagicConfigs()
     //     .withMotionMagicCruiseVelocity(15)
     //     .withMotionMagicAcceleration(60);
 
-    
     m2Config.apply(mmc);
 
     coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble();
@@ -121,7 +116,7 @@ public class FunnelSubsystem extends SubsystemBase {
     rightMotor.setControl(m_velocityControlTop);
   }
 
-  public void rampUp(){
+  public void rampUp() {
     // velocityRequest.Acceleration = 60;
     // velocityRequest.Velocity = 15;
     rightMotor.setControl(velocityRequest.withVelocity(15).withAcceleration(60));
