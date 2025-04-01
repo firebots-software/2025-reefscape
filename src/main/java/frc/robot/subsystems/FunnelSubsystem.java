@@ -110,21 +110,23 @@ public class FunnelSubsystem extends SubsystemBase {
     }
   }
 
-  private void runFunnelAtRPS(double speed) {
+  public void runFunnelAtRPS(double speed) {
     VelocityVoltage m_velocityControlTop =
         new VelocityVoltage(speed / Constants.FunnelConstants.GEAR_RATIO);
     rightMotor.setControl(m_velocityControlTop);
   }
 
   public void rampUp() {
-    // velocityRequest.Acceleration = 60;
-    // velocityRequest.Velocity = 15;
     rightMotor.setControl(velocityRequest.withVelocity(15).withAcceleration(60));
   }
+
+
 
   public void spinFunnel() {
     runFunnelAtRPS(Constants.FunnelConstants.SPEED_RPS);
   }
+
+
 
   public void stopFunnel() {
     rightMotor.stopMotor();
@@ -157,6 +159,10 @@ public class FunnelSubsystem extends SubsystemBase {
 
   public void debugSpinBack() {
     runFunnelAtRPS(-Constants.FunnelConstants.SPEED_RPS);
+  }
+
+  public double getSpeed(){
+    return rightMotor.getVelocity().getValueAsDouble();
   }
 
   public boolean isCoralCheckedIn() {

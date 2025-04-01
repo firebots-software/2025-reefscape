@@ -8,6 +8,7 @@ import frc.robot.subsystems.FunnelSubsystem;
 public class RampUpFunnel extends Command {
   private FunnelSubsystem funnelSubsystem;
   private ElevatorSubsystem elevatorSubsystem;
+  private double tolerance = 2;
 
   public RampUpFunnel(FunnelSubsystem funnelSubsystem, ElevatorSubsystem elevator) {
     this.funnelSubsystem = funnelSubsystem;
@@ -25,8 +26,12 @@ public class RampUpFunnel extends Command {
   @Override
   public void execute() {
     if (elevatorSubsystem.isAtPosition()) {
+      if(funnelSubsystem.getSpeed() > 15 - tolerance && funnelSubsystem.getSpeed() < 15 + tolerance){
+        funnelSubsystem.runFunnelAtRPS(15);
+      }
       funnelSubsystem.rampUp();
-    } else {
+    } 
+    else {
       funnelSubsystem.maintainCurrentPosition();
     }
   }
