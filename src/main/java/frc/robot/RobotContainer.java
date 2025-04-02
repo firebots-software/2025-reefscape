@@ -10,6 +10,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -123,11 +125,11 @@ public class RobotContainer {
     //             ElevatorPositions.L1,
     //             redside,
     //             false));
-    customController.LeftL1().whileTrue(JamesHardenMovement.toClearHPS(driveTrain, redside, false));
+    customController.LeftL1().whileTrue(new InstantCommand(() -> driveTrain.setFieldSpeeds(new ChassisSpeeds(1, 0, 0))));
 
-    customController
-        .RightL1()
-        .whileTrue(JamesHardenMovement.toProcessorHPS(driveTrain, redside, false));
+    // customController
+    //     .RightL1()
+    //     .whileTrue(JamesHardenMovement.toProcessorHPS(driveTrain, redside, false));
 
     customController
         .LeftL2()

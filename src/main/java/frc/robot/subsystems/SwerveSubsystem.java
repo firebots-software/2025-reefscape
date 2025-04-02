@@ -7,10 +7,13 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -67,16 +70,16 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     qProfiledPIDController =
         new ProfiledPIDController(
-            3.25, // 3.4 not bad
-            0.3, // 345
-            0.0005, // 0.0015
+            1, // 3.4 not bad
+            0.4, // 345
+            0, // 0.0015
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND, 8.8)); // 8.25
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND-0.75, 7.5)); // 8.25 // 5 accel and 0.75 p was good
 
     headingProfiledPIDController =
         new ProfiledPIDController(
-            3.5, // 4 was good
-            0.4, //
+            1, // 4 was good
+            0.2, //
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE - 1.5, // -1 was good
@@ -282,7 +285,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   }
 
   public void setFieldSpeeds(ChassisSpeeds speeds) {
-    setControl(m_pathApplyFieldSpeeds.withSpeeds(speeds));
+    setControl(m_pathApplyFieldSpeeds.withSpeeds(speeds).withDriveRequestType(DriveRequestType.Velocity));
   }
 
   public Pose2d getPose() {

@@ -417,7 +417,7 @@ public final class Constants {
     public static enum SwerveDrivePIDValues {
       SERRANO(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
       PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619),
-      JAMES_HARDEN(0.041539, 0d, 0d, 0.14856, 0.12301, 0.0053369);
+      JAMES_HARDEN(0.14, 0d, 0d, 0.14856, 0.135, 0.0053369); //0.041539 //0.12301
       public final double KP, KI, KD, KS, KV, KA;
 
       SwerveDrivePIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
@@ -599,7 +599,7 @@ public final class Constants {
                 new CurrentLimitsConfigs()
                     .withStatorCurrentLimit(Amps.of(90.0))
                     .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(Amps.of(40.0))
+                    .withSupplyCurrentLimit(Amps.of(50.0)) // 40.0
                     .withSupplyCurrentLimitEnable(true));
     private static final TalonFXConfiguration STEER_INITIAL_CONFIGS =
         new TalonFXConfiguration()

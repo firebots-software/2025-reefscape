@@ -96,7 +96,8 @@ public class JamesHardenMovement extends Command {
   public void execute() {
     ChassisSpeeds speeds =
         swerve.calculateRequiredEdwardChassisSpeeds(targetPose, initialPathDistance);
-
+        
+    DogLog.log("JamesHardenMovement/TargetPose", targetPose);
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
     DogLog.log("JamesHardenMovement/TargetPoseHeading(deg)", targetPose.getRotation().getRadians());
@@ -105,6 +106,9 @@ public class JamesHardenMovement extends Command {
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(radps)", speeds.omegaRadiansPerSecond);
 
+    DogLog.log("JamesHardenMovement/ActualChassisSpeedsX(mps)", swerve.getFieldSpeeds().vxMetersPerSecond);
+    DogLog.log("JamesHardenMovement/ActualChassisSpeedsY(mps)", swerve.getFieldSpeeds().vyMetersPerSecond);
+    DogLog.log("JamesHardenMovement/ActualChassisSpeedsX(radps)", swerve.getFieldSpeeds().omegaRadiansPerSecond);
     swerve.setFieldSpeeds(speeds);
   }
 
