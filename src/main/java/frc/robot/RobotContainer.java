@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -49,6 +50,10 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
+import com.ctre.phoenix6.SignalLogger;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -125,98 +130,30 @@ public class RobotContainer {
     //             ElevatorPositions.L1,
     //             redside,
     //             false));
-    customController.LeftL1().whileTrue(new InstantCommand(() -> driveTrain.setFieldSpeeds(new ChassisSpeeds(1, 0, 0))));
 
     // customController
     //     .RightL1()
     //     .whileTrue(JamesHardenMovement.toProcessorHPS(driveTrain, redside, false));
 
-    customController
-        .LeftL2()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L2,
-                redside,
-                false));
-    customController
-        .LeftL3()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L3,
-                redside,
-                false));
-    customController
-        .LeftL4()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L4,
-                redside,
-                false));
+    //    joystick.povUp().onTrue(Commands.runOnce(SignalLogger::start));
+    //    joystick.povDown().onTrue(Commands.runOnce(SignalLogger::stop));
 
-    // // Right Elevator Levels
-    customController
-        .RightL1()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L1,
-                redside,
-                true));
-    customController
-        .RightL2()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L2,
-                redside,
-                true));
-    customController
-        .RightL3()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L3,
-                redside,
-                true));
-    customController
-        .RightL4()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L4,
-                redside,
-                true));
+    // * Joystick Y = quasistatic forward
+    // * Joystick A = quasistatic reverse
+    // * Joystick B = dynamic forward
+    // * Joystick X = dyanmic reverse
+    // *
+    //    joystick.y().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    //    joystick.a().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    //    joystick.b().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    //    joystick.x().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-    // Bottom Three Buttons
-    customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
-    customController
-        .In()
-        .whileTrue(
-            new RunFunnelAndTootsieInCommand(funnelSubsystem, tootsieSlideSubsystem)
-            // new UnjamFunnelAndIntake(
-            //     elevatorSubsystem,
-            //     funnelSubsystem,
-            //     tootsieSlideSubsystem)
-            ); // RunFunnelAndTootsieInCommand(funnelSubsystem,
-    // tootsieSlideSubsystem));
-    customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem));
+       customController.In().onTrue(Commands.runOnce(SignalLogger::start));
+       customController.Out().onTrue(Commands.runOnce(SignalLogger::stop));
+       customController.LeftL1().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+       customController.LeftL2().whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+       customController.LeftL3().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+       customController.LeftL4().whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Joystick 1:
 
