@@ -1,0 +1,22 @@
+package frc.robot.commandGroups;
+
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.FunnelCommands.RampUpFunnel;
+import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
+
+public class RunFunnelUntilDetectionSafeSmooth extends SequentialCommandGroup {
+  public RunFunnelUntilDetectionSafeSmooth(
+      ElevatorSubsystem elevatorSubsystem, FunnelSubsystem funnelSubsystem) {
+
+    addCommands(
+        new WaitCommand(0.2),
+        new RampUpFunnel(funnelSubsystem, elevatorSubsystem).until((BooleanSupplier)() -> {return !funnelSubsystem.isCoralCheckedIn();}),
+        new WaitCommand(0.3),
+        new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
+  }
+}
