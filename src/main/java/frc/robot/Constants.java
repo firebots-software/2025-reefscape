@@ -333,7 +333,7 @@ public final class Constants {
 
   public static final class Arm {
     // this is new code
-    public static final double PIVOT_GEAR_RATIO = 1 / 36d; // TODO
+    public static final double PIVOT_GEAR_RATIO = 1 / 25d; // TODO
 
     // end of new code
     public static final double STATOR_CURRENT_LIMIT_AMPS = 30.0;
