@@ -279,7 +279,7 @@ public class RobotContainer {
                         && elevatorSubsystem.atIntake()
                         && elevatorSubsystem.isAtPosition())
             .and(RobotModeTriggers.teleop());
-
+    
     funnelCheckout.onTrue(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
@@ -336,6 +336,8 @@ public class RobotContainer {
             // () -> joystick.rightTrigger().getAsBoolean(),
             redside,
             () -> joystick.rightTrigger().getAsBoolean(),
+            () -> customController.LeftL1().getAsBoolean(),
+            () -> customController.RightL1().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 

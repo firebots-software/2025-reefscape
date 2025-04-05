@@ -30,7 +30,7 @@ public class SwerveJoystickCommand extends Command {
   private final SwerveRequest.RobotCentric robotCentricDrive =
       new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
   private boolean squaredTurn;
-  private BooleanSupplier redSide;
+  private BooleanSupplier redSide, leftL1, rightL1;
   public SwerveJoystickCommand(
       DoubleSupplier frontBackFunction,
       DoubleSupplier leftRightFunction,
@@ -53,6 +53,8 @@ public class SwerveJoystickCommand extends Command {
     this.swerveDrivetrain = swerveSubsystem;
     this.fixedRotation = () -> false;
     this.redSide = () -> false;
+    this.leftL1 = () -> false;
+    this.rightL1 = () -> false;
     // Adds the subsystem as a requirement (prevents two commands from acting on subsystem at once)
     addRequirements(swerveDrivetrain);
   }
@@ -100,6 +102,8 @@ public class SwerveJoystickCommand extends Command {
       // SwerveSubsystem swerveSubsystem,
       BooleanSupplier redSide,
       BooleanSupplier targetRotationSupplier,
+      BooleanSupplier LeftL1,
+      BooleanSupplier RightL1,
       SwerveSubsystem swerveSubsystem) {
        this(
         frontBackFunction,
@@ -108,8 +112,10 @@ public class SwerveJoystickCommand extends Command {
         speedControlFunction,
         fieldRelativeFunction,
         swerveSubsystem);
-        this.fixedRotation = targetRotationSupplier;
-        this.redSide = redSide;
+      this.fixedRotation = targetRotationSupplier;
+      this.redSide = redSide;
+      this.leftL1 = LeftL1;
+      this.rightL1 = RightL1;
   }
 
   public SwerveJoystickCommand(
@@ -194,6 +200,20 @@ public class SwerveJoystickCommand extends Command {
     // Uses SwerveRequestFieldCentric (from java.frc.robot.util to apply module optimization)
     if(fixedRotation.getAsBoolean()){
       Rotation2d targetAngle = JamesHardenMovement.closestRotation(swerveDrivetrain, redSide);
+      if(leftL1.getAsBoolean()){
+        if(redSide.getAsBoolean()){
+          targetAngle = Constants.RedLandmarkPose.CLEAR_HPS.getPose().getRotation();
+        } else {
+          targetAngle = Constants.BlueLandmarkPose.CLEAR_HPS.getPose().getRotation();
+        }
+      }
+      if(rightL1.getAsBoolean()){
+        if(redSide.getAsBoolean()){
+          targetAngle = Constants.RedLandmarkPose.PROCESSOR_HPS.getPose().getRotation();
+        } else {
+          targetAngle = Constants.BlueLandmarkPose.PROCESSOR_HPS.getPose().getRotation();
+        }
+      }
       turn = swerveDrivetrain.calculateRequiredRotationalRate(targetAngle);
     }
     SwerveRequest drive =

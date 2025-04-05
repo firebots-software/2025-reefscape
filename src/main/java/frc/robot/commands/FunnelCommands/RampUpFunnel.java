@@ -45,7 +45,7 @@ public class RampUpFunnel extends Command {
     funnelSubsystem.maintainCurrentPosition();
     if (!interrupted) {
       funnelSubsystem.maintainCurrentPosition();
-      CoralPosition.setCoralInFunnel(true);
+      // CoralPosition.setCoralInFunnel(true);
     } else {
       funnelSubsystem.runFunnelAtRPS(Constants.FunnelConstants.RAMP_UP_SPEED);
     }

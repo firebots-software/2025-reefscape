@@ -45,14 +45,14 @@ public final class Constants {
 
   public static class HardenConstants {
     public static class EndWhenCloseEnough {
-      public static final double translationalToleranceTeleop = 0.43105229381;
+      public static final double translationalToleranceTeleop = 0.8d; // 0.43105229381 worked before
       public static final double translationalToleranceAuto = 1d;
       // public static final double translationalTolerance = 0.6;
       public static final double headingTolerance = 0.7853975; // Math.PI/4
     }
 
-    public static final double ffMinRadius = 0.2;
-    public static final double ffMaxRadius = 0.55; // 0.8 worked good
+    public static final double ffMinRadius = 0.2; // 0.2 worked good
+    public static final double ffMaxRadius = 0.65; // 0.8 worked good
 
     public static class RegularCommand {
       public static final double xyIndividualTolerance = 0.02;
