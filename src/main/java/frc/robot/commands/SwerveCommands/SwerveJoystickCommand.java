@@ -163,7 +163,7 @@ public class SwerveJoystickCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     // Applies SwerveDriveBrake (brakes the robot by turning wheels)
-    this.swerveDrivetrain.setControl(new SwerveRequest.SwerveDriveBrake());
+    this.swerveDrivetrain.setControl(new SwerveRequest.Idle());
   }
 
   @Override

@@ -70,11 +70,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     qProfiledPIDController =
         new ProfiledPIDController(
-            1, // 3.4 not bad
-            0.4, // 345
+            6, // 3.4 not bad
+            0, // 345
             0, // 0.0015
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND-0.75, 7.5)); // 8.25 // 5 accel and 0.75 p was good
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND-0.75, 7)); // 8.25 // 5 accel and 0.75 p was good
 
     headingProfiledPIDController =
         new ProfiledPIDController(
@@ -424,6 +424,13 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   @Override
   public void periodic() {
+    DogLog.log("subsystems/swerve/module0/drive/speedrps", this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
+    DogLog.log("subsystems/swerve/module0/drive/speedrps", this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
+    DogLog.log("subsystems/swerve/module0/drive/speedrps", this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
+    DogLog.log("subsystems/swerve/module0/drive/speedrps", this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
+    DogLog.log("subsystems/swerve/module0/drive/speedrps", this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
+    DogLog.log("subsystems/swerve/module0/drive/speedrps", this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
+    
     currentState = getState();
 
     if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {

@@ -37,6 +37,7 @@ import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
+import frc.robot.commands.SwerveCommands.ApplySwerveVoltage;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
@@ -125,7 +126,8 @@ public class RobotContainer {
     //             ElevatorPositions.L1,
     //             redside,
     //             false));
-    customController.LeftL1().whileTrue(new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(13.41100025177002, 6.457849025726318), new Rotation2d(Math.PI)), redAlliance));
+    customController.LeftL1().whileTrue(new ApplySwerveVoltage(driveTrain, 1.0));
+    customController.RightL1().whileTrue(new ApplySwerveVoltage(driveTrain, 2));
 
     // customController
     //     .RightL1()
@@ -163,16 +165,16 @@ public class RobotContainer {
                 false));
 
     // // Right Elevator Levels
-    customController
-        .RightL1()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L1,
-                redside,
-                true));
+    // customController
+    //     .RightL1()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L1,
+    //             redside,
+    //             true));
     customController
         .RightL2()
         .whileTrue(

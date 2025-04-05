@@ -99,8 +99,7 @@ public class VisionSystem extends SubsystemBase {
 
   public static VisionSystem getInstance(Constants.Vision.Cameras name) {
     if (systemList[name.ordinal()] == null) {
-      systemList[0] = new VisionSystem(name);
-      systemList[1] = new VisionSystem(name);
+      systemList[name.ordinal()] = new VisionSystem(name);
     }
 
     return systemList[name.ordinal()];
