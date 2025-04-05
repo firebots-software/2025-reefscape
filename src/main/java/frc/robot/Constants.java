@@ -52,7 +52,7 @@ public final class Constants {
     }
 
     public static final double ffMinRadius = 0.2; // 0.2 worked good
-    public static final double ffMaxRadius = 0.65; // 0.8 worked good
+    public static final double ffMaxRadius = 0.7; // 0.8 worked good
 
     public static class RegularCommand {
       public static final double xyIndividualTolerance = 0.02;
