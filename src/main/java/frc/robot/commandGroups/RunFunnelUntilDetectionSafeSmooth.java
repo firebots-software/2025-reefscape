@@ -14,7 +14,7 @@ public class RunFunnelUntilDetectionSafeSmooth extends SequentialCommandGroup {
       ElevatorSubsystem elevatorSubsystem, FunnelSubsystem funnelSubsystem) {
 
     addCommands(
-        new WaitCommand(0.2),
+        new WaitCommand(0.1),
         new RampUpFunnel(funnelSubsystem, elevatorSubsystem).until((BooleanSupplier)() -> {return !funnelSubsystem.isCoralCheckedIn();}),
         new WaitCommand(0.3),
         new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));

@@ -15,6 +15,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -67,11 +68,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     }
 
     currentState = getState(); // getCurrentState
-
+    // 1.7, 0.345, 0.0015
     qProfiledPIDController =
         new ProfiledPIDController(
-            1.7, // 3.4 not bad
-            0.345, // 345
+            3.4, // 3.4 not bad
+            0.3, // 345
             0.0015, // 0.0015
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND-0.75, 7.25)); // 8.25 // 5 accel and 0.75 p was good
@@ -309,10 +310,14 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   public ChassisSpeeds calculateRequiredEdwardChassisSpeeds(
       Pose2d targetPose, double completePathDistance) {
-    double distanceToTarget =
-        getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation());
+    double distanceToTarget = getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation());
+    double ffScaler = MathUtil.clamp(
+                (distanceToTarget - Constants.HardenConstants.ffMinRadius) / (Constants.HardenConstants.ffMaxRadius - Constants.HardenConstants.ffMinRadius),
+                0.0,
+                1.0);    
+
     double qSpeed =
-        qProfiledPIDController.getSetpoint().velocity
+        (qProfiledPIDController.getSetpoint().velocity*ffScaler)
             + qProfiledPIDController.calculate(
                 completePathDistance - distanceToTarget, completePathDistance);
     double omega =
