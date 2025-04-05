@@ -70,21 +70,30 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     qProfiledPIDController =
         new ProfiledPIDController(
-            2, // 3.4 not bad
+            1.7, // 3.4 not bad
             0.345, // 345
-            0, // 0.0015
+            0.0015, // 0.0015
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND-0.75, 7)); // 8.25 // 5 accel and 0.75 p was good
+                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND-0.75, 7.25)); // 8.25 // 5 accel and 0.75 p was good
 
     headingProfiledPIDController =
         new ProfiledPIDController(
-            1, // 4 was good
-            0.2, //
+            3.5, // 4 was good
+            0.4, //
             0,
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE - 1.5, // -1 was good
                 Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND
                     - 16)); // -13 was good
+    // headingProfiledPIDController =
+    //     new ProfiledPIDController(
+    //         1, // 4 was good
+    //         0.2, //
+    //         0,
+    //         new TrapezoidProfile.Constraints(
+    //             Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE - 1.5, // -1 was good
+    //             Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND
+    //                 - 16)); // -13 was good
 
     qProfiledPIDController.setIZone(0.35);
     headingProfiledPIDController.setIZone(0.14);
@@ -307,8 +316,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             + qProfiledPIDController.calculate(
                 completePathDistance - distanceToTarget, completePathDistance);
     double omega =
-        headingProfiledPIDController.getSetpoint().velocity
-            + headingProfiledPIDController.calculate(
+        // headingProfiledPIDController.getSetpoint().velocity+
+        headingProfiledPIDController.calculate(
                 currentState.Pose.getRotation().getRadians(),
                 targetPose.getRotation().getRadians());
 

@@ -158,7 +158,9 @@ public class JamesHardenMovement extends Command {
           && (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
               < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
           && (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot - currRot))
-              < Constants.HardenConstants.RegularCommand.headingTolerance)) {
+              < Constants.HardenConstants.RegularCommand.headingTolerance)
+          && (Math.sqrt((swerve.getFieldSpeeds().vxMetersPerSecond*swerve.getFieldSpeeds().vxMetersPerSecond) + (swerve.getFieldSpeeds().vyMetersPerSecond * swerve.getFieldSpeeds().vyMetersPerSecond)) <= 0.2)
+              ) {
         DogLog.log("JamesHardenMovement/End", true);
         return true;
       } else return false;
