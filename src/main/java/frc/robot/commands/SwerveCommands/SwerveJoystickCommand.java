@@ -4,11 +4,13 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class SwerveJoystickCommand extends Command {
   protected final DoubleSupplier xSpdFunction,
@@ -22,13 +24,13 @@ public class SwerveJoystickCommand extends Command {
   protected final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
   protected final SwerveSubsystem swerveDrivetrain;
-
+  protected BooleanSupplier fixedRotation;
   private final SwerveRequest.FieldCentric fieldCentricDrive =
       new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity);
   private final SwerveRequest.RobotCentric robotCentricDrive =
       new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
   private boolean squaredTurn;
-
+  private BooleanSupplier redSide;
   public SwerveJoystickCommand(
       DoubleSupplier frontBackFunction,
       DoubleSupplier leftRightFunction,
@@ -49,7 +51,8 @@ public class SwerveJoystickCommand extends Command {
     this.turningLimiter =
         new SlewRateLimiter(Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND);
     this.swerveDrivetrain = swerveSubsystem;
-
+    this.fixedRotation = () -> false;
+    this.redSide = () -> false;
     // Adds the subsystem as a requirement (prevents two commands from acting on subsystem at once)
     addRequirements(swerveDrivetrain);
   }
@@ -69,6 +72,44 @@ public class SwerveJoystickCommand extends Command {
         speedControlFunction,
         () -> false,
         swerveSubsystem);
+  }
+  // //anthony's
+  // public SwerveJoystickCommand(
+  //     DoubleSupplier frontBackFunction,
+  //     DoubleSupplier leftRightFunction,
+  //     DoubleSupplier speedControlFunction,
+  //     BooleanSupplier fieldRelativeFunction,
+  //     SwerveSubsystem swerveSubsystem,
+  //     Supplier<Rotation2d> targetRotationSupplier) {
+  //      this(
+  //       frontBackFunction,
+  //       leftRightFunction,
+  //       () -> swerveSubsystem.calculateRequiredRotationalRate(targetRotationSupplier.get()),
+  //       speedControlFunction,
+  //       fieldRelativeFunction,
+  //       swerveSubsystem);
+  // }
+
+    //setty
+    public SwerveJoystickCommand(
+      DoubleSupplier frontBackFunction,
+      DoubleSupplier leftRightFunction,
+      DoubleSupplier turningSpdFunction,
+      DoubleSupplier speedControlFunction,
+      BooleanSupplier fieldRelativeFunction,
+      // SwerveSubsystem swerveSubsystem,
+      BooleanSupplier redSide,
+      BooleanSupplier targetRotationSupplier,
+      SwerveSubsystem swerveSubsystem) {
+       this(
+        frontBackFunction,
+        leftRightFunction,
+        turningSpdFunction,
+        speedControlFunction,
+        fieldRelativeFunction,
+        swerveSubsystem);
+        this.fixedRotation = targetRotationSupplier;
+        this.redSide = redSide;
   }
 
   public SwerveJoystickCommand(
@@ -143,7 +184,7 @@ public class SwerveJoystickCommand extends Command {
     // Final values to apply to drivetrain
     final double x = xSpeed;
     final double y = ySpeed;
-    final double turn = turningSpeed;
+    double turn = turningSpeed;
 
     DogLog.log("joystickCommand/xSpeed", xSpeed);
     DogLog.log("joystickCommand/ySpeed", ySpeed);
@@ -151,6 +192,10 @@ public class SwerveJoystickCommand extends Command {
     DogLog.log("fieldCentric", fieldRelativeFunction.getAsBoolean());
     // 5. Applying the drive request on the swerve drivetrain
     // Uses SwerveRequestFieldCentric (from java.frc.robot.util to apply module optimization)
+    if(fixedRotation.getAsBoolean()){
+      Rotation2d targetAngle = JamesHardenMovement.closestRotation(swerveDrivetrain, redSide);
+      turn = swerveDrivetrain.calculateRequiredRotationalRate(targetAngle);
+    }
     SwerveRequest drive =
         !fieldRelativeFunction.getAsBoolean()
             ? fieldCentricDrive.withVelocityX(x).withVelocityY(y).withRotationalRate(turn)

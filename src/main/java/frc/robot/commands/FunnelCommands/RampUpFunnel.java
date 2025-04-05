@@ -21,6 +21,7 @@ public class RampUpFunnel extends Command {
   @Override
   public void initialize() {
     // Store the position of the coral when it was first checked out.
+    funnelSubsystem.rampUp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -30,19 +31,23 @@ public class RampUpFunnel extends Command {
       if(funnelSubsystem.getSpeed() > Constants.FunnelConstants.RAMP_UP_SPEED - tolerance && funnelSubsystem.getSpeed() < Constants.FunnelConstants.RAMP_UP_SPEED + tolerance){
         funnelSubsystem.runFunnelAtRPS(Constants.FunnelConstants.RAMP_UP_SPEED);
       }
-      funnelSubsystem.rampUp();
+      // funnelSubsystem.rampUp();
     } 
     else {
-      funnelSubsystem.maintainCurrentPosition();
+      // funnelSubsystem.maintainCurrentPosition();
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    funnelSubsystem.resetFunnelMotor();
     funnelSubsystem.maintainCurrentPosition();
     if (!interrupted) {
+      funnelSubsystem.maintainCurrentPosition();
       CoralPosition.setCoralInFunnel(true);
+    } else {
+      funnelSubsystem.runFunnelAtRPS(Constants.FunnelConstants.RAMP_UP_SPEED);
     }
   }
 

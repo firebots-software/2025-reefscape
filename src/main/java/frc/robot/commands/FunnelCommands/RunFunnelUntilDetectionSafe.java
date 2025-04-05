@@ -28,7 +28,9 @@ public class RunFunnelUntilDetectionSafe extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // funnelSubsystem.resetFunnelMotor();
     // Store the position of the coral when it was first checked out.
+    funnelSubsystem.resetFunnelMotor();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,6 +46,7 @@ public class RunFunnelUntilDetectionSafe extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    funnelSubsystem.resetFunnelMotor();
     funnelSubsystem.maintainCurrentPosition();
     if (!interrupted) {
       CoralPosition.setCoralInFunnel(true);

@@ -126,9 +126,10 @@ public class RobotContainer {
     //             ElevatorPositions.L1,
     //             redside,
     //             false));
-    customController.LeftL1().whileTrue(new ApplySwerveVoltage(driveTrain, 1.0));
-    customController.RightL1().whileTrue(new ApplySwerveVoltage(driveTrain, 2));
+    // customController.LeftL1().whileTrue(new ApplySwerveVoltage(driveTrain, 1.0));
+    // customController.RightL1().whileTrue(new ApplySwerveVoltage(driveTrain, 2));
 
+    // customController.LeftL1().whileTrue(new SwerveJoystickCommand(null, null,  null, driveTrain, redAlliance, ))
     // customController.LeftL1().whileTrue(new JamesHardenMovement(driveTrain, null, redAlliance));
     // customController
     //     .RightL1()
@@ -332,6 +333,9 @@ public class RobotContainer {
             rotationFunction,
             speedFunction, // slowmode when left shoulder is pressed, otherwise fast
             () -> joystick.leftTrigger().getAsBoolean(),
+            // () -> joystick.rightTrigger().getAsBoolean(),
+            redside,
+            () -> joystick.rightTrigger().getAsBoolean(),
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 

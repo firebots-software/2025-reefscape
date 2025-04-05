@@ -2,6 +2,7 @@ package frc.robot.commands.SwerveCommands;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -184,6 +185,33 @@ public class JamesHardenMovement extends Command {
     return new JamesHardenMovement(swerve, () -> branch.get().getPose(), noTolerance);
   }
 
+
+  public static Rotation2d closestRotation(SwerveSubsystem swerve, BooleanSupplier redSide){
+      Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
+      if (redSide.getAsBoolean()) {
+        double minDist =
+            currPosition.getDistance(RedLandmarkPose.L0.getPose().getTranslation());
+        RedLandmarkPose branchOfMinDist = RedLandmarkPose.L0;
+        for (RedLandmarkPose branch : redBranchesL) {
+          if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
+            minDist = currPosition.getDistance(branch.getPose().getTranslation());
+            branchOfMinDist = branch;
+          }
+        }
+        return branchOfMinDist.getPose().getRotation();
+      } else {
+        double minDist =
+            currPosition.getDistance(BlueLandmarkPose.L0.getPose().getTranslation());
+        BlueLandmarkPose branchOfMinDist = BlueLandmarkPose.L0;
+        for (BlueLandmarkPose branch : blueBranchesL) {
+          if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
+            minDist = currPosition.getDistance(branch.getPose().getTranslation());
+            branchOfMinDist = branch;
+          }
+        }
+        return branchOfMinDist.getPose().getRotation();
+      }
+  }
   public static JamesHardenMovement toClosestLeftBranch(
       SwerveSubsystem swerve, BooleanSupplier redSide, boolean noTolerance) {
 
