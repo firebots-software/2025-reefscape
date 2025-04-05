@@ -125,7 +125,7 @@ public class RobotContainer {
     //             ElevatorPositions.L1,
     //             redside,
     //             false));
-    customController.LeftL1().whileTrue(new InstantCommand(() -> driveTrain.setFieldSpeeds(new ChassisSpeeds(1, 0, 0))));
+    customController.LeftL1().whileTrue(new JamesHardenMovement(driveTrain, new Pose2d(new Translation2d(13.41100025177002, 6.457849025726318), new Rotation2d(Math.PI)), redAlliance));
 
     // customController
     //     .RightL1()

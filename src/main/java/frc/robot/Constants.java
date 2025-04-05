@@ -19,6 +19,9 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
+import frc.robot.Constants.Swerve.Simulation;
+import frc.robot.Constants.Swerve.SwerveType;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -417,7 +420,7 @@ public final class Constants {
     public static enum SwerveDrivePIDValues {
       SERRANO(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
       PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619),
-      JAMES_HARDEN(0.14, 0d, 0d, 0.14856, 0.135, 0.0053369); //0.041539 //0.12301
+      JAMES_HARDEN(0.16901, 0d, 0d, 0.1593, 0.12143, 0.0091321); //0.041539 //0.12301
       public final double KP, KI, KD, KS, KV, KA;
 
       SwerveDrivePIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
@@ -433,7 +436,7 @@ public final class Constants {
     public static enum SwerveSteerPIDValues {
       SERRANO(50d, 0d, 0.2, 0d, 1.5, 0d),
       PROTO(20d, 0d, 0d, 0d, 0d, 0d),
-      JAMES_HARDEN(50d, 0d, 0d, 0d, 0d, 0d);
+      JAMES_HARDEN(38.982d, 2.4768d, 0d, 0.23791d, 0d, 0.1151d);
       public final double KP, KI, KD, KS, KV, KA;
 
       SwerveSteerPIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
