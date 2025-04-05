@@ -26,8 +26,8 @@ public class RampUpFunnel extends Command {
   @Override
   public void execute() {
     if (elevatorSubsystem.isAtPosition()) {
-      if(funnelSubsystem.getSpeed() > 15 - tolerance && funnelSubsystem.getSpeed() < 15 + tolerance){
-        funnelSubsystem.runFunnelAtRPS(15);
+      if(funnelSubsystem.getSpeed() > 20 - tolerance && funnelSubsystem.getSpeed() < 20 + tolerance){
+        funnelSubsystem.runFunnelAtRPS(20);
       }
       funnelSubsystem.rampUp();
     } 

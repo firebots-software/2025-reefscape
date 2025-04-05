@@ -84,6 +84,7 @@ public class JamesHardenMovement extends Command {
   @Override
   public void initialize() {
     this.translationalToleranceMetCycleCounter = 0;
+    
     if (targetPoseSupplier != null) {
       targetPose = targetPoseSupplier.get();
     }
@@ -96,7 +97,7 @@ public class JamesHardenMovement extends Command {
   public void execute() {
     ChassisSpeeds speeds =
         swerve.calculateRequiredEdwardChassisSpeeds(targetPose, initialPathDistance);
-        
+    
     DogLog.log("JamesHardenMovement/TargetPose", targetPose);
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
