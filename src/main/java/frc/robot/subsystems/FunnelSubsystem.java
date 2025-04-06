@@ -117,16 +117,13 @@ public class FunnelSubsystem extends SubsystemBase {
   }
 
   public void rampUp() {
-    rightMotor.setControl(velocityRequest.withVelocity(Constants.FunnelConstants.RAMP_UP_SPEED).withAcceleration(55));
+    rightMotor.setControl(
+        velocityRequest.withVelocity(Constants.FunnelConstants.RAMP_UP_SPEED).withAcceleration(55));
   }
-
-
 
   public void spinFunnel() {
     runFunnelAtRPS(Constants.FunnelConstants.SPEED_RPS);
   }
-
-
 
   public void stopFunnel() {
     rightMotor.stopMotor();
@@ -141,17 +138,16 @@ public class FunnelSubsystem extends SubsystemBase {
         rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
   }
 
-  public void resetFunnelMotor(){
+  public void resetFunnelMotor() {
     rightMotor.setPosition(0);
   }
 
   public void maintainCurrentPosition() {
     // TODO: This code should maintain the current position of the elevator
-    if(rightMotor.getPosition().getValueAsDouble() > 1.0){
+    if (rightMotor.getPosition().getValueAsDouble() > 1.0) {
       rightMotor.setPosition(0.0);
     }
-    rightMotor.setControl(
-        controlRequest.withPosition(0).withSlot(0));
+    rightMotor.setControl(controlRequest.withPosition(0).withSlot(0));
     // rightMotor.setPosition(0);
     // rightMotor.setControl(controlRequest.withPosition(0).withSlot(0));
     // rightMotor.setPosition(0);
@@ -168,7 +164,7 @@ public class FunnelSubsystem extends SubsystemBase {
     runFunnelAtRPS(-Constants.FunnelConstants.SPEED_RPS);
   }
 
-  public double getSpeed(){
+  public double getSpeed() {
     return rightMotor.getVelocity().getValueAsDouble();
   }
 

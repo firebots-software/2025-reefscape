@@ -2,7 +2,6 @@ package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 
@@ -28,12 +27,12 @@ public class RampUpFunnel extends Command {
   @Override
   public void execute() {
     if (elevatorSubsystem.isAtPosition()) {
-      if(funnelSubsystem.getSpeed() > Constants.FunnelConstants.RAMP_UP_SPEED - tolerance && funnelSubsystem.getSpeed() < Constants.FunnelConstants.RAMP_UP_SPEED + tolerance){
+      if (funnelSubsystem.getSpeed() > Constants.FunnelConstants.RAMP_UP_SPEED - tolerance
+          && funnelSubsystem.getSpeed() < Constants.FunnelConstants.RAMP_UP_SPEED + tolerance) {
         funnelSubsystem.runFunnelAtRPS(Constants.FunnelConstants.RAMP_UP_SPEED);
       }
       // funnelSubsystem.rampUp();
-    } 
-    else {
+    } else {
       // funnelSubsystem.maintainCurrentPosition();
     }
   }

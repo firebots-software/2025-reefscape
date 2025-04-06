@@ -85,7 +85,7 @@ public class JamesHardenMovement extends Command {
   @Override
   public void initialize() {
     this.translationalToleranceMetCycleCounter = 0;
-    
+
     if (targetPoseSupplier != null) {
       targetPose = targetPoseSupplier.get();
     }
@@ -98,7 +98,7 @@ public class JamesHardenMovement extends Command {
   public void execute() {
     ChassisSpeeds speeds =
         swerve.calculateRequiredEdwardChassisSpeeds(targetPose, initialPathDistance);
-    
+
     DogLog.log("JamesHardenMovement/TargetPose", targetPose);
     DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
     DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
@@ -108,9 +108,13 @@ public class JamesHardenMovement extends Command {
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
     DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(radps)", speeds.omegaRadiansPerSecond);
 
-    DogLog.log("JamesHardenMovement/ActualChassisSpeedsX(mps)", swerve.getFieldSpeeds().vxMetersPerSecond);
-    DogLog.log("JamesHardenMovement/ActualChassisSpeedsY(mps)", swerve.getFieldSpeeds().vyMetersPerSecond);
-    DogLog.log("JamesHardenMovement/ActualChassisSpeedsX(radps)", swerve.getFieldSpeeds().omegaRadiansPerSecond);
+    DogLog.log(
+        "JamesHardenMovement/ActualChassisSpeedsX(mps)", swerve.getFieldSpeeds().vxMetersPerSecond);
+    DogLog.log(
+        "JamesHardenMovement/ActualChassisSpeedsY(mps)", swerve.getFieldSpeeds().vyMetersPerSecond);
+    DogLog.log(
+        "JamesHardenMovement/ActualChassisSpeedsX(radps)",
+        swerve.getFieldSpeeds().omegaRadiansPerSecond);
     swerve.setFieldSpeeds(speeds);
   }
 
@@ -160,8 +164,12 @@ public class JamesHardenMovement extends Command {
               < Constants.HardenConstants.RegularCommand.xyIndividualTolerance)
           && (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot - currRot))
               < Constants.HardenConstants.RegularCommand.headingTolerance)
-          && (Math.sqrt((swerve.getFieldSpeeds().vxMetersPerSecond*swerve.getFieldSpeeds().vxMetersPerSecond) + (swerve.getFieldSpeeds().vyMetersPerSecond * swerve.getFieldSpeeds().vyMetersPerSecond)) <= 0.2)
-              ) {
+          && (Math.sqrt(
+                  (swerve.getFieldSpeeds().vxMetersPerSecond
+                          * swerve.getFieldSpeeds().vxMetersPerSecond)
+                      + (swerve.getFieldSpeeds().vyMetersPerSecond
+                          * swerve.getFieldSpeeds().vyMetersPerSecond))
+              <= 0.2)) {
         DogLog.log("JamesHardenMovement/End", true);
         return true;
       } else return false;
@@ -185,33 +193,31 @@ public class JamesHardenMovement extends Command {
     return new JamesHardenMovement(swerve, () -> branch.get().getPose(), noTolerance);
   }
 
-
-  public static Rotation2d closestRotation(SwerveSubsystem swerve, BooleanSupplier redSide){
-      Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
-      if (redSide.getAsBoolean()) {
-        double minDist =
-            currPosition.getDistance(RedLandmarkPose.L0.getPose().getTranslation());
-        RedLandmarkPose branchOfMinDist = RedLandmarkPose.L0;
-        for (RedLandmarkPose branch : redBranchesL) {
-          if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
-            minDist = currPosition.getDistance(branch.getPose().getTranslation());
-            branchOfMinDist = branch;
-          }
+  public static Rotation2d closestRotation(SwerveSubsystem swerve, BooleanSupplier redSide) {
+    Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
+    if (redSide.getAsBoolean()) {
+      double minDist = currPosition.getDistance(RedLandmarkPose.L0.getPose().getTranslation());
+      RedLandmarkPose branchOfMinDist = RedLandmarkPose.L0;
+      for (RedLandmarkPose branch : redBranchesL) {
+        if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
+          minDist = currPosition.getDistance(branch.getPose().getTranslation());
+          branchOfMinDist = branch;
         }
-        return branchOfMinDist.getPose().getRotation();
-      } else {
-        double minDist =
-            currPosition.getDistance(BlueLandmarkPose.L0.getPose().getTranslation());
-        BlueLandmarkPose branchOfMinDist = BlueLandmarkPose.L0;
-        for (BlueLandmarkPose branch : blueBranchesL) {
-          if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
-            minDist = currPosition.getDistance(branch.getPose().getTranslation());
-            branchOfMinDist = branch;
-          }
-        }
-        return branchOfMinDist.getPose().getRotation();
       }
+      return branchOfMinDist.getPose().getRotation();
+    } else {
+      double minDist = currPosition.getDistance(BlueLandmarkPose.L0.getPose().getTranslation());
+      BlueLandmarkPose branchOfMinDist = BlueLandmarkPose.L0;
+      for (BlueLandmarkPose branch : blueBranchesL) {
+        if (currPosition.getDistance(branch.getPose().getTranslation()) < minDist) {
+          minDist = currPosition.getDistance(branch.getPose().getTranslation());
+          branchOfMinDist = branch;
+        }
+      }
+      return branchOfMinDist.getPose().getRotation();
+    }
   }
+
   public static JamesHardenMovement toClosestLeftBranch(
       SwerveSubsystem swerve, BooleanSupplier redSide, boolean noTolerance) {
 

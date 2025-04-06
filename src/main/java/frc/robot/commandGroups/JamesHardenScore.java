@@ -1,7 +1,6 @@
 package frc.robot.commandGroups;
 
 import dev.doglog.DogLog;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -74,13 +73,16 @@ public class JamesHardenScore extends SequentialCommandGroup {
     // if (DriverStation.isTeleop()) {
     DogLog.log("JamesHardenScore/Version", "teleop");
     addCommands(
-      maintainCommand.alongWith(
-            (new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d()))
-                .andThen(elevateCommand)).alongWith(
-        new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d(), 2.8284271247).andThen(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5))));
-                // )
-        // new ParallelDeadlineGroup(
-        //     new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
+        maintainCommand
+            .alongWith(
+                (new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d()))
+                    .andThen(elevateCommand))
+            .alongWith(
+                new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d(), 2.8284271247)
+                    .andThen(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5))));
+    // )
+    // new ParallelDeadlineGroup(
+    //     new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
     // } else {
     //   DogLog.log("JamesHardenScore/Version", "auto");
     //   addCommands(

@@ -10,7 +10,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -18,7 +17,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -36,8 +34,6 @@ import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
-import frc.robot.commands.SwerveCommands.JamesHardenMovement;
-import frc.robot.commands.SwerveCommands.ApplySwerveVoltage;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
@@ -129,7 +125,8 @@ public class RobotContainer {
     // customController.LeftL1().whileTrue(new ApplySwerveVoltage(driveTrain, 1.0));
     // customController.RightL1().whileTrue(new ApplySwerveVoltage(driveTrain, 2));
 
-    // customController.LeftL1().whileTrue(new SwerveJoystickCommand(null, null,  null, driveTrain, redAlliance, ))
+    // customController.LeftL1().whileTrue(new SwerveJoystickCommand(null, null,  null, driveTrain,
+    // redAlliance, ))
     // customController.LeftL1().whileTrue(new JamesHardenMovement(driveTrain, null, redAlliance));
     // customController
     //     .RightL1()
@@ -279,7 +276,7 @@ public class RobotContainer {
                         && elevatorSubsystem.atIntake()
                         && elevatorSubsystem.isAtPosition())
             .and(RobotModeTriggers.teleop());
-    
+
     funnelCheckout.onTrue(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));

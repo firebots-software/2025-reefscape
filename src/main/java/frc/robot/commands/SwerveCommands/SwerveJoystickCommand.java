@@ -10,7 +10,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 public class SwerveJoystickCommand extends Command {
   protected final DoubleSupplier xSpdFunction,
@@ -31,6 +30,7 @@ public class SwerveJoystickCommand extends Command {
       new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
   private boolean squaredTurn;
   private BooleanSupplier redSide, leftL1, rightL1;
+
   public SwerveJoystickCommand(
       DoubleSupplier frontBackFunction,
       DoubleSupplier leftRightFunction,
@@ -75,6 +75,7 @@ public class SwerveJoystickCommand extends Command {
         () -> false,
         swerveSubsystem);
   }
+
   // //anthony's
   // public SwerveJoystickCommand(
   //     DoubleSupplier frontBackFunction,
@@ -92,8 +93,8 @@ public class SwerveJoystickCommand extends Command {
   //       swerveSubsystem);
   // }
 
-    //setty
-    public SwerveJoystickCommand(
+  // setty
+  public SwerveJoystickCommand(
       DoubleSupplier frontBackFunction,
       DoubleSupplier leftRightFunction,
       DoubleSupplier turningSpdFunction,
@@ -105,17 +106,17 @@ public class SwerveJoystickCommand extends Command {
       BooleanSupplier LeftL1,
       BooleanSupplier RightL1,
       SwerveSubsystem swerveSubsystem) {
-       this(
+    this(
         frontBackFunction,
         leftRightFunction,
         turningSpdFunction,
         speedControlFunction,
         fieldRelativeFunction,
         swerveSubsystem);
-      this.fixedRotation = targetRotationSupplier;
-      this.redSide = redSide;
-      this.leftL1 = LeftL1;
-      this.rightL1 = RightL1;
+    this.fixedRotation = targetRotationSupplier;
+    this.redSide = redSide;
+    this.leftL1 = LeftL1;
+    this.rightL1 = RightL1;
   }
 
   public SwerveJoystickCommand(
@@ -198,17 +199,17 @@ public class SwerveJoystickCommand extends Command {
     DogLog.log("fieldCentric", fieldRelativeFunction.getAsBoolean());
     // 5. Applying the drive request on the swerve drivetrain
     // Uses SwerveRequestFieldCentric (from java.frc.robot.util to apply module optimization)
-    if(fixedRotation.getAsBoolean()){
+    if (fixedRotation.getAsBoolean()) {
       Rotation2d targetAngle = JamesHardenMovement.closestRotation(swerveDrivetrain, redSide);
-      if(leftL1.getAsBoolean()){
-        if(redSide.getAsBoolean()){
+      if (leftL1.getAsBoolean()) {
+        if (redSide.getAsBoolean()) {
           targetAngle = Constants.RedLandmarkPose.CLEAR_HPS.getPose().getRotation();
         } else {
           targetAngle = Constants.BlueLandmarkPose.CLEAR_HPS.getPose().getRotation();
         }
       }
-      if(rightL1.getAsBoolean()){
-        if(redSide.getAsBoolean()){
+      if (rightL1.getAsBoolean()) {
+        if (redSide.getAsBoolean()) {
           targetAngle = Constants.RedLandmarkPose.PROCESSOR_HPS.getPose().getRotation();
         } else {
           targetAngle = Constants.BlueLandmarkPose.PROCESSOR_HPS.getPose().getRotation();
