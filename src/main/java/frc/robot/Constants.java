@@ -424,7 +424,7 @@ public final class Constants {
       SERRANO(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
       PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619),
       // JAMES_HARDEN(0.16901, 0d, 0d, 0.1593, 0.12143, 0.0091321); //0.041539 //0.12301
-      JAMES_HARDEN(0.3, 0d, 0d, 0.2425, 0.11560693641, 0); //0.041539 //0.12301
+      JAMES_HARDEN(0.36, 0d, 0d, 0.2425, 0.11560693641, 0); //0.041539 //0.12301
       public final double KP, KI, KD, KS, KV, KA;
 
       SwerveDrivePIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
@@ -859,7 +859,7 @@ public final class Constants {
     public static final double ACCELERATION = 10.0; // TODO
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
-    public static final double SPEED_RPS = 11d; // 15.0
+    public static final double SPEED_RPS = 10d; // 15.0
     public static final double GEAR_RATIO = 1d / 5d;
 
     public static final int CHECK_IN_PORT = 1;
@@ -889,8 +889,8 @@ public final class Constants {
     public static double S0C_KA = 0.0004657452997; // 0.04
     public static double S0C_KV = 0.124; // 10.66
 
-    public static final double MOTIONMAGIC_MAX_VELOCITY = 60;
-    public static final double MOTIONMAGIC_MAX_ACCELERATION = 125;
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 90;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 250;
 
     public static double SENSOR_OFFSET = 0.11;
     // public static final double MOTIONMAGIC_KG = 0.28;
@@ -926,7 +926,7 @@ public final class Constants {
       L3(
           3,
           1.285 - 0.02 + elevatorRecalibration), // 1.27 // KALASH wants 1cm lower //old value 1.32
-      L4(4, 1.835), // 1.81
+      L4(4, 1.75), // 1.81
       LIMIT_OF_TRAVEL(1, 1.825 + 0.025); // 1.825
 
       public final int position;

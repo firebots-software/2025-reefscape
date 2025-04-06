@@ -117,7 +117,7 @@ public class FunnelSubsystem extends SubsystemBase {
   }
 
   public void rampUp() {
-    rightMotor.setControl(velocityRequest.withVelocity(Constants.FunnelConstants.RAMP_UP_SPEED).withAcceleration(70));
+    rightMotor.setControl(velocityRequest.withVelocity(Constants.FunnelConstants.RAMP_UP_SPEED).withAcceleration(55));
   }
 
 

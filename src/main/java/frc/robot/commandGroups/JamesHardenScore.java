@@ -71,24 +71,27 @@ public class JamesHardenScore extends SequentialCommandGroup {
     } else {
       elevateCommand = new SetElevatorLevel(elevatorSubsystem, height, true);
     }
-    if (DriverStation.isTeleop()) {
-      DogLog.log("JamesHardenScore/Version", "teleop");
-      addCommands(
-          movementCommand.alongWith(
-              (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
-                  .andThen(elevateCommand)),
-          new ParallelDeadlineGroup(
-              new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
-    } else {
-      DogLog.log("JamesHardenScore/Version", "auto");
-      addCommands(
-          movementCommand
-              .withTimeout(5.0)
-              .alongWith(
-                  (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
-                      .andThen(elevateCommand)),
-          new ParallelDeadlineGroup(
-              new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
-    }
+    // if (DriverStation.isTeleop()) {
+    DogLog.log("JamesHardenScore/Version", "teleop");
+    addCommands(
+      maintainCommand.alongWith(
+            (new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d()))
+                .andThen(elevateCommand)).alongWith(
+        new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d(), 2.8284271247).andThen(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5))));
+                // )
+        // new ParallelDeadlineGroup(
+        //     new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
+    // } else {
+    //   DogLog.log("JamesHardenScore/Version", "auto");
+    //   addCommands(
+    //       movementCommand
+    //           .withTimeout(5.0)
+    //           .alongWith(
+    //               (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
+    //                   .andThen(elevateCommand)),
+    //       new ParallelDeadlineGroup(
+    //           new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
+    //       new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d(), 2.8284271247);
+    // }
   }
 }
