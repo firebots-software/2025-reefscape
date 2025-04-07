@@ -21,6 +21,7 @@ import frc.robot.commands.FunnelCommands.CoralCheckedIn;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -52,7 +53,7 @@ public class AutoProducer extends SequentialCommandGroup {
                 JamesHardenMovement.toSpecificBranch(
                     driveTrain, () -> autoInformation.get(1), false))),
         new JamesHardenScore(
-            elevator, shooter, driveTrain, ElevatorPositions.L4, autoInformation.get(1)),
+            elevator, shooter, driveTrain, ElevatorPositions.L4, autoInformation.get(1)).until(() -> !CoralPosition.isCoralInTootsieSlide()),
         new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
 
     if (autoInformation.size() > 2) {
@@ -98,7 +99,8 @@ public class AutoProducer extends SequentialCommandGroup {
                 .andThen(
                     new EndWhenCloseEnough(
                         () -> movementCommand.getTargetPose2d(),
-                        Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceAuto))
+                        Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceAuto,
+                        Constants.HardenConstants.EndWhenCloseEnough.headingTolerance))
                 .andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4, true)),
 
             // Movement related

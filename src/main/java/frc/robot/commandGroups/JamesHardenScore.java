@@ -4,6 +4,7 @@ import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.Constants.LandmarkPose;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -78,7 +79,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
                 (new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d()))
                     .andThen(elevateCommand))
             .alongWith(
-                new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d(), 2.8284271247)
+                new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d(), Constants.HardenConstants.RegularCommand.xyIndividualTolerance * Math.sqrt(2), Constants.HardenConstants.RegularCommand.headingTolerance)
                     .andThen(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5))));
     // )
     // new ParallelDeadlineGroup(
