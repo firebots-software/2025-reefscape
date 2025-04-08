@@ -54,9 +54,9 @@ public class JamesHardenScore extends SequentialCommandGroup {
     //         .alongWith(
     //             (new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d()))
     //                 .andThen(elevateCommand))
-    //         .alongWith(
+    //         .andThen(
     //             new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d(), Constants.HardenConstants.RegularCommand.xyIndividualTolerance * Math.sqrt(2), Constants.HardenConstants.RegularCommand.headingTolerance)
-    //                 .andThen(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5)).onlyIf(() -> elevatorSubsystem.isAtPosition())));
+    //                 .andThen(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5))));
   }
 
   public JamesHardenScore(
