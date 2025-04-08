@@ -253,6 +253,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     return (Math.abs(getError()) <= ElevatorConstants.SETPOINT_TOLERANCE);
   }
 
+  public boolean isCloseToL4Height(){
+    return (Math.abs(getError()) <= ElevatorConstants.L4_TOLERANCE);
+  }
+
   public boolean canFunnelTransferCoralToScoring() {
     return this.getLevel().equals(Constants.ElevatorConstants.ElevatorPositions.Intake)
         && this.getError() < Constants.ElevatorConstants.MAX_POSITIONAL_ERROR;

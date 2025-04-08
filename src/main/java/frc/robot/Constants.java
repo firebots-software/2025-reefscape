@@ -875,7 +875,7 @@ public final class Constants {
     public static final double STATOR_CURRENT_LIMIT = 50.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 30.0; // TODO: change for actual match
 
-    public static double S0C_KP = 2.0;
+    public static double S0C_KP = 1.0;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.005;
 
@@ -896,6 +896,7 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0.2; // To-do
+    public static final double L4_TOLERANCE = 3.0;
     public static final double MAX_POSITIONAL_ERROR = 0.02;
     public static final double SPROCKET_CIRCUM_INCHES =
         1.751 * Math.PI; // TODO: change 0 to radius/diameter
@@ -925,7 +926,7 @@ public final class Constants {
       L3(
           3,
           1.285 - 0.02 + elevatorRecalibration), // 1.27 // KALASH wants 1cm lower //old value 1.32
-      L4(4, 1.81), // 1.81
+      L4(4, 1.825), // 1.81
       LIMIT_OF_TRAVEL(1, 1.825 + 0.025); // 1.825
 
       public final int position;
