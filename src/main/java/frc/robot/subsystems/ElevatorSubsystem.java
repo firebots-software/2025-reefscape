@@ -310,6 +310,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         "subsystems/Elevator/targetisIntake", this.getLevel().equals(ElevatorPositions.Intake));
     DogLog.log("subsystems/Elevator/targetLevel", this.getLevel().toString());
     DogLog.log("subsystems/Elevator/closedLoopError", master.getClosedLoopError().getValueAsDouble());
+    DogLog.log("subsystems/Elevator/elevatorProfile", master.getClosedLoopReference().getValueAsDouble());
   }
 
   @Override

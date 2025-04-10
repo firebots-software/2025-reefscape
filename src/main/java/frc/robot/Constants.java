@@ -50,11 +50,11 @@ public final class Constants {
       public static final double headingTolerance = 0.7853975; // Math.PI/4
     }
 
-    public static final double ffMinRadius = 0.2; // 0.2 worked good
+    public static final double ffMinRadius = 0.4; // 0.2 worked good
     public static final double ffMaxRadius = 0.85; // 0.8 worked good
 
     public static class RegularCommand {
-      public static final double xyIndividualTolerance = 0.01;
+      public static final double xyIndividualTolerance = 0.02;
       public static final double headingTolerance = 0.0075;
     }
   }
@@ -499,10 +499,10 @@ public final class Constants {
           "rio",
           BumperThickness.PROTO),
       JAMES_HARDEN(
-          Rotations.of(-0.076171875), // front left
-          Rotations.of(-0.493896484375), // front right
-          Rotations.of(0.18798828125), // back left
-          Rotations.of(-0.1591796875), // back right
+          Rotations.of(-0.0834960938), // front left
+          Rotations.of(-0.4912109375), // front right
+          Rotations.of(0.1931152344), // back left
+          Rotations.of(-0.15576171875), // back right
           SwerveLevel.L3,
           SwerveDrivePIDValues.JAMES_HARDEN,
           SwerveSteerPIDValues.JAMES_HARDEN,
@@ -875,7 +875,7 @@ public final class Constants {
     public static final double STATOR_CURRENT_LIMIT = 50.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 30.0; // TODO: change for actual match
 
-    public static double S0C_KP = 1.0;
+    public static double S0C_KP = 2.0; // 1.0 before (okay)
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.005;
 
@@ -919,7 +919,7 @@ public final class Constants {
           0, 0.057 + elevatorRecalibration), // 0.71 really high but we were using before // 0.0685
       // //0.065 still too high
       safePosition(0, 0.3 + elevatorRecalibration),
-      L1(1, 0.657 + elevatorRecalibration + 0.05),
+      L1(1, 0.657+0.05+0.05),
       L2DALE(0, 0.493 + elevatorRecalibration), // 0.8636 - 0.379
       L2(2, 0.9036 - 0.02 + elevatorRecalibration),
       L3DALE(0, 0.91 + elevatorRecalibration), // 1.27 - 0.379

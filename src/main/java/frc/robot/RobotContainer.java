@@ -28,6 +28,7 @@ import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commandGroups.RunFunnelUntilDetectionSafeSmooth;
+import frc.robot.commandGroups.ShootL1;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -338,6 +339,8 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
+    joystick.a().onTrue(new ShootL1(elevatorSubsystem, tootsieSlideSubsystem));
+
     joystick
         .b()
         .whileTrue(
@@ -351,13 +354,14 @@ public class RobotContainer {
         .whileTrue(
             new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
 
-    joystick
-        .a()
-        .onTrue(
-            driveTrain.runOnce(
-                () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
+    // joystick
+    //     .a()
+    //     .onTrue(
+    //         driveTrain.runOnce(
+    //             () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
 
     joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
+
 
     // new InstantCommand()
 
