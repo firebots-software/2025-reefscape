@@ -70,7 +70,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     qProfiledPIDController =
         new ProfiledPIDController(
             3.4, // 3.4 not bad // [3.4 good for 0.2-1.2, 0.425 I]
-            0.5, // 345
+            0.45, // 345
             0.0005, // 0.0015
             new TrapezoidProfile.Constraints(
                 Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND - 0.5,
@@ -380,8 +380,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         headingProfiledPIDController.getVelocityError());
 
     return new ChassisSpeeds(
-        qSpeed * Math.cos(travelAngle.getRadians()),
-        qSpeed * Math.sin(travelAngle.getRadians()),
+        qSpeed * Math.cos(travelAngle.getRadians()) + (0.075*Math.cos(getCurrentState().Pose.getRotation().getRadians())),
+        qSpeed * Math.sin(travelAngle.getRadians()) + (0.075*Math.sin(getCurrentState().Pose.getRotation().getRadians())),
         omega);
   }
 
