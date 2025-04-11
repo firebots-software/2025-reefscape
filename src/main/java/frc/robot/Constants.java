@@ -875,7 +875,7 @@ public final class Constants {
     public static final double STATOR_CURRENT_LIMIT = 50.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 30.0; // TODO: change for actual match
 
-    public static double S0C_KP = 2.0; // 1.0 before (okay)
+    public static double S0C_KP = 1.0; // 1.0 before (okay)
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.005;
 
@@ -884,7 +884,7 @@ public final class Constants {
     public static double S1C_KD = 0.0;
 
     public static double S0C_KS = 0.0;
-    public static double S0C_KG = 0.29+0.05;
+    public static double S0C_KG = 0.29 + 0.05;
     public static double S0C_KA = 0.0004657452997; // 0.04
     public static double S0C_KV = 0.124; // 10.66
 
@@ -896,7 +896,6 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
     public static final double SETPOINT_TOLERANCE = 0.2; // To-do
-    public static final double L4_TOLERANCE = 3.0;
     public static final double MAX_POSITIONAL_ERROR = 0.02;
     public static final double SPROCKET_CIRCUM_INCHES =
         1.751 * Math.PI; // TODO: change 0 to radius/diameter
@@ -919,7 +918,7 @@ public final class Constants {
           0, 0.057 + elevatorRecalibration), // 0.71 really high but we were using before // 0.0685
       // //0.065 still too high
       safePosition(0, 0.3 + elevatorRecalibration),
-      L1(1, 0.657+0.05+0.05),
+      L1(1, 0.657 + 0.05 + 0.05),
       L2DALE(0, 0.493 + elevatorRecalibration), // 0.8636 - 0.379
       L2(2, 0.9036 - 0.02 + elevatorRecalibration),
       L3DALE(0, 0.91 + elevatorRecalibration), // 1.27 - 0.379
@@ -927,7 +926,7 @@ public final class Constants {
           3,
           1.285 - 0.02 + elevatorRecalibration), // 1.27 // KALASH wants 1cm lower //old value 1.32
       L4(4, 1.825), // 1.81
-      LIMIT_OF_TRAVEL(1, 1.825 + 0.025); // 1.825
+      LIMIT_OF_TRAVEL(1, 1.8688); // 1.85
 
       public final int position;
       public final double height;

@@ -21,7 +21,10 @@ public class EndWhenCloseEnough extends Command {
     rotationalTolerance = Constants.HardenConstants.EndWhenCloseEnough.headingTolerance;
   }
 
-  public EndWhenCloseEnough(Supplier<Pose2d> targetTranslation, double translationalTolerance, double rotationalTolerance) {
+  public EndWhenCloseEnough(
+      Supplier<Pose2d> targetTranslation,
+      double translationalTolerance,
+      double rotationalTolerance) {
     driveTrain = SwerveSubsystem.getInstance();
     poseSupplier = targetTranslation;
     this.translationalTolerance = translationalTolerance;

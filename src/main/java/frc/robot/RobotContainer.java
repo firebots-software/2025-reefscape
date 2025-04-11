@@ -9,7 +9,6 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -339,7 +338,7 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    joystick.a().onTrue(new ShootL1(elevatorSubsystem, tootsieSlideSubsystem));
+    joystick.a().whileTrue(new ShootL1(elevatorSubsystem, tootsieSlideSubsystem));
 
     joystick
         .b()
@@ -358,10 +357,10 @@ public class RobotContainer {
     //     .a()
     //     .onTrue(
     //         driveTrain.runOnce(
-    //             () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d()))));
+    //             () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new
+    // Rotation2d()))));
 
     joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
-
 
     // new InstantCommand()
 

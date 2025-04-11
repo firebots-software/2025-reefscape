@@ -253,10 +253,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     return (Math.abs(getError()) <= ElevatorConstants.SETPOINT_TOLERANCE);
   }
 
-  public boolean isCloseToL4Height(){
-    return (Math.abs(getError()) <= ElevatorConstants.L4_TOLERANCE);
-  }
-
   public boolean canFunnelTransferCoralToScoring() {
     return this.getLevel().equals(Constants.ElevatorConstants.ElevatorPositions.Intake)
         && this.getError() < Constants.ElevatorConstants.MAX_POSITIONAL_ERROR;
@@ -309,8 +305,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     DogLog.log(
         "subsystems/Elevator/targetisIntake", this.getLevel().equals(ElevatorPositions.Intake));
     DogLog.log("subsystems/Elevator/targetLevel", this.getLevel().toString());
-    DogLog.log("subsystems/Elevator/closedLoopError", master.getClosedLoopError().getValueAsDouble());
-    DogLog.log("subsystems/Elevator/elevatorProfile", master.getClosedLoopReference().getValueAsDouble());
+    DogLog.log(
+        "subsystems/Elevator/closedLoopError", master.getClosedLoopError().getValueAsDouble());
+    DogLog.log(
+        "subsystems/Elevator/elevatorProfile", master.getClosedLoopReference().getValueAsDouble());
   }
 
   @Override

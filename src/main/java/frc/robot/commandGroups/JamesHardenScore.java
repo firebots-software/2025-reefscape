@@ -4,7 +4,6 @@ import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.Constants.LandmarkPose;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -41,7 +40,6 @@ public class JamesHardenScore extends SequentialCommandGroup {
       elevateCommand = new SetElevatorLevel(elevatorSubsystem, height, true);
     }
 
-
     addCommands(
         movementCommand.alongWith(
             (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
@@ -55,7 +53,9 @@ public class JamesHardenScore extends SequentialCommandGroup {
     //             (new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d()))
     //                 .andThen(elevateCommand))
     //         .andThen(
-    //             new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d(), Constants.HardenConstants.RegularCommand.xyIndividualTolerance * Math.sqrt(2), Constants.HardenConstants.RegularCommand.headingTolerance)
+    //             new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d(),
+    // Constants.HardenConstants.RegularCommand.xyIndividualTolerance * Math.sqrt(2),
+    // Constants.HardenConstants.RegularCommand.headingTolerance)
     //                 .andThen(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5))));
   }
 
@@ -85,18 +85,20 @@ public class JamesHardenScore extends SequentialCommandGroup {
     DogLog.log("JamesHardenScore/Version", "teleop");
 
     addCommands(
-      movementCommand.alongWith(
-          (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
-              .andThen(elevateCommand)),
-      new ParallelDeadlineGroup(
-          new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
+        movementCommand.alongWith(
+            (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
+                .andThen(elevateCommand)),
+        new ParallelDeadlineGroup(
+            new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
     // addCommands(
     //     maintainCommand
     //         .alongWith(
     //             (new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d()))
     //                 .andThen(elevateCommand))
     //         .alongWith(
-    //             new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d(), Constants.HardenConstants.RegularCommand.xyIndividualTolerance * Math.sqrt(2), Constants.HardenConstants.RegularCommand.headingTolerance)
+    //             new EndWhenCloseEnough(() -> maintainCommand.getTargetPose2d(),
+    // Constants.HardenConstants.RegularCommand.xyIndividualTolerance * Math.sqrt(2),
+    // Constants.HardenConstants.RegularCommand.headingTolerance)
     //                 .andThen(new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5))));
     // )
     // new ParallelDeadlineGroup(

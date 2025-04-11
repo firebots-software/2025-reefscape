@@ -198,8 +198,10 @@ public class VisionSystem extends SubsystemBase {
         //                     + Math.pow(driveTrain.getRobotSpeeds().vyMetersPerSecond, 2)))
         //             / 2
         //         + 1.0;
-        // double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.04, 0.5, 1.0) * speedMultiplier;
-        // double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.04, 0.5, 1.0) * speedMultiplier;
+        // double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.04, 0.5, 1.0) *
+        // speedMultiplier;
+        // double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.04, 0.5, 1.0) *
+        // speedMultiplier;
         double rotationKalman = MiscUtils.lerp((distance - 0.6) / 1.4, 0.4, 5, 30) / 10;
 
         DogLog.log("KalmanDebug/" + camName + "TranslationStandardDeviation", xKalman);
