@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.Constants.LandmarkPose;
@@ -109,6 +110,7 @@ public class AutoProducer extends SequentialCommandGroup {
                 new ParallelDeadlineGroup(
                     new CoralCheckedIn(funnel),
                     new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true)),
+                new WaitCommand(0.2),
                 movementCommand.withTimeout(5.0))), // Added timeout to movement command
         // When the elevator is up and when the movement command is done, then do the following
         new ElevatorHoldL4(elevator).withTimeout(0.25),
