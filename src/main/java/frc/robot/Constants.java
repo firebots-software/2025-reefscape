@@ -51,7 +51,7 @@ public final class Constants {
     }
 
     public static final double ffMinRadius = 0.4; // 0.2 worked good
-    public static final double ffMaxRadius = 0.85; // 0.8 worked good
+    public static final double ffMaxRadius = 1.4; // 0.8 worked good
 
     public static class RegularCommand {
       public static final double xyIndividualTolerance = 0.02;
@@ -926,7 +926,7 @@ public final class Constants {
           3,
           1.285 - 0.02 + elevatorRecalibration), // 1.27 // KALASH wants 1cm lower //old value 1.32
       L4(4, 1.825), // 1.81
-      LIMIT_OF_TRAVEL(1, 1.8688); // 1.85
+      LIMIT_OF_TRAVEL(1, 1.8513375662); // 1.85
 
       public final int position;
       public final double height;

@@ -11,7 +11,7 @@ public class ShootL1 extends SequentialCommandGroup {
   public ShootL1(ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem) {
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false)
-            .andThen(new ShootSlow(tootsieSlideSubsystem).withTimeout(0.7))
+            .andThen(new ShootSlow(tootsieSlideSubsystem))
         // .andThen(new WaitCommand(0.2))
         );
   }
