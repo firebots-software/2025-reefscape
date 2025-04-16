@@ -353,10 +353,13 @@ public class RobotContainer {
         .povDown()
         .whileTrue(
             new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
-    
-    joystick.povLeft().whileTrue(new ShootL1Funnel(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
-    // joystick.povRight().whileTrue(new ShootL1Funnel(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
-    
+
+    joystick
+        .povLeft()
+        .whileTrue(new ShootL1Funnel(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
+    // joystick.povRight().whileTrue(new ShootL1Funnel(elevatorSubsystem, tootsieSlideSubsystem,
+    // funnelSubsystem));
+
     // joystick
     //     .a()
     //     .onTrue(

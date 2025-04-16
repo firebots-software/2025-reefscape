@@ -12,14 +12,15 @@ import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
 public class ShootL1Funnel extends SequentialCommandGroup {
-  public ShootL1Funnel(ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem, FunnelSubsystem funnelSubsystem) {
-    if(CoralPosition.isCoralInTootsieSlide()){
-        addCommands(
-            new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false),
-            new ParallelCommandGroup(
-                new ReverseTootsie(tootsieSlideSubsystem),
-                new ReverseFunnel(funnelSubsystem))
-            );
-        }
+  public ShootL1Funnel(
+      ElevatorSubsystem elevatorSubsystem,
+      TootsieSlideSubsystem tootsieSlideSubsystem,
+      FunnelSubsystem funnelSubsystem) {
+    if (CoralPosition.isCoralInTootsieSlide()) {
+      addCommands(
+          new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false),
+          new ParallelCommandGroup(
+              new ReverseTootsie(tootsieSlideSubsystem), new ReverseFunnel(funnelSubsystem)));
     }
+  }
 }

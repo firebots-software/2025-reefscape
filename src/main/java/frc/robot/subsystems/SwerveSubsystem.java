@@ -380,8 +380,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         headingProfiledPIDController.getVelocityError());
 
     return new ChassisSpeeds(
-        qSpeed * Math.cos(travelAngle.getRadians()) + (0*0.075*Math.cos(getCurrentState().Pose.getRotation().getRadians())),
-        qSpeed * Math.sin(travelAngle.getRadians()) + (0*0.075*Math.sin(getCurrentState().Pose.getRotation().getRadians())),
+        qSpeed * Math.cos(travelAngle.getRadians())
+            + (0 * 0.075 * Math.cos(getCurrentState().Pose.getRotation().getRadians())),
+        qSpeed * Math.sin(travelAngle.getRadians())
+            + (0 * 0.075 * Math.sin(getCurrentState().Pose.getRotation().getRadians())),
         omega);
   }
 

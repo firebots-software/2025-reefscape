@@ -164,7 +164,7 @@ public class FunnelSubsystem extends SubsystemBase {
     runFunnelAtRPS(-Constants.FunnelConstants.SPEED_RPS);
   }
 
-  public void reverseFunnel(){
+  public void reverseFunnel() {
     runFunnelAtRPS(-Constants.FunnelConstants.REVERSE_SPEED_RPS);
   }
 

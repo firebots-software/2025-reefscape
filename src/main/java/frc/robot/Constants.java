@@ -845,7 +845,6 @@ public final class Constants {
         11.5d; // 12.5, 12 good for L3 and L2  worked for L2
     public static final double REVERSE_SHOOTING_SPEED_RPS =
         11.5d; // 12.5, 12 good for L3 and L2  worked for L2
-    
   }
 
   public static class FunnelConstants {
