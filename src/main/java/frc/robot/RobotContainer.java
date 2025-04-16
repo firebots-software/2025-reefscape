@@ -28,6 +28,7 @@ import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commandGroups.RunFunnelUntilDetectionSafeSmooth;
 import frc.robot.commandGroups.ShootL1;
+import frc.robot.commandGroups.ShootL1Funnel;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -352,7 +353,10 @@ public class RobotContainer {
         .povDown()
         .whileTrue(
             new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L4));
-
+    
+    joystick.povLeft().whileTrue(new ShootL1Funnel(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
+    // joystick.povRight().whileTrue(new ShootL1Funnel(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
+    
     // joystick
     //     .a()
     //     .onTrue(
