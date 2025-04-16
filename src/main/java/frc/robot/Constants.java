@@ -843,6 +843,9 @@ public final class Constants {
     public static final double INTAKE_SPEED_RPS = 5d; // TODO
     public static final double SHOOTING_SPEED_RPS =
         11.5d; // 12.5, 12 good for L3 and L2  worked for L2
+    public static final double REVERSE_SHOOTING_SPEED_RPS =
+        11.5d; // 12.5, 12 good for L3 and L2  worked for L2
+    
   }
 
   public static class FunnelConstants {
@@ -859,6 +862,7 @@ public final class Constants {
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
     public static final double SPEED_RPS = 10d; // 15.0
+    public static final double REVERSE_SPEED_RPS = 10d; // 15.0
     public static final double GEAR_RATIO = 1d / 5d;
 
     public static final int CHECK_IN_PORT = 1;

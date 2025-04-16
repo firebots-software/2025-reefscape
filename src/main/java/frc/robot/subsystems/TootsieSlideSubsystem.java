@@ -92,6 +92,10 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     runTootsieAtRPS(Constants.TootsieSlide.SHOOTING_SPEED_RPS);
   }
 
+  public void reverseTootsie(){
+    runTootsieAtRPS(-Constants.TootsieSlide.REVERSE_SHOOTING_SPEED_RPS);
+  }
+
   public void shootTootsieSlow() {
     runTootsieAtRPS(5.0);
   }
