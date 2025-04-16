@@ -25,13 +25,13 @@ public class ReverseTootsie extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    tootsieSlideSubsystem.shootTootsie();
+    tootsieSlideSubsystem.reverseTootsie();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    CoralPosition.setCoralInTootsieSlide(false);
+    // CoralPosition.setCoralInTootsieSlide(false);
     tootsieSlideSubsystem.stopTootsie();
   }
 

@@ -16,11 +16,11 @@ public class ShootL1Funnel extends SequentialCommandGroup {
       ElevatorSubsystem elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       FunnelSubsystem funnelSubsystem) {
-    if (CoralPosition.isCoralInTootsieSlide()) {
+    // if (CoralPosition.isCoralInTootsieSlide()) {
       addCommands(
           new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false),
           new ParallelCommandGroup(
               new ReverseTootsie(tootsieSlideSubsystem), new ReverseFunnel(funnelSubsystem)));
-    }
+    // }
   }
 }
