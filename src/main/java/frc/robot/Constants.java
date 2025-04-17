@@ -861,7 +861,7 @@ public final class Constants {
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
     public static final double SPEED_RPS = 10d; // 15.0
-    public static final double REVERSE_SPEED_RPS = 10d; // 15.0
+    public static final double REVERSE_SPEED_RPS = 15d; // 15.0
     public static final double GEAR_RATIO = 1d / 5d;
 
     public static final int CHECK_IN_PORT = 1;

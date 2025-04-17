@@ -218,7 +218,7 @@ public class RobotContainer {
             //     tootsieSlideSubsystem)
             ); // RunFunnelAndTootsieInCommand(funnelSubsystem,
     // tootsieSlideSubsystem));
-    customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem));
+    customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem, () -> joystick.rightTrigger().getAsBoolean()));
 
     // Joystick 1:
 
