@@ -278,7 +278,7 @@ public class RobotContainer {
                         && elevatorSubsystem.isAtPosition())
             .and(RobotModeTriggers.teleop());
 
-    funnelCheckout.and(joystick.a().negate()).onTrue(
+    funnelCheckout.and(joystick.rightTrigger().negate()).onTrue(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     Trigger coralInElevator =
@@ -334,7 +334,7 @@ public class RobotContainer {
             () -> joystick.leftTrigger().getAsBoolean(),
             // () -> joystick.rightTrigger().getAsBoolean(),
             redside,
-            () -> joystick.rightTrigger().getAsBoolean(),
+            () -> joystick.a().getAsBoolean(),
             () -> customController.LeftL1().getAsBoolean(),
             () -> customController.RightL1().getAsBoolean(),
             driveTrain);
