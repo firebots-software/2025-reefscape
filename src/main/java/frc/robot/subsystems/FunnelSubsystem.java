@@ -165,7 +165,7 @@ public class FunnelSubsystem extends SubsystemBase {
   }
 
   public void debugSpinBack(boolean fast) {
-    if(fast){
+    if (fast) {
       runFunnelAtRPS(-Constants.FunnelConstants.REVERSE_SPEED_RPS);
     } else {
       runFunnelAtRPS(-Constants.FunnelConstants.SPEED_RPS);

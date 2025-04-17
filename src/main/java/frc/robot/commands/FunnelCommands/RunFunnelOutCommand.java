@@ -1,9 +1,8 @@
 package frc.robot.commands.FunnelCommands;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.FunnelSubsystem;
+import java.util.function.BooleanSupplier;
 
 public class RunFunnelOutCommand extends Command {
   private FunnelSubsystem funnelSubsystem;

@@ -27,8 +27,6 @@ import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commandGroups.PutUpAndShoot;
 import frc.robot.commandGroups.RunFunnelUntilDetectionSafeSmooth;
-import frc.robot.commandGroups.ShootL1;
-import frc.robot.commandGroups.ShootL1Funnel;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -42,6 +40,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
@@ -56,6 +55,7 @@ public class RobotContainer {
   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+  LedSubsystem leds = new LedSubsystem();
   // Alliance color
   Boolean coralInFunnel = Boolean.valueOf(false);
   Boolean coralInElevator = Boolean.valueOf(false);
@@ -218,7 +218,10 @@ public class RobotContainer {
             //     tootsieSlideSubsystem)
             ); // RunFunnelAndTootsieInCommand(funnelSubsystem,
     // tootsieSlideSubsystem));
-    customController.Out().whileTrue(new RunFunnelOutCommand(funnelSubsystem, () -> joystick.rightTrigger().getAsBoolean()));
+    customController
+        .Out()
+        .whileTrue(
+            new RunFunnelOutCommand(funnelSubsystem, () -> joystick.rightTrigger().getAsBoolean()));
 
     // Joystick 1:
 
@@ -278,9 +281,11 @@ public class RobotContainer {
                         && elevatorSubsystem.isAtPosition())
             .and(RobotModeTriggers.teleop());
 
-    funnelCheckout.and(joystick.rightTrigger().negate()).onTrue(
-        new TransferPieceBetweenFunnelAndElevator(
-            elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
+    funnelCheckout
+        .and(joystick.rightTrigger().negate())
+        .onTrue(
+            new TransferPieceBetweenFunnelAndElevator(
+                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     Trigger coralInElevator =
         new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
     coralInElevator.onTrue(
