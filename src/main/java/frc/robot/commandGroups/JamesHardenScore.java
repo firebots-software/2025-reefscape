@@ -11,6 +11,7 @@ import frc.robot.commands.EndWhenCloseEnough;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.function.BooleanSupplier;
@@ -85,6 +86,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
     DogLog.log("JamesHardenScore/Version", "teleop");
 
     addCommands(
+        new LedSubsystem.updateLedsCommand(LedSubsystem.LedState.ALIGNMENT_FLASH),
         movementCommand.alongWith(
             (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
                 .andThen(elevateCommand)),
