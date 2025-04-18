@@ -142,7 +142,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L2,
                 redside,
-                false));
+                false,
+                leds));
     customController
         .LeftL3()
         .whileTrue(
@@ -152,7 +153,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L3,
                 redside,
-                false));
+                false,
+                leds));
     customController
         .LeftL4()
         .whileTrue(
@@ -162,7 +164,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L4,
                 redside,
-                false));
+                false,
+                leds));
 
     // // Right Elevator Levels
     // customController
@@ -184,7 +187,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L2,
                 redside,
-                true));
+                true,
+                leds));
     customController
         .RightL3()
         .whileTrue(
@@ -194,7 +198,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L3,
                 redside,
-                true));
+                true,
+                leds));
     customController
         .RightL4()
         .whileTrue(
@@ -204,7 +209,8 @@ public class RobotContainer {
                 driveTrain,
                 ElevatorPositions.L4,
                 redside,
-                true));
+                true,
+                leds));
 
     // Bottom Three Buttons
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));

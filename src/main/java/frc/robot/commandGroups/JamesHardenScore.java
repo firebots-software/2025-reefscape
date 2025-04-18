@@ -23,7 +23,8 @@ public class JamesHardenScore extends SequentialCommandGroup {
       SwerveSubsystem swerveSubsystem,
       ElevatorPositions height,
       BooleanSupplier redSide,
-      boolean moveRight) {
+      boolean moveRight,
+      LedSubsystem leds) {
 
     JamesHardenMovement movementCommand, maintainCommand;
 
@@ -42,9 +43,11 @@ public class JamesHardenScore extends SequentialCommandGroup {
     }
 
     addCommands(
+        leds.updateLedsCommand(LedSubsystem.LedState.ALIGNMENT_FLASH),
         movementCommand.alongWith(
             (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
                 .andThen(elevateCommand)),
+        leds.updateLedsCommand(LedSubsystem.LedState.SCORING_SOLID),
         new ParallelDeadlineGroup(
             new ShootTootsieSlide(tootsieSlideSubsystem).withTimeout(0.5), maintainCommand));
 
@@ -86,7 +89,6 @@ public class JamesHardenScore extends SequentialCommandGroup {
     DogLog.log("JamesHardenScore/Version", "teleop");
 
     addCommands(
-        new LedSubsystem.updateLedsCommand(LedSubsystem.LedState.ALIGNMENT_FLASH),
         movementCommand.alongWith(
             (new EndWhenCloseEnough(() -> movementCommand.getTargetPose2d()))
                 .andThen(elevateCommand)),

@@ -10,6 +10,7 @@ import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,12 +21,13 @@ public class Intake extends SequentialCommandGroup {
   public Intake(
       ElevatorSubsystem elevatorSubsystem,
       FunnelSubsystem funnelSubsystem,
-      TootsieSlideSubsystem tootsieSlideSubsystem) {
+      TootsieSlideSubsystem tootsieSlideSubsystem,
+      LedSubsystem leds) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false)
-            .alongWith(new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem)));
+            .alongWith(new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds)));
     addCommands(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));

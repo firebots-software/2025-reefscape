@@ -51,7 +51,7 @@ public class LedSubsystem extends SubsystemBase {
     }
   }
 
-  private LedState currentState = LedState.SCORING_SOLID;
+  private LedState currentState = LedState.MATCH_IDLE;
   private LedState lastState = LedState.IDLE;
   private final CANdle candle;
 
