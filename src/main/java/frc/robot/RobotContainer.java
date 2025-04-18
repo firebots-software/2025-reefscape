@@ -457,6 +457,11 @@ public class RobotContainer {
             : (DriverStation.getAlliance().get() == Alliance.Red);
   }
 
+  public BooleanSupplier getRedSide(){
+    DogLog.log("get alliance", redside.getAsBoolean());
+    return redside;
+  }
+
   public Command getAutonomousCommand() {
     /* Run the path selected from the auto chooser */
     int autoValue = autoChooser.getSelected();

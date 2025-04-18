@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -39,6 +41,8 @@ public class VisionSystem extends SubsystemBase {
   public static int numNotThrowaways = 0;
   List<Integer> reefIDs =
       new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18, 6, 7, 8, 9, 10, 11));
+  List<Integer> blueReefID = new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18));
+  List<Integer> redReefID = new ArrayList<Integer>(Arrays.asList(6, 7, 8, 9, 10, 11));
 
   Pose2d savedResult = new Pose2d(0, 0, new Rotation2d(0.01, 0.01));
   private static VisionSystem[] systemList =
@@ -72,8 +76,9 @@ public class VisionSystem extends SubsystemBase {
       AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   PhotonPoseEstimator photonPoseEstimator;
   private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
+  private BooleanSupplier redSide;
 
-  public VisionSystem(Constants.Vision.Cameras cameraEnum) {
+  public VisionSystem(Constants.Vision.Cameras cameraEnum, BooleanSupplier redSide) {
     this.cameraEnum = cameraEnum;
     String name = cameraEnum.toString();
     int index = cameraEnum.ordinal();
@@ -81,7 +86,7 @@ public class VisionSystem extends SubsystemBase {
     photonPoseEstimator =
         new PhotonPoseEstimator(
             aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camToRobots[index]);
-
+    this.redSide = redSide;
     for (var x : camera.getAllUnreadResults()) {
       pipeline = x;
     }
@@ -97,9 +102,9 @@ public class VisionSystem extends SubsystemBase {
                 driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
   }
 
-  public static VisionSystem getInstance(Constants.Vision.Cameras name) {
+  public static VisionSystem getInstance(Constants.Vision.Cameras name, BooleanSupplier redSide) {
     if (systemList[name.ordinal()] == null) {
-      systemList[name.ordinal()] = new VisionSystem(name);
+      systemList[name.ordinal()] = new VisionSystem(name, redSide);
     }
 
     return systemList[name.ordinal()];
@@ -171,9 +176,19 @@ public class VisionSystem extends SubsystemBase {
       DogLog.log("KalmanDebug/" + camName + "DistToAprilTag", distance);
 
       for (PhotonTrackedTarget target : targets) {
-        if (!reefIDs.contains(target.getFiducialId())) {
-          hasReefTag = false;
+        DogLog.log("redside in vision system", redSide.getAsBoolean());
+        if(redSide.getAsBoolean()){
+          if (!redReefID.contains(target.getFiducialId())) {
+            hasReefTag = false;
+          }
+        } else {
+          if (!blueReefID.contains(target.getFiducialId())) {
+            hasReefTag = false;
+          }
         }
+        // if (!reefIDs.contains(target.getFiducialId())) {
+        //   hasReefTag = false;
+        // }
       }
 
       if (hasReefTag) {

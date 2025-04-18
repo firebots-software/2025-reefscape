@@ -29,10 +29,12 @@ public class Robot extends TimedRobot {
   // TODO: uncomment when arm is on real bot
   // private ZeroArm zeroArm = new ZeroArm(ArmSubsystem.getInstance());
 
-  private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
-  private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
+  // private VisionSystem visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM);
+  // private VisionSystem visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM);
   private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   private final RobotContainer m_robotContainer;
+  private VisionSystem visionRight;
+  private VisionSystem visionLeft;
 
   // standard deviation for x (meters), y (meters) and rotation (radians) camera data
 
@@ -46,6 +48,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    visionRight = VisionSystem.getInstance(Constants.Vision.Cameras.RIGHT_CAM, m_robotContainer.getRedSide());
+    visionLeft = VisionSystem.getInstance(Constants.Vision.Cameras.LEFT_CAM, m_robotContainer.getRedSide());
     absoluteInit();
   }
 
