@@ -7,7 +7,6 @@ import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.LedSubsystem;
-
 import java.util.function.BooleanSupplier;
 
 public class RunFunnelUntilDetectionSafeSmooth extends SequentialCommandGroup {

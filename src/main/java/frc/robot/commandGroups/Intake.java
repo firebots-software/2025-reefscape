@@ -27,7 +27,8 @@ public class Intake extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false)
-            .alongWith(new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds)));
+            .alongWith(
+                new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds)));
     addCommands(
         new TransferPieceBetweenFunnelAndElevator(
             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));

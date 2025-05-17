@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
-
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -177,7 +176,7 @@ public class VisionSystem extends SubsystemBase {
 
       for (PhotonTrackedTarget target : targets) {
         DogLog.log("redside in vision system", redSide.getAsBoolean());
-        if(redSide.getAsBoolean()){
+        if (redSide.getAsBoolean()) {
           if (!redReefID.contains(target.getFiducialId())) {
             hasReefTag = false;
           }

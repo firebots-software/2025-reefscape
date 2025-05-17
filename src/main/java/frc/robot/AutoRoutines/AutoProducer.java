@@ -102,7 +102,7 @@ public class AutoProducer extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             // Elevator related
-            new Intake(elevator, funnel, shooter,leds)
+            new Intake(elevator, funnel, shooter, leds)
                 .andThen(
                     new EndWhenCloseEnough(
                         () -> movementCommand.getTargetPose2d(),

@@ -107,7 +107,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    leds.setDefaultCommand(new InstantCommand(() -> leds.updateLedsCommand(LedSubsystem.LedState.IDLE)));
+    leds.setDefaultCommand(
+        new InstantCommand(() -> leds.updateLedsCommand(LedSubsystem.LedState.IDLE)));
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
 
@@ -279,7 +280,8 @@ public class RobotContainer {
             .and(RobotModeTriggers.teleop());
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
     funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false));
-    funnelCheckin.onTrue(new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
+    funnelCheckin.onTrue(
+        new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
     Trigger funnelCheckout =
         new Trigger(
                 () ->
@@ -469,7 +471,7 @@ public class RobotContainer {
             : (DriverStation.getAlliance().get() == Alliance.Red);
   }
 
-  public BooleanSupplier getRedSide(){
+  public BooleanSupplier getRedSide() {
     DogLog.log("get alliance", redside.getAsBoolean());
     return redside;
   }
@@ -489,14 +491,16 @@ public class RobotContainer {
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.RED_PROCESSOR_3,leds)
+                    Constants.AutoRoutines.RED_PROCESSOR_3,
+                    leds)
                 : new AutoProducer(
                     driveTrain,
                     tootsieSlideSubsystem,
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.BLUE_PROCESSOR_3,leds);
+                    Constants.AutoRoutines.BLUE_PROCESSOR_3,
+                    leds);
         break;
       case 2:
         autoCommand =
@@ -507,14 +511,16 @@ public class RobotContainer {
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.RED_PROCESSOR_2,leds)
+                    Constants.AutoRoutines.RED_PROCESSOR_2,
+                    leds)
                 : new AutoProducer(
                     driveTrain,
                     tootsieSlideSubsystem,
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.BLUE_PROCESSOR_2,leds);
+                    Constants.AutoRoutines.BLUE_PROCESSOR_2,
+                    leds);
         break;
       case 3:
         autoCommand =
@@ -525,14 +531,16 @@ public class RobotContainer {
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.RED_PROCESSOR_1,leds)
+                    Constants.AutoRoutines.RED_PROCESSOR_1,
+                    leds)
                 : new AutoProducer(
                     driveTrain,
                     tootsieSlideSubsystem,
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.BLUE_PROCESSOR_1,leds);
+                    Constants.AutoRoutines.BLUE_PROCESSOR_1,
+                    leds);
         break;
       case 4:
         autoCommand =
@@ -543,14 +551,16 @@ public class RobotContainer {
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.RED_CLEAR_3,leds)
+                    Constants.AutoRoutines.RED_CLEAR_3,
+                    leds)
                 : new AutoProducer(
                     driveTrain,
                     tootsieSlideSubsystem,
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.BLUE_CLEAR_3,leds);
+                    Constants.AutoRoutines.BLUE_CLEAR_3,
+                    leds);
         break;
       case 5:
         autoCommand =
@@ -561,14 +571,16 @@ public class RobotContainer {
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.RED_CLEAR_2,leds)
+                    Constants.AutoRoutines.RED_CLEAR_2,
+                    leds)
                 : new AutoProducer(
                     driveTrain,
                     tootsieSlideSubsystem,
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.BLUE_CLEAR_2,leds);
+                    Constants.AutoRoutines.BLUE_CLEAR_2,
+                    leds);
         break;
       case 6:
         autoCommand =
@@ -579,14 +591,16 @@ public class RobotContainer {
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.RED_CLEAR_1,leds)
+                    Constants.AutoRoutines.RED_CLEAR_1,
+                    leds)
                 : new AutoProducer(
                     driveTrain,
                     tootsieSlideSubsystem,
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.BLUE_CLEAR_1,leds);
+                    Constants.AutoRoutines.BLUE_CLEAR_1,
+                    leds);
         break;
       case 7:
         autoCommand =
@@ -597,14 +611,16 @@ public class RobotContainer {
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.RED_MID_1,leds)
+                    Constants.AutoRoutines.RED_MID_1,
+                    leds)
                 : new AutoProducer(
                     driveTrain,
                     tootsieSlideSubsystem,
                     elevatorSubsystem,
                     funnelSubsystem,
                     armSubsystem,
-                    Constants.AutoRoutines.BLUE_MID_1,leds);
+                    Constants.AutoRoutines.BLUE_MID_1,
+                    leds);
         break;
       default:
         autoCommand = null;
