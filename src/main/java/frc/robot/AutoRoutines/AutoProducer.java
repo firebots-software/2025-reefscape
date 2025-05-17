@@ -25,6 +25,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.List;
@@ -38,7 +39,8 @@ public class AutoProducer extends SequentialCommandGroup {
       ElevatorSubsystem elevator,
       FunnelSubsystem funnel,
       ArmSubsystem arm,
-      List<LandmarkPose> autoInformation) {
+      List<LandmarkPose> autoInformation,
+      LedSubsystem leds) {
     // initializing commands
 
     addCommands(new InstantCommand(() -> driveTrain.resetPose(autoInformation.get(0).getPose())));
@@ -50,7 +52,7 @@ public class AutoProducer extends SequentialCommandGroup {
             new ParallelDeadlineGroup(
                 new SequentialCommandGroup(
                     new ZeroElevatorHardStop(elevator).withTimeout(1.5),
-                    new Intake(elevator, funnel, shooter).withTimeout(2.0)),
+                    new Intake(elevator, funnel, shooter, leds).withTimeout(2.0)),
                 JamesHardenMovement.toSpecificBranch(
                     driveTrain, () -> autoInformation.get(1), false))),
         new JamesHardenScore(
@@ -65,7 +67,8 @@ public class AutoProducer extends SequentialCommandGroup {
           shooter,
           driveTrain,
           autoInformation.get(2),
-          autoInformation.get(autoInformation.size() - 1));
+          autoInformation.get(autoInformation.size() - 1),
+          leds);
     }
     if (autoInformation.size() > 3) {
       settyCycle(
@@ -74,7 +77,8 @@ public class AutoProducer extends SequentialCommandGroup {
           shooter,
           driveTrain,
           autoInformation.get(3),
-          autoInformation.get(autoInformation.size() - 1));
+          autoInformation.get(autoInformation.size() - 1),
+          leds);
     }
   }
 
@@ -84,7 +88,8 @@ public class AutoProducer extends SequentialCommandGroup {
       TootsieSlideSubsystem shooter,
       SwerveSubsystem driveTrain,
       LandmarkPose scorePosition,
-      LandmarkPose HPSPosition) {
+      LandmarkPose HPSPosition,
+      LedSubsystem leds) {
 
     JamesHardenMovement movementCommand, maintainCommand;
     if (!scorePosition.isBranch()) {
@@ -97,7 +102,7 @@ public class AutoProducer extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             // Elevator related
-            new Intake(elevator, funnel, shooter)
+            new Intake(elevator, funnel, shooter,leds)
                 .andThen(
                     new EndWhenCloseEnough(
                         () -> movementCommand.getTargetPose2d(),

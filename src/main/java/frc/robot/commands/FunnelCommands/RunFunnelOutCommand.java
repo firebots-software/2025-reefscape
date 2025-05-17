@@ -1,6 +1,7 @@
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.FunnelSubsystem;
 import java.util.function.BooleanSupplier;
 
@@ -29,6 +30,7 @@ public class RunFunnelOutCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    CoralPosition.setCoralInFunnel(false);
     funnelSubsystem.stopFunnel();
   }
 
