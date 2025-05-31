@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.ControlModeValue;
@@ -32,6 +33,7 @@ public class FunnelSubsystem extends SubsystemBase {
   private DigitalInput drake;
   private double coralCheckedOutPosition;
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+  private final MotionMagicVelocityVoltage velocityRequest = new MotionMagicVelocityVoltage(0);
   private final boolean m;
 
   private FunnelSubsystem() {
@@ -81,7 +83,13 @@ public class FunnelSubsystem extends SubsystemBase {
         new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(Constants.FunnelConstants.CRUISE_VELOCITY)
             .withMotionMagicAcceleration(Constants.FunnelConstants.ACCELERATION);
-    m1Config.apply(mmc);
+
+    // mmc.MotionMagicAcceleration =
+    // MotionMagicConfigs mmcR =
+    //     new MotionMagicConfigs()
+    //     .withMotionMagicCruiseVelocity(15)
+    //     .withMotionMagicAcceleration(60);
+
     m2Config.apply(mmc);
 
     coralCheckedOutPosition = rightMotor.getPosition().getValueAsDouble();
@@ -102,10 +110,15 @@ public class FunnelSubsystem extends SubsystemBase {
     }
   }
 
-  private void runFunnelAtRPS(double speed) {
+  public void runFunnelAtRPS(double speed) {
     VelocityVoltage m_velocityControlTop =
         new VelocityVoltage(speed / Constants.FunnelConstants.GEAR_RATIO);
     rightMotor.setControl(m_velocityControlTop);
+  }
+
+  public void rampUp() {
+    rightMotor.setControl(
+        velocityRequest.withVelocity(Constants.FunnelConstants.RAMP_UP_SPEED).withAcceleration(55));
   }
 
   public void spinFunnel() {
@@ -125,10 +138,16 @@ public class FunnelSubsystem extends SubsystemBase {
         rightMotor.getPosition().getValueAsDouble(); // Store the current encoder position broom
   }
 
+  public void resetFunnelMotor() {
+    rightMotor.setPosition(0);
+  }
+
   public void maintainCurrentPosition() {
     // TODO: This code should maintain the current position of the elevator
-    rightMotor.setControl(
-        controlRequest.withPosition(rightMotor.getPosition().getValueAsDouble()).withSlot(0));
+    if (rightMotor.getPosition().getValueAsDouble() > 1.0) {
+      rightMotor.setPosition(0.0);
+    }
+    rightMotor.setControl(controlRequest.withPosition(0).withSlot(0));
     // rightMotor.setPosition(0);
     // rightMotor.setControl(controlRequest.withPosition(0).withSlot(0));
     // rightMotor.setPosition(0);
@@ -143,6 +162,22 @@ public class FunnelSubsystem extends SubsystemBase {
 
   public void debugSpinBack() {
     runFunnelAtRPS(-Constants.FunnelConstants.SPEED_RPS);
+  }
+
+  public void debugSpinBack(boolean fast) {
+    if (fast) {
+      runFunnelAtRPS(-Constants.FunnelConstants.REVERSE_SPEED_RPS);
+    } else {
+      runFunnelAtRPS(-Constants.FunnelConstants.SPEED_RPS);
+    }
+  }
+
+  public void reverseFunnel() {
+    runFunnelAtRPS(-Constants.FunnelConstants.REVERSE_SPEED_RPS);
+  }
+
+  public double getSpeed() {
+    return rightMotor.getVelocity().getValueAsDouble();
   }
 
   public boolean isCoralCheckedIn() {

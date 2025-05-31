@@ -42,7 +42,8 @@ public class MiscUtils {
   //   return a + (t * (b - a));
   // }
 
-  public static double lerp(double t, double a, double b) {
+  public static double lerp(double t, double a, double b, double c) {
+    if (t > 1) return c;
     t = Math.max(0, Math.min(1, t));
 
     return a + (t * (b - a));

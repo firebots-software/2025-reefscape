@@ -176,8 +176,9 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void zeroSensor() {
-    armMotor.disable();
+    // armMotor.disable();
     armMotor.setPosition(0);
+    this.setPosition(0.0);
   }
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {

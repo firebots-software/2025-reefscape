@@ -1,25 +1,16 @@
-/*
-This Command spins the Funnel motors until the Coral is detected by the Checkout sensor. At That
-point, the funnel maintains its current position (if the Coral moves the Funnel motors due to
-momentum, then this moves the funnel motors backwards)
-*/
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralPosition;
+import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 
-/**
- * Runs the intake and preshooter until IR sensor detects note
- *
- * @param subsystem The subsystem used by this command.
- */
-public class RunFunnelUntilDetectionSafe extends Command {
+public class RampUpFunnel extends Command {
   private FunnelSubsystem funnelSubsystem;
   private ElevatorSubsystem elevatorSubsystem;
+  private double tolerance = 2;
 
-  public RunFunnelUntilDetectionSafe(FunnelSubsystem funnelSubsystem, ElevatorSubsystem elevator) {
+  public RampUpFunnel(FunnelSubsystem funnelSubsystem, ElevatorSubsystem elevator) {
     this.funnelSubsystem = funnelSubsystem;
     this.elevatorSubsystem = elevator;
     addRequirements(funnelSubsystem);
@@ -28,18 +19,21 @@ public class RunFunnelUntilDetectionSafe extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // funnelSubsystem.resetFunnelMotor();
     // Store the position of the coral when it was first checked out.
-    funnelSubsystem.resetFunnelMotor();
+    funnelSubsystem.rampUp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (elevatorSubsystem.isAtPosition()) {
-      funnelSubsystem.spinFunnel();
+      if (funnelSubsystem.getSpeed() > Constants.FunnelConstants.RAMP_UP_SPEED - tolerance
+          && funnelSubsystem.getSpeed() < Constants.FunnelConstants.RAMP_UP_SPEED + tolerance) {
+        funnelSubsystem.runFunnelAtRPS(Constants.FunnelConstants.RAMP_UP_SPEED);
+      }
+      // funnelSubsystem.rampUp();
     } else {
-      funnelSubsystem.maintainCurrentPosition();
+      // funnelSubsystem.maintainCurrentPosition();
     }
   }
 
@@ -49,7 +43,10 @@ public class RunFunnelUntilDetectionSafe extends Command {
     funnelSubsystem.resetFunnelMotor();
     funnelSubsystem.maintainCurrentPosition();
     if (!interrupted) {
-      CoralPosition.setCoralInFunnel(true);
+      funnelSubsystem.maintainCurrentPosition();
+      // CoralPosition.setCoralInFunnel(true);
+    } else {
+      funnelSubsystem.runFunnelAtRPS(Constants.FunnelConstants.RAMP_UP_SPEED);
     }
   }
 

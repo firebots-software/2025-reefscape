@@ -11,18 +11,24 @@ public class EndWhenCloseEnough extends Command {
   SwerveSubsystem driveTrain;
   Supplier<Pose2d> poseSupplier;
   double translationalTolerance;
+  double rotationalTolerance;
 
   public EndWhenCloseEnough(Supplier<Pose2d> targetTranslation) {
     driveTrain = SwerveSubsystem.getInstance();
     poseSupplier = targetTranslation;
     translationalTolerance =
         Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceTeleop;
+    rotationalTolerance = Constants.HardenConstants.EndWhenCloseEnough.headingTolerance;
   }
 
-  public EndWhenCloseEnough(Supplier<Pose2d> targetTranslation, double translationalTolerance) {
+  public EndWhenCloseEnough(
+      Supplier<Pose2d> targetTranslation,
+      double translationalTolerance,
+      double rotationalTolerance) {
     driveTrain = SwerveSubsystem.getInstance();
     poseSupplier = targetTranslation;
     this.translationalTolerance = translationalTolerance;
+    this.rotationalTolerance = rotationalTolerance;
   }
 
   // Called when the command is initially scheduled.
@@ -57,7 +63,7 @@ public class EndWhenCloseEnough extends Command {
                     .getDistance(poseSupplier.get().getTranslation()))
             <= translationalTolerance)
         && (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot - currRot))
-            <= Constants.HardenConstants.EndWhenCloseEnough.headingTolerance)) {
+            <= rotationalTolerance)) {
       return true;
     } else return false;
   }

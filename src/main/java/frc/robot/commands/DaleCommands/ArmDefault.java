@@ -24,7 +24,7 @@ public class ArmDefault extends Command {
 
   @Override
   public boolean isFinished() {
-    return arm.atTarget(tolerance);
+    return false;
   }
 
   @Override

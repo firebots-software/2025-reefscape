@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.Constants.LandmarkPose;
@@ -21,8 +22,10 @@ import frc.robot.commands.FunnelCommands.CoralCheckedIn;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 import java.util.List;
@@ -36,7 +39,8 @@ public class AutoProducer extends SequentialCommandGroup {
       ElevatorSubsystem elevator,
       FunnelSubsystem funnel,
       ArmSubsystem arm,
-      List<LandmarkPose> autoInformation) {
+      List<LandmarkPose> autoInformation,
+      LedSubsystem leds) {
     // initializing commands
 
     addCommands(new InstantCommand(() -> driveTrain.resetPose(autoInformation.get(0).getPose())));
@@ -48,11 +52,12 @@ public class AutoProducer extends SequentialCommandGroup {
             new ParallelDeadlineGroup(
                 new SequentialCommandGroup(
                     new ZeroElevatorHardStop(elevator).withTimeout(1.5),
-                    new Intake(elevator, funnel, shooter).withTimeout(2.0)),
+                    new Intake(elevator, funnel, shooter, leds).withTimeout(2.0)),
                 JamesHardenMovement.toSpecificBranch(
-                    driveTrain, true, () -> autoInformation.get(1), false))),
+                    driveTrain, () -> autoInformation.get(1), false))),
         new JamesHardenScore(
-            elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(1)),
+                elevator, shooter, driveTrain, ElevatorPositions.L4, autoInformation.get(1))
+            .until(() -> !CoralPosition.isCoralInTootsieSlide()),
         new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
 
     if (autoInformation.size() > 2) {
@@ -62,7 +67,8 @@ public class AutoProducer extends SequentialCommandGroup {
           shooter,
           driveTrain,
           autoInformation.get(2),
-          autoInformation.get(autoInformation.size() - 1));
+          autoInformation.get(autoInformation.size() - 1),
+          leds);
     }
     if (autoInformation.size() > 3) {
       settyCycle(
@@ -71,67 +77,9 @@ public class AutoProducer extends SequentialCommandGroup {
           shooter,
           driveTrain,
           autoInformation.get(3),
-          autoInformation.get(autoInformation.size() - 1));
+          autoInformation.get(autoInformation.size() - 1),
+          leds);
     }
-    // first hps visit, second score
-    // if (autoInformation.size() > 2) {
-    //   addCommands(
-    //       new ParallelDeadlineGroup(
-    //           new Intake(elevator, funnel, shooter),
-    //           new SequentialCommandGroup(
-    //               new CoralCheckedIn(funnel)
-    //                   .deadlineFor(
-    //                       new JamesHardenMovement(
-    //                           driveTrain,
-    //                           autoInformation.get(autoInformation.size() - 1).getPose(),
-    //                           true,
-    //                           false)),
-    //               JamesHardenMovement.toSpecificBranch(
-    //                   driveTrain, true, () -> autoInformation.get(2), false))),
-    //       new JamesHardenScore(
-    //           elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(2)),
-    //       new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
-    // }
-
-    // if (autoInformation.size() > 3) {
-    //   addCommands(
-    //       new ParallelDeadlineGroup(
-    //           new Intake(elevator, funnel, shooter),
-    //           new SequentialCommandGroup(
-    //               new CoralCheckedIn(funnel)
-    //                   .deadlineFor(
-    //                       new JamesHardenMovement(
-    //                           driveTrain,
-    //                           autoInformation.get(autoInformation.size() - 1).getPose(),
-    //                           true,
-    //                           false)),
-    //               JamesHardenMovement.toSpecificBranch(
-    //                   driveTrain, true, () -> autoInformation.get(3), false))),
-    //       new JamesHardenScore(
-    //           elevator, shooter, driveTrain, ElevatorPositions.L4, true, autoInformation.get(3)),
-    //       new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake));
-    // }
-
-    // addCommands(
-    //     new ParallelCommandGroup(
-    //         new Intake(elevator, funnel, shooter),
-    //         new SequentialCommandGroup(
-    //             new CoralCheckedIn(funnel)
-    //                 .deadlineFor(
-    //                     new JamesHardenMovement(
-    //                         driveTrain,
-    //                         autoInformation.get(autoInformation.size() - 1).getPose(),
-    //                         true,
-    //                         false))
-    //                 .andThen(
-    //                     new JamesHardenScore(
-    //                         elevator,
-    //                         shooter,
-    //                         driveTrain,
-    //                         ElevatorPositions.L4,
-    //                         true,
-    //                         autoInformation.get(3))),
-    //             new SetElevatorLevelInstant(elevator, ElevatorPositions.Intake))));
   }
 
   private void settyCycle(
@@ -140,33 +88,34 @@ public class AutoProducer extends SequentialCommandGroup {
       TootsieSlideSubsystem shooter,
       SwerveSubsystem driveTrain,
       LandmarkPose scorePosition,
-      LandmarkPose HPSPosition) {
+      LandmarkPose HPSPosition,
+      LedSubsystem leds) {
 
     JamesHardenMovement movementCommand, maintainCommand;
     if (!scorePosition.isBranch()) {
       DogLog.log("JamesHardenScore/Errors", "called without real branch");
       return;
     }
-    movementCommand =
-        JamesHardenMovement.toSpecificBranch(driveTrain, true, () -> scorePosition, false);
-    maintainCommand =
-        JamesHardenMovement.toSpecificBranch(driveTrain, true, () -> scorePosition, true);
+    movementCommand = JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, false);
+    maintainCommand = JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, true);
 
     addCommands(
         new ParallelCommandGroup(
             // Elevator related
-            new Intake(elevator, funnel, shooter)
+            new Intake(elevator, funnel, shooter, leds)
                 .andThen(
                     new EndWhenCloseEnough(
                         () -> movementCommand.getTargetPose2d(),
-                        Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceAuto))
+                        Constants.HardenConstants.EndWhenCloseEnough.translationalToleranceAuto,
+                        Constants.HardenConstants.EndWhenCloseEnough.headingTolerance))
                 .andThen(new SetElevatorLevel(elevator, ElevatorPositions.L4, true)),
 
             // Movement related
             new SequentialCommandGroup(
                 new ParallelDeadlineGroup(
                     new CoralCheckedIn(funnel),
-                    new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true, true)),
+                    new JamesHardenMovement(driveTrain, HPSPosition.getPose(), true)),
+                new WaitCommand(0.2),
                 movementCommand.withTimeout(5.0))), // Added timeout to movement command
         // When the elevator is up and when the movement command is done, then do the following
         new ElevatorHoldL4(elevator).withTimeout(0.25),

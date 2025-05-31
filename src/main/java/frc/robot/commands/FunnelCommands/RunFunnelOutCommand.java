@@ -1,13 +1,17 @@
 package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.FunnelSubsystem;
+import java.util.function.BooleanSupplier;
 
 public class RunFunnelOutCommand extends Command {
   private FunnelSubsystem funnelSubsystem;
+  private BooleanSupplier L1;
 
-  public RunFunnelOutCommand(FunnelSubsystem funnelSubsystem) {
+  public RunFunnelOutCommand(FunnelSubsystem funnelSubsystem, BooleanSupplier L1) {
     this.funnelSubsystem = funnelSubsystem;
+    this.L1 = L1;
     addRequirements(funnelSubsystem);
   }
 
@@ -20,12 +24,13 @@ public class RunFunnelOutCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    funnelSubsystem.debugSpinBack();
+    funnelSubsystem.debugSpinBack(L1.getAsBoolean());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    CoralPosition.setCoralInFunnel(false);
     funnelSubsystem.stopFunnel();
   }
 

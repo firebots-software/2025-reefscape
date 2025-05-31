@@ -19,6 +19,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
+import frc.robot.Constants.Swerve.Simulation;
+import frc.robot.Constants.Swerve.SwerveType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,11 +44,14 @@ public final class Constants {
 
   public static class HardenConstants {
     public static class EndWhenCloseEnough {
-      public static final double translationalToleranceTeleop = 0.43105229381;
+      public static final double translationalToleranceTeleop = 0.8d; // 0.43105229381 worked before
       public static final double translationalToleranceAuto = 1d;
       // public static final double translationalTolerance = 0.6;
       public static final double headingTolerance = 0.7853975; // Math.PI/4
     }
+
+    public static final double ffMinRadius = 0.4; // 0.2 worked good
+    public static final double ffMaxRadius = 1.4; // 0.8 worked good
 
     public static class RegularCommand {
       public static final double xyIndividualTolerance = 0.02;
@@ -333,7 +338,7 @@ public final class Constants {
 
   public static final class Arm {
     // this is new code
-    public static final double PIVOT_GEAR_RATIO = 1 / 36d; // TODO
+    public static final double PIVOT_GEAR_RATIO = 1 / 25d; // TODO
 
     // end of new code
     public static final double STATOR_CURRENT_LIMIT_AMPS = 30.0;
@@ -417,7 +422,8 @@ public final class Constants {
     public static enum SwerveDrivePIDValues {
       SERRANO(0.18014, 0d, 0d, -0.023265, 0.12681, 0.058864),
       PROTO(0.053218, 0d, 0d, 0.19977, 0.11198, 0.0048619),
-      JAMES_HARDEN(0.041539, 0d, 0d, 0.14856, 0.12301, 0.0053369);
+      // JAMES_HARDEN(0.16901, 0d, 0d, 0.1593, 0.12143, 0.0091321); //0.041539 //0.12301
+      JAMES_HARDEN(0.36, 0d, 0d, 0.2425, 0.11560693641, 0); // 0.041539 //0.12301
       public final double KP, KI, KD, KS, KV, KA;
 
       SwerveDrivePIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
@@ -433,7 +439,7 @@ public final class Constants {
     public static enum SwerveSteerPIDValues {
       SERRANO(50d, 0d, 0.2, 0d, 1.5, 0d),
       PROTO(20d, 0d, 0d, 0d, 0d, 0d),
-      JAMES_HARDEN(50d, 0d, 0d, 0d, 0d, 0d);
+      JAMES_HARDEN(38.982d, 2.4768d, 0d, 0.23791d, 0d, 0.1151d);
       public final double KP, KI, KD, KS, KV, KA;
 
       SwerveSteerPIDValues(double KP, double KI, double KD, double KS, double KV, double KA) {
@@ -493,10 +499,10 @@ public final class Constants {
           "rio",
           BumperThickness.PROTO),
       JAMES_HARDEN(
-          Rotations.of(-0.076171875), // front left
-          Rotations.of(-0.493896484375), // front right
-          Rotations.of(0.18798828125), // back left
-          Rotations.of(-0.1591796875), // back right
+          Rotations.of(-0.0834960938), // front left
+          Rotations.of(-0.4912109375), // front right
+          Rotations.of(0.1931152344), // back left
+          Rotations.of(-0.15576171875), // back right
           SwerveLevel.L3,
           SwerveDrivePIDValues.JAMES_HARDEN,
           SwerveSteerPIDValues.JAMES_HARDEN,
@@ -599,7 +605,7 @@ public final class Constants {
                 new CurrentLimitsConfigs()
                     .withStatorCurrentLimit(Amps.of(90.0))
                     .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(Amps.of(40.0))
+                    .withSupplyCurrentLimit(Amps.of(50.0)) // 40.0
                     .withSupplyCurrentLimitEnable(true));
     private static final TalonFXConfiguration STEER_INITIAL_CONFIGS =
         new TalonFXConfiguration()
@@ -837,9 +843,12 @@ public final class Constants {
     public static final double INTAKE_SPEED_RPS = 5d; // TODO
     public static final double SHOOTING_SPEED_RPS =
         11.5d; // 12.5, 12 good for L3 and L2  worked for L2
+    public static final double REVERSE_SHOOTING_SPEED_RPS =
+        11.5d; // 12.5, 12 good for L3 and L2  worked for L2
   }
 
   public static class FunnelConstants {
+    public static final int RAMP_UP_SPEED = 25;
     public static final int RIGHT_MOTOR_PORT = 14; // TODO
     public static final int LEFT_MOTOR_PORT = 13; // TODO
     public static final double SUPPLY_CURRENT_LIMIT = 20.0; // TODO
@@ -851,7 +860,8 @@ public final class Constants {
     public static final double ACCELERATION = 10.0; // TODO
 
     public static final double SLOW_BACKWARDS_VELOCITY = -0.1;
-    public static final double SPEED_RPS = 11d; // 15.0
+    public static final double SPEED_RPS = 10d; // 15.0
+    public static final double REVERSE_SPEED_RPS = 15d; // 15.0
     public static final double GEAR_RATIO = 1d / 5d;
 
     public static final int CHECK_IN_PORT = 1;
@@ -868,7 +878,7 @@ public final class Constants {
     public static final double STATOR_CURRENT_LIMIT = 50.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 30.0; // TODO: change for actual match
 
-    public static double S0C_KP = 2.0;
+    public static double S0C_KP = 1.0; // 1.0 before (okay)
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.005;
 
@@ -877,12 +887,12 @@ public final class Constants {
     public static double S1C_KD = 0.0;
 
     public static double S0C_KS = 0.0;
-    public static double S0C_KG = 0.29;
+    public static double S0C_KG = 0.29 + 0.05;
     public static double S0C_KA = 0.0004657452997; // 0.04
     public static double S0C_KV = 0.124; // 10.66
 
-    public static final double MOTIONMAGIC_MAX_VELOCITY = 60;
-    public static final double MOTIONMAGIC_MAX_ACCELERATION = 125;
+    public static final double MOTIONMAGIC_MAX_VELOCITY = 90;
+    public static final double MOTIONMAGIC_MAX_ACCELERATION = 250;
 
     public static double SENSOR_OFFSET = 0.11;
     // public static final double MOTIONMAGIC_KG = 0.28;
@@ -911,15 +921,15 @@ public final class Constants {
           0, 0.057 + elevatorRecalibration), // 0.71 really high but we were using before // 0.0685
       // //0.065 still too high
       safePosition(0, 0.3 + elevatorRecalibration),
-      L1(1, 0.657 + elevatorRecalibration + 0.05),
+      L1(1, 0.657 + 0.05 + 0.05),
       L2DALE(0, 0.493 + elevatorRecalibration), // 0.8636 - 0.379
       L2(2, 0.9036 - 0.02 + elevatorRecalibration),
       L3DALE(0, 0.91 + elevatorRecalibration), // 1.27 - 0.379
       L3(
           3,
           1.285 - 0.02 + elevatorRecalibration), // 1.27 // KALASH wants 1cm lower //old value 1.32
-      L4(4, 1.835), // 1.81
-      LIMIT_OF_TRAVEL(1, 1.825 + 0.025); // 1.825
+      L4(4, 1.825), // 1.81
+      LIMIT_OF_TRAVEL(1, 1.8513375662); // 1.85
 
       public final int position;
       public final double height;
