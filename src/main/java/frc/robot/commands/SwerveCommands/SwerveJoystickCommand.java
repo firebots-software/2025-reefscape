@@ -60,6 +60,8 @@ public class SwerveJoystickCommand extends Command {
   }
 
   // Sets everything, not field relative
+  // This is a Swerve Joystick Command that takes in joystick inputs and allows the Robot to drive on the field
+  
   public SwerveJoystickCommand(
       DoubleSupplier frontBackFunction,
       DoubleSupplier leftRightFunction,
