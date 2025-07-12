@@ -14,7 +14,10 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -90,6 +93,33 @@ public final class Constants {
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(-12.5);
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-40);
+
+    public static Transform3d getCameraTransform(Cameras cam) {
+      switch (cam) {
+        case RIGHT_CAM:
+          return new Transform3d(
+              new Translation3d(
+                  RIGHT_CAM_TO_ROBOT_TRANSLATION_X,
+                  RIGHT_CAM_TO_ROBOT_TRANSLATION_Y,
+                  RIGHT_CAM_TO_ROBOT_TRANSLATION_Z),
+              new Rotation3d(
+                  RIGHT_CAM_TO_ROBOT_ROTATION_ROLL,
+                  RIGHT_CAM_TO_ROBOT_ROTATION_PITCH,
+                  RIGHT_CAM_TO_ROBOT_ROTATION_YAW));
+        case LEFT_CAM:
+          return new Transform3d(
+              new Translation3d(
+                  LEFT_CAM_TO_ROBOT_TRANSLATION_X,
+                  LEFT_CAM_TO_ROBOT_TRANSLATION_Y,
+                  LEFT_CAM_TO_ROBOT_TRANSLATION_Z),
+              new Rotation3d(
+                  LEFT_CAM_TO_ROBOT_ROTATION_ROLL,
+                  LEFT_CAM_TO_ROBOT_ROTATION_PITCH,
+                  LEFT_CAM_TO_ROBOT_ROTATION_YAW));
+        default:
+          throw new IllegalArgumentException("Unknown camera: " + cam);
+      }
+    }
   }
 
   public static class AutoRoutines {

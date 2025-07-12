@@ -11,21 +11,17 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.MiscUtils;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Collectors;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -33,242 +29,239 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-/** Creates a new VisionSystem. */
+/**
+ * VisionSystem fuses multi-tag AprilTag measurements from PhotonVision with swerve odometry by
+ * dynamically computing measurement noise based on tag count, distance, viewing angle, and robot
+ * speed.
+ */
 public class VisionSystem extends SubsystemBase {
+  // Reef tag IDs for each side of the field
+  private static final List<Integer> BLUE_SIDE_TAG_IDS = List.of(19, 20, 21, 22, 17, 18);
+  private static final List<Integer> RED_SIDE_TAG_IDS = List.of(6, 7, 8, 9, 10, 11);
 
-  public static int numThrowaways = 0;
-  public static int numNotThrowaways = 0;
-  List<Integer> reefIDs =
-      new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18, 6, 7, 8, 9, 10, 11));
-  List<Integer> blueReefID = new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18));
-  List<Integer> redReefID = new ArrayList<Integer>(Arrays.asList(6, 7, 8, 9, 10, 11));
+  // Base noise tuning parameters (tweakable)
+  private double calibrationFactor = 1.0;
+  private double baseNoiseX = 0.1; // meters
+  private double baseNoiseY = 0.1;
+  private double baseNoiseTheta = 0.17; // radians
 
-  Pose2d savedResult = new Pose2d(0, 0, new Rotation2d(0.01, 0.01));
-  private static VisionSystem[] systemList =
-      new VisionSystem[Constants.Vision.Cameras.values().length];
-  private Transform3d[] camToRobots = {
-    // right Camera transform
-    new Transform3d(
-        new Translation3d(
-            Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_X,
-            Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_Y,
-            Constants.Vision.RIGHT_CAM_TO_ROBOT_TRANSLATION_Z),
-        new Rotation3d(
-            Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_ROLL,
-            Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_PITCH,
-            Constants.Vision.RIGHT_CAM_TO_ROBOT_ROTATION_YAW)),
-    // left Camera
-    new Transform3d(
-        new Translation3d(
-            Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_X,
-            Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_Y,
-            Constants.Vision.LEFT_CAM_TO_ROBOT_TRANSLATION_Z),
-        new Rotation3d(
-            Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_ROLL,
-            Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_PITCH,
-            Constants.Vision.LEFT_CAM_TO_ROBOT_ROTATION_YAW)),
-  };
-  private PhotonCamera camera;
-  private Constants.Vision.Cameras cameraEnum;
-  private PhotonPipelineResult pipeline;
-  AprilTagFieldLayout aprilTagFieldLayout =
+  private double distanceCoefficientX = 0.02; // noise growth per meter
+  private double distanceCoefficientY = 0.02;
+  private double distanceCoefficientTheta = 0.01;
+
+  private double angleCoefficientX = 0.5; // noise growth per radian of viewing angle
+  private double angleCoefficientY = 0.5;
+  private double angleCoefficientTheta = 0.5;
+
+  private double speedCoefficientX = 0.5; // noise growth per fraction of max speed
+  private double speedCoefficientY = 0.5;
+  private double speedCoefficientTheta = 0.2;
+
+  // Maximums for normalization
+  private double maximumViewingAngle = Math.toRadians(90.0);
+  private double maximumRobotSpeed = 3.0; // meters per second
+  private double maximumAllowedDistance = 5.0; // meters, beyond which readings are dropped
+
+  // PhotonVision and odometry references
+  private final PhotonCamera photonCamera;
+  private final PhotonPoseEstimator poseEstimator;
+  private PhotonPipelineResult latestVisionResult;
+  private final BooleanSupplier isRedSide;
+  private Pose2d lastKnownPose = new Pose2d(0, 0, new Rotation2d());
+  private final SwerveSubsystem swerveDrive = SwerveSubsystem.getInstance();
+  private final AprilTagFieldLayout fieldLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
-  PhotonPoseEstimator photonPoseEstimator;
-  private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
-  private BooleanSupplier redSide;
 
-  public VisionSystem(Constants.Vision.Cameras cameraEnum, BooleanSupplier redSide) {
-    this.cameraEnum = cameraEnum;
-    String name = cameraEnum.toString();
-    int index = cameraEnum.ordinal();
-    camera = new PhotonCamera(name);
-    photonPoseEstimator =
+  public VisionSystem(Constants.Vision.Cameras cameraId, BooleanSupplier isRedSide) {
+    this.isRedSide = isRedSide;
+    photonCamera = new PhotonCamera(cameraId.toString());
+    Transform3d cameraToRobot = Constants.Vision.getCameraTransform(cameraId);
+    poseEstimator =
         new PhotonPoseEstimator(
-            aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camToRobots[index]);
-    this.redSide = redSide;
-    for (var x : camera.getAllUnreadResults()) {
-      pipeline = x;
-    }
-  }
-
-  public Double getDistance() {
-    return this.getAprilTagFieldLayout()
-        .getTagPose(getPipelineResult().getBestTarget().getFiducialId())
-        .get()
-        .getTranslation()
-        .getDistance(
-            new Translation3d(
-                driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
-  }
-
-  public static VisionSystem getInstance(Constants.Vision.Cameras name, BooleanSupplier redSide) {
-    if (systemList[name.ordinal()] == null) {
-      systemList[name.ordinal()] = new VisionSystem(name, redSide);
-    }
-
-    return systemList[name.ordinal()];
-  }
-
-  // use this when feeding into drivetrain
-  public Optional<EstimatedRobotPose> getMultiTagPose3d(Pose2d previousRobotPose) {
-    photonPoseEstimator.setReferencePose(previousRobotPose);
-    return photonPoseEstimator.update(pipeline);
-  }
-
-  public Pose2d getPose2d() {
-    Optional<EstimatedRobotPose> pose3d = getMultiTagPose3d(savedResult);
-    if (pose3d.isEmpty()) return null;
-    savedResult = pose3d.get().estimatedPose.toPose2d();
-    return savedResult;
-  }
-
-  public Pose2d getSaved() {
-    return savedResult;
-  }
-
-  public boolean hasTarget(PhotonPipelineResult pipeline) {
-    if (pipeline == null) {
-      return false;
-    }
-    return pipeline.hasTargets();
-  }
-
-  public void setReference(Pose2d newPose) {
-    if (newPose == null) {
-      return;
-    }
-    savedResult = newPose;
-  }
-
-  public static Pose2d getAverageForOffBotTesting(Pose2d one, Pose2d two) {
-    if (one == null) return two;
-    if (two == null) return one;
-
-    return new Pose2d(
-        (one.getX() + two.getX()) / 2, (one.getY() + two.getY()) / 2, one.getRotation());
-  }
-
-  public AprilTagFieldLayout getAprilTagFieldLayout() {
-    return this.aprilTagFieldLayout;
-  }
-
-  public PhotonPipelineResult getPipelineResult() {
-    return pipeline;
-  }
-
-  public void addFilteredPose() {
-    String camName = cameraEnum.getLoggingName();
-    PhotonPipelineResult pipelineResult = getPipelineResult();
-
-    DogLog.log("KalmanDebug/" + camName + "PiplineNull", pipelineResult == null);
-    DogLog.log("KalmanDebug/" + camName + "PipelineHasTarget", hasTarget(pipelineResult));
-
-    if (pipelineResult != null && hasTarget(pipelineResult)) {
-
-      List<PhotonTrackedTarget> targets = pipelineResult.getTargets();
-
-      boolean hasReefTag = true;
-      double poseAmbiguity = pipelineResult.getBestTarget().poseAmbiguity;
-      double distance = getDistance();
-
-      DogLog.log("KalmanDebug/" + camName + "PoseAmbiguity", poseAmbiguity);
-      DogLog.log("KalmanDebug/" + camName + "DistToAprilTag", distance);
-
-      for (PhotonTrackedTarget target : targets) {
-        DogLog.log("redside in vision system", redSide.getAsBoolean());
-        if (redSide.getAsBoolean()) {
-          if (!redReefID.contains(target.getFiducialId())) {
-            hasReefTag = false;
-          }
-        } else {
-          if (!blueReefID.contains(target.getFiducialId())) {
-            hasReefTag = false;
-          }
-        }
-        // if (!reefIDs.contains(target.getFiducialId())) {
-        //   hasReefTag = false;
-        // }
-      }
-
-      if (hasReefTag) {
-        double speedMultiplier =
-            (Math.sqrt(
-                        Math.pow(driveTrain.getRobotSpeeds().vxMetersPerSecond, 2)
-                            + Math.pow(driveTrain.getRobotSpeeds().vyMetersPerSecond, 2)))
-                    / 2
-                + 1.0;
-        double xKalman = MiscUtils.lerp((distance - 0.62) / 3, 0.03, 0.3, 1.0) * speedMultiplier;
-        double yKalman = MiscUtils.lerp((distance - 0.62) / 3, 0.03, 0.3, 1.0) * speedMultiplier;
-        // double speedMultiplier = 1;
-        // if (Math.sqrt(
-        //         Math.pow(driveTrain.getRobotSpeeds().vxMetersPerSecond, 2)
-        //             + Math.pow(driveTrain.getRobotSpeeds().vyMetersPerSecond, 2))
-        //     > 1) {
-        //   speedMultiplier = 2;
-        // }
-        // speedMultiplier =
-        //     (Math.sqrt(
-        //                 Math.pow(driveTrain.getRobotSpeeds().vxMetersPerSecond, 2)
-        //                     + Math.pow(driveTrain.getRobotSpeeds().vyMetersPerSecond, 2)))
-        //             / 2
-        //         + 1.0;
-        // double xKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.04, 0.5, 1.0) *
-        // speedMultiplier;
-        // double yKalman = MiscUtils.lerp((distance - 0.6) / 2.4, 0.04, 0.5, 1.0) *
-        // speedMultiplier;
-        double rotationKalman = MiscUtils.lerp((distance - 0.6) / 1.4, 0.4, 5, 30) / 10;
-
-        DogLog.log("KalmanDebug/" + camName + "TranslationStandardDeviation", xKalman);
-        DogLog.log("KalmanDebug/" + camName + "RotationStandardDeviation", rotationKalman);
-
-        Matrix<N3, N1> visionMatrix = VecBuilder.fill(xKalman, yKalman, rotationKalman);
-        Pose2d bestRobotPose2d = getPose2d();
-
-        if (bestRobotPose2d == null) {
-          VisionSystem.numThrowaways++;
-          DogLog.log("KalmanDebug/" + camName + "visionUsed", false);
-          DogLog.log("KalmanDebug/" + camName + "throwaways", VisionSystem.numThrowaways);
-          return;
-        }
-        Pose2d rotationLess =
-            new Pose2d(bestRobotPose2d.getTranslation(), driveTrain.getState().Pose.getRotation());
-        DogLog.log("KalmanDebug/" + camName + "Rotationless", rotationLess);
-        DogLog.log("KalmanDebug/" + camName + "RobotPoseIsPresent", bestRobotPose2d != null);
-        DogLog.log("KalmanDebug/" + camName + "VisionPose", bestRobotPose2d);
-
-        double xDifference = Math.abs(driveTrain.getPose().getX() - bestRobotPose2d.getX());
-        double yDifference = Math.abs(driveTrain.getPose().getY() - bestRobotPose2d.getY());
-        double rotDifference =
-            Math.abs(
-                driveTrain.getPose().getRotation().getDegrees()
-                    - bestRobotPose2d.getRotation().getDegrees());
-        Translation2d transDifference = new Translation2d(xDifference, yDifference);
-        Rotation2d rot2dDifference = new Rotation2d(rotDifference);
-
-        Pose2d visionDiff = new Pose2d(transDifference, rot2dDifference);
-        double timeDiff = Math.abs(pipelineResult.getTimestampSeconds() - Timer.getTimestamp());
-        DogLog.log("KalmanDebug/" + camName + "visionDiff", visionDiff);
-        DogLog.log("KalmanDebug/" + camName + "diffInTimestamps", timeDiff);
-
-        driveTrain.addVisionMeasurement(
-            bestRobotPose2d,
-            timeDiff > 5 ? Timer.getTimestamp() - 0.070 : pipelineResult.getTimestampSeconds(),
-            visionMatrix);
-        VisionSystem.numNotThrowaways++;
-        DogLog.log("KalmanDebug/" + camName + "numNotThrowaway", VisionSystem.numNotThrowaways);
-        DogLog.log("KalmanDebug/" + camName + "visionUsed", true);
-      } else {
-        DogLog.log("KalmanDebug/" + camName + "visionUsed", false);
-      }
-    } else {
-      DogLog.log("KalmanDebug/" + camName + "visionUsed", false);
-    }
+            fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraToRobot);
+    latestVisionResult = null;
   }
 
   @Override
   public void periodic() {
-    for (var x : camera.getAllUnreadResults()) {
-      pipeline = x;
+    for (var x : photonCamera.getAllUnreadResults()) {
+      latestVisionResult = x;
     }
+  }
+
+  /**
+   * Attempts to fuse a vision measurement into the swerve pose estimator, dropping readings that
+   * fail validity checks, and computing noise dynamically via computeMeasurementNoise().
+   */
+  public void addFilteredPose() {
+    if (latestVisionResult == null || !latestVisionResult.hasTargets()) {
+      DogLog.log("Vision/MeasurementUsed", false);
+      return;
+    }
+
+    // Filter tags to only those on the active side
+    List<PhotonTrackedTarget> validTags =
+        latestVisionResult.getTargets().stream()
+            .filter(t -> isTagOnActiveSide(t.getFiducialId()))
+            .collect(Collectors.toList());
+    if (validTags.isEmpty()) {
+      DogLog.log("Vision/TagFilter", false);
+      return;
+    }
+
+    // Compute effective metrics for multi-tag solution
+    int tagCount = validTags.size();
+    double averageDistance =
+        validTags.stream()
+            .mapToDouble(t -> getDistanceToTag(t.getFiducialId()))
+            .average()
+            .orElse(Double.NaN);
+    if (Double.isNaN(averageDistance) || averageDistance > maximumAllowedDistance) {
+      DogLog.log("Vision/DistanceFilter", true);
+      return;
+    }
+    double averageAngle =
+        validTags.stream()
+            .mapToDouble(PhotonTrackedTarget::getYaw)
+            .map(Math::toRadians)
+            .map(Math::abs)
+            .average()
+            .orElse(0.0);
+    double currentSpeed =
+        Math.hypot(
+            swerveDrive.getRobotSpeeds().vxMetersPerSecond,
+            swerveDrive.getRobotSpeeds().vyMetersPerSecond);
+
+    // Compute measurement noise for each axis
+    double noiseX =
+        computeMeasurementNoise(
+            baseNoiseX,
+            distanceCoefficientX,
+            angleCoefficientX,
+            speedCoefficientX,
+            averageDistance,
+            averageAngle,
+            currentSpeed,
+            tagCount);
+    double noiseY =
+        computeMeasurementNoise(
+            baseNoiseY,
+            distanceCoefficientY,
+            angleCoefficientY,
+            speedCoefficientY,
+            averageDistance,
+            averageAngle,
+            currentSpeed,
+            tagCount);
+    double noiseTheta =
+        computeMeasurementNoise(
+            baseNoiseTheta,
+            distanceCoefficientTheta,
+            angleCoefficientTheta,
+            speedCoefficientTheta,
+            averageDistance,
+            averageAngle,
+            currentSpeed,
+            tagCount);
+
+    DogLog.log("Vision/NoiseX", noiseX);
+    DogLog.log("Vision/NoiseY", noiseY);
+    DogLog.log("Vision/NoiseTheta", noiseTheta);
+
+    // Get the pose from PhotonVision
+    poseEstimator.setReferencePose(lastKnownPose);
+    Optional<EstimatedRobotPose> maybePose = poseEstimator.update(latestVisionResult);
+    if (maybePose.isEmpty()) {
+      DogLog.log("Vision/PoseEstimateFailed", true);
+      return;
+    }
+    Pose2d measuredPose = maybePose.get().estimatedPose.toPose2d();
+    lastKnownPose = measuredPose;
+
+    // Choose timestamp: use vision timestamp unless it differs too much from FPGA
+    double visionTimestamp = latestVisionResult.getTimestampSeconds();
+    double fpgaTimestamp = Timer.getFPGATimestamp();
+    double timestampDifference = Math.abs(visionTimestamp - fpgaTimestamp);
+    double chosenTimestamp = (timestampDifference > 0.5) ? fpgaTimestamp : visionTimestamp;
+
+    // Build the noise vector and add the vision measurement
+    Matrix<N3, N1> noiseVector = VecBuilder.fill(noiseX, noiseY, noiseTheta);
+    swerveDrive.addVisionMeasurement(measuredPose, chosenTimestamp, noiseVector);
+    DogLog.log("Vision/MeasurementUsed", true);
+  }
+
+  private boolean isTagOnActiveSide(int tagId) {
+    return isRedSide.getAsBoolean()
+        ? RED_SIDE_TAG_IDS.contains(tagId)
+        : BLUE_SIDE_TAG_IDS.contains(tagId);
+  }
+
+  private double getDistanceToTag(int tagId) {
+    return fieldLayout
+        .getTagPose(tagId)
+        .map(
+            pose3d ->
+                pose3d
+                    .getTranslation()
+                    .getDistance(
+                        new Translation3d(
+                            swerveDrive.getPose().getX(), swerveDrive.getPose().getY(), 0.0)))
+        .orElse(Double.NaN);
+  }
+
+  /**
+   * Computes a measurement noise standard deviation based on: - base noise (zero-distance, head-on)
+   * - distance scaling - viewing angle scaling - robot speed scaling - tag count (noise reduction
+   * by sqrt(N))
+   */
+  private double computeMeasurementNoise(
+      double baseNoise,
+      double distanceCoefficient,
+      double angleCoefficient,
+      double speedCoefficient,
+      double distance,
+      double angleRad,
+      double robotSpeed,
+      int tagCount) {
+    double tagCountScale = 1.0 / Math.sqrt(Math.max(tagCount, 1));
+    double distanceTerm = baseNoise + distanceCoefficient * distance;
+    double angleTerm = 1.0 + angleCoefficient * (angleRad / maximumViewingAngle);
+    double speedTerm = 1.0 + speedCoefficient * (robotSpeed / maximumRobotSpeed);
+    return calibrationFactor * tagCountScale * distanceTerm * angleTerm * speedTerm;
+  }
+
+  // Setters for runtime tuning of parameters
+  public void setCalibrationFactor(double factor) {
+    calibrationFactor = factor;
+  }
+
+  public void setBaseNoise(double noiseX, double noiseY, double noiseTheta) {
+    baseNoiseX = noiseX;
+    baseNoiseY = noiseY;
+    baseNoiseTheta = noiseTheta;
+  }
+
+  public void setDistanceCoefficients(double coeffX, double coeffY, double coeffTheta) {
+    distanceCoefficientX = coeffX;
+    distanceCoefficientY = coeffY;
+    distanceCoefficientTheta = coeffTheta;
+  }
+
+  public void setAngleCoefficients(double coeffX, double coeffY, double coeffTheta) {
+    angleCoefficientX = coeffX;
+    angleCoefficientY = coeffY;
+    angleCoefficientTheta = coeffTheta;
+  }
+
+  public void setSpeedCoefficients(double coeffX, double coeffY, double coeffTheta) {
+    speedCoefficientX = coeffX;
+    speedCoefficientY = coeffY;
+    speedCoefficientTheta = coeffTheta;
+  }
+
+  public void setMaximums(double maxDistance, double maxSpeed, double maxAngleDegrees) {
+    maximumAllowedDistance = maxDistance;
+    maximumRobotSpeed = maxSpeed;
+    maximumViewingAngle = Math.toRadians(maxAngleDegrees);
   }
 }
