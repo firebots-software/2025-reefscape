@@ -59,7 +59,7 @@ public class VisionSystem extends SubsystemBase {
 
   // Maximums for normalization
   private double maximumViewingAngle = Math.toRadians(90.0);
-  private double maximumRobotSpeed = 3.0; // meters per second
+  private double maximumRobotSpeed = 4.8; // meters per second
   private double maximumAllowedDistance = 5.0; // meters, beyond which readings are dropped
 
   // PhotonVision and odometry references
