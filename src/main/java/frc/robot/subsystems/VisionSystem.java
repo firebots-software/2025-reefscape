@@ -35,6 +35,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
  * speed.
  */
 public class VisionSystem extends SubsystemBase {
+  private static VisionSystem[] systemList = new VisionSystem[Constants.Vision.Cameras.values().length];
+
   // Reef tag IDs for each side of the field
   private static final List<Integer> BLUE_SIDE_TAG_IDS = List.of(19, 20, 21, 22, 17, 18);
   private static final List<Integer> RED_SIDE_TAG_IDS = List.of(6, 7, 8, 9, 10, 11);
@@ -80,6 +82,14 @@ public class VisionSystem extends SubsystemBase {
         new PhotonPoseEstimator(
             fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraToRobot);
     latestVisionResult = null;
+  }
+
+  public static VisionSystem getInstance(Constants.Vision.Cameras cameraId, BooleanSupplier isRedSide) {
+    int idx = cameraId.ordinal();
+    if (systemList[idx] == null) {
+      systemList[idx] = new VisionSystem(cameraId, isRedSide);
+    }
+    return systemList[idx];
   }
 
   @Override
