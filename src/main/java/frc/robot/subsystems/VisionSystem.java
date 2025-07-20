@@ -38,18 +38,19 @@ public class VisionSystem extends SubsystemBase {
   private static VisionSystem[] systemList =
       new VisionSystem[Constants.Vision.Cameras.values().length];
 
+  private final Constants.Vision.Cameras cameraId;
   // Reef tag IDs for each side of the field
   private static final List<Integer> BLUE_SIDE_TAG_IDS = List.of(19, 20, 21, 22, 17, 18);
   private static final List<Integer> RED_SIDE_TAG_IDS = List.of(6, 7, 8, 9, 10, 11);
 
   // Base noise tuning parameters (tweakable)
   private double calibrationFactor = 1.0;
-  private double baseNoiseX = 0.05; // meters
-  private double baseNoiseY = 0.05;
-  private double baseNoiseTheta = 1; // radians
+  private double baseNoiseX = 0.02; // meters
+  private double baseNoiseY = 0.02;
+  private double baseNoiseTheta = 0.5; // radians
 
-  private double distanceCoefficientX = 0.02; // noise growth per meter
-  private double distanceCoefficientY = 0.02;
+  private double distanceCoefficientX = 0.4; // noise growth per meter
+  private double distanceCoefficientY = 0.4;
   private double distanceCoefficientTheta = 1;
 
   private double angleCoefficientX = 0.5; // noise growth per radian of viewing angle
@@ -58,11 +59,11 @@ public class VisionSystem extends SubsystemBase {
 
   private double speedCoefficientX = 0.5; // noise growth per fraction of max speed
   private double speedCoefficientY = 0.5;
-  private double speedCoefficientTheta = 0.2;
+  private double speedCoefficientTheta = 0.5;
 
   // Maximums for normalization
   private double maximumViewingAngle = Math.toRadians(90.0);
-  private double maximumRobotSpeed = 4.8; // meters per second
+  private double maximumRobotSpeed = 5; // meters per second
   private double maximumAllowedDistance = 15.0; // meters, beyond which readings are dropped
 
   // PhotonVision and odometry references
@@ -77,6 +78,7 @@ public class VisionSystem extends SubsystemBase {
 
   public VisionSystem(Constants.Vision.Cameras cameraId, BooleanSupplier isRedSide) {
     this.isRedSide = isRedSide;
+    this.cameraId = cameraId;
     photonCamera = new PhotonCamera(cameraId.toString());
     Transform3d cameraToRobot = Constants.Vision.getCameraTransform(cameraId);
     poseEstimator =
@@ -189,7 +191,7 @@ public class VisionSystem extends SubsystemBase {
     }
     Pose2d measuredPose = maybePose.get().estimatedPose.toPose2d();
     lastKnownPose = measuredPose;
-
+    DogLog.log("Vision/" + cameraId.toString() + "Pose", measuredPose);
     // Choose timestamp: use vision timestamp unless it differs too much from FPGA
     double visionTimestamp = latestVisionResult.getTimestampSeconds();
     double fpgaTimestamp = Timer.getFPGATimestamp();
