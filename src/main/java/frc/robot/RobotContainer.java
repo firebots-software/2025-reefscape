@@ -107,8 +107,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    leds.setDefaultCommand(
-        new InstantCommand(() -> leds.updateLedsCommand(LedSubsystem.LedState.IDLE)));
+    // leds.setDefaultCommand(
+    //     new InstantCommand(() -> leds.updateLedsCommand(LedSubsystem.LedState.IDLE)));
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
 
