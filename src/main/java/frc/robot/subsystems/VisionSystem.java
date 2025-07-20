@@ -35,7 +35,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
  * speed.
  */
 public class VisionSystem extends SubsystemBase {
-  private static VisionSystem[] systemList = new VisionSystem[Constants.Vision.Cameras.values().length];
+  private static VisionSystem[] systemList =
+      new VisionSystem[Constants.Vision.Cameras.values().length];
 
   // Reef tag IDs for each side of the field
   private static final List<Integer> BLUE_SIDE_TAG_IDS = List.of(19, 20, 21, 22, 17, 18);
@@ -43,13 +44,13 @@ public class VisionSystem extends SubsystemBase {
 
   // Base noise tuning parameters (tweakable)
   private double calibrationFactor = 1.0;
-  private double baseNoiseX = 0.1; // meters
-  private double baseNoiseY = 0.1;
-  private double baseNoiseTheta = 0.17; // radians
+  private double baseNoiseX = 0.05; // meters
+  private double baseNoiseY = 0.05;
+  private double baseNoiseTheta = 1; // radians
 
   private double distanceCoefficientX = 0.02; // noise growth per meter
   private double distanceCoefficientY = 0.02;
-  private double distanceCoefficientTheta = 0.01;
+  private double distanceCoefficientTheta = 1;
 
   private double angleCoefficientX = 0.5; // noise growth per radian of viewing angle
   private double angleCoefficientY = 0.5;
@@ -62,7 +63,7 @@ public class VisionSystem extends SubsystemBase {
   // Maximums for normalization
   private double maximumViewingAngle = Math.toRadians(90.0);
   private double maximumRobotSpeed = 4.8; // meters per second
-  private double maximumAllowedDistance = 5.0; // meters, beyond which readings are dropped
+  private double maximumAllowedDistance = 15.0; // meters, beyond which readings are dropped
 
   // PhotonVision and odometry references
   private final PhotonCamera photonCamera;
@@ -84,7 +85,8 @@ public class VisionSystem extends SubsystemBase {
     latestVisionResult = null;
   }
 
-  public static VisionSystem getInstance(Constants.Vision.Cameras cameraId, BooleanSupplier isRedSide) {
+  public static VisionSystem getInstance(
+      Constants.Vision.Cameras cameraId, BooleanSupplier isRedSide) {
     int idx = cameraId.ordinal();
     if (systemList[idx] == null) {
       systemList[idx] = new VisionSystem(cameraId, isRedSide);
