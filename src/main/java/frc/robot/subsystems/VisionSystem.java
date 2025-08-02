@@ -69,7 +69,7 @@ public class VisionSystem extends SubsystemBase {
   // PhotonVision and odometry references
   private final PhotonCamera photonCamera;
   private final PhotonPoseEstimator poseEstimator;
-  private PhotonPipelineResult latestVisionResult;
+  private volatile PhotonPipelineResult latestVisionResult;
   private final BooleanSupplier isRedSide;
   private Pose2d lastKnownPose = new Pose2d(0, 0, new Rotation2d());
   private final SwerveSubsystem swerveDrive = SwerveSubsystem.getInstance();
@@ -182,6 +182,12 @@ public class VisionSystem extends SubsystemBase {
     DogLog.log("Vision/NoiseY", noiseY);
     DogLog.log("Vision/NoiseTheta", noiseTheta);
 
+    if (Double.isNaN(noiseX) || Double.isNaN(noiseY) || Double.isNaN(noiseTheta) ||
+        Double.isInfinite(noiseX) || Double.isInfinite(noiseY) || Double.isInfinite(noiseTheta)) {
+      DogLog.log("Vision/BadNoise", true);
+      return;
+    }
+
     // Get the pose from PhotonVision
     poseEstimator.setReferencePose(lastKnownPose);
     Optional<EstimatedRobotPose> maybePose = poseEstimator.update(latestVisionResult);
@@ -195,13 +201,21 @@ public class VisionSystem extends SubsystemBase {
     // Choose timestamp: use vision timestamp unless it differs too much from FPGA
     double visionTimestamp = latestVisionResult.getTimestampSeconds();
     double fpgaTimestamp = Timer.getFPGATimestamp();
+    if (visionTimestamp < 0 || visionTimestamp > fpgaTimestamp + 1.0) {
+      DogLog.log("Vision/BadTimestamp", true);
+      visionTimestamp = fpgaTimestamp;
+    }
     double timestampDifference = Math.abs(visionTimestamp - fpgaTimestamp);
     double chosenTimestamp = (timestampDifference > 0.5) ? fpgaTimestamp : visionTimestamp;
 
     // Build the noise vector and add the vision measurement
     Matrix<N3, N1> noiseVector = VecBuilder.fill(noiseX, noiseY, noiseTheta);
-    swerveDrive.addVisionMeasurement(measuredPose, chosenTimestamp, noiseVector);
-    DogLog.log("Vision/MeasurementUsed", true);
+    try {
+      swerveDrive.addVisionMeasurement(measuredPose, chosenTimestamp, noiseVector);
+    } catch (Exception e) {
+      DogLog.log("Vision/FusionException", true);
+      DogLog.log("Vision/FusionExceptionDetail", e.toString());
+    }
   }
 
   private boolean isTagOnActiveSide(int tagId) {
