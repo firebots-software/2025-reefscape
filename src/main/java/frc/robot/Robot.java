@@ -71,8 +71,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
 
-    visionRight.addFilteredPose();
-    visionLeft.addFilteredPose();
+    visionRight.addFilteredPose(true);
+    visionLeft.addFilteredPose(true);
 
     DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
 
