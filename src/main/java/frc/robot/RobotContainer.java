@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -107,8 +106,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    leds.setDefaultCommand(
-        new InstantCommand(() -> leds.updateLedsCommand(LedSubsystem.LedState.IDLE)));
+    // leds.setDefaultCommand(
+    //     new InstantCommand(() -> leds.updateLedsCommand(LedSubsystem.LedState.IDLE)));
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
     elevatorSubsystem.setDefaultCommand(new DefaultElevator(elevatorSubsystem));
 
