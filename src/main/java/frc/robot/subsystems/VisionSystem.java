@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
@@ -168,28 +169,22 @@ public class VisionSystem extends SubsystemBase {
       DogLog.log("Vision/DistanceFilter", true);
       return null;
     }
-    double averageYawDeg =
+    // Compute true viewing skew (how oblique the camera is to the tag face)
+    double averageSkewRad =
         validTags.stream()
-            .mapToDouble(PhotonTrackedTarget::getYaw)
-            .map(Math::abs)
-            .average()
-            .orElse(0.0);
-    double averagePitchDeg =
-        validTags.stream()
-            .mapToDouble(PhotonTrackedTarget::getPitch)
-            .map(Math::abs)
+            .mapToDouble(this::computeTargetSkewRad)
             .average()
             .orElse(0.0);
 
-    // Reject overly oblique views (>70 degrees in either axis)
-    if (averageYawDeg > 70.0 || averagePitchDeg > 70.0) {
+    // Reject overly oblique views (e.g., >70° combined yaw/pitch off-axis)
+    if (Math.toDegrees(averageSkewRad) > 70.0) {
       if (forceAdd) return null;
-      DogLog.log("Vision/ViewAngleTooLarge", true);
+      DogLog.log("Vision/ViewSkewTooLarge", true);
       return null;
     }
 
-    // retain previous semantics for noise calculation (uses yaw)
-    double averageAngle = Math.toRadians(averageYawDeg);
+    // Use true viewing skew (radians) for noise calculation
+    double averageAngle = averageSkewRad;
     double currentSpeed =
         Math.hypot(
             swerveDrive.getRobotSpeeds().vxMetersPerSecond,
@@ -436,5 +431,15 @@ public class VisionSystem extends SubsystemBase {
       this.tagCount = tagCount;
       this.timestamp = timestamp;
     }
+  }
+  /**
+   * Computes the camera's off-axis viewing skew for a single tag, in radians.
+   * Uses the rotation from camera -> target; pitch (Y) and yaw (Z) near zero imply head-on view.
+   */
+  private double computeTargetSkewRad(PhotonTrackedTarget t) {
+    Rotation3d r = t.getBestCameraToTarget().getRotation();
+    // r.getY() and r.getZ() are radians (pitch and yaw).
+    // Combined off-axis = sqrt(pitch^2 + yaw^2)
+    return Math.hypot(r.getY(), r.getZ());
   }
 }
