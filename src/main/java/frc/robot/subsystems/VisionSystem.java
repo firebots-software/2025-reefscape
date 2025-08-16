@@ -50,7 +50,7 @@ public class VisionSystem extends SubsystemBase {
   private double baseNoiseY = 0.0;
   private double baseNoiseTheta = 0.5; // radians
 
-  private double distanceCoefficientX = 0.05; // noise growth per m^2
+  private double distanceCoefficientX = 0.05; // noise growth per meter
   private double distanceCoefficientY = 0.05;
   private double distanceCoefficientTheta = 1;
 
@@ -140,11 +140,16 @@ public class VisionSystem extends SubsystemBase {
    * @return PoseEstimateResult containing the pose and confidence data, or null if failed
    */
   private PoseEstimateResult addFilteredPoseInternal(boolean useTrigsolve, boolean forceAdd) {
+    final String strategyPrefix = useTrigsolve ? "Trigsolve" : "MultiTag";
     if (latestVisionResult == null || !latestVisionResult.hasTargets()) {
-      if (forceAdd) return null;
-      DogLog.log("Vision/MeasurementUsed", false);
+      if (!forceAdd) {
+        v(strategyPrefix + "/HasTargets", false);
+        vts(strategyPrefix + "/Frame/NoTargets");
+      }
       return null;
     }
+    v(strategyPrefix + "/HasTargets", true);
+    vts(strategyPrefix + "/Frame/Start");
 
     // Filter tags to only those on the active side
     List<PhotonTrackedTarget> validTags =
@@ -156,9 +161,15 @@ public class VisionSystem extends SubsystemBase {
       DogLog.log("Vision/TagFilter", false);
       return null;
     }
+    int tagCount = validTags.size();
+    v(strategyPrefix + "/Tags/Count", tagCount);
+    String tagIdsCsv = validTags.stream()
+        .map(t -> Integer.toString(t.getFiducialId()))
+        .sorted()
+        .collect(Collectors.joining(","));
+    v(strategyPrefix + "/Tags/IDs", tagIdsCsv);
 
     // Compute effective metrics for solution
-    int tagCount = validTags.size();
     // Use camera→target distance from PV (avoids odometry dependence)
     double averageDistance =
         validTags.stream()
@@ -170,9 +181,13 @@ public class VisionSystem extends SubsystemBase {
             .mapToDouble(t -> t.getBestCameraToTarget().getTranslation().getNorm())
             .min()
             .orElse(Double.NaN);
+    v(strategyPrefix + "/Range/AvgM", averageDistance);
+    v(strategyPrefix + "/Range/MinM", minDistance);
     if (Double.isNaN(minDistance) || minDistance > maximumAllowedDistance) {
-      if (forceAdd) return null;
-      DogLog.log("Vision/DistanceFilter", true);
+      if (!forceAdd) {
+        v(strategyPrefix + "/Gate/DistanceRejected", true);
+        v(strategyPrefix + "/Range/MaxAllowedM", maximumAllowedDistance);
+      }
       return null;
     }
     // Compute true viewing skew (how oblique the camera is to the tag face)
@@ -183,17 +198,25 @@ public class VisionSystem extends SubsystemBase {
     double maxSkewRad =
         validTags.stream().mapToDouble(this::computeTargetSkewRad).max().orElse(0.0);
 
+    v(strategyPrefix + "/Skew/AvgDeg", Math.toDegrees(avgSkewRad));
+    v(strategyPrefix + "/Skew/MinDeg", Math.toDegrees(minSkewRad));
+    v(strategyPrefix + "/Skew/MaxDeg", Math.toDegrees(maxSkewRad));
+
     // Strategy-specific gating: trigsolve rejects only if ALL tags are too skewed; PnP rejects if ANY is too skewed
     if (useTrigsolve) {
       if (Math.toDegrees(minSkewRad) > 70.0) {
-        if (forceAdd) return null;
-        DogLog.log("Vision/ViewSkewTooLarge", true);
+        if (!forceAdd) {
+          v(strategyPrefix + "/Gate/SkewRejected", true);
+          v(strategyPrefix + "/Skew/CutoffDeg", 70.0);
+        }
         return null;
       }
     } else {
       if (Math.toDegrees(maxSkewRad) > 70.0) {
-        if (forceAdd) return null;
-        DogLog.log("Vision/ViewSkewTooLarge", true);
+        if (!forceAdd) {
+          v(strategyPrefix + "/Gate/SkewRejected", true);
+          v(strategyPrefix + "/Skew/CutoffDeg", 70.0);
+        }
         return null;
       }
     }
@@ -204,6 +227,8 @@ public class VisionSystem extends SubsystemBase {
         Math.hypot(
             swerveDrive.getRobotSpeeds().vxMetersPerSecond,
             swerveDrive.getRobotSpeeds().vyMetersPerSecond);
+    v(strategyPrefix + "/Inputs/SkewUsedDeg", Math.toDegrees(averageAngle));
+    v(strategyPrefix + "/Inputs/SpeedMps", currentSpeed);
 
     // Choose the appropriate pose estimator and reference pose
     PhotonPoseEstimator selectedEstimator = useTrigsolve ? trigsolvePoseEstimator : poseEstimator;
@@ -213,9 +238,10 @@ public class VisionSystem extends SubsystemBase {
     selectedEstimator.setReferencePose(referencePos);
     Optional<EstimatedRobotPose> maybePose = selectedEstimator.update(latestVisionResult);
     if (maybePose.isEmpty()) {
-      if (forceAdd) return null;
-      String strategyPrefix = useTrigsolve ? "Trigsolve" : "MultiTag";
-      DogLog.log("Vision/" + strategyPrefix + "PoseEstimateFailed", true);
+      if (!forceAdd) {
+        v(strategyPrefix + "/Pose/EstimateFailed", true);
+        vts(strategyPrefix + "/Frame/End");
+      }
       return null;
     }
     
@@ -227,44 +253,42 @@ public class VisionSystem extends SubsystemBase {
     if (useTrigsolve) {
       // For trigsolve, calculate confidence based on the measurement noise multipliers
       // Lower total noise = higher confidence
-      double noiseX =
-          computeMeasurementNoise(
-              baseNoiseX,
-              distanceCoefficientX,
-              angleCoefficientX,
-              speedCoefficientX,
-              averageDistance,
-              averageAngle,
-              currentSpeed,
-              tagCount);
-      double noiseY =
-          computeMeasurementNoise(
-              baseNoiseY,
-              distanceCoefficientY,
-              angleCoefficientY,
-              speedCoefficientY,
-              averageDistance,
-              averageAngle,
-              currentSpeed,
-              tagCount);
-      double noiseTheta =
-          computeMeasurementNoise(
-              baseNoiseTheta,
-              distanceCoefficientTheta,
-              angleCoefficientTheta,
-              speedCoefficientTheta,
-              averageDistance,
-              averageAngle,
-              currentSpeed,
-              tagCount);
+      NoiseComponents nxC = computeNoiseComponents(
+          baseNoiseX, distanceCoefficientX, angleCoefficientX, speedCoefficientX,
+          averageDistance, averageAngle, currentSpeed, tagCount);
+      NoiseComponents nyC = computeNoiseComponents(
+          baseNoiseY, distanceCoefficientY, angleCoefficientY, speedCoefficientY,
+          averageDistance, averageAngle, currentSpeed, tagCount);
+      NoiseComponents nthC = computeNoiseComponents(
+          baseNoiseTheta, distanceCoefficientTheta, angleCoefficientTheta, speedCoefficientTheta,
+          averageDistance, averageAngle, currentSpeed, tagCount);
 
-      // Calculate overall measurement quality (lower noise = higher confidence)
-      // Normalize axes to unitless before combining (meters/radians)
-      double nx = noiseX / Math.max(baseNoiseX, 1e-9);
-      double ny = noiseY / Math.max(baseNoiseY, 1e-9);
-      double nth = noiseTheta / Math.max(baseNoiseTheta, 1e-9);
-      double totalNoise = Math.sqrt(nx * nx + ny * ny + nth * nth);
+      double noiseX = nxC.total;
+      double noiseY = nyC.total;
+      double noiseTheta = nthC.total;
+
+      // Unitless blend for confidence
+      double nxU = noiseX / Math.max(baseNoiseX, 1e-9);
+      double nyU = noiseY / Math.max(baseNoiseY, 1e-9);
+      double nthU = noiseTheta / Math.max(baseNoiseTheta, 1e-9);
+      double totalNoise = Math.sqrt(nxU * nxU + nyU * nyU + nthU * nthU);
       confidence = 1.0 / (1.0 + totalNoise);
+
+      // Structured logs for tuning (Trigsolve only)
+      v(strategyPrefix + "/Confidence", confidence);
+      v(strategyPrefix + "/Noise/X/Total", noiseX);
+      v(strategyPrefix + "/Noise/Y/Total", noiseY);
+      v(strategyPrefix + "/Noise/Theta/Total", noiseTheta);
+      v(strategyPrefix + "/Noise/TagScale", nxC.tagScale); // same for all axes
+      v(strategyPrefix + "/Noise/X/DistanceTerm", nxC.distanceTerm);
+      v(strategyPrefix + "/Noise/X/AngleTerm", nxC.angleTerm);
+      v(strategyPrefix + "/Noise/X/SpeedTerm", nxC.speedTerm);
+      v(strategyPrefix + "/Noise/Y/DistanceTerm", nyC.distanceTerm);
+      v(strategyPrefix + "/Noise/Y/AngleTerm", nyC.angleTerm);
+      v(strategyPrefix + "/Noise/Y/SpeedTerm", nyC.speedTerm);
+      v(strategyPrefix + "/Noise/Theta/DistanceTerm", nthC.distanceTerm);
+      v(strategyPrefix + "/Noise/Theta/AngleTerm", nthC.angleTerm);
+      v(strategyPrefix + "/Noise/Theta/SpeedTerm", nthC.speedTerm);
     }
     
     // If this is just for confidence comparison, return the result without adding to odometry
@@ -316,9 +340,9 @@ public class VisionSystem extends SubsystemBase {
                                 currentSpeed, tagCount, timestamp);
     } else {
       // Another camera had better confidence, don't add measurement
-      DogLog.log("Vision/TrigsolveLowerConfidence", true);
-      DogLog.log("Vision/TrigsolveOurConfidence", confidence);
-      DogLog.log("Vision/TrigsolveBestConfidence", bestConfidence);
+      v("Trigsolve/Confidence/LowerThanOtherCam", true);
+      v("Trigsolve/Confidence/Ours", confidence);
+      v("Trigsolve/Confidence/Best", bestConfidence);
       return null;
     }
   }
@@ -329,62 +353,61 @@ public class VisionSystem extends SubsystemBase {
   private PoseEstimateResult processPoseEstimate(Pose2d measuredPose, boolean useTrigsolve,
       double averageDistance, double averageAngle, double currentSpeed, int tagCount, double timestamp) {
     
-    // Compute measurement noise for each axis
-    double noiseX =
-        computeMeasurementNoise(
-            baseNoiseX,
-            distanceCoefficientX,
-            angleCoefficientX,
-            speedCoefficientX,
-            averageDistance,
-            averageAngle,
-            currentSpeed,
-            tagCount);
-    double noiseY =
-        computeMeasurementNoise(
-            baseNoiseY,
-            distanceCoefficientY,
-            angleCoefficientY,
-            speedCoefficientY,
-            averageDistance,
-            averageAngle,
-            currentSpeed,
-            tagCount);
-    double noiseTheta =
-        computeMeasurementNoise(
-            baseNoiseTheta,
-            distanceCoefficientTheta,
-            angleCoefficientTheta,
-            speedCoefficientTheta,
-            averageDistance,
-            averageAngle,
-            currentSpeed,
-            tagCount);
+    // Compute measurement noise for each axis and log components
+    NoiseComponents nxC = computeNoiseComponents(
+        baseNoiseX, distanceCoefficientX, angleCoefficientX, speedCoefficientX,
+        averageDistance, averageAngle, currentSpeed, tagCount);
+    NoiseComponents nyC = computeNoiseComponents(
+        baseNoiseY, distanceCoefficientY, angleCoefficientY, speedCoefficientY,
+        averageDistance, averageAngle, currentSpeed, tagCount);
+    NoiseComponents nthC = computeNoiseComponents(
+        baseNoiseTheta, distanceCoefficientTheta, angleCoefficientTheta, speedCoefficientTheta,
+        averageDistance, averageAngle, currentSpeed, tagCount);
+
+    double noiseX = nxC.total;
+    double noiseY = nyC.total;
+    double noiseTheta = nthC.total;
 
     String strategyPrefix = useTrigsolve ? "Trigsolve" : "MultiTag";
-    DogLog.log("Vision/" + strategyPrefix + "NoiseX", noiseX);
-    DogLog.log("Vision/" + strategyPrefix + "NoiseY", noiseY);
-    DogLog.log("Vision/" + strategyPrefix + "NoiseTheta", noiseTheta);
-    
+    v(strategyPrefix + "/Noise/X/Total", noiseX);
+    v(strategyPrefix + "/Noise/Y/Total", noiseY);
+    v(strategyPrefix + "/Noise/Theta/Total", noiseTheta);
+    v(strategyPrefix + "/Noise/TagScale", nxC.tagScale);
+    v(strategyPrefix + "/Noise/X/DistanceTerm", nxC.distanceTerm);
+    v(strategyPrefix + "/Noise/X/AngleTerm", nxC.angleTerm);
+    v(strategyPrefix + "/Noise/X/SpeedTerm", nxC.speedTerm);
+    v(strategyPrefix + "/Noise/Y/DistanceTerm", nyC.distanceTerm);
+    v(strategyPrefix + "/Noise/Y/AngleTerm", nyC.angleTerm);
+    v(strategyPrefix + "/Noise/Y/SpeedTerm", nyC.speedTerm);
+    v(strategyPrefix + "/Noise/Theta/DistanceTerm", nthC.distanceTerm);
+    v(strategyPrefix + "/Noise/Theta/AngleTerm", nthC.angleTerm);
+    v(strategyPrefix + "/Noise/Theta/SpeedTerm", nthC.speedTerm);
+
     // Update the appropriate reference pose
     if (useTrigsolve) {
       lastKnownTrigsolvePose = measuredPose;
     } else {
       lastKnownPose = measuredPose;
     }
-    
-    DogLog.log("Vision/" + cameraId.toString() + strategyPrefix + "Pose", measuredPose);
-    
+
     // Choose timestamp: use vision timestamp unless it differs too much from FPGA
     double fpgaTimestamp = Timer.getFPGATimestamp();
     double timestampDifference = Math.abs(timestamp - fpgaTimestamp);
     double chosenTimestamp = (timestampDifference > 0.5) ? fpgaTimestamp : timestamp;
 
+    v(strategyPrefix + "/Pose/X", measuredPose.getX());
+    v(strategyPrefix + "/Pose/Y", measuredPose.getY());
+    v(strategyPrefix + "/Pose/ThetaDeg", measuredPose.getRotation().getDegrees());
+    v(strategyPrefix + "/Timestamp/Vision", timestamp);
+    v(strategyPrefix + "/Timestamp/FPGA", fpgaTimestamp);
+    v(strategyPrefix + "/Timestamp/Delta", timestampDifference);
+
     // Build the noise vector and add the vision measurement
     Matrix<N3, N1> noiseVector = VecBuilder.fill(noiseX, noiseY, noiseTheta);
     swerveDrive.addVisionMeasurement(measuredPose, chosenTimestamp, noiseVector);
-    DogLog.log("Vision/" + strategyPrefix + "MeasurementUsed", true);
-    
+    v(strategyPrefix + "/MeasurementUsed", true);
+    vts(strategyPrefix + "/Frame/End");
+
     return new PoseEstimateResult(measuredPose, 1.0, averageDistance, averageAngle, 
                                  currentSpeed, tagCount, timestamp);
   }
@@ -408,6 +431,58 @@ public class VisionSystem extends SubsystemBase {
         .orElse(Double.NaN);
   }
 
+  // ─── Vision logging helpers ──────────────────────────────────────────────────
+  private String vKey(String subkey) { return "Vision/" + cameraId.toString() + "/" + subkey; }
+  private void vts(String subkey) { DogLog.timestamp(vKey(subkey)); }
+  private void v(String subkey, double val) { DogLog.log(vKey(subkey), val); }
+  private void v(String subkey, boolean val) { DogLog.log(vKey(subkey), val); }
+  private void v(String subkey, String val) { DogLog.log(vKey(subkey), val); }
+
+  private static class NoiseComponents {
+    double tagScale;     // 1/sqrt(tags)
+    double distanceTerm; // base + k*d^2
+    double angleTerm;    // normalized sec^2
+    double speedTerm;    // 1 + k*(v/vmax)^2
+    double total;        // calibrationFactor * tagScale * distanceTerm * angleTerm * speedTerm
+  }
+
+  private NoiseComponents computeNoiseComponents(
+      double baseNoise,
+      double distanceCoefficient,
+      double angleCoefficient,
+      double speedCoefficient,
+      double distance,
+      double angleRad,
+      double robotSpeed,
+      int tagCount) {
+    NoiseComponents c = new NoiseComponents();
+
+    // Tag count factor (diminishing returns; cap at 4)
+    int effectiveTags = Math.max(1, Math.min(tagCount, 4));
+    c.tagScale = 1.0 / Math.sqrt(effectiveTags);
+
+    // Distance term (keep as d^2 per your model)
+    c.distanceTerm = baseNoise + distanceCoefficient * distance * distance;
+
+    // Angle term (foreshortening ~ sec^2(theta), normalized to [1, 1+coef])
+    double theta = Math.max(0.0, Math.min(angleRad, 0.999 * maximumViewingAngle));
+    double cosT = Math.cos(theta);
+    double sec2T = 1.0 / Math.max(cosT * cosT, 1e-6);
+    double cosMax = Math.cos(0.999 * maximumViewingAngle);
+    double sec2Max = 1.0 / Math.max(cosMax * cosMax, 1e-6);
+    double normalizedAngle = (sec2T - 1.0) / Math.max(sec2Max - 1.0, 1e-6);
+    normalizedAngle = Math.max(0.0, Math.min(normalizedAngle, 1.0));
+    c.angleTerm = 1.0 + angleCoefficient * normalizedAngle;
+
+    // Speed term (quadratic, saturated)
+    double vNorm = Math.max(0.0, Math.min(robotSpeed, maximumRobotSpeed))
+        / Math.max(maximumRobotSpeed, 1e-6);
+    c.speedTerm = 1.0 + speedCoefficient * (vNorm * vNorm);
+
+    c.total = calibrationFactor * c.tagScale * c.distanceTerm * c.angleTerm * c.speedTerm;
+    return c;
+  }
+
   private double computeMeasurementNoise(
       double baseNoise,
       double distanceCoefficient,
@@ -417,37 +492,16 @@ public class VisionSystem extends SubsystemBase {
       double angleRad,
       double robotSpeed,
       int tagCount) {
-    // --- Tag count factor (diminishing returns). Keep same semantics but saturate at 4 tags.
-    // 1 tag = 1.0x, 2 tags ≈ 0.71x, 3 tags ≈ 0.58x, 4+ tags = 0.5x
-    int effectiveTags = Math.max(1, Math.min(tagCount, 4));
-    double tagCountScale = 1.0 / Math.sqrt(effectiveTags);
-
-    // --- Distance term (UNCHANGED as requested)
-    double distanceTerm = baseNoise + distanceCoefficient * distance * distance;
-
-    // --- Angle factor: use foreshortening model ~ sec^2(theta).
-    // Normalize so angleTerm grows from 1 at 0° up to (1 + angleCoefficient) at maximumViewingAngle.
-    // Guard against cos(θ) → 0 near 90°.
-    double theta = Math.max(0.0, Math.min(angleRad, 0.999 * maximumViewingAngle));
-    double cosT = Math.cos(theta);
-    double sec2T = 1.0 / Math.max(cosT * cosT, 1e-6); // sec^2(theta)
-
-    double cosMax = Math.cos(0.999 * maximumViewingAngle);
-    double sec2Max = 1.0 / Math.max(cosMax * cosMax, 1e-6);
-
-    // Map sec^2(theta) to [0,1] where 0 at head-on, 1 at max angle
-    double normalizedAngle = (sec2T - 1.0) / Math.max(sec2Max - 1.0, 1e-6);
-    normalizedAngle = Math.max(0.0, Math.min(normalizedAngle, 1.0));
-
-    double angleTerm = 1.0 + angleCoefficient * normalizedAngle;
-
-    // --- Speed factor: quadratic with saturation at max speed
-    double v = Math.max(0.0, Math.min(robotSpeed, maximumRobotSpeed));
-    double normalizedSpeed = (v / Math.max(maximumRobotSpeed, 1e-6));
-    double speedTerm = 1.0 + speedCoefficient * (normalizedSpeed * normalizedSpeed);
-
-    // Combine with calibration gain. Keep multiplicative structure.
-    return calibrationFactor * tagCountScale * distanceTerm * angleTerm * speedTerm;
+    NoiseComponents c = computeNoiseComponents(
+        baseNoise,
+        distanceCoefficient,
+        angleCoefficient,
+        speedCoefficient,
+        distance,
+        angleRad,
+        robotSpeed,
+        tagCount);
+    return c.total;
   }
   /**
    * Helper class to store pose estimation results with confidence metrics.
