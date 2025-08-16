@@ -69,7 +69,7 @@ public class VisionSystem extends SubsystemBase {
   // PhotonVision and odometry references
   private final PhotonCamera photonCamera;
   private final PhotonPoseEstimator poseEstimator; // MULTI_TAG_PNP_ON_COPROCESSOR
-  private final PhotonPoseEstimator trigsolvePoseEstimator; // LOWEST_AMBIGUITY with trigsolve
+  private final PhotonPoseEstimator trigsolvePoseEstimator; // PNP_DISTANCE_TRIG_SOLVE
   private PhotonPipelineResult latestVisionResult;
   private final BooleanSupplier isRedSide;
   private Pose2d lastKnownPose = new Pose2d(0, 0, new Rotation2d());
