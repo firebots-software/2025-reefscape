@@ -50,8 +50,8 @@ public class VisionSystem extends SubsystemBase {
   private double baseNoiseY = 0.0;
   private double baseNoiseTheta = 0.5; // radians
 
-  private double distanceCoefficientX = 0.019194; // noise growth per meter
-  private double distanceCoefficientY = 0.019194;
+  private double distanceCoefficientX = 0.05; // noise growth per m^2
+  private double distanceCoefficientY = 0.05;
   private double distanceCoefficientTheta = 1;
 
   private double angleCoefficientX = 0.5; // noise growth per radian of viewing angle
@@ -423,7 +423,7 @@ public class VisionSystem extends SubsystemBase {
     double tagCountScale = 1.0 / Math.sqrt(effectiveTags);
 
     // --- Distance term (UNCHANGED as requested)
-    double distanceTerm = baseNoise + distanceCoefficient * distance * distance * distance;
+    double distanceTerm = baseNoise + distanceCoefficient * distance * distance;
 
     // --- Angle factor: use foreshortening model ~ sec^2(theta).
     // Normalize so angleTerm grows from 1 at 0° up to (1 + angleCoefficient) at maximumViewingAngle.
