@@ -159,32 +159,47 @@ public class VisionSystem extends SubsystemBase {
 
     // Compute effective metrics for solution
     int tagCount = validTags.size();
+    // Use camera→target distance from PV (avoids odometry dependence)
     double averageDistance =
         validTags.stream()
-            .mapToDouble(t -> getDistanceToTag(t.getFiducialId()))
+            .mapToDouble(t -> t.getBestCameraToTarget().getTranslation().getNorm())
             .average()
             .orElse(Double.NaN);
-    if (Double.isNaN(averageDistance) || averageDistance > maximumAllowedDistance) {
+    double minDistance =
+        validTags.stream()
+            .mapToDouble(t -> t.getBestCameraToTarget().getTranslation().getNorm())
+            .min()
+            .orElse(Double.NaN);
+    if (Double.isNaN(minDistance) || minDistance > maximumAllowedDistance) {
       if (forceAdd) return null;
       DogLog.log("Vision/DistanceFilter", true);
       return null;
     }
     // Compute true viewing skew (how oblique the camera is to the tag face)
-    double averageSkewRad =
-        validTags.stream()
-            .mapToDouble(this::computeTargetSkewRad)
-            .average()
-            .orElse(0.0);
+    double avgSkewRad =
+        validTags.stream().mapToDouble(this::computeTargetSkewRad).average().orElse(0.0);
+    double minSkewRad =
+        validTags.stream().mapToDouble(this::computeTargetSkewRad).min().orElse(0.0);
+    double maxSkewRad =
+        validTags.stream().mapToDouble(this::computeTargetSkewRad).max().orElse(0.0);
 
-    // Reject overly oblique views (e.g., >70° combined yaw/pitch off-axis)
-    if (Math.toDegrees(averageSkewRad) > 70.0) {
-      if (forceAdd) return null;
-      DogLog.log("Vision/ViewSkewTooLarge", true);
-      return null;
+    // Strategy-specific gating: trigsolve rejects only if ALL tags are too skewed; PnP rejects if ANY is too skewed
+    if (useTrigsolve) {
+      if (Math.toDegrees(minSkewRad) > 70.0) {
+        if (forceAdd) return null;
+        DogLog.log("Vision/ViewSkewTooLarge", true);
+        return null;
+      }
+    } else {
+      if (Math.toDegrees(maxSkewRad) > 70.0) {
+        if (forceAdd) return null;
+        DogLog.log("Vision/ViewSkewTooLarge", true);
+        return null;
+      }
     }
 
-    // Use true viewing skew (radians) for noise calculation
-    double averageAngle = averageSkewRad;
+    // Use strategy-appropriate skew for noise scaling
+    double averageAngle = useTrigsolve ? minSkewRad : avgSkewRad;
     double currentSpeed =
         Math.hypot(
             swerveDrive.getRobotSpeeds().vxMetersPerSecond,
@@ -242,9 +257,13 @@ public class VisionSystem extends SubsystemBase {
               averageAngle,
               currentSpeed,
               tagCount);
-      
+
       // Calculate overall measurement quality (lower noise = higher confidence)
-      double totalNoise = Math.sqrt(noiseX * noiseX + noiseY * noiseY + noiseTheta * noiseTheta);
+      // Normalize axes to unitless before combining (meters/radians)
+      double nx = noiseX / Math.max(baseNoiseX, 1e-9);
+      double ny = noiseY / Math.max(baseNoiseY, 1e-9);
+      double nth = noiseTheta / Math.max(baseNoiseTheta, 1e-9);
+      double totalNoise = Math.sqrt(nx * nx + ny * ny + nth * nth);
       confidence = 1.0 / (1.0 + totalNoise);
     }
     
