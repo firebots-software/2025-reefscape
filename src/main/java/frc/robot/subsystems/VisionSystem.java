@@ -394,11 +394,6 @@ public class VisionSystem extends SubsystemBase {
         .orElse(Double.NaN);
   }
 
-  /**
-   * Computes a measurement noise standard deviation based on: - base noise (zero-distance, head-on)
-   * - distance scaling - viewing angle scaling - robot speed scaling - tag count (noise reduction
-   * by sqrt(N))
-   */
   private double computeMeasurementNoise(
       double baseNoise,
       double distanceCoefficient,
