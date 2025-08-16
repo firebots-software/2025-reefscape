@@ -417,15 +417,36 @@ public class VisionSystem extends SubsystemBase {
       double angleRad,
       double robotSpeed,
       int tagCount) {
-    double tagCountScale = 1.0 / Math.sqrt(Math.max(tagCount, 1));
+    // --- Tag count factor (diminishing returns). Keep same semantics but saturate at 4 tags.
+    // 1 tag = 1.0x, 2 tags ≈ 0.71x, 3 tags ≈ 0.58x, 4+ tags = 0.5x
+    int effectiveTags = Math.max(1, Math.min(tagCount, 4));
+    double tagCountScale = 1.0 / Math.sqrt(effectiveTags);
+
+    // --- Distance term (UNCHANGED as requested)
     double distanceTerm = baseNoise + distanceCoefficient * distance * distance;
-    double cosMax = Math.cos(maximumViewingAngle);
-    double normalizedAngle = 0.0;
-    if (1.0 - cosMax > 1e-9) {
-      normalizedAngle = (1.0 - Math.cos(angleRad)) / (1.0 - cosMax);
-    }
+
+    // --- Angle factor: use foreshortening model ~ sec^2(theta).
+    // Normalize so angleTerm grows from 1 at 0° up to (1 + angleCoefficient) at maximumViewingAngle.
+    // Guard against cos(θ) → 0 near 90°.
+    double theta = Math.max(0.0, Math.min(angleRad, 0.999 * maximumViewingAngle));
+    double cosT = Math.cos(theta);
+    double sec2T = 1.0 / Math.max(cosT * cosT, 1e-6); // sec^2(theta)
+
+    double cosMax = Math.cos(0.999 * maximumViewingAngle);
+    double sec2Max = 1.0 / Math.max(cosMax * cosMax, 1e-6);
+
+    // Map sec^2(theta) to [0,1] where 0 at head-on, 1 at max angle
+    double normalizedAngle = (sec2T - 1.0) / Math.max(sec2Max - 1.0, 1e-6);
+    normalizedAngle = Math.max(0.0, Math.min(normalizedAngle, 1.0));
+
     double angleTerm = 1.0 + angleCoefficient * normalizedAngle;
-    double speedTerm = 1.0 + speedCoefficient * (robotSpeed / maximumRobotSpeed);
+
+    // --- Speed factor: quadratic with saturation at max speed
+    double v = Math.max(0.0, Math.min(robotSpeed, maximumRobotSpeed));
+    double normalizedSpeed = (v / Math.max(maximumRobotSpeed, 1e-6));
+    double speedTerm = 1.0 + speedCoefficient * (normalizedSpeed * normalizedSpeed);
+
+    // Combine with calibration gain. Keep multiplicative structure.
     return calibrationFactor * tagCountScale * distanceTerm * angleTerm * speedTerm;
   }
   /**
