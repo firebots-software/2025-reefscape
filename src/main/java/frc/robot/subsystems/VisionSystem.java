@@ -45,12 +45,12 @@ public class VisionSystem extends SubsystemBase {
 
   // Base noise tuning parameters (tweakable)
   private double calibrationFactor = 1.0;
-  private double baseNoiseX = 0.02; // meters
-  private double baseNoiseY = 0.02;
+  private double baseNoiseX = 0.01; // meters
+  private double baseNoiseY = 0.01;
   private double baseNoiseTheta = 0.5; // radians
 
-  private double distanceCoefficientX = 0.4; // noise growth per meter
-  private double distanceCoefficientY = 0.4;
+  private double distanceCoefficientX = 0.0444898; // noise growth per meter
+  private double distanceCoefficientY = 0.0444898;
   private double distanceCoefficientTheta = 1;
 
   private double angleCoefficientX = 0.5; // noise growth per radian of viewing angle
@@ -91,7 +91,7 @@ public class VisionSystem extends SubsystemBase {
     
     trigsolvePoseEstimator =
         new PhotonPoseEstimator(
-            fieldLayout, PoseStrategy.LOWEST_AMBIGUITY, cameraToRobot);
+            fieldLayout, PoseStrategy.PNP_DISTANCE_TRIG_SOLVE, cameraToRobot);
     
     latestVisionResult = null;
   }
@@ -168,13 +168,28 @@ public class VisionSystem extends SubsystemBase {
       DogLog.log("Vision/DistanceFilter", true);
       return null;
     }
-    double averageAngle =
+    double averageYawDeg =
         validTags.stream()
             .mapToDouble(PhotonTrackedTarget::getYaw)
-            .map(Math::toRadians)
             .map(Math::abs)
             .average()
             .orElse(0.0);
+    double averagePitchDeg =
+        validTags.stream()
+            .mapToDouble(PhotonTrackedTarget::getPitch)
+            .map(Math::abs)
+            .average()
+            .orElse(0.0);
+
+    // Reject overly oblique views (>70 degrees in either axis)
+    if (averageYawDeg > 70.0 || averagePitchDeg > 70.0) {
+      if (forceAdd) return null;
+      DogLog.log("Vision/ViewAngleTooLarge", true);
+      return null;
+    }
+
+    // retain previous semantics for noise calculation (uses yaw)
+    double averageAngle = Math.toRadians(averageYawDeg);
     double currentSpeed =
         Math.hypot(
             swerveDrive.getRobotSpeeds().vxMetersPerSecond,
@@ -394,8 +409,13 @@ public class VisionSystem extends SubsystemBase {
       double robotSpeed,
       int tagCount) {
     double tagCountScale = 1.0 / Math.sqrt(Math.max(tagCount, 1));
-    double distanceTerm = baseNoise + distanceCoefficient * distance;
-    double angleTerm = 1.0 + angleCoefficient * (angleRad / maximumViewingAngle);
+    double distanceTerm = baseNoise + distanceCoefficient * distance * distance;
+    double cosMax = Math.cos(maximumViewingAngle);
+    double normalizedAngle = 0.0;
+    if (1.0 - cosMax > 1e-9) {
+      normalizedAngle = (1.0 - Math.cos(angleRad)) / (1.0 - cosMax);
+    }
+    double angleTerm = 1.0 + angleCoefficient * normalizedAngle;
     double speedTerm = 1.0 + speedCoefficient * (robotSpeed / maximumRobotSpeed);
     return calibrationFactor * tagCountScale * distanceTerm * angleTerm * speedTerm;
   }
