@@ -414,42 +414,6 @@ public class VisionSystem extends SubsystemBase {
     double speedTerm = 1.0 + speedCoefficient * (robotSpeed / maximumRobotSpeed);
     return calibrationFactor * tagCountScale * distanceTerm * angleTerm * speedTerm;
   }
-
-  // Setters for runtime tuning of parameters
-  public void setCalibrationFactor(double factor) {
-    calibrationFactor = factor;
-  }
-
-  public void setBaseNoise(double noiseX, double noiseY, double noiseTheta) {
-    baseNoiseX = noiseX;
-    baseNoiseY = noiseY;
-    baseNoiseTheta = noiseTheta;
-  }
-
-  public void setDistanceCoefficients(double coeffX, double coeffY, double coeffTheta) {
-    distanceCoefficientX = coeffX;
-    distanceCoefficientY = coeffY;
-    distanceCoefficientTheta = coeffTheta;
-  }
-
-  public void setAngleCoefficients(double coeffX, double coeffY, double coeffTheta) {
-    angleCoefficientX = coeffX;
-    angleCoefficientY = coeffY;
-    angleCoefficientTheta = coeffTheta;
-  }
-
-  public void setSpeedCoefficients(double coeffX, double coeffY, double coeffTheta) {
-    speedCoefficientX = coeffX;
-    speedCoefficientY = coeffY;
-    speedCoefficientTheta = coeffTheta;
-  }
-
-  public void setMaximums(double maxDistance, double maxSpeed, double maxAngleDegrees) {
-    maximumAllowedDistance = maxDistance;
-    maximumRobotSpeed = maxSpeed;
-    maximumViewingAngle = Math.toRadians(maxAngleDegrees);
-  }
-
   /**
    * Helper class to store pose estimation results with confidence metrics.
    */
