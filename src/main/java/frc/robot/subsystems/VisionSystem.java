@@ -47,11 +47,11 @@ public class VisionSystem extends SubsystemBase {
   // Base noise tuning parameters (tweakable)
   private double calibrationFactor = 1.0;
   private double baseNoiseX = 0.01; // meters
-  private double baseNoiseY = 0.0;
+  private double baseNoiseY = 0.01;
   private double baseNoiseTheta = 0.5; // radians
 
-  private double distanceCoefficientX = 0.05; // noise growth per meter
-  private double distanceCoefficientY = 0.05;
+  private double distanceCoefficientX = 0.055; // noise growth per meter
+  private double distanceCoefficientY = 0.055;
   private double distanceCoefficientTheta = 1;
 
   private double angleCoefficientX = 0.5; // noise growth per radian of viewing angle
@@ -75,9 +75,8 @@ public class VisionSystem extends SubsystemBase {
   private final BooleanSupplier isRedSide;
   private Pose2d lastKnownPose = new Pose2d(0, 0, new Rotation2d());
   private Pose2d lastKnownTrigsolvePose = new Pose2d(0, 0, new Rotation2d());
-  private final SwerveSubsystem swerveDrive = SwerveSubsystem.getInstance();
-  private final AprilTagFieldLayout fieldLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+  private SwerveSubsystem swerveDrive;
+  private final AprilTagFieldLayout fieldLayout;
 
   public VisionSystem(Constants.Vision.Cameras cameraId, BooleanSupplier isRedSide) {
     this.isRedSide = isRedSide;
@@ -85,16 +84,35 @@ public class VisionSystem extends SubsystemBase {
     photonCamera = new PhotonCamera(cameraId.toString());
     Transform3d cameraToRobot = Constants.Vision.getCameraTransform(cameraId);
     
-    // Initialize both pose estimators
-    poseEstimator =
-        new PhotonPoseEstimator(
-            fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraToRobot);
+    // Initialize field layout with error handling
+    AprilTagFieldLayout tempLayout = null;
+    try {
+      tempLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    } catch (Exception e) {
+      System.err.println("Failed to load AprilTag field layout: " + e.getMessage());
+      e.printStackTrace();
+    }
+    this.fieldLayout = tempLayout;
     
-    trigsolvePoseEstimator =
-        new PhotonPoseEstimator(
-            fieldLayout, PoseStrategy.PNP_DISTANCE_TRIG_SOLVE, cameraToRobot);
+    // Initialize both pose estimators only if field layout loaded successfully
+    if (fieldLayout != null) {
+      poseEstimator =
+          new PhotonPoseEstimator(
+              fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraToRobot);
+      
+      trigsolvePoseEstimator =
+          new PhotonPoseEstimator(
+              fieldLayout, PoseStrategy.PNP_DISTANCE_TRIG_SOLVE, cameraToRobot);
+    } else {
+      poseEstimator = null;
+      trigsolvePoseEstimator = null;
+    }
     
     latestVisionResult = null;
+    
+    // Minimal debug logging (guarded by ENABLE_LOGS)
+    v("Init", true);
+    v("FieldLayoutLoaded", fieldLayout != null);
   }
 
   public static VisionSystem getInstance(
@@ -108,8 +126,50 @@ public class VisionSystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    for (var x : photonCamera.getAllUnreadResults()) {
-      latestVisionResult = x;
+    // Initialize swerve drive if not already done
+    if (swerveDrive == null) {
+      try {
+        swerveDrive = SwerveSubsystem.getInstance();
+      } catch (Exception e) {
+        v("SwerveNotReady", true);
+        return;
+      }
+    }
+
+    // Log that periodic is running (guarded)
+    v("Periodic", true);
+
+    // Check camera connection
+    boolean cameraConnected = photonCamera.isConnected();
+    v("CameraConnected", cameraConnected);
+
+    if (!cameraConnected) {
+      v("CameraDisconnected", true);
+      return;
+    }
+
+    // Get all unread results
+    var results = photonCamera.getAllUnreadResults();
+    v("UnreadResultsCount", results.size());
+
+    for (var result : results) {
+      latestVisionResult = result;
+      v("ResultTimestamp", result.getTimestampSeconds());
+      v("HasTargets", result.hasTargets());
+      if (result.hasTargets()) {
+        v("TargetCount", result.getTargets().size());
+      }
+    }
+
+    // If we have a recent result, try to add it
+    if (latestVisionResult != null) {
+      double timeSinceResult = Timer.getFPGATimestamp() - latestVisionResult.getTimestampSeconds();
+      v("TimeSinceLastResult", timeSinceResult);
+
+      // Only use results that are recent (within 0.5 seconds)
+      if (timeSinceResult < 0.5) {
+        addFilteredPose();
+      }
     }
   }
 
@@ -125,7 +185,7 @@ public class VisionSystem extends SubsystemBase {
    * Attempts to fuse a vision measurement into the swerve pose estimator, dropping readings that
    * fail validity checks, and computing noise dynamically via computeMeasurementNoise().
    * 
-   * @param useTrigsolve If true, uses the trigsolve pose estimator (PNP_DISTANCE_TRIG_SOLVE strategy).
+   * @param useTrigsolve If true, uses the trigsolve pose estimator (LOWEST_AMBIGUITY strategy).
    *                     If false, uses the multi-tag PnP pose estimator (MULTI_TAG_PNP_ON_COPROCESSOR strategy).
    */
   public void addFilteredPose(boolean useTrigsolve) {
@@ -141,6 +201,24 @@ public class VisionSystem extends SubsystemBase {
    */
   private PoseEstimateResult addFilteredPoseInternal(boolean useTrigsolve, boolean forceAdd) {
     final String strategyPrefix = useTrigsolve ? "Trigsolve" : "MultiTag";
+    
+    // Check prerequisites
+    if (fieldLayout == null) {
+      v(strategyPrefix + "/FieldLayoutMissing", true);
+      return null;
+    }
+    
+    if (swerveDrive == null) {
+      v(strategyPrefix + "/SwerveDriveNull", true);
+      return null;
+    }
+    
+    PhotonPoseEstimator selectedEstimator = useTrigsolve ? trigsolvePoseEstimator : poseEstimator;
+    if (selectedEstimator == null) {
+      v(strategyPrefix + "/PoseEstimatorNull", true);
+      return null;
+    }
+    
     if (latestVisionResult == null || !latestVisionResult.hasTargets()) {
       if (!forceAdd) {
         v(strategyPrefix + "/HasTargets", false);
@@ -156,11 +234,21 @@ public class VisionSystem extends SubsystemBase {
         latestVisionResult.getTargets().stream()
             .filter(t -> isTagOnActiveSide(t.getFiducialId()))
             .collect(Collectors.toList());
+    
+    // Log all detected tags for debugging
+    String allTagIds = latestVisionResult.getTargets().stream()
+        .map(t -> Integer.toString(t.getFiducialId()))
+        .collect(Collectors.joining(","));
+    v(strategyPrefix + "/AllDetectedTags", allTagIds);
+    v(strategyPrefix + "/IsRedSide", isRedSide.getAsBoolean());
+    
     if (validTags.isEmpty()) {
-      if (forceAdd) return null;
-      DogLog.log("Vision/TagFilter", false);
+      if (!forceAdd) {
+        v(strategyPrefix + "/TagFilter", false);
+      }
       return null;
     }
+    
     int tagCount = validTags.size();
     v(strategyPrefix + "/Tags/Count", tagCount);
     String tagIdsCsv = validTags.stream()
@@ -190,52 +278,54 @@ public class VisionSystem extends SubsystemBase {
       }
       return null;
     }
-    // Compute true viewing skew (how oblique the camera is to the tag face)
-    double avgSkewRad =
-        validTags.stream().mapToDouble(this::computeTargetSkewRad).average().orElse(0.0);
+    // Compute true 3D viewing skew for each tag: angle between camera +X and NEGATED tag +Z
     double minSkewRad =
         validTags.stream().mapToDouble(this::computeTargetSkewRad).min().orElse(0.0);
     double maxSkewRad =
         validTags.stream().mapToDouble(this::computeTargetSkewRad).max().orElse(0.0);
+    double rmsSkewRad = computeWeightedRmsSkewRad(validTags);
+    double avgSkewRad =
+        validTags.stream().mapToDouble(this::computeTargetSkewRad).average().orElse(0.0);
 
-    v(strategyPrefix + "/Skew/AvgDeg", Math.toDegrees(avgSkewRad));
     v(strategyPrefix + "/Skew/MinDeg", Math.toDegrees(minSkewRad));
+    v(strategyPrefix + "/Skew/AvgDeg", Math.toDegrees(avgSkewRad));
+    v(strategyPrefix + "/Skew/RmsDeg", Math.toDegrees(rmsSkewRad));
     v(strategyPrefix + "/Skew/MaxDeg", Math.toDegrees(maxSkewRad));
 
-    // Strategy-specific gating: trigsolve rejects only if ALL tags are too skewed; PnP rejects if ANY is too skewed
-    if (useTrigsolve) {
-      if (Math.toDegrees(minSkewRad) > 70.0) {
-        if (!forceAdd) {
-          v(strategyPrefix + "/Gate/SkewRejected", true);
-          v(strategyPrefix + "/Skew/CutoffDeg", 70.0);
-        }
-        return null;
-      }
-    } else {
-      if (Math.toDegrees(maxSkewRad) > 70.0) {
-        if (!forceAdd) {
-          v(strategyPrefix + "/Gate/SkewRejected", true);
-          v(strategyPrefix + "/Skew/CutoffDeg", 70.0);
-        }
-        return null;
-      }
-    }
+// No skew gating: skew only affects noise scaling below.
 
-    // Use strategy-appropriate skew for noise scaling
-    double averageAngle = useTrigsolve ? minSkewRad : avgSkewRad;
-    double currentSpeed =
-        Math.hypot(
-            swerveDrive.getRobotSpeeds().vxMetersPerSecond,
-            swerveDrive.getRobotSpeeds().vyMetersPerSecond);
+// Use strategy-appropriate skew for noise scaling
+double averageAngle = useTrigsolve ? minSkewRad : rmsSkewRad;
+    double currentSpeed = 0.0;
+    try {
+      currentSpeed = Math.hypot(
+          swerveDrive.getRobotSpeeds().vxMetersPerSecond,
+          swerveDrive.getRobotSpeeds().vyMetersPerSecond);
+    } catch (Exception e) {
+      v(strategyPrefix + "/SpeedCalculationError", true);
+    }
+    
     v(strategyPrefix + "/Inputs/SkewUsedDeg", Math.toDegrees(averageAngle));
     v(strategyPrefix + "/Inputs/SpeedMps", currentSpeed);
 
     // Choose the appropriate pose estimator and reference pose
-    PhotonPoseEstimator selectedEstimator = useTrigsolve ? trigsolvePoseEstimator : poseEstimator;
     Pose2d referencePos = useTrigsolve ? lastKnownTrigsolvePose : lastKnownPose;
     
+    // Update reference pose with current odometry if we have it
+    try {
+      Pose2d currentOdometry = swerveDrive.getPose();
+      if (currentOdometry != null) {
+        selectedEstimator.setReferencePose(currentOdometry);
+        v(strategyPrefix + "/ReferencePose/Pose", currentOdometry);
+      } else {
+        selectedEstimator.setReferencePose(referencePos);
+      }
+    } catch (Exception e) {
+      v(strategyPrefix + "/ReferencePoseError", true);
+      selectedEstimator.setReferencePose(referencePos);
+    }
+    
     // Get the pose from PhotonVision
-    selectedEstimator.setReferencePose(referencePos);
     Optional<EstimatedRobotPose> maybePose = selectedEstimator.update(latestVisionResult);
     if (maybePose.isEmpty()) {
       if (!forceAdd) {
@@ -293,59 +383,16 @@ public class VisionSystem extends SubsystemBase {
     
     // If this is just for confidence comparison, return the result without adding to odometry
     if (forceAdd) {
-      return new PoseEstimateResult(measuredPose, confidence, averageDistance, averageAngle, 
+      return new PoseEstimateResult(measuredPose, confidence, averageDistance, averageAngle,
                                    currentSpeed, tagCount, latestVisionResult.getTimestampSeconds());
     }
 
-    // For non-trigsolve or when not doing confidence comparison, proceed normally
-    if (!useTrigsolve) {
-      return processPoseEstimate(measuredPose, useTrigsolve, averageDistance, averageAngle, 
-                                currentSpeed, tagCount, latestVisionResult.getTimestampSeconds());
-    }
-
-    // For trigsolve, check confidence against other cameras
-    return processTrigsolveWithConfidenceCheck(measuredPose, confidence, averageDistance, 
-                                              averageAngle, currentSpeed, tagCount, 
-                                              latestVisionResult.getTimestampSeconds());
+    // Process locally (no cross-camera comparison)
+    return processPoseEstimate(measuredPose, useTrigsolve, averageDistance, averageAngle,
+                               currentSpeed, tagCount, latestVisionResult.getTimestampSeconds());
   }
 
-  /**
-   * Processes trigsolve pose estimation with confidence checking across all cameras.
-   */
-  private PoseEstimateResult processTrigsolveWithConfidenceCheck(Pose2d measuredPose, double confidence,
-      double averageDistance, double averageAngle, double currentSpeed, int tagCount, double timestamp) {
-    
-    // Get results from all other cameras for confidence comparison
-    double bestConfidence = confidence;
-    PoseEstimateResult bestResult = new PoseEstimateResult(measuredPose, confidence, averageDistance, 
-                                                          averageAngle, currentSpeed, tagCount, timestamp);
-    
-    // Check all other camera instances
-    for (Constants.Vision.Cameras otherCamera : Constants.Vision.Cameras.values()) {
-      if (otherCamera == this.cameraId) continue; // Skip self
-      
-      VisionSystem otherSystem = systemList[otherCamera.ordinal()];
-      if (otherSystem != null) {
-        PoseEstimateResult otherResult = otherSystem.addFilteredPoseInternal(true, true);
-        if (otherResult != null && otherResult.confidence > bestConfidence) {
-          bestConfidence = otherResult.confidence;
-          bestResult = otherResult;
-        }
-      }
-    }
-    
-    // Only proceed if this camera has the best confidence
-    if (bestResult.pose == measuredPose) { // This camera won
-      return processPoseEstimate(measuredPose, true, averageDistance, averageAngle, 
-                                currentSpeed, tagCount, timestamp);
-    } else {
-      // Another camera had better confidence, don't add measurement
-      v("Trigsolve/Confidence/LowerThanOtherCam", true);
-      v("Trigsolve/Confidence/Ours", confidence);
-      v("Trigsolve/Confidence/Best", bestConfidence);
-      return null;
-    }
-  }
+  // (processTrigsolveWithConfidenceCheck removed)
 
   /**
    * Final processing and addition of pose estimate to odometry.
@@ -395,20 +442,25 @@ public class VisionSystem extends SubsystemBase {
     double timestampDifference = Math.abs(timestamp - fpgaTimestamp);
     double chosenTimestamp = (timestampDifference > 0.5) ? fpgaTimestamp : timestamp;
 
-    v(strategyPrefix + "/Pose/X", measuredPose.getX());
-    v(strategyPrefix + "/Pose/Y", measuredPose.getY());
-    v(strategyPrefix + "/Pose/ThetaDeg", measuredPose.getRotation().getDegrees());
+    v(strategyPrefix + "/Pose/Pose", measuredPose);
     v(strategyPrefix + "/Timestamp/Vision", timestamp);
     v(strategyPrefix + "/Timestamp/FPGA", fpgaTimestamp);
     v(strategyPrefix + "/Timestamp/Delta", timestampDifference);
 
     // Build the noise vector and add the vision measurement
     Matrix<N3, N1> noiseVector = VecBuilder.fill(noiseX, noiseY, noiseTheta);
-    swerveDrive.addVisionMeasurement(measuredPose, chosenTimestamp, noiseVector);
-    v(strategyPrefix + "/MeasurementUsed", true);
+    
+    try {
+      swerveDrive.addVisionMeasurement(measuredPose, chosenTimestamp, noiseVector);
+      v(strategyPrefix + "/MeasurementUsed", true);
+    } catch (Exception e) {
+      v(strategyPrefix + "/MeasurementFailed", true);
+      v("AddMeasurementError", e.getMessage());
+    }
+
     vts(strategyPrefix + "/Frame/End");
 
-    return new PoseEstimateResult(measuredPose, 1.0, averageDistance, averageAngle, 
+    return new PoseEstimateResult(measuredPose, 1.0, averageDistance, averageAngle,
                                  currentSpeed, tagCount, timestamp);
   }
 
@@ -418,30 +470,21 @@ public class VisionSystem extends SubsystemBase {
         : BLUE_SIDE_TAG_IDS.contains(tagId);
   }
 
-  private double getDistanceToTag(int tagId) {
-    return fieldLayout
-        .getTagPose(tagId)
-        .map(
-            pose3d ->
-                pose3d
-                    .getTranslation()
-                    .getDistance(
-                        new Translation3d(
-                            swerveDrive.getPose().getX(), swerveDrive.getPose().getY(), 0.0)))
-        .orElse(Double.NaN);
-  }
+  // (getDistanceToTag removed)
 
   // ─── Vision logging helpers ──────────────────────────────────────────────────
+  private static final boolean ENABLE_LOGS = true; // flip true when tuning
   private String vKey(String subkey) { return "Vision/" + cameraId.toString() + "/" + subkey; }
-  private void vts(String subkey) { DogLog.timestamp(vKey(subkey)); }
-  private void v(String subkey, double val) { DogLog.log(vKey(subkey), val); }
-  private void v(String subkey, boolean val) { DogLog.log(vKey(subkey), val); }
-  private void v(String subkey, String val) { DogLog.log(vKey(subkey), val); }
+  private void vts(String subkey) { if (!ENABLE_LOGS) return; DogLog.timestamp(vKey(subkey)); }
+  private void v(String subkey, double val) { if (!ENABLE_LOGS) return; DogLog.log(vKey(subkey), val); }
+  private void v(String subkey, boolean val) { if (!ENABLE_LOGS) return; DogLog.log(vKey(subkey), val); }
+  private void v(String subkey, String val) { if (!ENABLE_LOGS) return; DogLog.log(vKey(subkey), val); }
+  private void v(String subkey, Pose2d val) { if (!ENABLE_LOGS) return; DogLog.log(vKey(subkey), val); }
 
   private static class NoiseComponents {
     double tagScale;     // 1/sqrt(tags)
     double distanceTerm; // base + k*d^2
-    double angleTerm;    // normalized sec^2
+    double angleTerm;    // cosine-based (1 - cos θ) normalized
     double speedTerm;    // 1 + k*(v/vmax)^2
     double total;        // calibrationFactor * tagScale * distanceTerm * angleTerm * speedTerm
   }
@@ -464,13 +507,12 @@ public class VisionSystem extends SubsystemBase {
     // Distance term (keep as d^2 per your model)
     c.distanceTerm = baseNoise + distanceCoefficient * distance * distance;
 
-    // Angle term (foreshortening ~ sec^2(theta), normalized to [1, 1+coef])
+    // Angle term (cosine-based): scale with 1 - cos(theta), normalized to cutoff
     double theta = Math.max(0.0, Math.min(angleRad, 0.999 * maximumViewingAngle));
     double cosT = Math.cos(theta);
-    double sec2T = 1.0 / Math.max(cosT * cosT, 1e-6);
     double cosMax = Math.cos(0.999 * maximumViewingAngle);
-    double sec2Max = 1.0 / Math.max(cosMax * cosMax, 1e-6);
-    double normalizedAngle = (sec2T - 1.0) / Math.max(sec2Max - 1.0, 1e-6);
+    double denom = Math.max(1.0 - cosMax, 1e-6);
+    double normalizedAngle = (1.0 - cosT) / denom; // 0 at head-on, 1 at max angle
     normalizedAngle = Math.max(0.0, Math.min(normalizedAngle, 1.0));
     c.angleTerm = 1.0 + angleCoefficient * normalizedAngle;
 
@@ -503,6 +545,7 @@ public class VisionSystem extends SubsystemBase {
         tagCount);
     return c.total;
   }
+  
   /**
    * Helper class to store pose estimation results with confidence metrics.
    */
@@ -526,14 +569,48 @@ public class VisionSystem extends SubsystemBase {
       this.timestamp = timestamp;
     }
   }
+  
   /**
-   * Computes the camera's off-axis viewing skew for a single tag, in radians.
-   * Uses the rotation from camera -> target; pitch (Y) and yaw (Z) near zero imply head-on view.
+   * Computes the true 3D off-axis viewing angle (skew) for a tag.
+   * Returns angle in radians: 0 = head-on, increases with obliqueness.
+   * Geometric skew: ACUTE angle between camera +X and tag face normal (−Z_tag).
    */
   private double computeTargetSkewRad(PhotonTrackedTarget t) {
+    // Geometric skew: ACUTE angle between camera +X and tag face normal (−Z_tag).
+    // Use inverse rotation to express tag +Z in the camera frame.
     Rotation3d r = t.getBestCameraToTarget().getRotation();
-    // r.getY() and r.getZ() are radians (pitch and yaw).
-    // Combined off-axis = sqrt(pitch^2 + yaw^2)
-    return Math.hypot(r.getY(), r.getZ());
+    Translation3d nCam = new Translation3d(0.0, 0.0, 1.0).rotateBy(r.unaryMinus());
+
+    // Flip so the normal points into the scene, then take the acute angle (abs dot) vs +X.
+    double nx = -nCam.getX();
+    double ny = -nCam.getY();
+    double nz = -nCam.getZ();
+
+    double nNorm = Math.sqrt(nx * nx + ny * ny + nz * nz);
+    if (nNorm < 1e-9) return 0.0;
+
+    // Absolute dot to make it invariant to 180° normal flips; yields [0, 90°].
+    double cosAng = Math.abs(nx) / nNorm; // camera forward is (1,0,0)
+    cosAng = Math.max(-1.0, Math.min(1.0, cosAng));
+    return Math.acos(cosAng);
+  }
+
+  /**
+   * Weighted RMS of per-tag skew angles (radians) using geometric skew.
+   * Weights favor closer and front-on tags:
+   *   w_i = cos^2(skew_i) / (d_i^2 + eps)
+   */
+  private double computeWeightedRmsSkewRad(List<PhotonTrackedTarget> tags) {
+    double num = 0.0, den = 0.0;
+    for (var t : tags) {
+      double s = computeTargetSkewRad(t); // radians from geometry
+      double d = t.getBestCameraToTarget().getTranslation().getNorm();
+      double c = Math.cos(Math.min(s, 0.999 * maximumViewingAngle));
+      double w = (c * c) / (d * d + 1e-6);
+      num += w * s * s;
+      den += w;
+    }
+    if (den <= 1e-9) return 0.0;
+    return Math.sqrt(num / den);
   }
 }
