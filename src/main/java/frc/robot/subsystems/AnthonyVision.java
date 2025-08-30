@@ -12,8 +12,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
@@ -66,7 +64,6 @@ public class AnthonyVision extends SubsystemBase {
   private double speedCoefficientTheta = 0.5;
 
   // Maximums for normalization
-  private double maximumViewingAngle = Math.toRadians(90.0);
   private double maximumRobotSpeed = 5; // meters per second
   private double maximumAllowedDistance = 15.0; // meters, beyond which readings are dropped
 
@@ -75,7 +72,6 @@ public class AnthonyVision extends SubsystemBase {
   private final PhotonPoseEstimator poseEstimator; // MULTI_TAG_PNP_ON_COPROCESSOR
   private PhotonPipelineResult latestVisionResult;
   private final BooleanSupplier isRedSide;
-  private Pose2d lastKnownPose = new Pose2d(0, 0, new Rotation2d());
   private SwerveSubsystem swerveDrive;
   private final AprilTagFieldLayout fieldLayout;
 
@@ -218,8 +214,6 @@ public class AnthonyVision extends SubsystemBase {
    * Final processing and addition of pose estimate to odometry.
    */
   private void processPoseEstimate(Pose2d measuredPose, double averageDistance, double currentSpeed, int tagCount, double timestamp, Matrix<N3, N1> noiseVector) {
-    lastKnownPose = measuredPose;
-
     // Choose timestamp: use vision timestamp unless it differs too much from FPGA
     double fpgaTimestamp = Timer.getFPGATimestamp();
     double timestampDifference = Math.abs(timestamp - fpgaTimestamp);
