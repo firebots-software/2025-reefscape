@@ -200,13 +200,13 @@ public class AnthonyVision extends SubsystemBase {
   
     double nX = computeNoise(
         baseNoiseX, distanceCoefficientX, angleCoefficientX, speedCoefficientX,
-        averageDistance, 0, currentSpeed, tagCount);
+        averageDistance, currentSpeed, tagCount);
     double nY = computeNoise(
         baseNoiseY, distanceCoefficientY, angleCoefficientY, speedCoefficientY,
-        averageDistance, 0, currentSpeed, tagCount);
+        averageDistance, currentSpeed, tagCount);
     double nTH = computeNoise(
         baseNoiseTheta, distanceCoefficientTheta, angleCoefficientTheta, speedCoefficientTheta,
-        averageDistance, 0, currentSpeed, tagCount);
+        averageDistance, currentSpeed, tagCount);
 
     Matrix<N3, N1> noiseVector = VecBuilder.fill(nX, nY, nTH);
     // Process locally (no cross-camera comparison)
@@ -243,7 +243,6 @@ public class AnthonyVision extends SubsystemBase {
       double angleCoefficient,
       double speedCoefficient,
       double distance,
-      double angleRad,
       double robotSpeed,
       int tagCount) {
 
