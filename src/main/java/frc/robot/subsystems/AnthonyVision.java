@@ -269,5 +269,4 @@ public class AnthonyVision extends SubsystemBase {
     double computedStdDevs = calibrationFactor * tagFactor * distanceFactor * speedFactor;
     return computedStdDevs;
   }
-
 }
