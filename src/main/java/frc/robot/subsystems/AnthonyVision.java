@@ -133,7 +133,7 @@ public class AnthonyVision extends SubsystemBase {
    * @param forceAdd If true, bypasses confidence checking (used for non-trigsolve or single camera)
    * @return PoseEstimateResult containing the pose and confidence data, or null if failed
    */
-  private void addFilteredPose() {
+  public void addFilteredPose() {
     PhotonPoseEstimator selectedEstimator = poseEstimator;
     
     if (latestVisionResult == null || !latestVisionResult.hasTargets()) {
@@ -145,7 +145,21 @@ public class AnthonyVision extends SubsystemBase {
         latestVisionResult.getTargets().stream()
             .filter(t -> isTagOnActiveSide(t.getFiducialId()))
             .collect(Collectors.toList());
-    
+   
+    if (cameraId.equals(Constants.Vision.Cameras.RIGHT_CAM)) {
+        for (PhotonTrackedTarget tag : validTags) {
+            DogLog.log("Vision/RightCAM/Area", tag.getArea());
+            DogLog.log("Vision/RightCAM/Yaw", tag.getYaw());
+        }
+    }
+
+    if (cameraId.equals(Constants.Vision.Cameras.LEFT_CAM)) {
+        for (PhotonTrackedTarget tag : validTags) {
+            DogLog.log("Vision/LeftCAM/Area", tag.getArea());
+            DogLog.log("Vision/LefttCAM/Yaw", tag.getYaw());
+        }
+    }
+
     // Log all detected tags for debugging
     String allTagIds = latestVisionResult.getTargets().stream()
         .map(t -> Integer.toString(t.getFiducialId()))
