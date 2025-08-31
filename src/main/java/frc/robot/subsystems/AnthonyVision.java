@@ -51,8 +51,8 @@ public class AnthonyVision extends SubsystemBase {
   private double baseNoiseY = 0.01;
   private double baseNoiseTheta = 0.5; // radians
 
-  private double distanceCoefficientX = 0.055; 
-  private double distanceCoefficientY = 0.055;
+  private double distanceCoefficientX = 0.06; 
+  private double distanceCoefficientY = 0.06;
   private double distanceCoefficientTheta = 1;
 
   private double angleCoefficientX = 0.5; // noise growth per radian of viewing angle
@@ -135,59 +135,53 @@ public class AnthonyVision extends SubsystemBase {
    */
   public void addFilteredPose() {
     PhotonPoseEstimator selectedEstimator = poseEstimator;
-    
+    String camTitle = cameraId.getLoggingName(); 
     if (latestVisionResult == null || !latestVisionResult.hasTargets()) {
       return;
     }
+
+    double averageDistance =
+        latestVisionResult.getTargets().stream()
+            .mapToDouble(t -> t.getBestCameraToTarget().getTranslation().getNorm())
+            .average()
+            .orElse(Double.NaN);
+
+    double minDistance =
+        latestVisionResult.getTargets().stream()
+            .mapToDouble(t -> t.getBestCameraToTarget().getTranslation().getNorm())
+            .min()
+            .orElse(Double.NaN);
 
     // Filter tags to only those on the active side
     List<PhotonTrackedTarget> validTags =
         latestVisionResult.getTargets().stream()
             .filter(t -> isTagOnActiveSide(t.getFiducialId()))
+            .filter(t -> isNotChopped(t.getYaw()))
             .collect(Collectors.toList());
-   
-    if (cameraId.equals(Constants.Vision.Cameras.RIGHT_CAM)) {
-        for (PhotonTrackedTarget tag : validTags) {
-            DogLog.log("Vision/RightCAM/Area", tag.getArea());
-            DogLog.log("Vision/RightCAM/Yaw", tag.getYaw());
-        }
-    }
+    
+    DogLog.log("Vision/"+camTitle+"/numValidTags", validTags.size());
 
-    if (cameraId.equals(Constants.Vision.Cameras.LEFT_CAM)) {
         for (PhotonTrackedTarget tag : validTags) {
-            DogLog.log("Vision/LeftCAM/Area", tag.getArea());
-            DogLog.log("Vision/LefttCAM/Yaw", tag.getYaw());
+            DogLog.log("Vision/"+camTitle+"/Area", tag.getArea());
+            DogLog.log("Vision/"+camTitle+"/Yaw", tag.getYaw());
         }
-    }
 
     // Log all detected tags for debugging
     String allTagIds = latestVisionResult.getTargets().stream()
         .map(t -> Integer.toString(t.getFiducialId()))
         .collect(Collectors.joining(","));
-    
+   
+    DogLog.log("Vision/"+camTitle+"/allTagIds", allTagIds);
+
     if (validTags.isEmpty()) {
       return;
     }
    
     // Log all tags that haven't been thrown out
     int tagCount = validTags.size();
-    String tagIdsCsv = validTags.stream()
-        .map(t -> Integer.toString(t.getFiducialId()))
-        .sorted()
-        .collect(Collectors.joining(","));
 
     // Compute effective metrics for solution
     // Use camera→target distance from PV (avoids odometry dependence)
-    double averageDistance =
-        validTags.stream()
-            .mapToDouble(t -> t.getBestCameraToTarget().getTranslation().getNorm())
-            .average()
-            .orElse(Double.NaN);
-    double minDistance =
-        validTags.stream()
-            .mapToDouble(t -> t.getBestCameraToTarget().getTranslation().getNorm())
-            .min()
-            .orElse(Double.NaN);
 
     // nothing to do if rejected based on the minDistance or if no min dist has been found
     if (Double.isNaN(minDistance) || minDistance > maximumAllowedDistance) {
@@ -218,6 +212,13 @@ public class AnthonyVision extends SubsystemBase {
         baseNoiseTheta, distanceCoefficientTheta, angleCoefficientTheta, speedCoefficientTheta,
         averageDistance, currentSpeed, tagCount);
 
+    DogLog.log("Vision/"+camTitle+"/speed", currentSpeed);
+    DogLog.log("Vision/"+camTitle+"/nX", nX);
+    DogLog.log("Vision/"+camTitle+"/nY", nY);
+    DogLog.log("Vision/"+camTitle+"/nTH", nTH);
+    DogLog.log("Vision/"+camTitle+"/Pose", measuredPose);
+    DogLog.log("Vision/"+camTitle+"/averageDistance", averageDistance);
+
     Matrix<N3, N1> noiseVector = VecBuilder.fill(nX, nY, nTH);
     // Process locally (no cross-camera comparison)
     processPoseEstimate(measuredPose, averageDistance,
@@ -243,6 +244,10 @@ public class AnthonyVision extends SubsystemBase {
     return isRedSide.getAsBoolean()
         ? RED_SIDE_TAG_IDS.contains(tagId)
         : BLUE_SIDE_TAG_IDS.contains(tagId);
+  }
+
+  private boolean isNotChopped(double yaw) {
+    return (Math.abs(yaw) < 60d);
   }
 
   private double computeNoise(
