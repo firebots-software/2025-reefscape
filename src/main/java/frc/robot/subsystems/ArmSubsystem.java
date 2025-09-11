@@ -9,11 +9,10 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -32,11 +31,9 @@ public class ArmSubsystem extends SubsystemBase {
   public LoggedTalonFX armMotor;
   public LoggedTalonFX flywheelMotor;
 
-  private MotionMagicConfigs motionMagicConfigsArm;
-  private MotionMagicConfigs motionMagicConfigsFlywheel;
-
-  private final MotionMagicVoltage controlRequestArm = new MotionMagicVoltage(0);
   private final VelocityVoltage controlRequestFlywheel = new VelocityVoltage(0);
+  private final PositionVoltage controlRequestArm = new PositionVoltage(0);
+
   private double encoderDegrees;
 
   private double targetDegrees;
@@ -117,12 +114,6 @@ public class ArmSubsystem extends SubsystemBase {
     masterConfiguratorFlywheel.apply(mocFlywheel);
     masterConfiguratorFlywheel.apply(clcFlywheel); // Apply current limits to the master motor
     masterConfiguratorFlywheel.apply(s0cFlywheel); // Apply PID settings to the master motor
-
-    // Apply MotionMagicConfigs to master motor
-    motionMagicConfigsArm = new MotionMagicConfigs();
-    motionMagicConfigsArm.MotionMagicCruiseVelocity = Constants.Arm.MOTIONMAGIC_MAX_VELOCITY;
-    motionMagicConfigsArm.MotionMagicAcceleration = Constants.Arm.MOTIONMAGIC_MAX_ACCELERATION;
-    masterConfiguratorArm.apply(motionMagicConfigsArm);
   }
 
   // ARM:

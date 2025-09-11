@@ -387,16 +387,12 @@ public final class Constants {
     public static final int PIVOT_MOTOR_PORT = 16;
 
     public static final double CURRENT_LIMIT = 8.0;
-    public static double S0C_KP = 0.75;
+    public static double S0C_KP = 0.0;
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.0;
     public static double S0C_KS = 0.0;
     public static double S0C_KG = 0.0;
 
-    public static final double MOTIONMAGIC_MAX_VELOCITY =
-        200; // MotionMagic Cruise Velocity in RPS of the arm
-    public static final double MOTIONMAGIC_MAX_ACCELERATION =
-        5 * MOTIONMAGIC_MAX_VELOCITY; // MotionMagic Acceleration in RPS^2 of the arm
     public static final double ZERO_CURRENT = 5;
     public static final double DEALGAENATE_SPEED_ZOOM_ZOOM = 60;
     public static final double EXTENDED_ANGLE = 90;
