@@ -25,7 +25,6 @@ public class ApplySwerveVoltage extends Command {
 
   @Override
   public void execute() {
-    DogLog.log("restarted", counter);
     swerveDrivetrain.getModule(0).getDriveMotor().setVoltage(0.2425 + applyVoltage);
     swerveDrivetrain.getModule(1).getDriveMotor().setVoltage(0.2425 + applyVoltage);
     swerveDrivetrain.getModule(2).getDriveMotor().setVoltage(0.2425 + applyVoltage);

@@ -99,21 +99,21 @@ public class JamesHardenMovement extends Command {
     ChassisSpeeds speeds =
         swerve.calculateRequiredEdwardChassisSpeeds(targetPose, initialPathDistance);
 
-    DogLog.log("JamesHardenMovement/TargetPose", targetPose);
-    DogLog.log("JamesHardenMovement/TargetPoseX(m)", targetPose.getX());
-    DogLog.log("JamesHardenMovement/TargetPoseY(m)", targetPose.getY());
-    DogLog.log("JamesHardenMovement/TargetPoseHeading(deg)", targetPose.getRotation().getRadians());
+    DogLog.log("Commands/JamesHarden/TargetPose", targetPose);
+    DogLog.log("Commands/JamesHarden/AxisSpecificInformation/TargetPoseX(m)", targetPose.getX());
+    DogLog.log("Commands/JamesHarden/AxisSpecificInformation/TargetPoseY(m)", targetPose.getY());
+    DogLog.log("Commands/JamesHarden/AxisSpecificInformation/TargetPoseHeading(deg)", targetPose.getRotation().getRadians());
 
-    DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(mps)", speeds.vxMetersPerSecond);
-    DogLog.log("JamesHardenMovement/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
-    DogLog.log("JamesHardenMovement/DesiredChassisSpeedsX(radps)", speeds.omegaRadiansPerSecond);
+    DogLog.log("Commands/JamesHarden/AxisSpecificInformation/DesiredChassisSpeedsX(mps)", speeds.vxMetersPerSecond);
+    DogLog.log("Commands/JamesHarden/AxisSpecificInformation/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
+    DogLog.log("Commands/JamesHarden/AxisSpecificInformation/DesiredChassisSpeedsTheta(radps)", speeds.omegaRadiansPerSecond);
 
     DogLog.log(
-        "JamesHardenMovement/ActualChassisSpeedsX(mps)", swerve.getFieldSpeeds().vxMetersPerSecond);
+        "Commands/JamesHarden/AxisSpecificInformation/ActualChassisSpeedsX(mps)", swerve.getFieldSpeeds().vxMetersPerSecond);
     DogLog.log(
-        "JamesHardenMovement/ActualChassisSpeedsY(mps)", swerve.getFieldSpeeds().vyMetersPerSecond);
+        "Commands/JamesHarden/AxisSpecificInformation/ActualChassisSpeedsY(mps)", swerve.getFieldSpeeds().vyMetersPerSecond);
     DogLog.log(
-        "JamesHardenMovement/ActualChassisSpeedsX(radps)",
+        "Commands/JamesHarden/AxisSpecificInformation/ActualChassisSpeedsX(radps)",
         swerve.getFieldSpeeds().omegaRadiansPerSecond);
     swerve.setFieldSpeeds(speeds);
   }
@@ -127,21 +127,21 @@ public class JamesHardenMovement extends Command {
       currRot = ((2.0 * Math.PI) + (currRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
       double targetRot = targetPose.getRotation().getRadians();
       targetRot = ((2.0 * Math.PI) + (targetRot % (2.0 * Math.PI))) % (2.0 * Math.PI);
-      DogLog.log("JamesHardenMovement/currRot(rad)", currRot);
-      DogLog.log("JamesHardenMovement/targetRot(rad)", targetRot);
+      DogLog.log("Commands/JamesHarden/IsFinished/currRot(rad)", currRot);
+      DogLog.log("Commands/JamesHarden/IsFinished/targetRot(rad)", targetRot);
       DogLog.log(
-          "JamesHardenMovement/xTolMet",
+          "Commands/JamesHarden/IsFinished/xTolMet",
           (Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
               < Constants.HardenConstants.RegularCommand.xyIndividualTolerance));
       DogLog.log(
-          "JamesHardenMovement/yTolMet",
+          "Commands/JamesHarden/IsFinished/yTolMet",
           (Math.abs(swerve.getCurrentState().Pose.getY() - targetPose.getY())
               < Constants.HardenConstants.RegularCommand.xyIndividualTolerance));
       DogLog.log(
-          "JamesHardenMovement/rotTolMet",
+          "Commands/JamesHarden/IsFinished/rotTolMet",
           (Math.min(Math.abs(targetRot - currRot), (Math.PI * 2) - Math.abs(targetRot - currRot))
               < Constants.HardenConstants.RegularCommand.headingTolerance));
-      DogLog.log("JamesHardenMovement/End", false);
+      DogLog.log("Commands/JamesHarden/End", false);
 
       // translational is met
       if ((Math.abs(swerve.getCurrentState().Pose.getX() - targetPose.getX())
@@ -170,7 +170,7 @@ public class JamesHardenMovement extends Command {
                       + (swerve.getFieldSpeeds().vyMetersPerSecond
                           * swerve.getFieldSpeeds().vyMetersPerSecond))
               <= 0.2)) {
-        DogLog.log("JamesHardenMovement/End", true);
+        DogLog.log("Commands/JamesHarden/End", true);
         return true;
       } else return false;
     }
@@ -258,10 +258,6 @@ public class JamesHardenMovement extends Command {
     Supplier<LandmarkPose> targetBranch =
         () -> {
           Translation2d currPosition = swerve.getCurrentState().Pose.getTranslation();
-          DogLog.log("currPositionX", currPosition.getX());
-          DogLog.log("currPositionY", currPosition.getY());
-          DogLog.log("currPositionTheta", currPosition.getAngle().getRadians());
-          DogLog.log("hardenRed", redSide.getAsBoolean());
           if (redSide.getAsBoolean()) {
             double minDist =
                 currPosition.getDistance(RedLandmarkPose.R0.getPose().getTranslation());
