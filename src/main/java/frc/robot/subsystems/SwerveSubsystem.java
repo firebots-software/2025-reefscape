@@ -344,39 +344,39 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     Rotation2d travelAngle = travelAngleTo(targetPose);
 
     DogLog.log(
-        "EdwardCalculation/qProfiledPID/CurrentPositionMeasurement",
+        "Commands/JamesHarden/Edward/qPositionMeasurement",
         completePathDistance - distanceToTarget);
     DogLog.log(
-        "EdwardCalculation/qProfiledPID/PositionSetpoint",
+        "Commands/JamesHarden/Edward/qPositionSetpoint",
         qProfiledPIDController.getSetpoint().position);
     DogLog.log(
-        "EdwardCalculation/qProfiledPID/CurrentVelocityMeasurement",
+        "Commands/JamesHarden/Edward/qVelocityMeasurement",
         getDirectionalChassisSpeeds(travelAngle));
     DogLog.log(
-        "EdwardCalculation/qProfiledPID/VelocitySetpoint",
+        "Commands/JamesHarden/Edward/qVelocitySetpoint",
         qProfiledPIDController.getSetpoint().velocity);
     DogLog.log(
-        "EdwardCalculation/qProfiledPID/PositionError", qProfiledPIDController.getPositionError());
+        "Commands/JamesHarden/Edward/qPositionError", qProfiledPIDController.getPositionError());
     DogLog.log(
-        "EdwardCalculation/qProfiledPID/VelocityError", qProfiledPIDController.getVelocityError());
+        "Commands/JamesHarden/Edward/qVelocityError", qProfiledPIDController.getVelocityError());
 
     DogLog.log(
-        "EdwardCalculation/headingProfiledPID/CurrentPositionMeasurement",
+        "Commands/JamesHarden/Rotational/PositionMeasurement",
         currentState.Pose.getRotation().getRadians());
     DogLog.log(
-        "EdwardCalculation/headingProfiledPID/PositionSetpoint",
+        "Commands/JamesHarden/Rotational/PositionSetpoint",
         headingProfiledPIDController.getSetpoint().position);
     DogLog.log(
-        "EdwardCalculation/headingProfiledPID/CurrentVelocityMeasurement",
+        "Commands/JamesHarden/Rotational/VelocityMeasurement",
         currentState.Speeds.omegaRadiansPerSecond);
     DogLog.log(
-        "EdwardCalculation/headingProfiledPID/VelocitySetpoint",
+        "Commands/JamesHarden/Rotational/VelocitySetpoint",
         headingProfiledPIDController.getSetpoint().velocity);
     DogLog.log(
-        "EdwardCalculation/headingProfiledPID/PositionError",
+        "Commands/JamesHarden/Rotational/PositionError",
         headingProfiledPIDController.getPositionError());
     DogLog.log(
-        "EdwardCalculation/headingProfiledPID/VelocityError",
+        "Commands/JamesHarden/Rotational/VelocityError",
         headingProfiledPIDController.getVelocityError());
 
     return new ChassisSpeeds(
