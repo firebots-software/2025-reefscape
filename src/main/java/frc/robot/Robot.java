@@ -105,6 +105,26 @@ public class Robot extends TimedRobot {
     DogLog.log("PIDValues/TootsieKD", Constants.TootsieSlide.S0C_KD);
     DogLog.log("PIDValues/TootsieKS", Constants.TootsieSlide.S0C_KS);
     DogLog.log("PIDValues/TootsieKG", Constants.TootsieSlide.S0C_KG);
+
+    // Q set
+    DogLog.log("PIDValues/QKP", Constants.HardenConstants.QKP);
+    DogLog.log("PIDValues/QKI", Constants.HardenConstants.QKI);
+    DogLog.log("PIDValues/QKD", Constants.HardenConstants.QKD);
+    DogLog.log("PIDValues/QCRUISE", Constants.HardenConstants.QCRUISE);
+    DogLog.log("PIDValues/QACCEL", Constants.HardenConstants.QACCEL);
+    DogLog.log("PIDValues/QIZONE", Constants.HardenConstants.QIZONE);
+    DogLog.log("PIDValues/QIRANGE_LOWER", Constants.HardenConstants.QIRANGE_LOWER);
+    DogLog.log("PIDValues/QIRANGE_UPPER", Constants.HardenConstants.QIRANGE_UPPER);
+
+    // H set
+    DogLog.log("PIDValues/HKP", Constants.HardenConstants.HKP);
+    DogLog.log("PIDValues/HKI", Constants.HardenConstants.HKI);
+    DogLog.log("PIDValues/HKD", Constants.HardenConstants.HKD);
+    DogLog.log("PIDValues/HCRUISE", Constants.HardenConstants.HCRUISE);
+    DogLog.log("PIDValues/HACCEL", Constants.HardenConstants.HACCEL);
+    DogLog.log("PIDValues/HIZONE", Constants.HardenConstants.HIZONE);
+    DogLog.log("PIDValues/HIRANGE_LOWER", Constants.HardenConstants.HIRANGE_LOWER);
+    DogLog.log("PIDValues/HIRANGE_UPPER", Constants.HardenConstants.HIRANGE_UPPER);
     // Commented this code that logs the electric data because it crashed the robot code
     // there is an error related to the usage of this
     // DogLog.setPdh(new PowerDistribution());

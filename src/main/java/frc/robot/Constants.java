@@ -46,6 +46,24 @@ public final class Constants {
   }
 
   public static class HardenConstants {
+    public static final double QKP = 3.4;
+    public static final double QKI = 0.45;
+    public static final double QKD = 0.0005;
+    public static final double QCRUISE = 4.368;
+    public static final double QACCEL = 8.0;
+    public static final double QIZONE = 0.35;
+    public static final double QIRANGE_LOWER = 0.0;
+    public static final double QIRANGE_UPPER = 0.2;
+
+    public static final double HKP = 3.7;
+    public static final double HKI = 0.4;
+    public static final double HKD = 0.0;
+    public static final double HCRUISE = 9.417;
+    public static final double HACCEL = 10.971;
+    public static final double HIZONE = 0.14;
+    public static final double HIRANGE_LOWER = 0.0;
+    public static final double HIRANGE_UPPER = Math.PI / 4.0;
+
     public static class EndWhenCloseEnough {
       public static final double translationalToleranceTeleop = 0.8d; // 0.43105229381 worked before
       public static final double translationalToleranceAuto = 1d;

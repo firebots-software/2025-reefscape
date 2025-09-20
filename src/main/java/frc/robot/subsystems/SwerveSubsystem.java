@@ -69,22 +69,21 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // 1.7, 0.345, 0.0015
     qProfiledPIDController =
         new ProfiledPIDController(
-            3.4, // 3.4 not bad // [3.4 good for 0.2-1.2, 0.425 I]
-            0.45, // 345
-            0.0005, // 0.0015
+            Constants.HardenConstants.QKP, // 3.4 not bad // [3.4 good for 0.2-1.2, 0.425 I]
+            Constants.HardenConstants.QKI, // 345
+            Constants.HardenConstants.QKD, // 0.0015
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.PHYSICAL_MAX_SPEED_METERS_PER_SECOND - 0.5,
-                8)); // 8.25 // 5 accel and 0.75 p was good
+                Constants.HardenConstants.QCRUISE,
+                Constants.HardenConstants.QACCEL)); // 8.25 // 5 accel and 0.75 p was good
 
     headingProfiledPIDController =
         new ProfiledPIDController(
-            3.7, // 4 was good
-            0.4, //
-            0,
+            Constants.HardenConstants.HKP, // 4 was good
+            Constants.HardenConstants.HKI, //
+            Constants.HardenConstants.HKD,
             new TrapezoidProfile.Constraints(
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_RATE - 1.5, // -1 was good
-                Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND
-                    - 16)); // -13 was good
+                Constants.HardenConstants.HCRUISE, // -1 was good
+                Constants.HardenConstants.HACCEL)); // -13 was good
     // headingProfiledPIDController =
     //     new ProfiledPIDController(
     //         1, // 4 was good
@@ -95,11 +94,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     //             Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND
     //                 - 16)); // -13 was good
 
-    qProfiledPIDController.setIZone(0.35);
-    headingProfiledPIDController.setIZone(0.14);
+    qProfiledPIDController.setIZone(Constants.HardenConstants.QIZONE);
+    headingProfiledPIDController.setIZone(Constants.HardenConstants.HIZONE);
 
-    qProfiledPIDController.setIntegratorRange(0, 0.2);
-    headingProfiledPIDController.setIntegratorRange(0.0, Math.PI / 4); // 0.3 before
+    qProfiledPIDController.setIntegratorRange(Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
+    headingProfiledPIDController.setIntegratorRange(Constants.HardenConstants.HIRANGE_LOWER, Constants.HardenConstants.HIRANGE_UPPER); // 0.3 before
 
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     // configureAutoBuilder();
