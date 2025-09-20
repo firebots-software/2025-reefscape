@@ -46,12 +46,18 @@ public class AnthonyVision extends SubsystemBase {
 
   // Noise parameters
   private double calibrationFactor = 1.0; // constant multiplier to everything
-  private double baseNoiseX = 0.01; // meters
-  private double baseNoiseY = 0.01;
+  private double baseNoiseX = 0.00; // meters
+  private double baseNoiseY = 0.00;
   private double baseNoiseTheta = 0.5; // radians
 
-  private double distanceCoefficientX = 0.06;
-  private double distanceCoefficientY = 0.06;
+  // private double distanceCoefficientX = 0.06;
+  // private double distanceCoefficientY = 0.06;
+
+  private double distanceExponentialCoefficientX = 0.00046074;
+  private double distanceExponentialBaseX = 2.97294;
+  private double distanceExponentialCoefficientY = 0.00046074;
+  private double distanceExponentialBaseY = 2.97294;
+
   private double distanceCoefficientTheta = 0.9;
 
   private double angleCoefficientX = 0.5; // noise growth per radian of viewing angle
