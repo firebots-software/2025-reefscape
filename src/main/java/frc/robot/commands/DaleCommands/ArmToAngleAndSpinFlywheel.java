@@ -27,7 +27,7 @@ public class ArmToAngleAndSpinFlywheel extends Command {
   @Override
   public void execute() {
     armPlusFlywheel.spinFlywheel(); // Spin the flywheel at desired speed
-    DogLog.log("Running to target angle: ", angle);
+    DogLog.log("Commands/ArmToAngleAndSpinFlywheel/TargetAngle", angle);
     armPlusFlywheel.setPosition(angle);
   }
 

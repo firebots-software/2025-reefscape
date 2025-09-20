@@ -72,7 +72,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
 
     JamesHardenMovement movementCommand, maintainCommand;
     if (!branch.isBranch()) {
-      DogLog.log("JamesHardenScore/Errors", "called without real branch");
+      DogLog.log("Commands/JamesHardenScore/Errors", "Called without a real branch");
       return;
     }
 
@@ -85,8 +85,6 @@ public class JamesHardenScore extends SequentialCommandGroup {
     } else {
       elevateCommand = new SetElevatorLevel(elevatorSubsystem, height, true);
     }
-    // if (DriverStation.isTeleop()) {
-    DogLog.log("JamesHardenScore/Version", "teleop");
 
     addCommands(
         movementCommand.alongWith(
