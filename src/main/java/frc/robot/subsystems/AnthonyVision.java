@@ -53,7 +53,7 @@ public class AnthonyVision extends SubsystemBase {
 
   private double distanceCoefficientX = 0.06; 
   private double distanceCoefficientY = 0.06;
-  private double distanceCoefficientTheta = 1;
+  private double distanceCoefficientTheta = 0.9;
 
   private double angleCoefficientX = 0.5; // noise growth per radian of viewing angle
   private double angleCoefficientY = 0.5;
