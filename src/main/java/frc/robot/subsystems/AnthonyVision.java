@@ -10,7 +10,6 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -51,7 +50,7 @@ public class AnthonyVision extends SubsystemBase {
   private double baseNoiseY = 0.01;
   private double baseNoiseTheta = 0.5; // radians
 
-  private double distanceCoefficientX = 0.06; 
+  private double distanceCoefficientX = 0.06;
   private double distanceCoefficientY = 0.06;
   private double distanceCoefficientTheta = 0.9;
 
@@ -80,15 +79,15 @@ public class AnthonyVision extends SubsystemBase {
     this.cameraId = cameraId;
     photonCamera = new PhotonCamera(cameraId.toString());
     Transform3d cameraToRobot = Constants.Vision.getCameraTransform(cameraId);
-    
+
     // Initialize field layout
     this.fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
-    
-    // Initialize both pose estimators 
-      poseEstimator =
-          new PhotonPoseEstimator(
-              fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraToRobot);
-      
+
+    // Initialize both pose estimators
+    poseEstimator =
+        new PhotonPoseEstimator(
+            fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraToRobot);
+
     latestVisionResult = null;
   }
 
@@ -106,7 +105,7 @@ public class AnthonyVision extends SubsystemBase {
   public void periodic() {
     // Initialize swerve drive if not already done
     if (swerveDrive == null) {
-        swerveDrive = SwerveSubsystem.getInstance();
+      swerveDrive = SwerveSubsystem.getInstance();
     }
 
     // Check camera connection
@@ -128,14 +127,14 @@ public class AnthonyVision extends SubsystemBase {
 
   /**
    * Internal method to handle pose estimation with optional confidence checking.
-   * 
+   *
    * @param useTrigsolve If true, uses trigsolve strategy
    * @param forceAdd If true, bypasses confidence checking (used for non-trigsolve or single camera)
    * @return PoseEstimateResult containing the pose and confidence data, or null if failed
    */
   public void addFilteredPose() {
     PhotonPoseEstimator selectedEstimator = poseEstimator;
-    String camTitle = cameraId.getLoggingName(); 
+    String camTitle = cameraId.getLoggingName();
     if (latestVisionResult == null || !latestVisionResult.hasTargets()) {
       return;
     }
@@ -158,25 +157,26 @@ public class AnthonyVision extends SubsystemBase {
             .filter(t -> isTagOnActiveSide(t.getFiducialId()))
             .filter(t -> isNotChopped(t.getYaw()))
             .collect(Collectors.toList());
-    
-    DogLog.log("Vision/"+camTitle+"/numValidTags", validTags.size());
 
-        for (PhotonTrackedTarget tag : validTags) {
-            DogLog.log("Vision/"+camTitle+"/Area", tag.getArea());
-            DogLog.log("Vision/"+camTitle+"/Yaw", tag.getYaw());
-        }
+    DogLog.log("Vision/" + camTitle + "/numValidTags", validTags.size());
+
+    for (PhotonTrackedTarget tag : validTags) {
+      DogLog.log("Vision/" + camTitle + "/Area", tag.getArea());
+      DogLog.log("Vision/" + camTitle + "/Yaw", tag.getYaw());
+    }
 
     // Log all detected tags for debugging
-    String allTagIds = latestVisionResult.getTargets().stream()
-        .map(t -> Integer.toString(t.getFiducialId()))
-        .collect(Collectors.joining(","));
-   
-    DogLog.log("Vision/"+camTitle+"/allTagIds", allTagIds);
+    String allTagIds =
+        latestVisionResult.getTargets().stream()
+            .map(t -> Integer.toString(t.getFiducialId()))
+            .collect(Collectors.joining(","));
+
+    DogLog.log("Vision/" + camTitle + "/allTagIds", allTagIds);
 
     if (validTags.isEmpty()) {
       return;
     }
-   
+
     // Log all tags that haven't been thrown out
     int tagCount = validTags.size();
 
@@ -189,54 +189,81 @@ public class AnthonyVision extends SubsystemBase {
     }
 
     // find the current speed
-    double currentSpeed = Math.hypot(
-        swerveDrive.getRobotSpeeds().vxMetersPerSecond,
-        swerveDrive.getRobotSpeeds().vyMetersPerSecond);
-    
+    double currentSpeed =
+        Math.hypot(
+            swerveDrive.getRobotSpeeds().vxMetersPerSecond,
+            swerveDrive.getRobotSpeeds().vyMetersPerSecond);
+
     // Get the pose from PhotonVision
     Optional<EstimatedRobotPose> maybePose = selectedEstimator.update(latestVisionResult);
     if (maybePose.isEmpty()) {
       return;
     }
-    
+
     EstimatedRobotPose estimatedPose = maybePose.get();
     Pose2d measuredPose = estimatedPose.estimatedPose.toPose2d();
-  
-    double nX = computeNoise(
-        baseNoiseX, distanceCoefficientX, angleCoefficientX, speedCoefficientX,
-        averageDistance, currentSpeed, tagCount);
-    double nY = computeNoise(
-        baseNoiseY, distanceCoefficientY, angleCoefficientY, speedCoefficientY,
-        averageDistance, currentSpeed, tagCount);
-    double nTH = computeNoise(
-        baseNoiseTheta, distanceCoefficientTheta, angleCoefficientTheta, speedCoefficientTheta,
-        averageDistance, currentSpeed, tagCount);
 
-    DogLog.log("Vision/"+camTitle+"/speed", currentSpeed);
-    DogLog.log("Vision/"+camTitle+"/nX", nX);
-    DogLog.log("Vision/"+camTitle+"/nY", nY);
-    DogLog.log("Vision/"+camTitle+"/nTH", nTH);
-    DogLog.log("Vision/"+camTitle+"/Pose", measuredPose);
-    DogLog.log("Vision/"+camTitle+"/averageDistance", averageDistance);
+    double nX =
+        computeNoise(
+            baseNoiseX,
+            distanceCoefficientX,
+            angleCoefficientX,
+            speedCoefficientX,
+            averageDistance,
+            currentSpeed,
+            tagCount);
+    double nY =
+        computeNoise(
+            baseNoiseY,
+            distanceCoefficientY,
+            angleCoefficientY,
+            speedCoefficientY,
+            averageDistance,
+            currentSpeed,
+            tagCount);
+    double nTH =
+        computeNoise(
+            baseNoiseTheta,
+            distanceCoefficientTheta,
+            angleCoefficientTheta,
+            speedCoefficientTheta,
+            averageDistance,
+            currentSpeed,
+            tagCount);
+
+    DogLog.log("Vision/" + camTitle + "/speed", currentSpeed);
+    DogLog.log("Vision/" + camTitle + "/nX", nX);
+    DogLog.log("Vision/" + camTitle + "/nY", nY);
+    DogLog.log("Vision/" + camTitle + "/nTH", nTH);
+    DogLog.log("Vision/" + camTitle + "/Pose", measuredPose);
+    DogLog.log("Vision/" + camTitle + "/averageDistance", averageDistance);
 
     Matrix<N3, N1> noiseVector = VecBuilder.fill(nX, nY, nTH);
     // Process locally (no cross-camera comparison)
-    processPoseEstimate(measuredPose, averageDistance,
-                               currentSpeed, tagCount, latestVisionResult.getTimestampSeconds(), noiseVector);
+    processPoseEstimate(
+        measuredPose,
+        averageDistance,
+        currentSpeed,
+        tagCount,
+        latestVisionResult.getTimestampSeconds(),
+        noiseVector);
   }
 
-  /**
-   * Final processing and addition of pose estimate to odometry.
-   */
-  private void processPoseEstimate(Pose2d measuredPose, double averageDistance, double currentSpeed, int tagCount, double timestamp, Matrix<N3, N1> noiseVector) {
+  /** Final processing and addition of pose estimate to odometry. */
+  private void processPoseEstimate(
+      Pose2d measuredPose,
+      double averageDistance,
+      double currentSpeed,
+      int tagCount,
+      double timestamp,
+      Matrix<N3, N1> noiseVector) {
     // Choose timestamp: use vision timestamp unless it differs too much from FPGA
     double fpgaTimestamp = Timer.getFPGATimestamp();
     double timestampDifference = Math.abs(timestamp - fpgaTimestamp);
-    double chosenTimestamp = (timestampDifference > 0.5) ? fpgaTimestamp-0.03 : timestamp;
+    double chosenTimestamp = (timestampDifference > 0.5) ? fpgaTimestamp - 0.03 : timestamp;
 
     // Build the noise vector and add the vision measurement
-    
-    
+
     swerveDrive.addVisionMeasurement(measuredPose, chosenTimestamp, noiseVector);
   }
 
@@ -267,8 +294,7 @@ public class AnthonyVision extends SubsystemBase {
     double distanceFactor = baseNoise + distanceCoefficient * distance * distance;
 
     // Speed term (quadratic, saturated)
-    double vNorm = Math.min(robotSpeed, maximumRobotSpeed)
-        / maximumRobotSpeed;
+    double vNorm = Math.min(robotSpeed, maximumRobotSpeed) / maximumRobotSpeed;
     double speedFactor = 1.0 + speedCoefficient * (vNorm * vNorm);
 
     double computedStdDevs = calibrationFactor * tagFactor * distanceFactor * speedFactor;

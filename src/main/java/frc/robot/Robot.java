@@ -14,7 +14,6 @@ import frc.robot.subsystems.AnthonyVision;
 import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
 
 /**
@@ -51,7 +50,8 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     visionRight =
-        AnthonyVision.getInstance(Constants.Vision.Cameras.RIGHT_CAM, m_robotContainer.getRedSide());
+        AnthonyVision.getInstance(
+            Constants.Vision.Cameras.RIGHT_CAM, m_robotContainer.getRedSide());
     visionLeft =
         AnthonyVision.getInstance(Constants.Vision.Cameras.LEFT_CAM, m_robotContainer.getRedSide());
     absoluteInit();
