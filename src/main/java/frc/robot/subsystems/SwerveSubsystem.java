@@ -455,25 +455,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   @Override
   public void periodic() {
-    DogLog.log(
-        "subsystems/swerve/module0/drive/speedrps",
-        this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
-    DogLog.log(
-        "subsystems/swerve/module0/drive/speedrps",
-        this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
-    DogLog.log(
-        "subsystems/swerve/module0/drive/speedrps",
-        this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
-    DogLog.log(
-        "subsystems/swerve/module0/drive/speedrps",
-        this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
-    DogLog.log(
-        "subsystems/swerve/module0/drive/speedrps",
-        this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
-    DogLog.log(
-        "subsystems/swerve/module0/drive/speedrps",
-        this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
-
     currentState = getState();
 
     if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
@@ -488,16 +469,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
               });
     }
 
-    DogLog.log("subsystems/swerve/fl_speed", currentState.ModuleStates[0].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/fl_angle", currentState.ModuleStates[0].angle.getDegrees());
-    DogLog.log("subsystems/swerve/fr_speed", currentState.ModuleStates[1].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/fr_angle", currentState.ModuleStates[1].angle.getDegrees());
-    DogLog.log("subsystems/swerve/bl_speed", currentState.ModuleStates[2].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/bl_angle", currentState.ModuleStates[2].angle.getDegrees());
-    DogLog.log("subsystems/swerve/br_speed", currentState.ModuleStates[3].speedMetersPerSecond);
-    DogLog.log("subsystems/swerve/br_angle", currentState.ModuleStates[3].angle.getDegrees());
+    DogLog.log("PoseEstimation/DrivetrainPose", currentState.Pose);
+
     DogLog.log(
-        "subsystems/swerve/command",
+        "Subsystems/SwerveSubsystem/CurrentCommand",
         this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 }

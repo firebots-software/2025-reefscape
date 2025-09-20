@@ -75,7 +75,6 @@ public class Robot extends TimedRobot {
     visionRight.addFilteredPose();
     visionLeft.addFilteredPose();
 
-    DogLog.log("KalmanDebug/drivetrainPose", driveTrain.getPose());
 
     DogLog.log("CoralPosition/isCoralInFunnel", CoralPosition.isCoralInFunnel());
     DogLog.log("CoralPosition/isCoralInTootsieSlide", CoralPosition.isCoralInTootsieSlide());
