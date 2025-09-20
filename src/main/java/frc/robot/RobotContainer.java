@@ -83,7 +83,6 @@ public class RobotContainer {
     if (driveTrain.getCurrentCommand() != null) {
       commandName = driveTrain.getCurrentCommand().getName();
     }
-    DogLog.log("Robot/SwerveDriveCommand", commandName);
   }
 
   public RobotContainer() {
@@ -471,7 +470,7 @@ public class RobotContainer {
   }
 
   public BooleanSupplier getRedSide() {
-    DogLog.log("get alliance", redside.getAsBoolean());
+    DogLog.log("Info/Alliance", redside.getAsBoolean());
     return redside;
   }
 
@@ -479,7 +478,7 @@ public class RobotContainer {
     /* Run the path selected from the auto chooser */
     int autoValue = autoChooser.getSelected();
     Command autoCommand;
-    DogLog.log("auto/selected", autoValue);
+    DogLog.log("Auto/Selected", autoValue);
     switch (autoValue) {
       case 1:
         autoCommand =
