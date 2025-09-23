@@ -46,8 +46,8 @@ public class AnthonyVision extends SubsystemBase {
 
   // Noise parameters
   private double calibrationFactor = 1.0; // constant multiplier to everything
-  private double baseNoiseX = 0.00; // meters
-  private double baseNoiseY = 0.00;
+  private double baseNoiseX = 0.0008; // meters
+  private double baseNoiseY = 0.0008;
   private double baseNoiseTheta = 0.5; // radians
 
   // private double distanceCoefficientX = 0.06;
@@ -210,25 +210,27 @@ public class AnthonyVision extends SubsystemBase {
     Pose2d measuredPose = estimatedPose.estimatedPose.toPose2d();
 
     double nX =
-        computeNoise(
+        computeNoiseXY(
             baseNoiseX,
-            distanceCoefficientX,
+            distanceExponentialCoefficientX,
+            distanceExponentialBaseX,
             angleCoefficientX,
             speedCoefficientX,
             averageDistance,
             currentSpeed,
             tagCount);
     double nY =
-        computeNoise(
+        computeNoiseXY(
             baseNoiseY,
-            distanceCoefficientY,
+            distanceExponentialCoefficientY,
+            distanceExponentialBaseY,
             angleCoefficientY,
             speedCoefficientY,
             averageDistance,
             currentSpeed,
             tagCount);
     double nTH =
-        computeNoise(
+        computeNoiseHeading(
             baseNoiseTheta,
             distanceCoefficientTheta,
             angleCoefficientTheta,
@@ -283,7 +285,37 @@ public class AnthonyVision extends SubsystemBase {
     return (Math.abs(yaw) < 60d);
   }
 
-  private double computeNoise(
+  private double computeNoiseXY(
+      double baseNoise,
+      double distanceExponentialCoefficient,
+      double distanceExponentialBase,
+      double angleCoefficient,
+      double speedCoefficient,
+      double distance,
+      double robotSpeed,
+      int tagCount) {
+
+    // Tag count factor (diminishing returns; cap at 4)
+    int effectiveTags = Math.min(tagCount, 4);
+    double tagFactor = 1.0 / Math.sqrt(effectiveTags);
+
+    // Distance term (keep as d^2)
+    double distanceFactor = baseNoise + distanceExponentialCoefficient*Math.pow(distanceExponentialBase, distance);
+
+    // Speed term (quadratic, saturated)
+    double vNorm = Math.min(robotSpeed, maximumRobotSpeed) / maximumRobotSpeed;
+    double speedFactor = 1.0 + speedCoefficient * (vNorm * vNorm);
+    DogLog.log("Vision/calibrationFactor", calibrationFactor);
+    DogLog.log("Vision/tagFactor", tagFactor);
+    DogLog.log("Vision/distanceFactor", distanceFactor);
+    DogLog.log("Vision/speedFactor", speedFactor);
+    
+    double computedStdDevs = calibrationFactor * tagFactor * distanceFactor * speedFactor;
+    return computedStdDevs;
+  }
+
+
+  private double computeNoiseHeading(
       double baseNoise,
       double distanceCoefficient,
       double angleCoefficient,
