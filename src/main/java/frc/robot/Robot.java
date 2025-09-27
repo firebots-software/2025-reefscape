@@ -174,8 +174,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // DogLog.log("PID Constant", IncreasePArm.broomIndex());
-    // DogLog.log("Mechanism Type", IncreasePArm.mechIndex());
   }
 
   @Override

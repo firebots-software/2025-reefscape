@@ -478,7 +478,7 @@ public class RobotContainer {
     /* Run the path selected from the auto chooser */
     int autoValue = autoChooser.getSelected();
     Command autoCommand;
-    DogLog.log("Auto/Selected", autoValue);
+    DogLog.log("Info/AutoSelected", autoValue);
     switch (autoValue) {
       case 1:
         autoCommand =

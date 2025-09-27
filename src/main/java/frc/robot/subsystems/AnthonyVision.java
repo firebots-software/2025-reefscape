@@ -40,6 +40,7 @@ public class AnthonyVision extends SubsystemBase {
   // Data type is "Cameras", an enum defined in Constants.java with only two options (left, right)
   private final Constants.Vision.Cameras cameraId;
 
+  private String camTitle; 
   // Reef tag IDs for each side of the field
   private static final List<Integer> BLUE_SIDE_TAG_IDS = List.of(19, 20, 21, 22, 17, 18);
   private static final List<Integer> RED_SIDE_TAG_IDS = List.of(6, 7, 8, 9, 10, 11);
@@ -94,6 +95,8 @@ public class AnthonyVision extends SubsystemBase {
         new PhotonPoseEstimator(
             fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraToRobot);
 
+    camTitle = cameraId.getLoggingName();
+
     latestVisionResult = null;
   }
 
@@ -119,9 +122,11 @@ public class AnthonyVision extends SubsystemBase {
 
     // If the current camera isn't connected, there's nothing to do here
     if (!cameraConnected) {
+      DogLog.log("Vision/" + camTitle + "/CameraConnected", false);
       return;
     }
 
+    DogLog.log("Vision/" + camTitle + "/CameraConnected", true);
     // Get all unread results
     List<PhotonPipelineResult> results = photonCamera.getAllUnreadResults();
 
@@ -131,19 +136,13 @@ public class AnthonyVision extends SubsystemBase {
     }
   }
 
-  /**
-   * Internal method to handle pose estimation with optional confidence checking.
-   *
-   * @param useTrigsolve If true, uses trigsolve strategy
-   * @param forceAdd If true, bypasses confidence checking (used for non-trigsolve or single camera)
-   * @return PoseEstimateResult containing the pose and confidence data, or null if failed
-   */
   public void addFilteredPose() {
     PhotonPoseEstimator selectedEstimator = poseEstimator;
-    String camTitle = cameraId.getLoggingName();
     if (latestVisionResult == null || !latestVisionResult.hasTargets()) {
+      DogLog.log("Vision/" + camTitle + "/HasTargets", false);
       return;
     }
+    DogLog.log("Vision/" + camTitle + "/HasTargets", true);
 
     double averageDistance =
         latestVisionResult.getTargets().stream()
@@ -180,8 +179,10 @@ public class AnthonyVision extends SubsystemBase {
     DogLog.log("Vision/" + camTitle + "/allTagIds", allTagIds);
 
     if (validTags.isEmpty()) {
+      DogLog.log("Vision/" + camTitle + "/ValidTags", false);
       return;
     }
+      DogLog.log("Vision/" + camTitle + "/ValidTags", true);
 
     // Log all tags that haven't been thrown out
     int tagCount = validTags.size();
@@ -191,20 +192,25 @@ public class AnthonyVision extends SubsystemBase {
 
     // nothing to do if rejected based on the minDistance or if no min dist has been found
     if (Double.isNaN(minDistance) || minDistance > maximumAllowedDistance) {
+      DogLog.log("Vision/" + camTitle + "/ThrownOutDistance", true);
       return;
     }
+    DogLog.log("Vision/" + camTitle + "/ThrownOutDistance", false);
 
     // find the current speed
     double currentSpeed =
         Math.hypot(
             swerveDrive.getRobotSpeeds().vxMetersPerSecond,
             swerveDrive.getRobotSpeeds().vyMetersPerSecond);
+    DogLog.log("Vision/" + camTitle + "/VisionDrivebaseSpeed", currentSpeed);
 
     // Get the pose from PhotonVision
     Optional<EstimatedRobotPose> maybePose = selectedEstimator.update(latestVisionResult);
     if (maybePose.isEmpty()) {
+      DogLog.log("Vision/" + camTitle + "/AvailablePose", false);
       return;
     }
+    DogLog.log("Vision/" + camTitle + "/AvailablePose", true);
 
     EstimatedRobotPose estimatedPose = maybePose.get();
     Pose2d measuredPose = estimatedPose.estimatedPose.toPose2d();

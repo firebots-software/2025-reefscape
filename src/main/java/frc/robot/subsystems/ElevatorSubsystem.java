@@ -143,7 +143,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     master.setPosition(
         currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
     DogLog.log(
-        "subsystems/Elevator/resetElevatorPosition",
+        "Subsystems/Elevator/resetElevatorPosition",
         currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
 
@@ -153,7 +153,7 @@ public class ElevatorSubsystem extends SubsystemBase {
           this.getToFDistance()
               * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
       DogLog.log(
-          "subsystems/Elevator/resetElevatorPosition",
+          "Subsystems/Elevator/resetElevatorPosition",
           this.getToFDistance()
               * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
     }
@@ -164,7 +164,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     master.setPosition(
         posInHeight * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
     DogLog.log(
-        "subsystems/Elevator/resetElevatorPosition",
+        "Subsystems/Elevator/resetElevatorPosition",
         posInHeight * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
 
@@ -194,8 +194,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean checkCurrent() {
     double Supplycurrent = Math.abs(master.getSupplyCurrent().getValue().magnitude());
     double Statorcurrent = Math.abs(master.getStatorCurrent().getValue().magnitude());
-    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/supply", Supplycurrent);
-    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/stator", Statorcurrent);
+    DogLog.log("Subsystems/Elevator/ZeroElevatorHardStop/supply", Supplycurrent);
+    DogLog.log("Subsystems/Elevator/ZeroElevatorHardStop/stator", Statorcurrent);
 
     if (Supplycurrent > 1.0 && Statorcurrent > 20) {
       return true;
@@ -232,14 +232,14 @@ public class ElevatorSubsystem extends SubsystemBase {
                     / ElevatorConstants.CARRAIGE_UPDUCTION)
             .withSlot(0));
     DogLog.log(
-        "subsystems/Elevator/elevatorSetpoint(rot)",
+        "Subsystems/Elevator/elevatorSetpoint(rot)",
         height
             * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
             / ElevatorConstants.CARRAIGE_UPDUCTION);
   }
 
   public void ElevatorTorqueMode() {
-    DogLog.log("subsystems/Elevator/usingTorqueMode", true);
+    DogLog.log("Subsystems/Elevator/usingTorqueMode", true);
     master.setControl(torqueRequest.withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
     // .withMaxAbsDutyCycle(Constants.ElevatorConstants.ELEVATOR_DUTY_CYCLE));
   }
@@ -261,7 +261,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double getToFDistance() {
     // 0.11 is the sensor offset
     DogLog.log(
-        "subsystems/Elevator/ToF/DistanceNoOffset", distance.getDistance().getValueAsDouble());
+        "Subsystems/Elevator/ToF/DistanceNoOffset", distance.getDistance().getValueAsDouble());
     return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
   }
 
@@ -277,38 +277,38 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     currentHeightToF = elevatorFilter.calculate(getToFDistance());
     // Time of Flight Sensor
-    DogLog.log("subsystems/Elevator/getError", getError());
-    DogLog.log("subsystems/Elevator/ToF/Distance", getToFDistance());
-    DogLog.log("subsystems/Elevator/ToF/Connected", distance.isConnected());
-    DogLog.log("subsystems/Elevator/ToF/LinearFilterDistance", currentHeightToF);
+    DogLog.log("Subsystems/Elevator/getError", getError());
+    DogLog.log("Subsystems/Elevator/ToF/Distance", getToFDistance());
+    DogLog.log("Subsystems/Elevator/ToF/Connected", distance.isConnected());
+    DogLog.log("Subsystems/Elevator/ToF/LinearFilterDistance", currentHeightToF);
 
-    DogLog.log("subsystems/Elevator/isAtPosition", this.isAtPosition());
-    DogLog.log("subsystems/Elevator/targetPosition", currentLevel.getPosition());
-    DogLog.log("subsystems/Elevator/targetHeightDist", currentLevel.getHeight());
+    DogLog.log("Subsystems/Elevator/isAtPosition", this.isAtPosition());
+    DogLog.log("Subsystems/Elevator/targetPosition", currentLevel.getPosition());
+    DogLog.log("Subsystems/Elevator/targetHeightDist", currentLevel.getHeight());
     DogLog.log(
-        "subsystems/Elevator/targetHeightRot",
+        "Subsystems/Elevator/targetHeightRot",
         currentLevel.getHeight()
             * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
             / Constants.ElevatorConstants.CARRAIGE_UPDUCTION);
     DogLog.log(
-        "subsystems/Elevator/currentHeightDist",
+        "Subsystems/Elevator/currentHeightDist",
         master.getPosition().getValueAsDouble()
             * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE
             * Constants.ElevatorConstants.CARRAIGE_UPDUCTION);
-    DogLog.log("subsystems/Elevator/currentHeightRot", master.getPosition().getValueAsDouble());
+    DogLog.log("Subsystems/Elevator/currentHeightRot", master.getPosition().getValueAsDouble());
     DogLog.log(
-        "subsystems/Elevator/command",
+        "Subsystems/Elevator/command",
         this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
     DogLog.log(
-        "subsystems/Elevator/resetPositionBoolean",
+        "Subsystems/Elevator/resetPositionBoolean",
         this.isAtPosition() && this.getLevel().equals(ElevatorPositions.Intake));
     DogLog.log(
-        "subsystems/Elevator/targetisIntake", this.getLevel().equals(ElevatorPositions.Intake));
-    DogLog.log("subsystems/Elevator/targetLevel", this.getLevel().toString());
+        "Subsystems/Elevator/targetisIntake", this.getLevel().equals(ElevatorPositions.Intake));
+    DogLog.log("Subsystems/Elevator/targetLevel", this.getLevel().toString());
     DogLog.log(
-        "subsystems/Elevator/closedLoopError", master.getClosedLoopError().getValueAsDouble());
+        "Subsystems/Elevator/closedLoopError", master.getClosedLoopError().getValueAsDouble());
     DogLog.log(
-        "subsystems/Elevator/elevatorProfile", master.getClosedLoopReference().getValueAsDouble());
+        "Subsystems/Elevator/elevatorProfile", master.getClosedLoopReference().getValueAsDouble());
   }
 
   @Override
@@ -321,9 +321,5 @@ public class ElevatorSubsystem extends SubsystemBase {
     double newPosition = currentPosition + simulatedSpeed * 0.02; // Assuming a 20ms loop
     master.setPosition(
         newPosition); // Alarming to have this since running this on the robot will lead to
-
-    // Log simulation data for debugging
-    DogLog.log("Simulated Position", newPosition);
-    DogLog.log("Simulated Speed", simulatedSpeed);
   }
 }
