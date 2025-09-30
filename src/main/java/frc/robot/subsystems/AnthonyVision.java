@@ -306,8 +306,10 @@ public class AnthonyVision extends SubsystemBase {
     double tagFactor = 1.0 / Math.sqrt(effectiveTags);
 
     // Distance term (keep as d^2)
-    double distanceFactor = baseNoise + distanceExponentialCoefficient*Math.pow(distanceExponentialBase, distance);
+    // double distanceFactor = baseNoise + distanceExponentialCoefficient*Math.pow(distanceExponentialBase, distance);
 
+    double distanceFactor = (distance < (17.548+0.67)) ? Math.min(baseNoise + distanceExponentialCoefficient*Math.pow(distanceExponentialBase, distance), 1.167) : (baseNoise + distanceExponentialCoefficient*Math.pow(distanceExponentialBase, distance));
+    
     // Speed term (quadratic, saturated)
     double vNorm = Math.min(robotSpeed, maximumRobotSpeed) / maximumRobotSpeed;
     double speedFactor = 1.0 + speedCoefficient * (vNorm * vNorm);
