@@ -3,13 +3,13 @@ package frc.robot.commands.ElevatorCommands;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 
 public class ZeroElevatorToFFiltered extends Command {
-  private final ElevatorSubsystem elevatorSubsystem;
+  private final ElevatorSubsystemMD2 elevatorSubsystem;
   private double ticksAtPosition;
 
-  public ZeroElevatorToFFiltered(ElevatorSubsystem subsystem) {
+  public ZeroElevatorToFFiltered(ElevatorSubsystemMD2 subsystem) {
     elevatorSubsystem = subsystem;
     DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/running", false);
     addRequirements(elevatorSubsystem);
@@ -19,7 +19,7 @@ public class ZeroElevatorToFFiltered extends Command {
   public void initialize() {
     ticksAtPosition = 0;
     DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/running", true);
-    elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
+    elevatorSubsystem.setHeight(ElevatorPositions.Intake.height);
   }
 
   @Override
@@ -34,7 +34,7 @@ public class ZeroElevatorToFFiltered extends Command {
   @Override
   public boolean isFinished() {
     DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/ticksAtPosition", ticksAtPosition);
-    boolean inPosition = elevatorSubsystem.isAtPosition() && elevatorSubsystem.atIntake();
+    boolean inPosition = elevatorSubsystem.isAtTargetHeight() && elevatorSubsystem.atIntake();
     DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/inPosition", inPosition);
 
     if (inPosition) {

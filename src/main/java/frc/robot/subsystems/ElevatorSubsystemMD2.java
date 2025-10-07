@@ -10,11 +10,13 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.util.LoggedTalonFX;
 
 public class ElevatorSubsystemMD2 extends SubsystemBase {
@@ -25,8 +27,10 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   MotionMagicVoltage request = new MotionMagicVoltage(null);
 
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
+  private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
 
+  private double currentHeightToF;
   private double targetHeight;
   private double tolerance = 3.0;
 
@@ -79,14 +83,52 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     return getErrorDist() <= tolerance;
   }
 
+  public boolean atIntake() {
+    return getCurrentHeight() == (ElevatorPositions.Intake.height);
+  }
+
   public void zeroElevator() {
     master.setPosition(0);
+  }
+
+  public void reduceCurrentLimits() {
+    master.updateCurrentLimits(30, 10);
+  }
+
+  public void moveElevatorNegative() {
+    master.setControl(velocityRequest.withVelocity(-5).withSlot(1));
   }
 
   public void ElevatorTorqueMode() {
     DogLog.log("subsystems/Elevator/usingTorqueMode", true);
     master.setControl(torqueRequest.withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
     // .withMaxAbsDutyCycle(Constants.ElevatorConstants.ELEVATOR_DUTY_CYCLE));
+  }
+
+  public void resetCurrentLimits() {
+    master.updateCurrentLimits(
+        Constants.ElevatorConstants.STATOR_CURRENT_LIMIT,
+        Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+  }
+
+  public boolean checkCurrent() {
+    double Supplycurrent = Math.abs(master.getSupplyCurrent().getValue().magnitude());
+    double Statorcurrent = Math.abs(master.getStatorCurrent().getValue().magnitude());
+    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/supply", Supplycurrent);
+    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/stator", Statorcurrent);
+
+    if (Supplycurrent > 1.0 && Statorcurrent > 20) {
+      return true;
+    }
+    return false;
+  }
+
+  public void resetPositionFiltered() {
+    master.setPosition(
+        currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+    DogLog.log(
+        "subsystems/Elevator/resetElevatorPosition",
+        currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
 
   @Override
