@@ -144,10 +144,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    if (ElevatorSubsystem.getInstance().isElevatorZeroed() == false) {
-      CommandScheduler.getInstance()
-          .schedule(new ZeroElevatorHardStop(ElevatorSubsystem.getInstance()));
-    }
+    CommandScheduler.getInstance()
+        .schedule(new ZeroElevatorHardStop(ElevatorSubsystem.getInstance()));
 
     // CommandScheduler.getInstance();
     // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler

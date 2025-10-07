@@ -21,7 +21,7 @@ public class ElevatorHoldL4 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
 
   public void execute() {
-    elevatorSubsystem.ElevatorTorqueMode();
+    // elevatorSubsystem.ElevatorTorqueMode();
   }
 
   // Called once the command ends or is interrupted.
