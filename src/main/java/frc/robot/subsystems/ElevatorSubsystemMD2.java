@@ -9,8 +9,11 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.LoggedTalonFX;
 
@@ -20,6 +23,9 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   LoggedTalonFX master;
 
   MotionMagicVoltage request = new MotionMagicVoltage(null);
+
+  private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
+
 
   private double targetHeight;
   private double tolerance = 3.0;
@@ -37,6 +43,8 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     motor1.updateCurrentLimits(1.0, 1.0);
     motor2.updateCurrentLimits(1.0, 1.0);
 
+
+
     MotionMagicConfigs mmc =
         new MotionMagicConfigs()
             .withMotionMagicAcceleration(ElevatorConstants.ACCELERATION)
@@ -47,6 +55,8 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     m1Config.apply(s0c);
     m1Config.apply(mmc);
   }
+
+
 
   public void setHeight(double height) {
     targetHeight = height;
@@ -73,6 +83,12 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     master.setPosition(0);
   }
 
+  public void ElevatorTorqueMode() {
+    DogLog.log("subsystems/Elevator/usingTorqueMode", true);
+    master.setControl(torqueRequest.withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
+    // .withMaxAbsDutyCycle(Constants.ElevatorConstants.ELEVATOR_DUTY_CYCLE));
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -84,4 +100,5 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
 }

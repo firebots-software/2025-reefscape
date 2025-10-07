@@ -872,8 +872,6 @@ public final class Constants {
 
   public static class ElevatorConstants {
 
-
-
     public static final int MOTOR1_PORT = 11; // TODO: change port
     public static final int MOTOR2_PORT = 12; // TODO: change port
     public static final int CANRANGE_PORT = 41; // TODO: change port
