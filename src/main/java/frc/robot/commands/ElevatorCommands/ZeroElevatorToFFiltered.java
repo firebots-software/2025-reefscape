@@ -19,7 +19,7 @@ public class ZeroElevatorToFFiltered extends Command {
   public void initialize() {
     ticksAtPosition = 0;
     DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/running", true);
-    elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
+    elevatorSubsystem.setHeight(ElevatorPositions.Intake);
   }
 
   @Override

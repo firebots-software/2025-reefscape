@@ -25,10 +25,10 @@ public class SetElevatorLevel extends Command {
   public void execute() {
     if (checkIfCoralInTootsie) {
       if (CoralPosition.isCoralInTootsieSlide()) {
-        elevatorSubsystem.elevateTo(pos);
+        elevatorSubsystem.setHeight(pos);
       }
     } else {
-      elevatorSubsystem.elevateTo(pos);
+      elevatorSubsystem.setHeight(pos);
     }
   }
 

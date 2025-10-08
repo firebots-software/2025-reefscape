@@ -19,7 +19,7 @@ public class SetElevatorLevelInstant extends Command {
 
   @Override
   public void execute() {
-    elevatorSubsystem.elevateTo(pos);
+    elevatorSubsystem.setHeight(pos);
   }
 
   @Override
