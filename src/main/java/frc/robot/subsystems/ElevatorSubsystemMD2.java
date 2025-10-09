@@ -116,8 +116,10 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
 
   // use a control request to move to the height.
   public void setHeight(double height) {
+
     targetHeight = height*ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
     master.setControl(request.withPosition(targetHeight));
+    
   }
 
   // getters
