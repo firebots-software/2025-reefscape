@@ -112,6 +112,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double height) {
+    targetHeight = height;
+
     // if (height < Constants.ElevatorConstants.minHeight)
     //   height =
     //       Constants.ElevatorConstants
@@ -147,7 +149,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPosition() {
-    return Math.abs(getHeight()-targetHeight) <= 0.05;
+    return Math.abs(getHeight() - targetHeight) <= 0.05;
   }
 
   public boolean atIntake() {
@@ -162,7 +164,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     this.setPosition(level.getHeight());
   }
 
-    public void ElevatorTorqueMode() {
+  public void ElevatorTorqueMode() {
     master.setControl(torqueRequest.withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
     // .withMaxAbsDutyCycle(Constants.ElevatorConstants.ELEVATOR_DUTY_CYCLE));
   }
@@ -197,11 +199,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void resetPositionFiltered() {
     // master.setPosition(
-    //     currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+    //     currentHeightToF *
+    // Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
 
   public static ElevatorSubsystem getInstance() {
-    if (instance==null) {
+    if (instance == null) {
       instance = new ElevatorSubsystem();
     }
     return instance;

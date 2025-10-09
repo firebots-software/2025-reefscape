@@ -141,10 +141,12 @@
 
 //   public void resetPositionFiltered() {
 //     master.setPosition(
-//         currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+//         currentHeightToF *
+// Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
 //     DogLog.log(
 //         "Subsystems/Elevator/resetElevatorPosition",
-//         currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+//         currentHeightToF *
+// Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
 //   }
 
 //   public void resetPosition() {
@@ -185,7 +187,8 @@
 
 //   public void resetElevatorPositionToZero() {
 //     master.setPosition(0);
-//     // master.setControl(controlRequest.withPosition(master.getPosition().getValueAsDouble()).withSlot(0));
+//     //
+// master.setControl(controlRequest.withPosition(master.getPosition().getValueAsDouble()).withSlot(0));
 //     // master.setPosition(0);
 //     // master.setControl(controlRequest.withPosition(0).withSlot(0));
 //     // master.setPosition(0);
@@ -308,7 +311,8 @@
 //     DogLog.log(
 //         "Subsystems/Elevator/closedLoopError", master.getClosedLoopError().getValueAsDouble());
 //     DogLog.log(
-//         "Subsystems/Elevator/elevatorProfile", master.getClosedLoopReference().getValueAsDouble());
+//         "Subsystems/Elevator/elevatorProfile",
+// master.getClosedLoopReference().getValueAsDouble());
 //   }
 
 //   @Override
