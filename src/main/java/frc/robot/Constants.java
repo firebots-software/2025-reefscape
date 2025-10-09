@@ -895,6 +895,8 @@ public final class Constants {
     public static final double MOTIONMAGIC_MAX_ACCELERATION = 250;
 
     public static double SENSOR_OFFSET = 0.11;
+    public static double minHeight;
+    public static double maxHeight;
     // public static final double MOTIONMAGIC_KG = 0.28;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
