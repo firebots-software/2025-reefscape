@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
@@ -15,8 +14,8 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -33,7 +32,7 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   LoggedTalonFX motor2;
   LoggedTalonFX master;
 
-  MotionMagicVoltage request = new MotionMagicVoltage(null);
+  MotionMagicVoltage request = new MotionMagicVoltage(0);
 
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
@@ -106,7 +105,7 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     m1Config.apply(moc);
     m2Config.apply(moc);
 
-    master = motor1;  
+    master = motor1;
   }
 
   public static ElevatorSubsystemMD2 getInstance() {
@@ -118,7 +117,7 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
 
   // use a control request to move to the height.
   public void setHeight(double height) {
-    targetHeight = height;
+    targetHeight = height*5;
     master.setControl(request.withPosition(targetHeight));
   }
 
@@ -137,7 +136,7 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   }
 
   public boolean isAtTargetHeight() {
-    return getErrorDist() <= tolerance;
+    return getErrorDist() <= ElevatorConstants.SETPOINT_TOLERANCE;
   }
 
   // based on last year's code
