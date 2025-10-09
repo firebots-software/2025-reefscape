@@ -97,8 +97,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     qProfiledPIDController.setIZone(Constants.HardenConstants.QIZONE);
     headingProfiledPIDController.setIZone(Constants.HardenConstants.HIZONE);
 
-    qProfiledPIDController.setIntegratorRange(Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
-    headingProfiledPIDController.setIntegratorRange(Constants.HardenConstants.HIRANGE_LOWER, Constants.HardenConstants.HIRANGE_UPPER); // 0.3 before
+    qProfiledPIDController.setIntegratorRange(
+        Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
+    headingProfiledPIDController.setIntegratorRange(
+        Constants.HardenConstants.HIRANGE_LOWER,
+        Constants.HardenConstants.HIRANGE_UPPER); // 0.3 before
 
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     // configureAutoBuilder();
