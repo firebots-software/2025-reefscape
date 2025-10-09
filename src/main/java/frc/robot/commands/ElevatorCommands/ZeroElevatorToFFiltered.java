@@ -11,14 +11,14 @@ public class ZeroElevatorToFFiltered extends Command {
 
   public ZeroElevatorToFFiltered(ElevatorSubsystem subsystem) {
     elevatorSubsystem = subsystem;
-    DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/running", false);
+    DogLog.log("Commands/ZeroElevatorToFFiltered/running", false);
     addRequirements(elevatorSubsystem);
   }
 
   @Override
   public void initialize() {
     ticksAtPosition = 0;
-    DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/running", true);
+    DogLog.log("Commands/ZeroElevatorToFFiltered/running", true);
     elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
   }
 
@@ -27,15 +27,15 @@ public class ZeroElevatorToFFiltered extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/running", false);
+    DogLog.log("Commands/ZeroElevatorToFFiltered/running", false);
     elevatorSubsystem.resetPositionFiltered();
   }
 
   @Override
   public boolean isFinished() {
-    DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/ticksAtPosition", ticksAtPosition);
+    DogLog.log("Commands/ZeroElevatorToFFiltered/ticksAtPosition", ticksAtPosition);
     boolean inPosition = elevatorSubsystem.isAtPosition() && elevatorSubsystem.atIntake();
-    DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/inPosition", inPosition);
+    DogLog.log("Commands/ZeroElevatorToFFiltered/inPosition", inPosition);
 
     if (inPosition) {
       ticksAtPosition++;

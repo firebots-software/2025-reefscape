@@ -14,7 +14,10 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -43,6 +46,24 @@ public final class Constants {
   }
 
   public static class HardenConstants {
+    public static final double QKP = 3.4;
+    public static final double QKI = 0.45;
+    public static final double QKD = 0.0005;
+    public static final double QCRUISE = 4.368;
+    public static final double QACCEL = 8.0;
+    public static final double QIZONE = 0.35;
+    public static final double QIRANGE_LOWER = 0.0;
+    public static final double QIRANGE_UPPER = 0.2;
+
+    public static final double HKP = 3.7;
+    public static final double HKI = 0.4;
+    public static final double HKD = 0.0;
+    public static final double HCRUISE = 9.417;
+    public static final double HACCEL = 10.971;
+    public static final double HIZONE = 0.14;
+    public static final double HIRANGE_LOWER = 0.0;
+    public static final double HIRANGE_UPPER = Math.PI / 4.0;
+
     public static class EndWhenCloseEnough {
       public static final double translationalToleranceTeleop = 0.8d; // 0.43105229381 worked before
       public static final double translationalToleranceAuto = 1d;
@@ -90,6 +111,33 @@ public final class Constants {
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0;
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = Units.degreesToRadians(-12.5);
     public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Units.degreesToRadians(-40);
+
+    public static Transform3d getCameraTransform(Cameras cam) {
+      switch (cam) {
+        case RIGHT_CAM:
+          return new Transform3d(
+              new Translation3d(
+                  RIGHT_CAM_TO_ROBOT_TRANSLATION_X,
+                  RIGHT_CAM_TO_ROBOT_TRANSLATION_Y,
+                  RIGHT_CAM_TO_ROBOT_TRANSLATION_Z),
+              new Rotation3d(
+                  RIGHT_CAM_TO_ROBOT_ROTATION_ROLL,
+                  RIGHT_CAM_TO_ROBOT_ROTATION_PITCH,
+                  RIGHT_CAM_TO_ROBOT_ROTATION_YAW));
+        case LEFT_CAM:
+          return new Transform3d(
+              new Translation3d(
+                  LEFT_CAM_TO_ROBOT_TRANSLATION_X,
+                  LEFT_CAM_TO_ROBOT_TRANSLATION_Y,
+                  LEFT_CAM_TO_ROBOT_TRANSLATION_Z),
+              new Rotation3d(
+                  LEFT_CAM_TO_ROBOT_ROTATION_ROLL,
+                  LEFT_CAM_TO_ROBOT_ROTATION_PITCH,
+                  LEFT_CAM_TO_ROBOT_ROTATION_YAW));
+        default:
+          throw new IllegalArgumentException("Unknown camera: " + cam);
+      }
+    }
   }
 
   public static class AutoRoutines {
@@ -878,7 +926,7 @@ public final class Constants {
     public static final double STATOR_CURRENT_LIMIT = 50.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 30.0; // TODO: change for actual match
 
-    public static double S0C_KP = 1.0; // 1.0 before (okay)
+    public static double S0C_KP = 1.04; // 1.0 before (okay)
     public static double S0C_KI = 0.0;
     public static double S0C_KD = 0.005;
 
