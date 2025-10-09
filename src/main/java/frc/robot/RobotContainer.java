@@ -22,12 +22,12 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.AutoRoutines.AutoProducer;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commandGroups.ApplicationMD4;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commandGroups.PutUpAndShoot;
-import frc.robot.commandGroups.RunFunnelUntilDetectionSafeSmooth;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -271,14 +271,16 @@ public class RobotContainer {
     // Auto Intake and Eject
     // Trigger funnelCheckin =
     //     new Trigger(
-    //             () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide())
+    //             () -> funnelSubsystem.isCoralCheckedIn() &&
+    // !CoralPosition.isCoralInTootsieSlide())
     //         .and(RobotModeTriggers.teleop());
     Trigger ejectTime =
         new Trigger(
                 () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()))
             .and(RobotModeTriggers.teleop());
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
-    // funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false));
+    // funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake,
+    // false));
     // funnelCheckin.onTrue(
     //     new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
     Trigger funnelCheckout =
@@ -357,7 +359,7 @@ public class RobotContainer {
     // joystick.a().whileTrue(new ShootL1(elevatorSubsystem, tootsieSlideSubsystem));
 
     // REPLACE 'new WaitCommand(0)' with YOUR COMMAND GROUP!
-    customController.LeftL1().whileTrue(new WaitCommand(0));
+    customController.LeftL1().whileTrue(new ApplicationMD4(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, leds));
 
     joystick
         .b()
