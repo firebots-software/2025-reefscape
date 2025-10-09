@@ -39,7 +39,6 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
 
   private double currentHeightToF;
   private double targetHeight;
-  private double tolerance = 3.0;
 
   public ElevatorSubsystemMD2() {
     motor1 =
@@ -117,7 +116,7 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
 
   // use a control request to move to the height.
   public void setHeight(double height) {
-    targetHeight = height*5;
+    targetHeight = height*ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
     master.setControl(request.withPosition(targetHeight));
   }
 
