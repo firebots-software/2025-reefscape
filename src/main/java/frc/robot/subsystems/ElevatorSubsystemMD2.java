@@ -16,7 +16,6 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -32,7 +31,7 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   LoggedTalonFX motor2;
   LoggedTalonFX master;
 
-  MotionMagicVoltage request = new MotionMagicVoltage(null);
+  MotionMagicVoltage request = new MotionMagicVoltage(0);
   TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
   VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
@@ -54,34 +53,37 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     motor1.updateCurrentLimits(1.0, 1.0);
     motor2.updateCurrentLimits(1.0, 1.0);
 
-    MotionMagicConfigs mmc = new MotionMagicConfigs()
-        .withMotionMagicAcceleration(ElevatorConstants.ACCELERATION)
-        .withMotionMagicCruiseVelocity(ElevatorConstants.CRUISE_VELOCITY);
+    MotionMagicConfigs mmc =
+        new MotionMagicConfigs()
+            .withMotionMagicAcceleration(ElevatorConstants.ACCELERATION)
+            .withMotionMagicCruiseVelocity(ElevatorConstants.CRUISE_VELOCITY);
 
     TalonFXConfigurator m1Config = motor1.getConfigurator();
     TalonFXConfigurator m2Config = motor2.getConfigurator();
 
-    Slot1Configs s1c = new Slot1Configs()
-        .withKP(ElevatorConstants.S1C_KP)
-        .withKI(ElevatorConstants.S1C_KI)
-        .withKD(ElevatorConstants.S1C_KD)
-        .withKS(ElevatorConstants.S0C_KS)
-        .withKG(ElevatorConstants.S0C_KG)
-        .withKA(ElevatorConstants.S0C_KA)
-        .withKV(ElevatorConstants.S0C_KV)
-        .withGravityType(GravityTypeValue.Elevator_Static)
-        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+    Slot1Configs s1c =
+        new Slot1Configs()
+            .withKP(ElevatorConstants.S1C_KP)
+            .withKI(ElevatorConstants.S1C_KI)
+            .withKD(ElevatorConstants.S1C_KD)
+            .withKS(ElevatorConstants.S0C_KS)
+            .withKG(ElevatorConstants.S0C_KG)
+            .withKA(ElevatorConstants.S0C_KA)
+            .withKV(ElevatorConstants.S0C_KV)
+            .withGravityType(GravityTypeValue.Elevator_Static)
+            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
 
-    Slot0Configs s0c = new Slot0Configs()
-        .withKP(ElevatorConstants.S0C_KP)
-        .withKI(ElevatorConstants.S0C_KI)
-        .withKD(ElevatorConstants.S0C_KD)
-        .withKS(ElevatorConstants.S0C_KS)
-        .withKG(ElevatorConstants.S0C_KG)
-        .withKA(ElevatorConstants.S0C_KA)
-        .withKV(ElevatorConstants.S0C_KV)
-        .withGravityType(GravityTypeValue.Elevator_Static)
-        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+    Slot0Configs s0c =
+        new Slot0Configs()
+            .withKP(ElevatorConstants.S0C_KP)
+            .withKI(ElevatorConstants.S0C_KI)
+            .withKD(ElevatorConstants.S0C_KD)
+            .withKS(ElevatorConstants.S0C_KS)
+            .withKG(ElevatorConstants.S0C_KG)
+            .withKA(ElevatorConstants.S0C_KA)
+            .withKV(ElevatorConstants.S0C_KV)
+            .withGravityType(GravityTypeValue.Elevator_Static)
+            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
 
     m1Config.apply(s0c);
     m2Config.apply(s0c);
