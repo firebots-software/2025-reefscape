@@ -10,7 +10,6 @@ public class LoggedTalonFX extends TalonFX {
 
   private static ArrayList<LoggedTalonFX> motors = new ArrayList<>();
   private String name;
-  private boolean refresh;
   private String temperature,
       closedLoopError,
       closedLoopReference,
@@ -126,4 +125,9 @@ public class LoggedTalonFX extends TalonFX {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'getCurrentState'");
   }
+
+public void updateCurrentLimits(String statorCurrentLimitAmps, String supplyCurrentLimitAmps) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'updateCurrentLimits'");
+}
 }

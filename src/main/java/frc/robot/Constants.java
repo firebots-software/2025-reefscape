@@ -19,8 +19,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
-import frc.robot.Constants.Swerve.Simulation;
-import frc.robot.Constants.Swerve.SwerveType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -804,14 +802,6 @@ public final class Constants {
                 STEER_MOTOR_REVERSED,
                 false);
 
-    // These constants are necessary for new Telemetry with swerve
-    // TODO: CHANGE FOR NEW ROBOT
-    private double MAX_SPEED_MPS =
-        SPEED_AT_12V_METERS_PER_SECOND.magnitude(); // kSpeedAt12Volts desired top speed
-    private double MAX_ANGULAR_RATE_RPS =
-        RotationsPerSecond.of(0.75)
-            .in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-
     // TODO: CHANGE FOR NEW ROBOT
     // these outline the speed calculations
     public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.868;
@@ -895,6 +885,8 @@ public final class Constants {
     public static final double MOTIONMAGIC_MAX_ACCELERATION = 250;
 
     public static double SENSOR_OFFSET = 0.11;
+    public static double minHeight;
+    public static double maxHeight;
     // public static final double MOTIONMAGIC_KG = 0.28;
     public static final double CRUISE_VELOCITY = 6.0; // To-do
     public static final double ACCELERATION = 6.0; // To-do
@@ -914,6 +906,8 @@ public final class Constants {
     public static final double ELEVATOR_TORQUE = 32;
     public static final double ELEVATOR_DUTY_CYCLE = 0.4;
     public static final double elevatorRecalibration = 0.04;
+    public static final String STATOR_CURRENT_LIMIT_AMPS = null;
+    public static final String SUPPLY_CURRENT_LIMIT_AMPS = null;
 
     public static enum ElevatorPositions {
       // TODO: Change the height values based on heights needed to score/intake coral on
