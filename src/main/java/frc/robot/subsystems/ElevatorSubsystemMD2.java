@@ -20,6 +20,8 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.util.LoggedTalonFX;
 
 public class ElevatorSubsystemMD2 extends SubsystemBase {
+  // config: wip, will update based on last years elevator subsystem before testing
+  
   LoggedTalonFX motor1;
   LoggedTalonFX motor2;
   LoggedTalonFX master;
@@ -61,12 +63,13 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   }
 
 
-
+  // use a control request to move to the height.
   public void setHeight(double height) {
     targetHeight = height;
     master.setControl(request.withPosition(targetHeight));
   }
 
+  // getters
   public double getCurrentHeight() {
     return master.getPosition().getValueAsDouble();
   }
@@ -75,6 +78,7 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     return targetHeight;
   }
 
+  // distance from the target
   public double getErrorDist() {
     return Math.abs(targetHeight - getCurrentHeight());
   }
@@ -82,7 +86,8 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   public boolean isAtTargetHeight() {
     return getErrorDist() <= tolerance;
   }
-
+  
+  // based on last year's code
   public boolean atIntake() {
     return getCurrentHeight() == (ElevatorPositions.Intake.height);
   }
@@ -95,22 +100,28 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     master.updateCurrentLimits(30, 10);
   }
 
+  // all of these created based on last year's code for one of the commands that requires it, my interpretation of their use is listed
+
+  // move elevator down, i assume this is for re-zeroing it.
   public void moveElevatorNegative() {
     master.setControl(velocityRequest.withVelocity(-5).withSlot(1));
   }
 
+  // set torque mode from constants.
   public void ElevatorTorqueMode() {
     DogLog.log("subsystems/Elevator/usingTorqueMode", true);
     master.setControl(torqueRequest.withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
     // .withMaxAbsDutyCycle(Constants.ElevatorConstants.ELEVATOR_DUTY_CYCLE));
   }
 
+  // apply the current limits defined in constants
   public void resetCurrentLimits() {
     master.updateCurrentLimits(
         Constants.ElevatorConstants.STATOR_CURRENT_LIMIT,
         Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
   }
 
+  // log the supply and stator current, return bool depending if they are above certain thresholds.
   public boolean checkCurrent() {
     double Supplycurrent = Math.abs(master.getSupplyCurrent().getValue().magnitude());
     double Statorcurrent = Math.abs(master.getStatorCurrent().getValue().magnitude());
@@ -123,6 +134,8 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     return false;
   }
 
+
+  // set the position based on tof sensor
   public void resetPositionFiltered() {
     master.setPosition(
         currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
