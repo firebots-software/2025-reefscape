@@ -1,5 +1,23 @@
 package frc.robot.commandGroups;
 
+import java.util.List;
+
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.LandmarkPose;
+import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
+import frc.robot.commands.FunnelCommands.isCoralInTootsieSlide;
+import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.subsystems.LedSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
+
 /*
  * 
  * 
@@ -43,6 +61,34 @@ package frc.robot.commandGroups;
  * 
  */
 
-public class ApplicationMD4 {
+public class ApplicationMD4 extends SequentialCommandGroup{
+    public ApplicationMD4 (SwerveSubsystem driveTrain,
+      TootsieSlideSubsystem shooter,
+      ElevatorSubsystem elevator,
+      FunnelSubsystem funnel,
+      ArmSubsystem arm,
+      List<LandmarkPose> autoInformation,
+      LedSubsystem leds) {
 
+        addCommands(
+            new SequentialCommandGroup(
+                new Intake(elevator, funnel, shooter, leds),
+                new SetElevatorLevel(elevator, ElevatorConstants.ElevatorPositions.L4, new isCoralInTootsieSlide().isFinished()),
+                new SetElevatorLevel(elevator, ElevatorConstants.ElevatorPositions.L2, new isCoralInTootsieSlide().isFinished()),
+                new SetElevatorLevel(elevator, ElevatorConstants.ElevatorPositions.L3, new isCoralInTootsieSlide().isFinished()),
+                new SetElevatorLevel(elevator, ElevatorConstants.ElevatorPositions.L2, new isCoralInTootsieSlide().isFinished()),
+
+                new ParallelDeadlineGroup(new ShootTootsieSlide(shooter), new RunFunnelOutCommand(funnel, () -> false)),
+                
+                new SetElevatorLevel(elevator, ElevatorConstants.ElevatorPositions.L4, new isCoralInTootsieSlide().isFinished()),
+
+                new ParallelCommandGroup(
+                    new SetElevatorLevel(elevator, ElevatorConstants.ElevatorPositions.L2, new isCoralInTootsieSlide().isFinished()),
+                    new SequentialCommandGroup(
+                        new ShootTootsieSlide(shooter), new RunFunnelOutCommand(funnel, () -> false)
+                    )
+                )
+            )
+        );
+    }
 }

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.AutoRoutines.AutoProducer;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commandGroups.ApplicationMD4;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
@@ -357,7 +358,7 @@ public class RobotContainer {
     // joystick.a().whileTrue(new ShootL1(elevatorSubsystem, tootsieSlideSubsystem));
 
     // REPLACE 'new WaitCommand(0)' with YOUR COMMAND GROUP!
-    customController.LeftL1().whileTrue(new WaitCommand(0));
+    customController.LeftL1().whileTrue(new ApplicationMD4(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, null, leds));
 
     joystick
         .b()
