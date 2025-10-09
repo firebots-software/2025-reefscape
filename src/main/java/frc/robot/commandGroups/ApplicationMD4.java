@@ -144,9 +144,9 @@ public class ApplicationMD4 extends SequentialCommandGroup{
                         new SetElevatorLevel(elevatorSubsystem, ElevatorConstants.ElevatorPositions.L3, new isCoralInTootsieSlide.isFinished()), 
                         new SetElevatorLevel(elevatorSubsystem, ELevatorConstants.ElevatorPositions.L2, new isCoralInTootsieSlide.isFinished()), 
                         new ParallelDeadlineGroup(new ShootTootsieSlide(tootsieSlideSubsystem), new RunFunnelOutCommand(funnelSubsystem, () -> false))
+                        new SetElevatorLevel()
                     ));
                 }
             })
-        ));
-    }
+        )
 }
