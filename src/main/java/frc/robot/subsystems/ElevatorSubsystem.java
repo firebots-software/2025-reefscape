@@ -146,6 +146,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void periodic() { // logs
     DogLog.log("subsystems/Elevator/currentheight", getHeight());
+    DogLog.log("subsystems/Elevator/currentheight", getHeight());
   }
 
   public boolean isAtPosition() {
