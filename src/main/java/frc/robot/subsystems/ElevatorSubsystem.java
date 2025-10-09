@@ -18,6 +18,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
+
+import dev.doglog.DogLog;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,7 +33,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private LoggedTalonFX motor1;
   private LoggedTalonFX motor2;
-  public TalonFX master;
+  public LoggedTalonFX master;
 
   private LinearFilter elevatorFilter;
   private double currentHeightToF;
@@ -158,11 +160,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPosition() {
-    return Math.abs(
-            currentLevel.getHeight()
-                    * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
-                    / Constants.ElevatorConstants.CARRAIGE_UPDUCTION
-                - master.getPosition().getValueAsDouble())
+    return Math.abs(getError())
         < ElevatorConstants.SETPOINT_TOLERANCE;
   }
 
@@ -179,5 +177,54 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void elevateTo(ElevatorPositions level) {
     this.currentLevel = level;
     this.setPosition(level.height);
+  }
+
+    public boolean canFunnelTransferCoralToScoring() {
+    return this.getLevel().equals(Constants.ElevatorConstants.ElevatorPositions.Intake)
+        && this.getError() < Constants.ElevatorConstants.MAX_POSITIONAL_ERROR;
+  }
+
+  public double getToFDistance() {
+    // 0.11 is the sensor offset
+    DogLog.log(
+        "subsystems/Elevator/ToF/DistanceNoOffset", distance.getDistance().getValueAsDouble());
+    return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
+  }
+
+  public boolean isElevatorZeroed() {
+    return elevatorZeroed;
+  }
+
+  public void elevatorHasBeenZeroed() {
+    elevatorZeroed = true;
+  }
+
+  public ElevatorPositions getLevel() {
+    return currentLevel;
+  }
+
+  public boolean atIntake() {
+    return currentLevel.equals(ElevatorPositions.Intake);
+  }
+
+  public void resetCurrentLimits() {
+    master.updateCurrentLimits(
+        Constants.ElevatorConstants.STATOR_CURRENT_LIMIT,
+        Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+  }
+
+  public void resetElevatorPositionToZero() {
+    master.setPosition(0);
+    // master.setControl(controlRequest.withPosition(master.getPosition().getValueAsDouble()).withSlot(0));
+    // master.setPosition(0);
+    // master.setControl(controlRequest.withPosition(0).withSlot(0));
+    // master.setPosition(0);
+  }
+
+  public double getError() {
+    return currentLevel.height
+            * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
+            / Constants.ElevatorConstants.CARRAIGE_UPDUCTION
+        - master.getPosition().getValueAsDouble();
   }
 }

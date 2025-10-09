@@ -34,10 +34,10 @@ public class ZeroElevatorHardStop extends Command {
   public void end(boolean interrupted) {
     DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/running", false);
     if (!interrupted) {
-      // elevatorSubsystem.resetElevatorPositionToZero();
+      elevatorSubsystem.resetElevatorPositionToZero();
     }
-    // elevatorSubsystem.resetCurrentLimits();
-    // elevatorSubsystem.elevatorHasBeenZeroed();
+    elevatorSubsystem.resetCurrentLimits();
+    elevatorSubsystem.elevatorHasBeenZeroed();
   }
 
   // Returns true when the command should end.
