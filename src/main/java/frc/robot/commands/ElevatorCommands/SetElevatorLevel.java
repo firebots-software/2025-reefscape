@@ -12,6 +12,7 @@ public class SetElevatorLevel extends Command {
 
   public SetElevatorLevel(
       ElevatorSubsystemMD2 subsystem, ElevatorPositions pos, boolean checkIfCoralInTootsie) {
+        
     elevatorSubsystem = subsystem;
     this.pos = pos;
     this.checkIfCoralInTootsie = checkIfCoralInTootsie;
