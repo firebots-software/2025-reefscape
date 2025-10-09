@@ -2,15 +2,15 @@ package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 import frc.robot.subsystems.FunnelSubsystem;
 
 public class RampUpFunnel extends Command {
   private FunnelSubsystem funnelSubsystem;
-  private ElevatorSubsystem elevatorSubsystem;
+  private ElevatorSubsystemMD2 elevatorSubsystem;
   private double tolerance = 2;
 
-  public RampUpFunnel(FunnelSubsystem funnelSubsystem, ElevatorSubsystem elevator) {
+  public RampUpFunnel(FunnelSubsystem funnelSubsystem, ElevatorSubsystemMD2 elevator) {
     this.funnelSubsystem = funnelSubsystem;
     this.elevatorSubsystem = elevator;
     addRequirements(funnelSubsystem);
@@ -26,7 +26,7 @@ public class RampUpFunnel extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (elevatorSubsystem.isAtPosition()) {
+    if (elevatorSubsystem.isAtTargetHeight()) {
       if (funnelSubsystem.getSpeed() > Constants.FunnelConstants.RAMP_UP_SPEED - tolerance
           && funnelSubsystem.getSpeed() < Constants.FunnelConstants.RAMP_UP_SPEED + tolerance) {
         funnelSubsystem.runFunnelAtRPS(Constants.FunnelConstants.RAMP_UP_SPEED);

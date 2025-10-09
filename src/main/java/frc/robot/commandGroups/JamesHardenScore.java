@@ -10,7 +10,7 @@ import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.EndWhenCloseEnough;
 import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
@@ -18,7 +18,7 @@ import java.util.function.BooleanSupplier;
 
 public class JamesHardenScore extends SequentialCommandGroup {
   public JamesHardenScore(
-      ElevatorSubsystem elevatorSubsystem,
+      ElevatorSubsystemMD2 elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
       ElevatorPositions height,
@@ -64,7 +64,7 @@ public class JamesHardenScore extends SequentialCommandGroup {
   }
 
   public JamesHardenScore(
-      ElevatorSubsystem elevatorSubsystem,
+      ElevatorSubsystemMD2 elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       SwerveSubsystem swerveSubsystem,
       ElevatorPositions height,

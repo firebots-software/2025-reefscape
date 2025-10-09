@@ -38,7 +38,7 @@ import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CoralPosition;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -53,7 +53,7 @@ public class RobotContainer {
 
   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
-  ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+  ElevatorSubsystemMD2 elevatorSubsystem = ElevatorSubsystemMD2.getInstance();
   ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
   LedSubsystem leds = new LedSubsystem();
   // Alliance color
@@ -286,7 +286,7 @@ public class RobotContainer {
                 () ->
                     CoralPosition.isCoralInFunnel()
                         && elevatorSubsystem.atIntake()
-                        && elevatorSubsystem.isAtPosition())
+                        && elevatorSubsystem.isAtTargetHeight())
             .and(RobotModeTriggers.teleop());
 
     funnelCheckout

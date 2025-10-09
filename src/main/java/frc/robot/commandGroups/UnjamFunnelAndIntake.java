@@ -5,13 +5,13 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutUntilUnstuckCommand;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
 public class UnjamFunnelAndIntake extends SequentialCommandGroup {
   public UnjamFunnelAndIntake(
-      ElevatorSubsystem elevatorSubsystem,
+      ElevatorSubsystemMD2 elevatorSubsystem,
       FunnelSubsystem funnelSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem) {
     addCommands(

@@ -2,13 +2,13 @@ package frc.robot.commands.ElevatorCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 
 public class SetElevatorLevelInstant extends Command {
-  private final ElevatorSubsystem elevatorSubsystem;
+  private final ElevatorSubsystemMD2 elevatorSubsystem;
   private final ElevatorPositions pos;
 
-  public SetElevatorLevelInstant(ElevatorSubsystem subsystem, ElevatorPositions pos) {
+  public SetElevatorLevelInstant(ElevatorSubsystemMD2 subsystem, ElevatorPositions pos) {
     elevatorSubsystem = subsystem;
     this.pos = pos;
     addRequirements(elevatorSubsystem);
@@ -19,7 +19,7 @@ public class SetElevatorLevelInstant extends Command {
 
   @Override
   public void execute() {
-    elevatorSubsystem.elevateTo(pos);
+    elevatorSubsystem.setHeight(pos.height);
   }
 
   @Override

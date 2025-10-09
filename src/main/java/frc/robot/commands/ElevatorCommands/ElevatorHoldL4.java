@@ -2,12 +2,12 @@ package frc.robot.commands.ElevatorCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 
 public class ElevatorHoldL4 extends Command {
-  private ElevatorSubsystem elevatorSubsystem;
+  private ElevatorSubsystemMD2 elevatorSubsystem;
 
-  public ElevatorHoldL4(ElevatorSubsystem elevatorSubsystem) {
+  public ElevatorHoldL4(ElevatorSubsystemMD2 elevatorSubsystem) {
     this.elevatorSubsystem = elevatorSubsystem;
     addRequirements(elevatorSubsystem);
   }
@@ -15,7 +15,7 @@ public class ElevatorHoldL4 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevatorSubsystem.elevateTo(ElevatorPositions.LIMIT_OF_TRAVEL);
+    elevatorSubsystem.setHeight(ElevatorPositions.LIMIT_OF_TRAVEL.height);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,6 +31,6 @@ public class ElevatorHoldL4 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.isAtPosition();
+    return elevatorSubsystem.isAtTargetHeight();
   }
 }

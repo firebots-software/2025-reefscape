@@ -23,7 +23,7 @@ import frc.robot.commands.SwerveCommands.JamesHardenMovement;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CoralPosition;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -36,7 +36,7 @@ public class AutoProducer extends SequentialCommandGroup {
   public AutoProducer(
       SwerveSubsystem driveTrain,
       TootsieSlideSubsystem shooter,
-      ElevatorSubsystem elevator,
+      ElevatorSubsystemMD2 elevator,
       FunnelSubsystem funnel,
       ArmSubsystem arm,
       List<LandmarkPose> autoInformation,
@@ -83,7 +83,7 @@ public class AutoProducer extends SequentialCommandGroup {
   }
 
   private void settyCycle(
-      ElevatorSubsystem elevator,
+      ElevatorSubsystemMD2 elevator,
       FunnelSubsystem funnel,
       TootsieSlideSubsystem shooter,
       SwerveSubsystem driveTrain,

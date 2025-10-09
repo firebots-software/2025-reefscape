@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.subsystems.CoralPosition;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.util.LoggedTalonFX;
@@ -144,9 +144,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    if (ElevatorSubsystem.getInstance().isElevatorZeroed() == false) {
+    if (ElevatorSubsystemMD2.getInstance().isElevatorZeroed() == false) {
       CommandScheduler.getInstance()
-          .schedule(new ZeroElevatorHardStop(ElevatorSubsystem.getInstance()));
+          .schedule(new ZeroElevatorHardStop(ElevatorSubsystemMD2.getInstance()));
     }
 
     // CommandScheduler.getInstance();

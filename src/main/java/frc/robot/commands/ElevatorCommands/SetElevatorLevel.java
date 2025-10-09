@@ -3,16 +3,18 @@ package frc.robot.commands.ElevatorCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.CoralPosition;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 
 public class SetElevatorLevel extends Command {
-  private final ElevatorSubsystem elevatorSubsystem;
+  private final ElevatorSubsystemMD2 elevatorSubsystem;
   private final ElevatorPositions pos;
   private final boolean checkIfCoralInTootsie;
 
   public SetElevatorLevel(
-      ElevatorSubsystem subsystem, ElevatorPositions pos, boolean checkIfCoralInTootsie) {
-    elevatorSubsystem = subsystem;
+      ElevatorSubsystemMD2 elevatorSubsystem2,
+      ElevatorPositions pos,
+      boolean checkIfCoralInTootsie) {
+    elevatorSubsystem = elevatorSubsystem2;
     this.pos = pos;
     this.checkIfCoralInTootsie = checkIfCoralInTootsie;
     addRequirements(elevatorSubsystem);
@@ -25,10 +27,10 @@ public class SetElevatorLevel extends Command {
   public void execute() {
     if (checkIfCoralInTootsie) {
       if (CoralPosition.isCoralInTootsieSlide()) {
-        elevatorSubsystem.elevateTo(pos);
+        elevatorSubsystem.setHeight(pos.height);
       }
     } else {
-      elevatorSubsystem.elevateTo(pos);
+      elevatorSubsystem.setHeight(pos.height);
     }
   }
 
@@ -37,6 +39,6 @@ public class SetElevatorLevel extends Command {
 
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.isAtPosition();
+    return elevatorSubsystem.isAtTargetHeight();
   }
 }

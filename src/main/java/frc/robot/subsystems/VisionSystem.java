@@ -72,7 +72,7 @@ public class VisionSystem extends SubsystemBase {
   private Constants.Vision.Cameras cameraEnum;
   private PhotonPipelineResult pipeline;
   AprilTagFieldLayout aprilTagFieldLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
   PhotonPoseEstimator photonPoseEstimator;
   private SwerveSubsystem driveTrain = SwerveSubsystem.getInstance();
   private BooleanSupplier redSide;
