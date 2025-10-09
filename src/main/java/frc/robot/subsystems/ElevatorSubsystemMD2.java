@@ -11,7 +11,6 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -20,8 +19,10 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.util.LoggedTalonFX;
 
 public class ElevatorSubsystemMD2 extends SubsystemBase {
+  private static ElevatorSubsystemMD2 instance;
+
   // config: wip, will update based on last years elevator subsystem before testing
-  
+
   LoggedTalonFX motor1;
   LoggedTalonFX motor2;
   LoggedTalonFX master;
@@ -30,7 +31,6 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
 
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
-
 
   private double currentHeightToF;
   private double targetHeight;
@@ -49,8 +49,6 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     motor1.updateCurrentLimits(1.0, 1.0);
     motor2.updateCurrentLimits(1.0, 1.0);
 
-
-
     MotionMagicConfigs mmc =
         new MotionMagicConfigs()
             .withMotionMagicAcceleration(ElevatorConstants.ACCELERATION)
@@ -62,6 +60,12 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     m1Config.apply(mmc);
   }
 
+  public static ElevatorSubsystemMD2 getInstance() {
+    if (instance == null) {
+      instance = new ElevatorSubsystemMD2();
+    }
+    return instance;
+  }
 
   // use a control request to move to the height.
   public void setHeight(double height) {
@@ -86,7 +90,7 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   public boolean isAtTargetHeight() {
     return getErrorDist() <= tolerance;
   }
-  
+
   // based on last year's code
   public boolean atIntake() {
     return getCurrentHeight() == (ElevatorPositions.Intake.height);
@@ -96,11 +100,16 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     master.setPosition(0);
   }
 
+  public boolean isElevatorZeroed() {
+    return master.getPosition().getValueAsDouble() == 0;
+  }
+
   public void reduceCurrentLimits() {
     master.updateCurrentLimits(30, 10);
   }
 
-  // all of these created based on last year's code for one of the commands that requires it, my interpretation of their use is listed
+  // all of these created based on last year's code for one of the commands that requires it, my
+  // interpretation of their use is listed
 
   // move elevator down, i assume this is for re-zeroing it.
   public void moveElevatorNegative() {
@@ -134,7 +143,6 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     return false;
   }
 
-
   // set the position based on tof sensor
   public void resetPositionFiltered() {
     master.setPosition(
@@ -155,5 +163,4 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
-
 }
