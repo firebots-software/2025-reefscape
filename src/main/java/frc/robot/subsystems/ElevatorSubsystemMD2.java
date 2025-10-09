@@ -42,48 +42,49 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
 
   public ElevatorSubsystemMD2() {
     elevatorZeroed = false;
-    motor1 = new LoggedTalonFX(1);
-    motor2 = new LoggedTalonFX(2);
+    motor1 = new LoggedTalonFX(
+        "subsystems/Elevator/motor1",
+        ElevatorConstants.MOTOR1_PORT,
+        Constants.Swerve.WHICH_SWERVE_ROBOT.CANBUS_NAME);
+    motor2 = new LoggedTalonFX("subsystems/Elevator/motor2",
+        ElevatorConstants.MOTOR2_PORT,
+        Constants.Swerve.WHICH_SWERVE_ROBOT.CANBUS_NAME);
     currentLevel = ElevatorPositions.Intake;
 
     master = motor1;
-    Follower follower = new Follower(1, false);
+    Follower follower = new Follower(ElevatorConstants.MOTOR1_PORT, false);
     motor2.setControl(follower);
 
-    motor1.updateCurrentLimits(1.0, 1.0);
-    motor2.updateCurrentLimits(1.0, 1.0);
+    motor1.updateCurrentLimits(ElevatorConstants.STATOR_CURRENT_LIMIT, ElevatorConstants.SUPPLY_CURRENT_LIMIT);
 
-    MotionMagicConfigs mmc =
-        new MotionMagicConfigs()
-            .withMotionMagicAcceleration(ElevatorConstants.ACCELERATION)
-            .withMotionMagicCruiseVelocity(ElevatorConstants.CRUISE_VELOCITY);
+    MotionMagicConfigs mmc = new MotionMagicConfigs()
+        .withMotionMagicAcceleration(ElevatorConstants.ACCELERATION)
+        .withMotionMagicCruiseVelocity(ElevatorConstants.CRUISE_VELOCITY);
 
     TalonFXConfigurator m1Config = motor1.getConfigurator();
     TalonFXConfigurator m2Config = motor2.getConfigurator();
 
-    Slot1Configs s1c =
-        new Slot1Configs()
-            .withKP(ElevatorConstants.S1C_KP)
-            .withKI(ElevatorConstants.S1C_KI)
-            .withKD(ElevatorConstants.S1C_KD)
-            .withKS(ElevatorConstants.S0C_KS)
-            .withKG(ElevatorConstants.S0C_KG)
-            .withKA(ElevatorConstants.S0C_KA)
-            .withKV(ElevatorConstants.S0C_KV)
-            .withGravityType(GravityTypeValue.Elevator_Static)
-            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+    Slot1Configs s1c = new Slot1Configs()
+        .withKP(ElevatorConstants.S1C_KP)
+        .withKI(ElevatorConstants.S1C_KI)
+        .withKD(ElevatorConstants.S1C_KD)
+        .withKS(ElevatorConstants.S0C_KS)
+        .withKG(ElevatorConstants.S0C_KG)
+        .withKA(ElevatorConstants.S0C_KA)
+        .withKV(ElevatorConstants.S0C_KV)
+        .withGravityType(GravityTypeValue.Elevator_Static)
+        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
 
-    Slot0Configs s0c =
-        new Slot0Configs()
-            .withKP(ElevatorConstants.S0C_KP)
-            .withKI(ElevatorConstants.S0C_KI)
-            .withKD(ElevatorConstants.S0C_KD)
-            .withKS(ElevatorConstants.S0C_KS)
-            .withKG(ElevatorConstants.S0C_KG)
-            .withKA(ElevatorConstants.S0C_KA)
-            .withKV(ElevatorConstants.S0C_KV)
-            .withGravityType(GravityTypeValue.Elevator_Static)
-            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+    Slot0Configs s0c = new Slot0Configs()
+        .withKP(ElevatorConstants.S0C_KP)
+        .withKI(ElevatorConstants.S0C_KI)
+        .withKD(ElevatorConstants.S0C_KD)
+        .withKS(ElevatorConstants.S0C_KS)
+        .withKG(ElevatorConstants.S0C_KG)
+        .withKA(ElevatorConstants.S0C_KA)
+        .withKV(ElevatorConstants.S0C_KV)
+        .withGravityType(GravityTypeValue.Elevator_Static)
+        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
 
     m1Config.apply(s0c);
     m2Config.apply(s0c);
@@ -107,7 +108,7 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   }
 
   public void setHeight(double height) {
-    targetHeight = height;
+    targetHeight = height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
     master.setControl(request.withPosition(targetHeight));
   }
 
@@ -123,8 +124,12 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     return Math.abs(targetHeight - getCurrentHeight());
   }
 
+  // public boolean isAtTargetHeight() {
+  //   return getErrorDist() <= tolerance;
+  // }
+
   public boolean isAtTargetHeight() {
-    return getErrorDist() <= tolerance;
+    return (Math.abs(getErrorDist()) <= ElevatorConstants.SETPOINT_TOLERANCE);
   }
 
   public void zeroElevator() {
