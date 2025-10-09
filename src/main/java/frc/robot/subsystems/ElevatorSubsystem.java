@@ -11,6 +11,8 @@ import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
@@ -29,6 +31,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   private MotionMagicConfigs mmc; // motion magic & control request
 
   private final MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+  private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(0);
+  private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
+
+  private boolean elevatorZeroed = false;
 
   public static ElevatorSubsystem instance;
 
@@ -127,6 +133,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void resetElevatorPositionToZero() { // self explanatory
     master.setPosition(0);
+    elevatorZeroed = true;
   }
 
   public double getHeight() { // self explanatory
@@ -149,6 +156,48 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public boolean isElevatorZeroed() {
     return Math.abs(getHeight()) <= 0.05;
+  }
+
+  public void elevateTo(ElevatorConstants.ElevatorPositions level) {
+    this.setPosition(level.getHeight());
+  }
+
+    public void ElevatorTorqueMode() {
+    master.setControl(torqueRequest.withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
+    // .withMaxAbsDutyCycle(Constants.ElevatorConstants.ELEVATOR_DUTY_CYCLE));
+  }
+
+  public void reduceCurrentLimits() {
+    master.updateCurrentLimits(30, 10);
+  }
+
+  public void moveElevatorNegative() {
+    master.setControl(velocityRequest.withVelocity(-5).withSlot(1));
+  }
+
+  public void resetCurrentLimits() {
+    master.updateCurrentLimits(
+        Constants.ElevatorConstants.STATOR_CURRENT_LIMIT,
+        Constants.ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+  }
+
+  public boolean elevatorHasBeenZeroed() {
+    return elevatorZeroed;
+  }
+
+  public boolean checkCurrent() {
+    double Supplycurrent = Math.abs(master.getSupplyCurrent().getValue().magnitude());
+    double Statorcurrent = Math.abs(master.getStatorCurrent().getValue().magnitude());
+
+    if (Supplycurrent > 1.0 && Statorcurrent > 20) {
+      return true;
+    }
+    return false;
+  }
+
+  public void resetPositionFiltered() {
+    // master.setPosition(
+    //     currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
   }
 
   public static ElevatorSubsystem getInstance() {
