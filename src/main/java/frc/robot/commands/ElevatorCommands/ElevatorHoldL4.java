@@ -15,7 +15,7 @@ public class ElevatorHoldL4 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevatorSubsystem.elevateTo(ElevatorPositions.LIMIT_OF_TRAVEL);
+    elevatorSubsystem.setHeight(ElevatorPositions.LIMIT_OF_TRAVEL);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

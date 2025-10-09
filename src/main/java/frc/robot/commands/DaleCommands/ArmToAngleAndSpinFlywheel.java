@@ -34,7 +34,7 @@ public class ArmToAngleAndSpinFlywheel extends Command {
   @Override
   public void end(boolean interrupted) {
     armPlusFlywheel.stopFlywheel(); // Stop the flywheel
-    elevatorSubsystem.elevateTo(ElevatorPositions.safePosition);
+    elevatorSubsystem.setHeight(ElevatorPositions.safePosition);
   }
 
   @Override

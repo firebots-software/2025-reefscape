@@ -41,7 +41,7 @@ public class DefaultElevator extends Command {
     // }
 
     if (!CoralPosition.isCoralInTootsieSlide()) {
-      elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
+      elevatorSubsystem.setHeight(ElevatorPositions.Intake);
     }
   }
 
