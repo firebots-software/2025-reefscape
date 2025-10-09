@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
@@ -19,7 +19,7 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 public class Intake extends SequentialCommandGroup {
 
   public Intake(
-      ElevatorSubsystem elevatorSubsystem,
+      ElevatorSubsystemMD2 elevatorSubsystem,
       FunnelSubsystem funnelSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       LedSubsystem leds) {
