@@ -300,7 +300,8 @@ public class AnthonyVision extends SubsystemBase {
     double tagFactor = 1.0 / Math.sqrt(effectiveTags);
 
     // Distance term (keep as d^2)
-    double distanceFactor = baseNoise + distanceExponentialCoefficient*Math.pow(distanceExponentialBase, distance);
+    double distanceFactor =
+        baseNoise + distanceExponentialCoefficient * Math.pow(distanceExponentialBase, distance);
 
     // Speed term (quadratic, saturated)
     double vNorm = Math.min(robotSpeed, maximumRobotSpeed) / maximumRobotSpeed;
@@ -309,11 +310,10 @@ public class AnthonyVision extends SubsystemBase {
     DogLog.log("Vision/tagFactor", tagFactor);
     DogLog.log("Vision/distanceFactor", distanceFactor);
     DogLog.log("Vision/speedFactor", speedFactor);
-    
+
     double computedStdDevs = calibrationFactor * tagFactor * distanceFactor * speedFactor;
     return computedStdDevs;
   }
-
 
   private double computeNoiseHeading(
       double baseNoise,
