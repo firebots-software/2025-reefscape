@@ -21,10 +21,12 @@ import frc.robot.AutoRoutines.AutoProducer;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.RunFunnelUntilDetectionSafeSmooth;
+import frc.robot.commandGroups.ShootL1Funnel;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
+import frc.robot.commands.FunnelCommands.ReverseFunnel;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ArmSubsystem;
@@ -122,10 +124,10 @@ public class RobotContainer {
             .and(RobotModeTriggers.teleop());
 
     funnelCheckout
-        .and(joystick.rightTrigger().negate())
-        .onTrue(
-            new TransferPieceBetweenFunnelAndElevator(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
+        .and(joystick.rightTrigger().negate());
+        // .onTrue(
+        //     new TransferPieceBetweenFunnelAndElevator(
+        //         elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     Trigger coralInElevator =
         new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
     coralInElevator.onTrue(
@@ -150,7 +152,7 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
+    joystick.x().whileTrue(new ReverseFunnel(funnelSubsystem));
   }
 
   public static void setAlliance() {

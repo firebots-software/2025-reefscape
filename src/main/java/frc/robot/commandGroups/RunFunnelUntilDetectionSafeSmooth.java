@@ -22,7 +22,7 @@ public class RunFunnelUntilDetectionSafeSmooth extends SequentialCommandGroup {
                     () -> {
                       return !funnelSubsystem.isCoralCheckedIn();
                     }),
-        new WaitCommand(0.1),
+        new WaitCommand(1.5),
         new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
   }
 }
