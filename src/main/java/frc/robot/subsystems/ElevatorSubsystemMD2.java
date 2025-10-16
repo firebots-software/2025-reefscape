@@ -115,11 +115,15 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   }
 
   // use a control request to move to the height.
-  public void setHeight(double height) {
+  public void setHeight(double position) {
 
-    targetHeight = height*ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
+    targetHeight = position * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS / ElevatorConstants.CARRAIGE_UPDUCTION;
     master.setControl(request.withPosition(targetHeight));
-    
+
+    master.setControl(
+        request
+            .withPosition(targetHeight)
+            .withSlot(0)); 
   }
 
   // getters
@@ -204,8 +208,8 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    DogLog.log("Current angle", getCurrentHeight());
-    DogLog.log("Is at target", isAtTargetHeight());
+    DogLog.log("subsystems/ElevatorMD2/currentHeight", getCurrentHeight());
+    DogLog.log("subsystems/ElevatorMD2/targetHeight", isAtTargetHeight());
   }
 
   @Override
