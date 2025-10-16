@@ -5,16 +5,16 @@ import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 
 public class ArmToAngleAndSpinFlywheel extends Command {
   private final ArmSubsystem armPlusFlywheel;
   private double angle;
   private double tolerance = 5;
-  private ElevatorSubsystem elevatorSubsystem;
+  private ElevatorSubsystemMD2 elevatorSubsystem;
 
   public ArmToAngleAndSpinFlywheel(
-      double angle, ArmSubsystem armSub, ElevatorSubsystem elevatorSubsystem) {
+      double angle, ArmSubsystem armSub, ElevatorSubsystemMD2 elevatorSubsystem) {
     armPlusFlywheel = armSub;
     this.angle = angle;
     this.elevatorSubsystem = elevatorSubsystem;
@@ -34,7 +34,7 @@ public class ArmToAngleAndSpinFlywheel extends Command {
   @Override
   public void end(boolean interrupted) {
     armPlusFlywheel.stopFlywheel(); // Stop the flywheel
-    elevatorSubsystem.elevateTo(ElevatorPositions.safePosition);
+    elevatorSubsystem.setHeight(ElevatorPositions.safePosition.height);
   }
 
   @Override

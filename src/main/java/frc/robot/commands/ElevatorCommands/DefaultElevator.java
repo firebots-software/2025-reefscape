@@ -3,15 +3,15 @@ package frc.robot.commands.ElevatorCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.CoralPosition;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 
 public class DefaultElevator extends Command {
-  private final ElevatorSubsystem elevatorSubsystem;
+  private final ElevatorSubsystemMD2 elevatorSubsystem;
 
   // private WindowAverage windowAverage = new WindowAverage();
   // private double currentAverage = 0.0;
 
-  public DefaultElevator(ElevatorSubsystem subsystem) {
+  public DefaultElevator(ElevatorSubsystemMD2 subsystem) {
     elevatorSubsystem = subsystem;
     addRequirements(elevatorSubsystem);
   }
@@ -41,7 +41,7 @@ public class DefaultElevator extends Command {
     // }
 
     if (!CoralPosition.isCoralInTootsieSlide()) {
-      elevatorSubsystem.elevateTo(ElevatorPositions.Intake);
+      elevatorSubsystem.setHeight(ElevatorPositions.Intake.height);
     }
   }
 

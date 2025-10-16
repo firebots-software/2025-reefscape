@@ -10,14 +10,14 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.DaleCommands.ArmToAngleAndSpinFlywheel;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Dealgaenate extends SequentialCommandGroup {
   /** Creates a new Dealgaenate. */
-  public Dealgaenate(ArmSubsystem arm, ElevatorSubsystem elevator, ElevatorPositions position) {
+  public Dealgaenate(ArmSubsystem arm, ElevatorSubsystemMD2 elevator, ElevatorPositions position) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 

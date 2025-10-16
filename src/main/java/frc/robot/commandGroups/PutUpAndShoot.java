@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
 public class PutUpAndShoot extends SequentialCommandGroup {
   public PutUpAndShoot(
-      ElevatorSubsystem elevatorSubsystem,
+      ElevatorSubsystemMD2 elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       ElevatorPositions height) {
 
