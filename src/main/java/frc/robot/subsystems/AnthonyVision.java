@@ -88,7 +88,7 @@ public class AnthonyVision extends SubsystemBase {
     Transform3d cameraToRobot = Constants.Vision.getCameraTransform(cameraId);
 
     // Initialize field layout
-    this.fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    this.fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
     // Initialize both pose estimators
     poseEstimator =

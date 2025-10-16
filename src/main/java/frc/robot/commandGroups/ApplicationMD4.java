@@ -84,7 +84,7 @@ public class ApplicationMD4 extends SequentialCommandGroup{
 
                 new ParallelCommandGroup(
                     new SetElevatorLevel(elevator, ElevatorConstants.ElevatorPositions.L2, new isCoralInTootsieSlide().isFinished()),
-                    new SequentialCommandGroup(
+                    new ParallelCommandGroup(
                         new ShootTootsieSlide(shooter), new RunFunnelOutCommand(funnel, () -> false)
                     )
                 )
