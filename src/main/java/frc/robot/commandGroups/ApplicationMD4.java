@@ -1,5 +1,17 @@
 package frc.robot.commandGroups;
 
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.TootsieSlideCommands.ShootSlow;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.TootsieSlideSubsystem;
+import frc.robot.subsystems.LedSubsystem;
+import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
+import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
+
+
 /*
  * 
  * 
@@ -43,6 +55,28 @@ package frc.robot.commandGroups;
  * 
  */
 
-public class ApplicationMD4 {
+public class ApplicationMD4 extends SequentialCommandGroup{
+    public ApplicationMD4(ElevatorSubsystem elevatorSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem, FunnelSubsystem funnelSubsystem, LedSubsystem leds){ {
+        addCommands(
+            //intake coral
+            //elevator to l4, l3, l2, l1
+            // shoot and spin funnel; when shooting ends stop funnel
+            // elevator to l4
+            // as elevator lowers to l2 spin both funnel and shooter
 
+            new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, leds)
+                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4, false))
+                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3, false))
+                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2, false))
+                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false))
+                .andThen(new ShootTootsieSlide(tootsieSlideSubsystem).deadlineWith(new RunFunnelOutCommand(funnelSubsystem, () -> false)))
+                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4, false))
+                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2, false)
+                    .alongWith(new ShootTootsieSlide(tootsieSlideSubsystem).alongWith(new RunFunnelOutCommand(funnelSubsystem, () -> false)))
+                )
+            );
+    
+    }
+
+}
 }
