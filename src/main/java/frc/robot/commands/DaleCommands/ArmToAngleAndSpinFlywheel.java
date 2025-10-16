@@ -1,7 +1,6 @@
 // TODO: THIS COMMAND NEED TO BE UPDATED TO WORK PROPERLY
 package frc.robot.commands.DaleCommands;
 
-import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.ArmSubsystem;
