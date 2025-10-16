@@ -46,7 +46,8 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
         "subsystems/Elevator/motor1",
         ElevatorConstants.MOTOR1_PORT,
         Constants.Swerve.WHICH_SWERVE_ROBOT.CANBUS_NAME);
-    motor2 = new LoggedTalonFX("subsystems/Elevator/motor2",
+    motor2 = new LoggedTalonFX(
+        "subsystems/Elevator/motor2",
         ElevatorConstants.MOTOR2_PORT,
         Constants.Swerve.WHICH_SWERVE_ROBOT.CANBUS_NAME);
     currentLevel = ElevatorPositions.Intake;
@@ -55,7 +56,8 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
     Follower follower = new Follower(ElevatorConstants.MOTOR1_PORT, false);
     motor2.setControl(follower);
 
-    motor1.updateCurrentLimits(ElevatorConstants.STATOR_CURRENT_LIMIT, ElevatorConstants.SUPPLY_CURRENT_LIMIT);
+    motor1.updateCurrentLimits(
+        ElevatorConstants.STATOR_CURRENT_LIMIT, ElevatorConstants.SUPPLY_CURRENT_LIMIT);
 
     MotionMagicConfigs mmc = new MotionMagicConfigs()
         .withMotionMagicAcceleration(ElevatorConstants.ACCELERATION)
@@ -108,7 +110,8 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   }
 
   public void setHeight(double height) {
-    targetHeight = height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS;
+    targetHeight = height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
+        / ElevatorConstants.CARRAIGE_UPDUCTION;
     master.setControl(request.withPosition(targetHeight));
   }
 
@@ -125,7 +128,7 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   }
 
   // public boolean isAtTargetHeight() {
-  //   return getErrorDist() <= tolerance;
+  // return getErrorDist() <= tolerance;
   // }
 
   public boolean isAtTargetHeight() {
@@ -191,8 +194,9 @@ public class ElevatorSubsystemMD2 extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    DogLog.log("Current angle", getCurrentHeight());
-    DogLog.log("Is at target", isAtTargetHeight());
+    DogLog.log("subsystems/ElevatorMD2/currentHeight", getCurrentHeight());
+    DogLog.log("subsystems/ElevatorMD2/isAtTargetHeight", isAtTargetHeight());
+    DogLog.log("subsystems/ElevatorMD2/targetHeight", targetHeight);
   }
 
   @Override
