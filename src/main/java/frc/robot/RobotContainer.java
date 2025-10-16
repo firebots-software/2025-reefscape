@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -159,7 +160,7 @@ public class RobotContainer {
         new Trigger(
                 () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide())
             .and(RobotModeTriggers.teleop());
-    funnelCheckin.onTrue(new SequentialCommandGroup(new stopFunnel(funnelSubsystem), new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds)));
+    funnelCheckin.onTrue(new SequentialCommandGroup(new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds).withTimeout(0.5), new stopFunnel(funnelSubsystem)));
 
     customController
         .LeftL1()
