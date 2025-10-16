@@ -21,12 +21,12 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.AutoRoutines.AutoProducer;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.commandGroups.ApplicationMD4;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commandGroups.PutUpAndShoot;
-import frc.robot.commandGroups.RunFunnelUntilDetectionSafeSmooth;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -50,6 +50,7 @@ import java.util.function.DoubleSupplier;
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
+
 
   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
@@ -83,7 +84,6 @@ public class RobotContainer {
     if (driveTrain.getCurrentCommand() != null) {
       commandName = driveTrain.getCurrentCommand().getName();
     }
-    DogLog.log("Robot/SwerveDriveCommand", commandName);
   }
 
   public RobotContainer() {
@@ -269,35 +269,37 @@ public class RobotContainer {
     //     .onTrue(new D2Intake(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
 
     // Auto Intake and Eject
-    Trigger funnelCheckin =
-        new Trigger(
-                () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide())
-            .and(RobotModeTriggers.teleop());
+    // Trigger funnelCheckin =
+    //     new Trigger(
+    //             () -> funnelSubsystem.isCoralCheckedIn() &&
+    // !CoralPosition.isCoralInTootsieSlide())
+    //         .and(RobotModeTriggers.teleop());
     Trigger ejectTime =
         new Trigger(
                 () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()))
             .and(RobotModeTriggers.teleop());
-    ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
-    funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false));
-    funnelCheckin.onTrue(
-        new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
-    Trigger funnelCheckout =
-        new Trigger(
-                () ->
-                    CoralPosition.isCoralInFunnel()
-                        && elevatorSubsystem.atIntake()
-                        && elevatorSubsystem.isAtPosition())
-            .and(RobotModeTriggers.teleop());
+    // ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
+    // funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake,
+    // false));
+    // funnelCheckin.onTrue(
+    //     new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
+    // Trigger funnelCheckout =
+    //     new Trigger(
+    //             () ->
+    //                 CoralPosition.isCoralInFunnel()
+    //                     && elevatorSubsystem.atIntake()
+    //                     && elevatorSubsystem.isAtPosition())
+    //         .and(RobotModeTriggers.teleop());
 
-    funnelCheckout
-        .and(joystick.rightTrigger().negate())
-        .onTrue(
-            new TransferPieceBetweenFunnelAndElevator(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
-    Trigger coralInElevator =
-        new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
-    coralInElevator.onTrue(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition, false));
+    // funnelCheckout
+    //     .and(joystick.rightTrigger().negate())
+    //     .onTrue(
+    //         new TransferPieceBetweenFunnelAndElevator(
+    //             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
+    // Trigger coralInElevator =
+    //     new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
+    // coralInElevator.onTrue(
+    //     new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition, false));
 
     // // Debugging
     // debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
@@ -348,13 +350,26 @@ public class RobotContainer {
             // () -> joystick.rightTrigger().getAsBoolean(),
             redside,
             () -> joystick.a().getAsBoolean(),
-            () -> customController.LeftL1().getAsBoolean(),
-            () -> customController.RightL1().getAsBoolean(),
+            () -> false,
+            () -> false,
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
     // IMPORTANT
     // joystick.a().whileTrue(new ShootL1(elevatorSubsystem, tootsieSlideSubsystem));
+
+    // REPLACE 'new WaitCommand(0)' with YOUR COMMAND GROUP!
+    customController
+        .LeftL1()
+        .whileTrue(
+            new ApplicationMD4(
+                driveTrain,
+                tootsieSlideSubsystem,
+                elevatorSubsystem,
+                funnelSubsystem,
+                armSubsystem,
+                null,
+                leds));
 
     joystick
         .b()
@@ -471,7 +486,7 @@ public class RobotContainer {
   }
 
   public BooleanSupplier getRedSide() {
-    DogLog.log("get alliance", redside.getAsBoolean());
+    DogLog.log("Info/Alliance", redside.getAsBoolean());
     return redside;
   }
 
@@ -479,7 +494,7 @@ public class RobotContainer {
     /* Run the path selected from the auto chooser */
     int autoValue = autoChooser.getSelected();
     Command autoCommand;
-    DogLog.log("auto/selected", autoValue);
+    DogLog.log("Info/AutoSelected", autoValue);
     switch (autoValue) {
       case 1:
         autoCommand =

@@ -9,6 +9,10 @@ public class RunFunnelOutCommand extends Command {
   private FunnelSubsystem funnelSubsystem;
   private BooleanSupplier L1;
 
+  // FOR THE MD.4 ACTIVITY: THE L1 BOOLEAN SUPPLIER you can just pass in () -> false
+  // when calling this Command. It is not relevant for this activity though you can
+  // ask me what it does if you are curious.
+
   public RunFunnelOutCommand(FunnelSubsystem funnelSubsystem, BooleanSupplier L1) {
     this.funnelSubsystem = funnelSubsystem;
     this.L1 = L1;
