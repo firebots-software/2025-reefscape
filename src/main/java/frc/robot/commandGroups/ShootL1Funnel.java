@@ -6,13 +6,13 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.FunnelCommands.ReverseFunnel;
 import frc.robot.commands.TootsieSlideCommands.ReverseTootsie;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
 public class ShootL1Funnel extends SequentialCommandGroup {
   public ShootL1Funnel(
-      ElevatorSubsystem elevatorSubsystem,
+      ElevatorSubsystemMD2 elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       FunnelSubsystem funnelSubsystem) {
     // if (CoralPosition.isCoralInTootsieSlide()) {

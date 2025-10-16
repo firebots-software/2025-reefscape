@@ -5,13 +5,13 @@ import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
 
 public class D2Intake extends SequentialCommandGroup {
   public D2Intake(
-      ElevatorSubsystem elevatorSubsystem,
+      ElevatorSubsystemMD2 elevatorSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
       FunnelSubsystem funnelSubsystem) {
     addCommands(

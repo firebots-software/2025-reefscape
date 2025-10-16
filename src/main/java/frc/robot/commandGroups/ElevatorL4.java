@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.ElevatorHoldL4;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 
 public class ElevatorL4 extends SequentialCommandGroup {
 
-  public ElevatorL4(ElevatorSubsystem elevatorSubsystem, boolean checkIfCoralInTootsie) {
+  public ElevatorL4(ElevatorSubsystemMD2 elevatorSubsystem, boolean checkIfCoralInTootsie) {
 
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4, checkIfCoralInTootsie)

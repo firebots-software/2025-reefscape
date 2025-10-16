@@ -2,13 +2,13 @@ package frc.robot.commands.ElevatorCommands;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystemMD2;
 
 public class ZeroElevatorHardStop extends Command {
-  private final ElevatorSubsystem elevatorSubsystem;
+  private final ElevatorSubsystemMD2 elevatorSubsystem;
   private double timesExceededCurrent;
 
-  public ZeroElevatorHardStop(ElevatorSubsystem subsystem) {
+  public ZeroElevatorHardStop(ElevatorSubsystemMD2 subsystem) {
     elevatorSubsystem = subsystem;
     DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/running", false);
     addRequirements(elevatorSubsystem);
@@ -34,10 +34,9 @@ public class ZeroElevatorHardStop extends Command {
   public void end(boolean interrupted) {
     DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/running", false);
     if (!interrupted) {
-      elevatorSubsystem.resetElevatorPositionToZero();
+      elevatorSubsystem.zeroElevator();
     }
     elevatorSubsystem.resetCurrentLimits();
-    elevatorSubsystem.elevatorHasBeenZeroed();
   }
 
   // Returns true when the command should end.
