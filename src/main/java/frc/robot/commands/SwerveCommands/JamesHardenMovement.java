@@ -102,16 +102,26 @@ public class JamesHardenMovement extends Command {
     DogLog.log("Commands/JamesHarden/TargetPose", targetPose);
     DogLog.log("Commands/JamesHarden/AxisSpecificInformation/TargetPoseX(m)", targetPose.getX());
     DogLog.log("Commands/JamesHarden/AxisSpecificInformation/TargetPoseY(m)", targetPose.getY());
-    DogLog.log("Commands/JamesHarden/AxisSpecificInformation/TargetPoseHeading(deg)", targetPose.getRotation().getRadians());
-
-    DogLog.log("Commands/JamesHarden/AxisSpecificInformation/DesiredChassisSpeedsX(mps)", speeds.vxMetersPerSecond);
-    DogLog.log("Commands/JamesHarden/AxisSpecificInformation/DesiredChassisSpeedsY(mps)", speeds.vyMetersPerSecond);
-    DogLog.log("Commands/JamesHarden/AxisSpecificInformation/DesiredChassisSpeedsTheta(radps)", speeds.omegaRadiansPerSecond);
+    DogLog.log(
+        "Commands/JamesHarden/AxisSpecificInformation/TargetPoseHeading(deg)",
+        targetPose.getRotation().getRadians());
 
     DogLog.log(
-        "Commands/JamesHarden/AxisSpecificInformation/ActualChassisSpeedsX(mps)", swerve.getFieldSpeeds().vxMetersPerSecond);
+        "Commands/JamesHarden/AxisSpecificInformation/DesiredChassisSpeedsX(mps)",
+        speeds.vxMetersPerSecond);
     DogLog.log(
-        "Commands/JamesHarden/AxisSpecificInformation/ActualChassisSpeedsY(mps)", swerve.getFieldSpeeds().vyMetersPerSecond);
+        "Commands/JamesHarden/AxisSpecificInformation/DesiredChassisSpeedsY(mps)",
+        speeds.vyMetersPerSecond);
+    DogLog.log(
+        "Commands/JamesHarden/AxisSpecificInformation/DesiredChassisSpeedsTheta(radps)",
+        speeds.omegaRadiansPerSecond);
+
+    DogLog.log(
+        "Commands/JamesHarden/AxisSpecificInformation/ActualChassisSpeedsX(mps)",
+        swerve.getFieldSpeeds().vxMetersPerSecond);
+    DogLog.log(
+        "Commands/JamesHarden/AxisSpecificInformation/ActualChassisSpeedsY(mps)",
+        swerve.getFieldSpeeds().vyMetersPerSecond);
     DogLog.log(
         "Commands/JamesHarden/AxisSpecificInformation/ActualChassisSpeedsX(radps)",
         swerve.getFieldSpeeds().omegaRadiansPerSecond);
