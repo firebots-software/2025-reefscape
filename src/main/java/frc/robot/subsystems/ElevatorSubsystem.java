@@ -84,7 +84,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void elevateTo(ElevatorPositions level) {
-    master.setControl(controlRequest.withPosition(level.height));
+    master.setControl(controlRequest.withPosition(level.height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS / ElevatorConstants.CARRAIGE_UPDUCTION));
   }
 
   public void zeroEncoders() {
@@ -150,4 +150,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     // TODO Auto-generated method stub
     return true;
   }
+
+public void resetCurrentLimits() {
+	// TODO Auto-generated method stub
+	throw new UnsupportedOperationException("Unimplemented method 'resetCurrentLimits'");
+}
 }

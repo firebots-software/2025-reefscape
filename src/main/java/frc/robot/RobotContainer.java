@@ -358,7 +358,7 @@ public class RobotContainer {
     joystick
         .b()
         .whileTrue(
-            new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false));
+            new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3, false));
     joystick
         .povUp()
         .whileTrue(
