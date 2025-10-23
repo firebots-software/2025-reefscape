@@ -27,8 +27,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   private MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
 
   public ElevatorSubsystem() {
-    motor1 = new TalonFX(ElevatorConstants.MOTOR1_PORT);
-    motor2 = new TalonFX(ElevatorConstants.MOTOR2_PORT);
+    motor1 = new TalonFX(ElevatorConstants.MOTOR1_PORT, Constants.Swerve.SwerveType.JAMES_HARDEN.CANBUS_NAME);
+    motor2 = new TalonFX(ElevatorConstants.MOTOR2_PORT, Constants.Swerve.SwerveType.JAMES_HARDEN.CANBUS_NAME);
 
     Follower follower = new Follower(Constants.ElevatorConstants.MOTOR1_PORT, false);
     motor2.setControl(follower);
@@ -114,41 +114,40 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void reduceCurrentLimits() {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'reduceCurrentLimits'");
+    //reduceCurrentLimits'");
   }
 
   public void moveElevatorNegative() {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'moveElevatorNegative'");
+    //moveElevatorNegative'");
   }
 
   public void resetElevatorPositionToZero() {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'resetElevatorPositionToZero'");
+    //resetElevatorPositionToZero'");
   }
 
   public void elevatorHasBeenZeroed() {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'elevatorHasBeenZeroed'");
+    //
   }
 
   public boolean checkCurrent() {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'checkCurrent'");
+    return true;
   }
 
   public void resetPositionFiltered() {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'resetPositionFiltered'");
   }
 
   public boolean atIntake() {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'atIntake'");
+    return true;
   }
 
   public boolean isElevatorZeroed() {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'isElevatorZeroed'");
+    return true;
   }
 }
