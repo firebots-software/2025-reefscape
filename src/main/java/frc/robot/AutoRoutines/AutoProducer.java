@@ -52,7 +52,7 @@ public class AutoProducer extends SequentialCommandGroup {
             new ParallelDeadlineGroup(
                 new SequentialCommandGroup(
                     new ZeroElevatorHardStop(elevator).withTimeout(1.5),
-                    new Intake(elevator, funnel, shooter, leds).withTimeout(2.0)),
+                    new Intake(elevator, funnel, shooter, leds, () -> true).withTimeout(2.0)),
                 JamesHardenMovement.toSpecificBranch(
                     driveTrain, () -> autoInformation.get(1), false))),
         new JamesHardenScore(
@@ -102,7 +102,7 @@ public class AutoProducer extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             // Elevator related
-            new Intake(elevator, funnel, shooter, leds)
+            new Intake(elevator, funnel, shooter, leds, () -> true)
                 .andThen(
                     new EndWhenCloseEnough(
                         () -> movementCommand.getTargetPose2d(),

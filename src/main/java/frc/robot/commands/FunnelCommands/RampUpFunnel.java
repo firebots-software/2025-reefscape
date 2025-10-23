@@ -2,6 +2,7 @@ package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 
@@ -53,6 +54,6 @@ public class RampUpFunnel extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return funnelSubsystem.isCoralCheckedIn();
+    return funnelSubsystem.isCoralCheckedIn() || CoralPosition.isCoralInFunnel();
   }
 }

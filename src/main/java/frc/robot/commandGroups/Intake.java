@@ -4,6 +4,8 @@
 
 package frc.robot.commandGroups;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -22,13 +24,13 @@ public class Intake extends SequentialCommandGroup {
       ElevatorSubsystem elevatorSubsystem,
       FunnelSubsystem funnelSubsystem,
       TootsieSlideSubsystem tootsieSlideSubsystem,
-      LedSubsystem leds) {
+      LedSubsystem leds, BooleanSupplier uncontinuar) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false)
             .alongWith(
-                new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds)));
+                new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds, uncontinuar)));
     // addCommands(
     //     new TransferPieceBetweenFunnelAndElevator(
     //         elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));

@@ -11,7 +11,7 @@ import java.util.function.BooleanSupplier;
 
 public class RunFunnelUntilDetectionSafeSmooth extends SequentialCommandGroup {
   public RunFunnelUntilDetectionSafeSmooth(
-      ElevatorSubsystem elevatorSubsystem, FunnelSubsystem funnelSubsystem, LedSubsystem leds) {
+      ElevatorSubsystem elevatorSubsystem, FunnelSubsystem funnelSubsystem, LedSubsystem leds, BooleanSupplier uncontinuar) {
 
     addCommands(
         // new WaitCommand(0.1),
@@ -22,7 +22,7 @@ public class RunFunnelUntilDetectionSafeSmooth extends SequentialCommandGroup {
                     () -> {
                       return !funnelSubsystem.isCoralCheckedIn();
                     }),
-        new WaitCommand(1.5),
+        // new WaitCommand(3),
         new RunFunnelUntilDetectionSafe(funnelSubsystem, elevatorSubsystem));
   }
 }

@@ -114,7 +114,7 @@ public class RobotContainer {
     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
     funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false));
     funnelCheckin.onTrue(
-        new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
+        new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds, joystick.x()));
     Trigger funnelCheckout =
         new Trigger(
                 () ->
@@ -152,7 +152,7 @@ public class RobotContainer {
             driveTrain);
     driveTrain.setDefaultCommand(swerveJoystickCommand);
 
-    joystick.x().whileTrue(new ReverseFunnel(funnelSubsystem));
+    customController.Eject().whileTrue(new ReverseFunnel(funnelSubsystem));
   }
 
   public static void setAlliance() {
