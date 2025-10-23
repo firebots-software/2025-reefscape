@@ -1,5 +1,6 @@
 package frc.robot.commandGroups;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -64,18 +65,24 @@ public class ApplicationMD4 extends SequentialCommandGroup{
             // elevator to l4
             // as elevator lowers to l2 spin both funnel and shooter
 
-            new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, leds)
-                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4, false))
-                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3, false))
-                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2, false))
-                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false))
-                .andThen(new ShootTootsieSlide(tootsieSlideSubsystem).deadlineWith(new RunFunnelOutCommand(funnelSubsystem, () -> false)))
-                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4, false))
-                .andThen(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2, false)
-                    .alongWith(new ShootTootsieSlide(tootsieSlideSubsystem).alongWith(new RunFunnelOutCommand(funnelSubsystem, () -> false)))
+            new SequentialCommandGroup(
+                new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, leds),
+                new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4, false),
+                new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3, false),
+                new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2, false),
+                new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false),
+                new ParallelDeadlineGroup(
+                    new ShootTootsieSlide(tootsieSlideSubsystem), 
+                    new RunFunnelOutCommand(funnelSubsystem, () -> false)),
+                new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4, false),
+                new ParallelDeadlineGroup(
+                    new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2, false), 
+                    new ShootTootsieSlide(tootsieSlideSubsystem),
+                    new RunFunnelOutCommand(funnelSubsystem, () -> false))
                 )
             );
-    
+
+        
     }
 
 }
