@@ -102,6 +102,7 @@ public class RobotContainer {
     startPosChooser.setDefaultOption("Top (next to blue barge zone)", "top");
     startPosChooser.addOption("Middle (between blue and red barge zones)", "middle");
     startPosChooser.addOption("Bottom (next to red barge zone)", "bottom");
+    startPosChooser.addOption("Test (next to red barge zone)", "test");
     SmartDashboard.putData(startPosChooser);
 
     configureBindings();

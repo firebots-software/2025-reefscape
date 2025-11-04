@@ -183,6 +183,9 @@ public class AutoRoutines {
         autoCommandGroup.addCommands(bottomTraj.get(0).resetOdometry());
         numPaths = bottomNames.size();
         break;
+      case "test": 
+        return simpleTest();
+
       default:
         throw new Error(
             "AUTO ERROR: The SmartDashboard SendableChooser for Auto (top/middle/bottom) was incorrect in autoRoutine()");
