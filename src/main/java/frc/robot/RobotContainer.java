@@ -44,6 +44,8 @@ import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import choreo.auto.AutoFactory;
+
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
@@ -464,10 +466,18 @@ public class RobotContainer {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
     DogLog.log("Auto/Get-Auto-Command", "Called");
     // String chosenPath = startPosChooser.getSelected();
-
-    // return autoRoutines.simpleTest(chosenPath).cmd();
+    AutoFactory autoFactory =
+        new AutoFactory(
+            driveTrain::getPose, // A function that returns the current robot pose
+            driveTrain
+                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            driveTrain::followTrajectory, // The drive subsystem trajectory follower
+            true, // If alliance flipping should be enabled
+            driveTrain);
+    AutoRoutines autoRoutines = new AutoRoutines(autoFactory, driveTrain, elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem, redside);
+    return autoRoutines.simpleTest().cmd();
     // return autoChooser.selectedCommandScheduler();
-    return null;
+    // return null;
   }
 
   //   public void testAutoCommands() {}
