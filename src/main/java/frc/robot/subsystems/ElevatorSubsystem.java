@@ -25,8 +25,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   private MotionMagicConfigs mmc;
   ElevatorPositions currentLevel;
   private MotionMagicVoltage controlRequest = new MotionMagicVoltage(0);
+  double targetHeight;
 
   public ElevatorSubsystem() {
+    targetHeight = 0.0;
     motor1 = new TalonFX(ElevatorConstants.MOTOR1_PORT, Constants.Swerve.SwerveType.JAMES_HARDEN.CANBUS_NAME);
     motor2 = new TalonFX(ElevatorConstants.MOTOR2_PORT, Constants.Swerve.SwerveType.JAMES_HARDEN.CANBUS_NAME);
 
@@ -85,6 +87,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void elevateTo(ElevatorPositions level) {
     master.setControl(controlRequest.withPosition(level.height * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS / ElevatorConstants.CARRAIGE_UPDUCTION));
+    targetHeight = level.height;
   }
 
   public void zeroEncoders() {
@@ -104,9 +107,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void periodic() {
     DogLog.log("subsystems/Elevator/isAtPosition", isAtPosition());
-  }
-
-  public void ElevatorTorqueMode() {
+    DogLog.log("subsystems/Elevator/currentHeight", getCurrentHeight());
+    DogLog.log("subsystems/Elevator/targetHeight", targetHeight);
+    DogLog.log("subsystems/Elevator/targetRotations", targetHeight * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS / ElevatorConstants.CARRAIGE_UPDUCTION);
+      }
+    
+      private double getCurrentHeight() {
+        return master.getPosition().getValueAsDouble() * ElevatorConstants.CARRAIGE_UPDUCTION * ElevatorConstants.CONVERSION_FACTOR_UP_ROTATIONS_TO_DISTANCE;
+      }
+    
+      public void ElevatorTorqueMode() {
     // DogLog.log("subsystems/Elevator/usingTorqueMode", true);
     // master.setControl(torqueRequest.withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
     // .withMaxAbsDutyCycle(Constants.ElevatorConstants.ELEVATOR_DUTY_CYCLE));

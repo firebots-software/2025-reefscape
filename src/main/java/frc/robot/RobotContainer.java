@@ -268,35 +268,35 @@ public class RobotContainer {
     //     .onTrue(new D2Intake(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
 
     // Auto Intake and Eject
-    Trigger funnelCheckin =
-        new Trigger(
-                () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide())
-            .and(RobotModeTriggers.teleop());
-    Trigger ejectTime =
-        new Trigger(
-                () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()))
-            .and(RobotModeTriggers.teleop());
-    ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
-    funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false));
-    funnelCheckin.onTrue(
-        new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
-    Trigger funnelCheckout =
-        new Trigger(
-                () ->
-                    CoralPosition.isCoralInFunnel()
-                        && elevatorSubsystem.atIntake()
-                        && elevatorSubsystem.isAtPosition())
-            .and(RobotModeTriggers.teleop());
+   // Trigger funnelCheckin =
+//    //     new Trigger(
+//                 () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide())
+//             .and(RobotModeTriggers.teleop());
+//     Trigger ejectTime =
+//         new Trigger(
+//                 () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()))
+//             .and(RobotModeTriggers.teleop());
+//     ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
+//     funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false));
+//     funnelCheckin.onTrue(
+//         new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
+//     Trigger funnelCheckout =
+//         new Trigger(
+//                 () ->
+//                     CoralPosition.isCoralInFunnel()
+//                         && elevatorSubsystem.atIntake()
+//                         && elevatorSubsystem.isAtPosition())
+//             .and(RobotModeTriggers.teleop());
 
-    funnelCheckout
-        .and(joystick.rightTrigger().negate())
-        .onTrue(
-            new TransferPieceBetweenFunnelAndElevator(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
-    Trigger coralInElevator =
-        new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
-    coralInElevator.onTrue(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition, false));
+//     funnelCheckout
+//         .and(joystick.rightTrigger().negate())
+//         .onTrue(
+//             new TransferPieceBetweenFunnelAndElevator(
+//                 elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
+//     Trigger coralInElevator =
+//         new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
+//     coralInElevator.onTrue(
+//         new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition, false));
 
     // // Debugging
     // debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
