@@ -14,6 +14,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -78,7 +79,31 @@ public class RobotContainer {
     logger.telemeterize(driveTrain.getCurrentState());
   }
 
+  private final AutoFactory autoFactory;
+  private final AutoRoutines autoRoutines;
+
   public RobotContainer() {
+    setAlliance();
+    autoFactory =
+        new AutoFactory(
+            driveTrain::getPose, // A function that returns the current robot pose
+            driveTrain
+                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            driveTrain::followTrajectory, // The drive subsystem trajectory follower
+            true, // If alliance flipping should be enabled
+            driveTrain);
+
+    autoRoutines = new AutoRoutines(autoFactory, driveTrain, elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem, redside);
+
+    // Set up the Auto chooser in SmartDashboard, which allows you to choose between the Top,
+    // Middle, and Bottom auto paths
+    // (Mirroring for Blue or Red side happens automatically with Choreo)
+    startPosChooser = new SendableChooser<String>();
+    startPosChooser.setDefaultOption("Top (next to blue barge zone)", "top");
+    startPosChooser.addOption("Middle (between blue and red barge zones)", "middle");
+    startPosChooser.addOption("Bottom (next to red barge zone)", "bottom");
+    SmartDashboard.putData(startPosChooser);
+
     configureBindings();
   }
 
@@ -465,17 +490,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
     DogLog.log("Auto/Get-Auto-Command", "Called");
-    // String chosenPath = startPosChooser.getSelected();
-    AutoFactory autoFactory =
-        new AutoFactory(
-            driveTrain::getPose, // A function that returns the current robot pose
-            driveTrain
-                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
-            driveTrain::followTrajectory, // The drive subsystem trajectory follower
-            true, // If alliance flipping should be enabled
-            driveTrain);
-    AutoRoutines autoRoutines = new AutoRoutines(autoFactory, driveTrain, elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem, redside);
-    return autoRoutines.simpleTest().cmd();
+    return autoRoutines.autoRoutine(startPosChooser.getSelected()).cmd();
     // return autoChooser.selectedCommandScheduler();
     // return null;
   }
