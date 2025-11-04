@@ -34,17 +34,17 @@ public class ZeroElevatorToFFiltered extends Command {
   @Override
   public boolean isFinished() {
     DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/ticksAtPosition", ticksAtPosition);
-    // boolean inPosition = elevatorSubsystem.isAtPosition() && elevatorSubsystem.atIntake();
+    boolean inPosition = elevatorSubsystem.isAtPosition() && elevatorSubsystem.atIntake();
     // DogLog.log("subsystems/Elevator/ZeroElevatorToFFiltered/inPosition", inPosition);
 
-    // if (inPosition) {
-    //   ticksAtPosition++;
-    // } else {
-    //   ticksAtPosition = 0;
-    // }
-    // if (ticksAtPosition >= 5) {
-    //   return true;
-    // }
+    if (inPosition) {
+      ticksAtPosition++;
+    } else {
+      ticksAtPosition = 0;
+    }
+    if (ticksAtPosition >= 5) {
+      return true;
+    }
     return false;
   }
 }

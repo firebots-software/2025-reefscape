@@ -116,13 +116,72 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     m1Config.apply(moc);
     m2Config.apply(moc);
+    
+    master = motor1;
+    currentHeightToF = elevatorFilter.calculate(getToFDistance());
+    resetPositionFiltered();
   }
 
+  // instance for elevator subsystem
   public static ElevatorSubsystem getInstance() {
     if (instance == null) {
       instance = new ElevatorSubsystem();
     }
     return instance;
+  }
+
+  public boolean tofIsConnected() {
+    return distance.isConnected();
+  }
+
+  public void resetPositionFiltered() {
+    master.setPosition(
+        currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+    DogLog.log(
+        "subsystems/Elevator/resetElevatorPosition",
+        currentHeightToF * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+  }
+
+  public void resetPosition() {
+    if (tofIsConnected()) {
+      master.setPosition(
+          this.getToFDistance()
+              * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+      DogLog.log(
+          "subsystems/Elevator/resetElevatorPosition",
+          this.getToFDistance()
+              * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+    }
+  }
+
+  public void resetPosition(double posInHeight) {
+    // TODO: add constant to convert distance to encoder values
+    master.setPosition(
+        posInHeight * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+    DogLog.log(
+        "subsystems/Elevator/resetElevatorPosition",
+        posInHeight * Constants.ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS);
+  }
+
+  // Hardstop Zeroing functions:
+  public void moveElevatorNegative() {
+    master.setControl(velocityRequest.withVelocity(-5).withSlot(1));
+  }
+
+  public void reduceCurrentLimits() {
+    master.updateCurrentLimits(30, 10);
+  }
+
+  public boolean checkCurrent() {
+    double Supplycurrent = Math.abs(master.getSupplyCurrent().getValue().magnitude());
+    double Statorcurrent = Math.abs(master.getStatorCurrent().getValue().magnitude());
+    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/supply", Supplycurrent);
+    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/stator", Statorcurrent);
+
+    if (Supplycurrent > 1.0 && Statorcurrent > 20) {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -159,11 +218,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public boolean isAtPosition() {
-    return Math.abs(getError())
-        < ElevatorConstants.SETPOINT_TOLERANCE;
-  }
-
   public void setPosition(double height) {
     master.setControl(
         controlRequest
@@ -177,26 +231,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void elevateTo(ElevatorPositions level) {
     this.currentLevel = level;
     this.setPosition(level.height);
-  }
-
-    public boolean canFunnelTransferCoralToScoring() {
-    return this.getLevel().equals(Constants.ElevatorConstants.ElevatorPositions.Intake)
-        && this.getError() < Constants.ElevatorConstants.MAX_POSITIONAL_ERROR;
-  }
-
-  public double getToFDistance() {
-    // 0.11 is the sensor offset
-    DogLog.log(
-        "subsystems/Elevator/ToF/DistanceNoOffset", distance.getDistance().getValueAsDouble());
-    return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
-  }
-
-  public boolean isElevatorZeroed() {
-    return elevatorZeroed;
-  }
-
-  public void elevatorHasBeenZeroed() {
-    elevatorZeroed = true;
   }
 
   public ElevatorPositions getLevel() {
@@ -226,5 +260,40 @@ public class ElevatorSubsystem extends SubsystemBase {
             * ElevatorConstants.CONVERSION_FACTOR_UP_DISTANCE_TO_ROTATIONS
             / Constants.ElevatorConstants.CARRAIGE_UPDUCTION
         - master.getPosition().getValueAsDouble();
+  }
+
+  public void ElevatorTorqueMode() {
+    DogLog.log("subsystems/Elevator/usingTorqueMode", true);
+    master.setControl(torqueRequest.withOutput(Constants.ElevatorConstants.ELEVATOR_TORQUE));
+    // .withMaxAbsDutyCycle(Constants.ElevatorConstants.ELEVATOR_DUTY_CYCLE));
+  }
+
+  // TODO: ONLY FOR DEBUGGING
+  public void testElevator(double height) {
+    this.setPosition(height);
+  }
+
+  public boolean isAtPosition() {
+    return (Math.abs(getError()) <= ElevatorConstants.SETPOINT_TOLERANCE);
+  }
+
+  public boolean canFunnelTransferCoralToScoring() {
+    return this.getLevel().equals(Constants.ElevatorConstants.ElevatorPositions.Intake)
+        && this.getError() < Constants.ElevatorConstants.MAX_POSITIONAL_ERROR;
+  }
+
+  public double getToFDistance() {
+    // 0.11 is the sensor offset
+    DogLog.log(
+        "subsystems/Elevator/ToF/DistanceNoOffset", distance.getDistance().getValueAsDouble());
+    return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
+  }
+
+  public boolean isElevatorZeroed() {
+    return elevatorZeroed;
+  }
+
+  public void elevatorHasBeenZeroed() {
+    elevatorZeroed = true;
   }
 }
