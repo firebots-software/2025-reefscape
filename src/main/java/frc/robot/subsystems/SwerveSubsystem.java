@@ -12,6 +12,8 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import choreo.trajectory.SwerveSample;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
@@ -191,6 +193,31 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   public double getDirectionalChassisSpeeds(Rotation2d qDirection) {
     return (qDirection.getCos() * getFieldSpeeds().vxMetersPerSecond)
         + (qDirection.getSin() * getFieldSpeeds().vyMetersPerSecond);
+  }
+
+
+  public void followTrajectory(SwerveSample sample) {
+    // Get the current pose of the robot
+    Pose2d pose = getCurrentState().Pose;
+    // Generate the next speeds for the robot
+    ChassisSpeeds speeds =
+        new ChassisSpeeds(
+            sample.vx + qProfiledPIDController.calculate(pose.getX(), sample.x),
+            sample.vy + qProfiledPIDController.calculate(pose.getY(), sample.y),
+            sample.omega
+                + headingProfiledPIDController.calculate(
+                    pose.getRotation().getRadians(), sample.heading));
+    DogLog.log("followTrajectory/sample.x", sample.x);
+    DogLog.log("followTrajectory/sample.y", sample.y);
+    DogLog.log("followTrajectory/sample.heading", sample.heading);
+    DogLog.log(
+        "followTrajectory/pidOutputX", qProfiledPIDController.calculate(pose.getX(), sample.x));
+    DogLog.log("followTrajectory/sample.vx", sample.vx);
+    DogLog.log("followTrajectory/sample.vy", sample.vy);
+    DogLog.log("followTrajectory/sample.omega", sample.omega);
+    DogLog.log("followTrajectory/speeds.vx", speeds.vxMetersPerSecond);
+    // Apply the generated speed
+    setFieldSpeeds(speeds);
   }
 
   public void resetRotationPID() {
