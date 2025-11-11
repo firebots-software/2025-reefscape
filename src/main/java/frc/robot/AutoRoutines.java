@@ -183,7 +183,8 @@ public class AutoRoutines {
         autoCommandGroup.addCommands(bottomTraj.get(0).resetOdometry());
         numPaths = bottomNames.size();
         break;
-      case "test": 
+      case "test":
+        DogLog.log("Auto/Returning-Auto-Routine", chosenAuto);
         return simpleTest();
 
       default:

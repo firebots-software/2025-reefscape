@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -44,8 +45,6 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import choreo.auto.AutoFactory;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -93,7 +92,14 @@ public class RobotContainer {
             true, // If alliance flipping should be enabled
             driveTrain);
 
-    autoRoutines = new AutoRoutines(autoFactory, driveTrain, elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem, redside);
+    autoRoutines =
+        new AutoRoutines(
+            autoFactory,
+            driveTrain,
+            elevatorSubsystem,
+            tootsieSlideSubsystem,
+            funnelSubsystem,
+            redside);
 
     // Set up the Auto chooser in SmartDashboard, which allows you to choose between the Top,
     // Middle, and Bottom auto paths
@@ -492,7 +498,7 @@ public class RobotContainer {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
     DogLog.log("Auto/Get-Auto-Command", "Called");
     return autoRoutines.autoRoutine(startPosChooser.getSelected()).cmd();
-    // return autoChooser.selectedCommandScheduler();
+    //return autoChooser.selectedCommandScheduler();
     // return null;
   }
 

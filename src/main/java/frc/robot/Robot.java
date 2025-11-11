@@ -93,10 +93,11 @@ public class Robot extends TimedRobot {
             funnelSubsystem,
             redside);
     autoChooser = new AutoChooser();
+    autoChooser.addRoutine("Test", autoRoutines::simpleTest);
     autoChooser.addRoutine("Next to allied barge zone", autoRoutines::topAutoRoutine);
     autoChooser.addRoutine("Between blue and red barge zones", autoRoutines::middleAutoRoutine);
     autoChooser.addRoutine("Next to opposing barge zone", autoRoutines::bottomAutoRoutine);
-    SmartDashboard.putData("autochooser", autoChooser);
+    //SmartDashboard.putData("autochooser", autoChooser);
     absoluteInit();
 
     DogLog.log("Auto/CommandIsNull", true);
