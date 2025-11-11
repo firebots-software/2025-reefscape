@@ -148,7 +148,6 @@ public class Robot extends TimedRobot {
       CommandScheduler.getInstance()
           .schedule(new ZeroElevatorHardStop(ElevatorSubsystem.getInstance()));
     }
-
     // CommandScheduler.getInstance();
     // .schedule(zeroArm); // TODO: Fix this to not expose the CommandScheduler
   }
