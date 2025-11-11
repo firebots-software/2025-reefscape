@@ -118,7 +118,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     m2Config.apply(moc);
     
     master = motor1;
-    currentHeightToF = elevatorFilter.calculate(getToFDistance());
+    currentHeightToF = 0f;//elevatorFilter.calculate(getToFDistance());
     resetPositionFiltered();
   }
 
@@ -285,8 +285,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double getToFDistance() {
     // 0.11 is the sensor offset
     DogLog.log(
-        "subsystems/Elevator/ToF/DistanceNoOffset", distance.getDistance().getValueAsDouble());
-    return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
+        "subsystems/Elevator/ToF/DistanceNoOffset", 0f/*distance.getDistance().getValueAsDouble()*/);
+    return 0f;
+    //return distance.getDistance().getValueAsDouble() - Constants.ElevatorConstants.SENSOR_OFFSET;
   }
 
   public boolean isElevatorZeroed() {
