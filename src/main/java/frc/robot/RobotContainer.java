@@ -109,7 +109,7 @@ public class RobotContainer {
     startPosChooser.addOption("Middle (between blue and red barge zones)", "middle");
     startPosChooser.addOption("Bottom (next to red barge zone)", "bottom");
     startPosChooser.addOption("Test (next to red barge zone)", "test");
-    SmartDashboard.putData(startPosChooser);
+    //SmartDashboard.putData(startPosChooser);
 
     configureBindings();
   }
@@ -497,7 +497,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
     DogLog.log("Auto/Get-Auto-Command", "Called");
-    return autoRoutines.autoRoutine(startPosChooser.getSelected()).cmd();
+    return autoRoutines.simpleTest().cmd();
+    //return autoRoutines.autoRoutine(startPosChooser.getSelected()).cmd();
     //return autoChooser.selectedCommandScheduler();
     // return null;
   }

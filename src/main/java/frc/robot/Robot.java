@@ -246,17 +246,17 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     AutoRoutines.setIsAutoRunning(true);
     RobotContainer.setAlliance();
-    // DogLog.log("Auto/CommandIsNull", true);
-    // DogLog.log("Auto/CommandScheduled", false);
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand(); // UNCOMMENT
+    DogLog.log("Auto/CommandIsNull", true);
+    DogLog.log("Auto/CommandScheduled", false);
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand(); // UNCOMMENT
 
     // // schedule the autonomous command (example) (UNCOMMENT)
-    // if (m_autonomousCommand != null) {
-    //   DogLog.log("Auto/CommandIsNull", false);
-    //   // m_autonomousCommand.schedule();
-    //   RobotModeTriggers.autonomous().whileTrue(m_autonomousCommand);
-    //   DogLog.log("Auto/CommandScheduled", true);
-    // }
+    if (m_autonomousCommand != null) {
+      DogLog.log("Auto/CommandIsNull", false);
+      m_autonomousCommand.schedule();
+      RobotModeTriggers.autonomous().whileTrue(m_autonomousCommand);
+      DogLog.log("Auto/CommandScheduled", true);
+    }
   }
 
   /** This function is called periodically during autonomous. */

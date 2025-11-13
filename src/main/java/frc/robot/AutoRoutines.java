@@ -4,10 +4,13 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
@@ -135,6 +138,7 @@ public class AutoRoutines {
     // autoCommandGroup.addCommands(new SetIsAutoRunningToFalse());
 
     // Bind the Auto SequentialCommandGroup to run when the routine is activated
+    DogLog.log("Auto/Running", "nothing");
     testRoutine
         .active()
         .onTrue(
@@ -142,7 +146,8 @@ public class AutoRoutines {
                 firstPathBottom
                     .resetOdometry()
                     .alongWith(new DogLogCmd("Auto/Running", "resetOdo")),
-                firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath"))));
+                firstPathBottom.cmd().alongWith(new DogLogCmd("Auto/Running", "firstPath"))
+                .andThen(new InstantCommand(() -> driveTrain.setFieldSpeeds(new ChassisSpeeds(0,0, 0))))));
 
     DogLog.log("Auto/Simple-Test-Constructor", "Ran");
     // DogLog.log("Auto/Returning-Num-Paths", numPaths);
