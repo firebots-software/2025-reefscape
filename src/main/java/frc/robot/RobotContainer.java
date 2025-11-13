@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.AutoRoutines.AutoProducer;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.JamesHardenScore;
@@ -30,12 +29,10 @@ import frc.robot.commandGroups.RunFunnelUntilDetectionSafeSmooth;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
 import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
-import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -233,11 +230,10 @@ public class RobotContainer {
 
     // Dale
     joystick
-        .rightBumper()
-        .whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L3DALE));
-    joystick
-        .leftBumper()
-        .whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
+        .x()
+        .whileTrue(
+            new RunFunnelOutCommand(funnelSubsystem, () -> joystick.rightTrigger().getAsBoolean()));
+    joystick.y().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2, false));
 
     // Zero Rotations
     joystick
@@ -280,19 +276,7 @@ public class RobotContainer {
     funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false));
     funnelCheckin.onTrue(
         new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
-    Trigger funnelCheckout =
-        new Trigger(
-                () ->
-                    CoralPosition.isCoralInFunnel()
-                        && elevatorSubsystem.atIntake()
-                        && elevatorSubsystem.isAtPosition())
-            .and(RobotModeTriggers.teleop());
 
-    funnelCheckout
-        .and(joystick.rightTrigger().negate())
-        .onTrue(
-            new TransferPieceBetweenFunnelAndElevator(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
     Trigger coralInElevator =
         new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
     coralInElevator.onTrue(
@@ -354,11 +338,13 @@ public class RobotContainer {
 
     // IMPORTANT
     // joystick.a().whileTrue(new ShootL1(elevatorSubsystem, tootsieSlideSubsystem));
+    /*
+    if (joystick.b().equals(true)) {
+        elevatorSubsystem.setHeight();
+    }
+    */
 
-    joystick
-        .b()
-        .whileTrue(
-            new PutUpAndShoot(elevatorSubsystem, tootsieSlideSubsystem, ElevatorPositions.L3));
+    joystick.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false));
     joystick
         .povUp()
         .whileTrue(
@@ -380,8 +366,8 @@ public class RobotContainer {
     //         driveTrain.runOnce(
     //             () -> driveTrain.resetPose(new Pose2d(new Translation2d(0, 0), new
     // Rotation2d()))));
-
-    joystick.x().onTrue(new ZeroElevatorHardStop(elevatorSubsystem));
+    ///////////////////////////////////////////////////////////////////////////////
+    /// //
 
     // new InstantCommand()
 

@@ -1,7 +1,6 @@
 package frc.robot.commands.SwerveCommands;
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 
