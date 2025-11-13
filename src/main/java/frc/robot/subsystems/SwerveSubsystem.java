@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import choreo.trajectory.SwerveSample;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -12,8 +13,6 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
-import choreo.trajectory.SwerveSample;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
@@ -99,8 +98,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     qProfiledPIDController.setIZone(Constants.HardenConstants.QIZONE);
     headingProfiledPIDController.setIZone(Constants.HardenConstants.HIZONE);
 
-    qProfiledPIDController.setIntegratorRange(Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
-    headingProfiledPIDController.setIntegratorRange(Constants.HardenConstants.HIRANGE_LOWER, Constants.HardenConstants.HIRANGE_UPPER); // 0.3 before
+    qProfiledPIDController.setIntegratorRange(
+        Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
+    headingProfiledPIDController.setIntegratorRange(
+        Constants.HardenConstants.HIRANGE_LOWER,
+        Constants.HardenConstants.HIRANGE_UPPER); // 0.3 before
 
     headingProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     // configureAutoBuilder();
@@ -194,7 +196,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     return (qDirection.getCos() * getFieldSpeeds().vxMetersPerSecond)
         + (qDirection.getSin() * getFieldSpeeds().vyMetersPerSecond);
   }
-
 
   public void followTrajectory(SwerveSample sample) {
     // Get the current pose of the robot

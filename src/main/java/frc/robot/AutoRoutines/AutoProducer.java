@@ -3,39 +3,17 @@ package frc.robot.AutoRoutines;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-
-
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
-import frc.robot.Constants.LandmarkPose;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
-import frc.robot.commandGroups.PutUpAndShoot;
-import frc.robot.commands.DaleCommands.ZeroArm;
-import frc.robot.commands.ElevatorCommands.ElevatorHoldL4;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
-import frc.robot.commands.ElevatorCommands.SetElevatorLevelInstant;
-import frc.robot.commands.ElevatorCommands.ZeroElevatorHardStop;
-import frc.robot.commands.EndWhenCloseEnough;
-import frc.robot.commands.FunnelCommands.CoralCheckedIn;
-import frc.robot.commands.SwerveCommands.JamesHardenMovement;
-import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
-import java.util.List;
 
 public class AutoProducer {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
@@ -49,50 +27,64 @@ public class AutoProducer {
 
   private final AutoFactory autoFactory;
 
-
   public AutoProducer(
       SwerveSubsystem driveTrain,
       TootsieSlideSubsystem shooter,
       ElevatorSubsystem elevator,
       FunnelSubsystem funnel,
       ArmSubsystem arm,
-      LedSubsystem leds) { //List<LandmarkPose> autoInformation,
-        this.driveTrain=driveTrain;
-        this.shooter=shooter;
-        this.elevator=elevator;
-        this.funnel=funnel;
-        this.arm=arm;
-        this.leds=leds;
+      LedSubsystem leds) { // List<LandmarkPose> autoInformation,
+    this.driveTrain = driveTrain;
+    this.shooter = shooter;
+    this.elevator = elevator;
+    this.funnel = funnel;
+    this.arm = arm;
+    this.leds = leds;
 
-        autoFactory = new AutoFactory(driveTrain::getPose, driveTrain::resetPose, driveTrain::followTrajectory, true, driveTrain);
+    autoFactory =
+        new AutoFactory(
+            driveTrain::getPose,
+            driveTrain::resetPose,
+            driveTrain::followTrajectory,
+            true,
+            driveTrain);
+  }
 
-      }
-    
-    public AutoRoutine getRoutine(int autoValue) {
-      AutoRoutine curr = null;
-      switch (autoValue) {
-        case 1:
-          curr = topRed();
-          break;
-      }
-      return curr;
+  public AutoRoutine getRoutine(int autoValue) {
+    AutoRoutine curr = null;
+    switch (autoValue) {
+      case 1:
+        curr = topRed();
+        break;
     }
+    return curr;
+  }
 
-    private AutoRoutine topRed() {
-      AutoRoutine routine = autoFactory.newRoutine("CR7");
-      AutoTrajectory topRed = routine.trajectory("TR.traj");
+  private AutoRoutine topRed() {
+    AutoRoutine routine = autoFactory.newRoutine("CR7");
+    AutoTrajectory topRed = routine.trajectory("TR.traj");
 
-      routine.active().onTrue(Commands.sequence(topRed.resetOdometry(), topRed.cmd()));
+    routine
+        .active()
+        .onTrue(Commands.sequence(topRed.resetOdometry(), topRed.cmd())); // maybe delete
 
-      topRed.atTime("shoot1").onTrue(new JamesHardenScore(elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, leds));
-      topRed.atTime("intake1").onTrue(new Intake(elevator, funnel, shooter, leds));
-      topRed.done().onTrue(new JamesHardenScore(elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, leds));
-      // topRed.atTime("shoot2").onTrue(new JamesHardenScore(elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, leds));
+    topRed
+        .atTime("shoot1")
+        .onTrue(
+            new JamesHardenScore(
+                elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, leds));
+    topRed.atTime("intake1").onTrue(new Intake(elevator, funnel, shooter, leds));
+    topRed
+        .done()
+        .onTrue(
+            new JamesHardenScore(
+                elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, leds));
+    // topRed.atTime("shoot2").onTrue(new JamesHardenScore(elevator, shooter, driveTrain,
+    // ElevatorPositions.L4, () -> true, true, leds));
 
-      return routine;
-    }
+    return routine;
+  }
 }
-
 
     // // first score
     // addCommands(
@@ -145,8 +137,10 @@ public class AutoProducer {
 //       DogLog.log("Commands/JamesHardenScore/Errors", "Called without a real branch");
 //       return;
 //     }
-//     movementCommand = JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, false);
-//     maintainCommand = JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, true);
+//     movementCommand = JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition,
+// false);
+//     maintainCommand = JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition,
+// true);
 
 //     addCommands(
 //         new ParallelCommandGroup(
@@ -168,7 +162,8 @@ public class AutoProducer {
 //                 movementCommand.withTimeout(5.0))), // Added timeout to movement command
 //         // When the elevator is up and when the movement command is done, then do the following
 //         new ElevatorHoldL4(elevator).withTimeout(0.25),
-//         new ParallelDeadlineGroup(new ShootTootsieSlide(shooter).withTimeout(0.5), maintainCommand),
+//         new ParallelDeadlineGroup(new ShootTootsieSlide(shooter).withTimeout(0.5),
+// maintainCommand),
 //         new SetElevatorLevelInstant(
 //             elevator, ElevatorPositions.Intake)); // sets elevator back to intake when finished
 //   }

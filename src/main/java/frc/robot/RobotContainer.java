@@ -4,10 +4,7 @@
 
 package frc.robot;
 
-import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
-import choreo.auto.AutoTrajectory;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -50,7 +47,6 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import frc.robot.Robot;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -94,17 +90,24 @@ public class RobotContainer {
 
   public RobotContainer() {
     autoChooser.setDefaultOption("Nothing", 0);
-    autoChooser.addOption("Processor 3", 1);
-    autoChooser.addOption("Processor 2", 2);
-    autoChooser.addOption("Processor 1", 3);
-    autoChooser.addOption("Clear 3", 4);
-    autoChooser.addOption("Clear 2", 5);
-    autoChooser.addOption("Clear 1", 6);
-    autoChooser.addOption("Mid 1", 7);
+    autoChooser.addOption("topRed", 1);
+    // autoChooser.addOption("Processor 2", 2);
+    // autoChooser.addOption("Processor 1", 3);
+    // autoChooser.addOption("Clear 3", 4);
+    // autoChooser.addOption("Clear 2", 5);
+    // autoChooser.addOption("Clear 1", 6);
+    // autoChooser.addOption("Mid 1", 7);
     SmartDashboard.putData("Auto Side Choices", autoChooser);
     configureBindings();
 
-    autoProducer = new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, leds);
+    autoProducer =
+        new AutoProducer(
+            driveTrain,
+            tootsieSlideSubsystem,
+            elevatorSubsystem,
+            funnelSubsystem,
+            armSubsystem,
+            leds);
   }
 
   public void teleopInit() {
@@ -493,151 +496,151 @@ public class RobotContainer {
     return routine != null ? routine.cmd() : null;
   }
 
-    // switch (autoValue) {
-    //   case 1:
-    //     autoCommand =
-    //         redside.getAsBoolean()
-    //             ? new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.RED_PROCESSOR_3,
-    //                 leds)
-    //             : new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.BLUE_PROCESSOR_3,
-    //                 leds);
-    //     break;
-    //   case 2:
-    //     autoCommand =
-    //         redside.getAsBoolean()
-    //             ? new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.RED_PROCESSOR_2,
-    //                 leds)
-    //             : new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.BLUE_PROCESSOR_2,
-    //                 leds);
-    //     break;
-    //   case 3:
-    //     autoCommand =
-    //         redside.getAsBoolean()
-    //             ? new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.RED_PROCESSOR_1,
-    //                 leds)
-    //             : new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.BLUE_PROCESSOR_1,
-    //                 leds);
-    //     break;
-    //   case 4:
-    //     autoCommand =
-    //         redside.getAsBoolean()
-    //             ? new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.RED_CLEAR_3,
-    //                 leds)
-    //             : new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.BLUE_CLEAR_3,
-    //                 leds);
-    //     break;
-    //   case 5:
-    //     autoCommand =
-    //         redside.getAsBoolean()
-    //             ? new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.RED_CLEAR_2,
-    //                 leds)
-    //             : new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.BLUE_CLEAR_2,
-    //                 leds);
-    //     break;
-    //   case 6:
-    //     autoCommand =
-    //         redside.getAsBoolean()
-    //             ? new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.RED_CLEAR_1,
-    //                 leds)
-    //             : new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.BLUE_CLEAR_1,
-    //                 leds);
-    //     break;
-    //   case 7:
-    //     autoCommand =
-    //         redside.getAsBoolean()
-    //             ? new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.RED_MID_1,
-    //                 leds)
-    //             : new AutoProducer(
-    //                 driveTrain,
-    //                 tootsieSlideSubsystem,
-    //                 elevatorSubsystem,
-    //                 funnelSubsystem,
-    //                 armSubsystem,
-    //                 Constants.AutoRoutines.BLUE_MID_1,
-    //                 leds);
-    //     break;
-    //   default:
-    //     autoCommand = null;
-    //     break;
-    // }
-    // return autoCommand;
-//   }
+  // switch (autoValue) {
+  //   case 1:
+  //     autoCommand =
+  //         redside.getAsBoolean()
+  //             ? new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.RED_PROCESSOR_3,
+  //                 leds)
+  //             : new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.BLUE_PROCESSOR_3,
+  //                 leds);
+  //     break;
+  //   case 2:
+  //     autoCommand =
+  //         redside.getAsBoolean()
+  //             ? new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.RED_PROCESSOR_2,
+  //                 leds)
+  //             : new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.BLUE_PROCESSOR_2,
+  //                 leds);
+  //     break;
+  //   case 3:
+  //     autoCommand =
+  //         redside.getAsBoolean()
+  //             ? new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.RED_PROCESSOR_1,
+  //                 leds)
+  //             : new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.BLUE_PROCESSOR_1,
+  //                 leds);
+  //     break;
+  //   case 4:
+  //     autoCommand =
+  //         redside.getAsBoolean()
+  //             ? new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.RED_CLEAR_3,
+  //                 leds)
+  //             : new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.BLUE_CLEAR_3,
+  //                 leds);
+  //     break;
+  //   case 5:
+  //     autoCommand =
+  //         redside.getAsBoolean()
+  //             ? new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.RED_CLEAR_2,
+  //                 leds)
+  //             : new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.BLUE_CLEAR_2,
+  //                 leds);
+  //     break;
+  //   case 6:
+  //     autoCommand =
+  //         redside.getAsBoolean()
+  //             ? new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.RED_CLEAR_1,
+  //                 leds)
+  //             : new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.BLUE_CLEAR_1,
+  //                 leds);
+  //     break;
+  //   case 7:
+  //     autoCommand =
+  //         redside.getAsBoolean()
+  //             ? new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.RED_MID_1,
+  //                 leds)
+  //             : new AutoProducer(
+  //                 driveTrain,
+  //                 tootsieSlideSubsystem,
+  //                 elevatorSubsystem,
+  //                 funnelSubsystem,
+  //                 armSubsystem,
+  //                 Constants.AutoRoutines.BLUE_MID_1,
+  //                 leds);
+  //     break;
+  //   default:
+  //     autoCommand = null;
+  //     break;
+  // }
+  // return autoCommand;
+  //   }
 }
