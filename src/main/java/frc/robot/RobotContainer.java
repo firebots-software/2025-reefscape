@@ -491,7 +491,10 @@ public class RobotContainer {
     int autoValue = autoChooser.getSelected();
 
     AutoRoutine routine = autoProducer.getRoutine(autoValue);
+
+
     DogLog.log("Info/AutoSelected", autoValue);
+    DogLog.log("Info/move", routine!=null);
 
     return routine != null ? routine.cmd() : null;
   }

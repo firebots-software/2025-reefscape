@@ -3,6 +3,8 @@ package frc.robot.AutoRoutines;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import dev.doglog.DogLog;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -61,9 +63,11 @@ public class AutoProducer {
   }
 
   private AutoRoutine topRed() {
-    AutoRoutine routine = autoFactory.newRoutine("CR7");
-    AutoTrajectory topRed = routine.trajectory("TR.traj");
+    AutoRoutine routine = autoFactory.newRoutine("CR7.chor");
+  
 
+    AutoTrajectory topRed = routine.trajectory("TR.traj");
+    
     routine
         .active()
         .onTrue(Commands.sequence(topRed.resetOdometry(), topRed.cmd())); // maybe delete
@@ -79,6 +83,11 @@ public class AutoProducer {
         .onTrue(
             new JamesHardenScore(
                 elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, leds));
+
+
+
+    
+
     // topRed.atTime("shoot2").onTrue(new JamesHardenScore(elevator, shooter, driveTrain,
     // ElevatorPositions.L4, () -> true, true, leds));
 

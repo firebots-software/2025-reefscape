@@ -66,7 +66,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             ElevatorConstants.MOTOR2_PORT,
             Constants.Swerve.WHICH_SWERVE_ROBOT.CANBUS_NAME);
 
-    currentLevel = ElevatorPositions.Intake;
+    // currentLevel = ElevatorPositions.Intake;
 
     // Set up motor followers and deal with inverted motors
     Follower follower = new Follower(ElevatorConstants.MOTOR1_PORT, false);
