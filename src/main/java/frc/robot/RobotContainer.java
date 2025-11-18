@@ -45,6 +45,7 @@ import frc.robot.subsystems.TootsieSlideSubsystem;
 import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
@@ -497,10 +498,48 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
     DogLog.log("Auto/Get-Auto-Command", "Called");
-    return autoRoutines.simpleTest().cmd();
+
+    BinaryPathNode head = 
+
+    new BinaryPathNode("top", null).withChildren(() -> (startPosChooser.getSelected().equals("top")), 
+
+        new BinaryPathNode("top1", null).withChildren(
+
+            new BinaryPathNode("top2", null).withChildren(joystick.x(), 
+                
+                null,
+                
+                null
+
+            )
+
+        ), 
+    
+        new BinaryPathNode("middle", null).withChildren(() -> (startPosChooser.getSelected().equals("middle")), 
+            
+            null, 
+
+            new BinaryPathNode("bottom", null).withChildren(
+                null
+
+            )
+
+        )
+        
+    );
+
+    return commandFromHead(() -> head);
+
+    //return autoRoutines.simpleTest().cmd();
     //return autoRoutines.autoRoutine(startPosChooser.getSelected()).cmd();
     //return autoChooser.selectedCommandScheduler();
     // return null;
+    // autoroutineutils(headPathNode, autosubcommandholder);
+  }
+
+  public Command commandFromHead(Supplier<BinaryPathNode> head) {
+    if (head.get().nextPath() == null) return null;
+    return head.get().command().andThen(commandFromHead(() -> head.get().nextPath()));
   }
 
   //   public void testAutoCommands() {}

@@ -225,49 +225,6 @@ public class AutoRoutines {
    *     in the constructor.
    */
   public Command autoSubCommand(String chosenAuto, int index) {
-    /*
-    AutoSubCommand creates a Command Group, which is a combination of the robot's swerve motion and necessary mechanism action.
-
-    ----- Old Structure (not using configureBindings()): -----
-
-    Sequential (
-      Parallel (
-        Follow Trajectory,
-        Sequential (
-          Intake-To-Tootsie (if Start or leaving HPS)
-          Elevator: Intake (if going to HPS) or L4 (if Start or leaving HPS)
-        )
-      ),
-      Wait-For-Coral / Shoot-Coral
-    )
-
-    ----- New Structure 1 (using configureBindings()): -----
-
-    (actually i don't think making an Auto that relies on the default bindings is ideal or even possible;
-    we would have to alter the triggers and commands in configureBindings() a lot in order to get it to work properly)
-
-    ----- New Structure 2 (not using configureBindings()): -----
-
-    Sequential (
-      Intake-To-Tootsie (if Start or leaving HPS),
-      Elevator: Safe Position, // we only want to move with the elevator down at the Safe position
-      Follow Trajectory,
-      if going to HPS (
-        Parallel (
-          Elevator: Intake // start moving Elevator to Intake to get ready for incoming Coral at HPS
-          Wait-For-Coral-Checkin // waiting for a Coral to hit Checkin sensor at the HPS
-        )
-      )
-      else if Start or leaving HPS (
-        Sequential (
-          Elevator: L4
-          Shoot-Coral
-        )
-      )
-    )
-
-    */
-
     String trajName; // Name of the .traj file that corresponds to chosenAuto and index
     AutoTrajectory trajectory; // Corresponding AutoTrajectory from the ArrayList initialized in the
     // constructor
@@ -330,24 +287,6 @@ public class AutoRoutines {
                     redside,
                     goRightBranch)));
 
-    // Command oldStructure =  Commands.parallel(
-    //         trajectory.cmd(),
-    //         Commands.sequence(
-    //             new LoadAndPutUp(
-    //                     elevatorSubsystem,
-    //                     funnelSubsystem,
-    //                     tootsieSlideSubsystem,
-    //                     ElevatorPositions.Intake)
-    //                 .onlyIf(() -> !pathGoesToHPS.getAsBoolean()), // LoadAndPutUp(Intake) only if
-    // the path does NOT go to the HPS. Should run on Start path
-    //             ((pathGoesToHPS.getAsBoolean())
-    //                 ? new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake)
-    //                 : new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L4))))
-    //     .andThen(
-    //         (pathGoesToHPS.getAsBoolean())
-    //             ? new RunFunnelUntilCheckedIn(funnelSubsystem)
-    //             : new AutoLiftAndShoot(elevatorSubsystem, tootsieSlideSubsystem));
-
     DogLog.log("Auto/AutoSubCommand-ran", true);
 
     return newStructure2;
@@ -361,11 +300,3 @@ public class AutoRoutines {
     return isAutoRunning;
   }
 }
-
-// Commands we should use for Auto:
-// new SetElevatorLevel // Intake
-// new RunFunnelUntilDetectionSafe
-// new TransferPieceBetweenFunnelAndElevator
-// new SetElevatorLevel // L4
-// new ShootTootsieSlide
-// new SetElevatorLevel // Intake
