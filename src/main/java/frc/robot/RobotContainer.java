@@ -528,18 +528,26 @@ public class RobotContainer {
         
     );
 
-    return commandFromHead(() -> head);
+    AutoSubCommandHolder subCommandHolder = new AutoSubCommandHolder();
+
+    AutoFactory autoFactory =
+        new AutoFactory(
+            driveTrain::getPose, // A function that returns the current robot pose
+            driveTrain
+                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            driveTrain::followTrajectory, // The drive subsystem trajectory follower
+            true, // If alliance flipping should be enabled
+            driveTrain);
+
+    AutoRoutineUtils autoRoutineUtils = new AutoRoutineUtils(head, subCommandHolder, autoFactory);
+
+    return autoRoutineUtils.commandFromHead(() -> head);
 
     //return autoRoutines.simpleTest().cmd();
     //return autoRoutines.autoRoutine(startPosChooser.getSelected()).cmd();
     //return autoChooser.selectedCommandScheduler();
     // return null;
     // autoroutineutils(headPathNode, autosubcommandholder);
-  }
-
-  public Command commandFromHead(Supplier<BinaryPathNode> head) {
-    if (head.get().nextPath() == null) return null;
-    return head.get().command().andThen(commandFromHead(() -> head.get().nextPath()));
   }
 
   //   public void testAutoCommands() {}
