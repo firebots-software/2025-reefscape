@@ -195,13 +195,13 @@ public class FunnelSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    DogLog.log("subsystems/Funnel/CheckedInStatus", isCoralCheckedIn());
-    DogLog.log("subsystems/Funnel/CheckedOutStatus", isCoralCheckedOut());
-    DogLog.log("subsystems/Funnel/DrakeStatus", drakeTripped());
+    DogLog.log("Subsystems/Funnel/CheckedInStatus", isCoralCheckedIn());
+    DogLog.log("Subsystems/Funnel/CheckedOutStatus", isCoralCheckedOut());
+    DogLog.log("Subsystems/Funnel/DrakeStatus", drakeTripped());
     // DogLog.log("subsystems/Funnel/FunnelVelocity", rightMotor.getVelocity().getValueAsDouble());
-    DogLog.log("subsystems/Funnel/AbsPositionalError", getAbsolutePositionalError());
+    DogLog.log("Subsystems/Funnel/AbsPositionalError", getAbsolutePositionalError());
     DogLog.log(
-        "subsystems/Funnel/command",
+        "Subsystems/Funnel/command",
         this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 

@@ -77,7 +77,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
 
   private void runTootsieAtRPS(double flywheelSpeed) {
     double motor_speed = flywheelSpeed / Constants.TootsieSlide.GEAR_RATIO;
-    DogLog.log("subsystems/tootsieslide/Target Motor Speed", motor_speed);
+    DogLog.log("Subsystems/tootsieslide/Target Motor Speed", motor_speed);
     master.setControl(m_velocity.withVelocity(motor_speed));
 
     m_flywheelSim.setInputVoltage(master.getSupplyVoltage().getValueAsDouble());
@@ -113,7 +113,7 @@ public class TootsieSlideSubsystem extends SubsystemBase {
     // DogLog.log("subsystems/tootsieslide/tootsieVelocity",
     // master.getVelocity().getValueAsDouble());
     DogLog.log(
-        "subsystems/tootsieslide/command",
+        "Subsystems/tootsieslide/command",
         this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 

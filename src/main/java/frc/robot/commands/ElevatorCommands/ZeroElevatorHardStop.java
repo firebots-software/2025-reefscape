@@ -10,7 +10,7 @@ public class ZeroElevatorHardStop extends Command {
 
   public ZeroElevatorHardStop(ElevatorSubsystem subsystem) {
     elevatorSubsystem = subsystem;
-    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/running", false);
+    DogLog.log("Commands/ZeroElevatorHardStop/Running", false);
     addRequirements(elevatorSubsystem);
   }
 
@@ -18,7 +18,7 @@ public class ZeroElevatorHardStop extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.reduceCurrentLimits();
-    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/running", true);
+    DogLog.log("Commands/ZeroElevatorHardStop/Running", true);
     timesExceededCurrent = 0;
   }
 
@@ -32,7 +32,7 @@ public class ZeroElevatorHardStop extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/running", false);
+    DogLog.log("Commands/ZeroElevatorHardStop/Running", false);
     if (!interrupted) {
       elevatorSubsystem.resetElevatorPositionToZero();
     }
@@ -43,9 +43,9 @@ public class ZeroElevatorHardStop extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/timesExceededCount", timesExceededCurrent);
+    DogLog.log("Commands/ZeroElevatorHardStop/timesExceededCurrent", timesExceededCurrent);
     boolean checkCurrent = elevatorSubsystem.checkCurrent();
-    DogLog.log("subsystems/Elevator/ZeroElevatorHardStop/checkcurrent", checkCurrent);
+    DogLog.log("Commands/ZeroElevatorHardStop/checkCurrent", checkCurrent);
     if (checkCurrent) {
       timesExceededCurrent++;
     } else {
