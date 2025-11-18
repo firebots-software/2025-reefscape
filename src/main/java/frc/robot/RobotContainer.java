@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -47,10 +48,14 @@ import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+
 public class RobotContainer {
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 
+  private final AutoFactory autoFactory;
   TootsieSlideSubsystem tootsieSlideSubsystem = TootsieSlideSubsystem.getInstance();
   FunnelSubsystem funnelSubsystem = FunnelSubsystem.getInstance();
   ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -96,6 +101,14 @@ public class RobotContainer {
     autoChooser.addOption("Mid 1", 7);
     SmartDashboard.putData("Auto Side Choices", autoChooser);
     configureBindings();
+
+    autoFactory = new AutoFactory(
+            driveTrain::getPose, // A function that returns the current robot pose
+            driveTrain::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            driveTrain::followTrajectory, // The drive subsystem trajectory follower 
+            true, // If alliance flipping should be enabled 
+            driveTrain // The drive subsystem
+        );
   }
 
   public void teleopInit() {
@@ -475,155 +488,161 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    AutoRoutine routine = autoFactory.newRoutine("exampleRoutine");
+
+     return Commands.sequence(
+        autoFactory.resetOdometry("BasicPath"),
+        autoFactory.trajectoryCmd("BasicPath")
+    );
     /* Run the path selected from the auto chooser */
-    int autoValue = autoChooser.getSelected();
-    Command autoCommand;
-    DogLog.log("Info/AutoSelected", autoValue);
-    switch (autoValue) {
-      case 1:
-        autoCommand =
-            redside.getAsBoolean()
-                ? new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.RED_PROCESSOR_3,
-                    leds)
-                : new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.BLUE_PROCESSOR_3,
-                    leds);
-        break;
-      case 2:
-        autoCommand =
-            redside.getAsBoolean()
-                ? new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.RED_PROCESSOR_2,
-                    leds)
-                : new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.BLUE_PROCESSOR_2,
-                    leds);
-        break;
-      case 3:
-        autoCommand =
-            redside.getAsBoolean()
-                ? new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.RED_PROCESSOR_1,
-                    leds)
-                : new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.BLUE_PROCESSOR_1,
-                    leds);
-        break;
-      case 4:
-        autoCommand =
-            redside.getAsBoolean()
-                ? new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.RED_CLEAR_3,
-                    leds)
-                : new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.BLUE_CLEAR_3,
-                    leds);
-        break;
-      case 5:
-        autoCommand =
-            redside.getAsBoolean()
-                ? new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.RED_CLEAR_2,
-                    leds)
-                : new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.BLUE_CLEAR_2,
-                    leds);
-        break;
-      case 6:
-        autoCommand =
-            redside.getAsBoolean()
-                ? new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.RED_CLEAR_1,
-                    leds)
-                : new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.BLUE_CLEAR_1,
-                    leds);
-        break;
-      case 7:
-        autoCommand =
-            redside.getAsBoolean()
-                ? new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.RED_MID_1,
-                    leds)
-                : new AutoProducer(
-                    driveTrain,
-                    tootsieSlideSubsystem,
-                    elevatorSubsystem,
-                    funnelSubsystem,
-                    armSubsystem,
-                    Constants.AutoRoutines.BLUE_MID_1,
-                    leds);
-        break;
-      default:
-        autoCommand = null;
-        break;
-    }
-    return autoCommand;
+    // int autoValue = autoChooser.getSelected();
+    // Command autoCommand;
+    // DogLog.log("Info/AutoSelected", autoValue);
+    // switch (autoValue) {
+    //   case 1:
+    //     autoCommand =
+    //         redside.getAsBoolean()
+    //             ? new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.RED_PROCESSOR_3,
+    //                 leds)
+    //             : new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.BLUE_PROCESSOR_3,
+    //                 leds);
+    //     break;
+    //   case 2:
+    //     autoCommand =
+    //         redside.getAsBoolean()
+    //             ? new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.RED_PROCESSOR_2,
+    //                 leds)
+    //             : new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.BLUE_PROCESSOR_2,
+    //                 leds);
+    //     break;
+    //   case 3:
+    //     autoCommand =
+    //         redside.getAsBoolean()
+    //             ? new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.RED_PROCESSOR_1,
+    //                 leds)
+    //             : new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.BLUE_PROCESSOR_1,
+    //                 leds);
+    //     break;
+    //   case 4:
+    //     autoCommand =
+    //         redside.getAsBoolean()
+    //             ? new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.RED_CLEAR_3,
+    //                 leds)
+    //             : new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.BLUE_CLEAR_3,
+    //                 leds);
+    //     break;
+    //   case 5:
+    //     autoCommand =
+    //         redside.getAsBoolean()
+    //             ? new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.RED_CLEAR_2,
+    //                 leds)
+    //             : new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.BLUE_CLEAR_2,
+    //                 leds);
+    //     break;
+    //   case 6:
+    //     autoCommand =
+    //         redside.getAsBoolean()
+    //             ? new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.RED_CLEAR_1,
+    //                 leds)
+    //             : new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.BLUE_CLEAR_1,
+    //                 leds);
+    //     break;
+    //   case 7:
+    //     autoCommand =
+    //         redside.getAsBoolean()
+    //             ? new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.RED_MID_1,
+    //                 leds)
+    //             : new AutoProducer(
+    //                 driveTrain,
+    //                 tootsieSlideSubsystem,
+    //                 elevatorSubsystem,
+    //                 funnelSubsystem,
+    //                 armSubsystem,
+    //                 Constants.AutoRoutines.BLUE_MID_1,
+    //                 leds);
+    //     break;
+    //   default:
+    //     autoCommand = null;
+    //     break;
+    // }
+    // return autoCommand;
   }
 }

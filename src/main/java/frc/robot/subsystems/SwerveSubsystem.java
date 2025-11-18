@@ -12,9 +12,12 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import choreo.trajectory.SwerveSample;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -42,6 +45,27 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     implements Subsystem {
   private static SwerveSubsystem instance;
 
+
+  private final PIDController xController = new PIDController(4.0, 0.0, 0.0);
+  private final PIDController yController = new PIDController(4.0, 0.0, 0.0);
+  private final PIDController headingController = new PIDController(3, 0.0, 0.0);
+
+
+    public void followTrajectory(SwerveSample sample) {
+        // Get the current pose of the robot
+        Pose2d pose = getPose();
+
+        // Generate the next speeds for the robot
+        ChassisSpeeds speeds = new ChassisSpeeds(
+            sample.vx + xController.calculate(pose.getX(), sample.x),
+            sample.vy + yController.calculate(pose.getY(), sample.y),
+            sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading)
+        );
+
+        // Apply the generated speeds
+        setFieldSpeeds(speeds);
+    }
+
   private ProfiledPIDController qProfiledPIDController, headingProfiledPIDController;
 
   private SwerveDriveState currentState;
@@ -67,6 +91,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     currentState = getState(); // getCurrentState
     // 1.7, 0.345, 0.0015
+    
+    // enable continuous for the controller
+    headingController.enableContinuousInput(-Math.PI, Math.PI);
+
     qProfiledPIDController =
         new ProfiledPIDController(
             Constants.HardenConstants.QKP, // 3.4 not bad // [3.4 good for 0.2-1.2, 0.425 I]
