@@ -69,9 +69,10 @@ public class AutoProducer {
     AutoRoutine routine = autoFactory.newRoutine("CR7.chor");
 
     AutoTrajectory topRed = routine.trajectory("TR.traj");
+    
     routine
         .active()
-        .onTrue(Commands.sequence( topRed.resetOdometry(), topRed.cmd())); // maybe delete
+        .onTrue(Commands.sequence( topRed.resetOdometry(), Commands.waitSeconds(0.1), topRed.cmd())); // maybe delete
 
     topRed
         .atTime("shoot1")
