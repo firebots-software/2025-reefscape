@@ -40,7 +40,7 @@ public class AnthonyVision extends SubsystemBase {
   // Data type is "Cameras", an enum defined in Constants.java with only two options (left, right)
   private final Constants.Vision.Cameras cameraId;
 
-  private String camTitle; 
+  private String camTitle;
   // Reef tag IDs for each side of the field
   private static final List<Integer> BLUE_SIDE_TAG_IDS = List.of(19, 20, 21, 22, 17, 18);
   private static final List<Integer> RED_SIDE_TAG_IDS = List.of(6, 7, 8, 9, 10, 11);
@@ -182,7 +182,7 @@ public class AnthonyVision extends SubsystemBase {
       DogLog.log("Vision/" + camTitle + "/ValidTags", false);
       return;
     }
-      DogLog.log("Vision/" + camTitle + "/ValidTags", true);
+    DogLog.log("Vision/" + camTitle + "/ValidTags", true);
 
     // Log all tags that haven't been thrown out
     int tagCount = validTags.size();
@@ -306,10 +306,18 @@ public class AnthonyVision extends SubsystemBase {
     double tagFactor = 1.0 / Math.sqrt(effectiveTags);
 
     // Distance term (keep as d^2)
-    // double distanceFactor = baseNoise + distanceExponentialCoefficient*Math.pow(distanceExponentialBase, distance);
+    // double distanceFactor = baseNoise +
+    // distanceExponentialCoefficient*Math.pow(distanceExponentialBase, distance);
 
-    double distanceFactor = (distance < (17.548+0.67)) ? Math.min(baseNoise + distanceExponentialCoefficient*Math.pow(distanceExponentialBase, distance), 1.167) : (baseNoise + distanceExponentialCoefficient*Math.pow(distanceExponentialBase, distance));
-    
+    double distanceFactor =
+        (distance < (17.548 + 0.67))
+            ? Math.min(
+                baseNoise
+                    + distanceExponentialCoefficient * Math.pow(distanceExponentialBase, distance),
+                1.167)
+            : (baseNoise
+                + distanceExponentialCoefficient * Math.pow(distanceExponentialBase, distance));
+
     // Speed term (quadratic, saturated)
     double vNorm = Math.min(robotSpeed, maximumRobotSpeed) / maximumRobotSpeed;
     double speedFactor = 1.0 + speedCoefficient * (vNorm * vNorm);
@@ -317,11 +325,10 @@ public class AnthonyVision extends SubsystemBase {
     DogLog.log("Vision/tagFactor", tagFactor);
     DogLog.log("Vision/distanceFactor", distanceFactor);
     DogLog.log("Vision/speedFactor", speedFactor);
-    
+
     double computedStdDevs = calibrationFactor * tagFactor * distanceFactor * speedFactor;
     return computedStdDevs;
   }
-
 
   private double computeNoiseHeading(
       double baseNoise,
