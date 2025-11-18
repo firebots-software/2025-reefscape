@@ -221,6 +221,21 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     setFieldSpeeds(speeds);
   }
 
+  public Command getFollowTrajectory(SwerveSample sample) {
+    return run(() -> {
+        Pose2d pose = getCurrentState().Pose;
+
+        ChassisSpeeds speeds =
+            new ChassisSpeeds(
+                sample.vx + qProfiledPIDController.calculate(pose.getX(), sample.x),
+                sample.vy + qProfiledPIDController.calculate(pose.getY(), sample.y),
+                sample.omega
+                    + headingProfiledPIDController.calculate(
+                        pose.getRotation().getRadians(), sample.heading));
+        setFieldSpeeds(speeds);
+    });
+  }
+
   public void resetRotationPID() {
     headingProfiledPIDController.reset(
         currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);

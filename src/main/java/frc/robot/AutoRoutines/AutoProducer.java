@@ -3,19 +3,17 @@ package frc.robot.AutoRoutines;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.wpilibj2.command.Commands;
-
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 
 public class AutoProducer {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
@@ -28,7 +26,6 @@ public class AutoProducer {
   private final LedSubsystem leds;
 
   private final AutoFactory autoFactory;
-
 
   public AutoProducer(
       SwerveSubsystem driveTrain,
@@ -48,7 +45,7 @@ public class AutoProducer {
         new AutoFactory(
             driveTrain::getPose,
             driveTrain::resetPose,
-            driveTrain::followTrajectory,
+            driveTrain::getFollowTrajectory,
             true,
             driveTrain);
   }
@@ -69,10 +66,10 @@ public class AutoProducer {
     AutoRoutine routine = autoFactory.newRoutine("CR7.chor");
 
     AutoTrajectory topRed = routine.trajectory("TR.traj");
-    
+
     routine
         .active()
-        .onTrue(Commands.sequence( topRed.resetOdometry(), Commands.waitSeconds(0.1), topRed.cmd())); // maybe delete
+        .onTrue(Commands.sequence(topRed.resetOdometry(), topRed.cmd())); // maybe delete
 
     topRed
         .atTime("shoot1")

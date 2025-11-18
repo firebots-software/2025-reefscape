@@ -21,11 +21,11 @@ import frc.robot.AutoRoutines.AutoProducer;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.util.CustomController;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -72,7 +72,13 @@ public class RobotContainer {
 
   public RobotContainer() {
     autoProducer =
-        new AutoProducer(driveTrain, tootsieSlideSubsystem, elevatorSubsystem, funnelSubsystem, armSubsystem, leds);
+        new AutoProducer(
+            driveTrain,
+            tootsieSlideSubsystem,
+            elevatorSubsystem,
+            funnelSubsystem,
+            armSubsystem,
+            leds);
 
     autoChooser.setDefaultOption("Nothing", 0);
     autoChooser.addOption("topRed", 1);
@@ -474,7 +480,7 @@ public class RobotContainer {
 
     AutoRoutine routine = autoProducer.getRoutine(autoValue);
 
-    DogLog.log("Auto/SelectedRoutine", routine != null? routine.toString() : "None");
+    DogLog.log("Auto/SelectedRoutine", routine != null ? routine.toString() : "None");
 
     return routine != null ? routine.cmd() : null;
   }
