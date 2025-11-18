@@ -3,6 +3,8 @@ package frc.robot.AutoRoutines;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import dev.doglog.DogLog;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -45,7 +47,7 @@ public class AutoProducer {
         new AutoFactory(
             driveTrain::getPose,
             driveTrain::resetPose,
-            driveTrain::getFollowTrajectory,
+            driveTrain::followTrajectory,
             true,
             driveTrain);
   }
@@ -59,6 +61,8 @@ public class AutoProducer {
       default:
         curr = null;
     }
+
+    DogLog.log("Auto/AutoRoutineinAutoProducer", curr != null ? "YES! THERE IS A ROUTINE!" : "NO ROUTINE DETECTED");
     return curr;
   }
 
@@ -69,19 +73,30 @@ public class AutoProducer {
 
     routine
         .active()
-        .onTrue(Commands.sequence(topRed.resetOdometry(), topRed.cmd())); // maybe delete
+        .onTrue(Commands.sequence(topRed.resetOdometry())); // maybe delete
 
-    topRed
-        .atTime("shoot1")
-        .onTrue(
-            new JamesHardenScore(
-                elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, leds));
-    topRed.atTime("intake1").onTrue(new Intake(elevator, funnel, shooter, leds));
-    topRed
-        .done()
-        .onTrue(
-            new JamesHardenScore(
-                elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, leds));
+    DogLog.log("Auto/ODOIsReset", driveTrain.getPose());
+      
+    // DogLog.log("Auto/routineinAutoProducer", routine != null ? "GOOD ODO!!!" : "RESET ODO");
+
+    // topRed
+    //     .atTime("shoot1")
+    //     .onTrue(
+    //         new JamesHardenScore(
+    //             elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, leds));
+                
+    // DogLog.log("Auto/topRedinAutoProducer", "SHOOT DONE1111");
+
+    // topRed.atTime("intake1").onTrue(new Intake(elevator, funnel, shooter, leds));
+
+    // topRed
+    //     .done()
+    //     .onTrue(
+    //         new JamesHardenScore(
+    //             elevator, shooter, driveTrain, ElevatorPositions.L4, () -> true, true, leds));
+
+
+    // DogLog.log("Auto/JamesHardenTopRed", "SHOOTED");
 
     // topRed.atTime("shoot2").onTrue(new JamesHardenScore(elevator, shooter, driveTrain,
     // ElevatorPositions.L4, () -> true, true, leds));
