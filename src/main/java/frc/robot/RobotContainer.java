@@ -10,6 +10,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -17,6 +18,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
@@ -26,6 +29,7 @@ import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
 import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenElevator;
+import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
@@ -499,37 +503,6 @@ public class RobotContainer {
     // SmartDashboard Auto Chooser: Returns "bottom", "top", or "middle"
     DogLog.log("Auto/Get-Auto-Command", "Called");
 
-    BinaryPathNode head = 
-
-    new BinaryPathNode("top", null).withChildren(() -> (startPosChooser.getSelected().equals("top")), 
-
-        new BinaryPathNode("top1", null).withChildren(
-
-            new BinaryPathNode("top2", null).withChildren(joystick.x(), 
-                
-                null,
-                
-                null
-
-            )
-
-        ), 
-    
-        new BinaryPathNode("middle", null).withChildren(() -> (startPosChooser.getSelected().equals("middle")), 
-            
-            null, 
-
-            new BinaryPathNode("bottom", null).withChildren(
-                null
-
-            )
-
-        )
-        
-    );
-
-    AutoSubCommandHolder subCommandHolder = new AutoSubCommandHolder();
-
     AutoFactory autoFactory =
         new AutoFactory(
             driveTrain::getPose, // A function that returns the current robot pose
@@ -539,7 +512,38 @@ public class RobotContainer {
             true, // If alliance flipping should be enabled
             driveTrain);
 
-    AutoRoutineUtils autoRoutineUtils = new AutoRoutineUtils(head, subCommandHolder, autoFactory);
+    AutoRoutineUtils autoRoutineUtils = new AutoRoutineUtils(autoFactory);
+
+    AutoSubCommandHolder subCommandHolder = new AutoSubCommandHolder();
+
+    BinaryPathNode head = 
+
+    new BinaryPathNode("top", new WaitCommand(0)).withChildren(() -> (startPosChooser.getSelected().equals("top")), 
+
+        new BinaryPathNode("top1", subCommandHolder.subCommand("BSTART-2L", autoRoutineUtils.getRoutine())).withChildren(
+
+            new BinaryPathNode("checkinput", new WaitCommand(0)).withChildren(joystick.x(), 
+                
+                new BinaryPathNode("score", new JamesHardenScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, null, redside, coralInElevator)),
+                
+                new BinaryPathNode("stop", new InstantCommand(() -> driveTrain.setFieldSpeeds(new ChassisSpeeds(0,0, 0))))
+                
+            )
+
+        ), 
+
+        new BinaryPathNode("middle", new WaitCommand(0)).withChildren(() -> (startPosChooser.getSelected().equals("middle")), 
+            
+            null, 
+
+            new BinaryPathNode("bottom", new WaitCommand(0)).withChildren(
+                null
+
+            )
+
+        )
+        
+    );
 
     return autoRoutineUtils.commandFromHead(() -> head);
 

@@ -4,7 +4,6 @@ import java.util.function.BooleanSupplier;
 
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class BinaryPathNode {
     private String name;
@@ -16,12 +15,16 @@ public class BinaryPathNode {
     public BinaryPathNode(String name, Command command) {
         this.name = name;
         this.command = command;
+        
+        trueChild = null;
+        falseChild = null;
+        conditionToCheck = () -> true;
     }
 
     public BinaryPathNode withChildren(BinaryPathNode trueChild) {
         this.trueChild = trueChild;
         this.falseChild = null;
-        conditionToCheck = new Trigger(() -> true);
+        conditionToCheck = () -> true;
         return this;
     }
 
