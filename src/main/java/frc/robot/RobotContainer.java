@@ -83,6 +83,8 @@ public class RobotContainer {
 
   private static SendableChooser<Integer> autoChooser = new SendableChooser<>();
 
+  private final AutoFactory autoFactory;
+
   // Starts telemetry operations (essentially logging -> look on SmartDashboard, AdvantageScope)
   public void doTelemetry() {
     logger.telemeterize(driveTrain.getCurrentState());
@@ -95,6 +97,13 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
+    autoFactory = new AutoFactory(
+      driveTrain::getPose, // A function that returns the current robot pose
+      driveTrain::resetPose, // A function that resets the current robot pose to the provided Pose2d
+      driveTrain::followTrajectory, // The drive subsystem trajectory follower  // TODO: change PID controller
+      true, // If alliance flipping should be enabled 
+      driveTrain);
+
     autoChooser.setDefaultOption("Nothing", 0);
     autoChooser.addOption("Processor 3", 1);
     autoChooser.addOption("Processor 2", 2);
