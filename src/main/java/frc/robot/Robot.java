@@ -138,9 +138,11 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RobotContainer.setAlliance();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    DogLog.log("Auto/autoCommand", "robot autonomous INIT Done");
     CoralPosition.preLoadedCoral();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
+      DogLog.log("Auto", "Robot autonomous command is null");
       m_autonomousCommand.schedule();
     }
   }

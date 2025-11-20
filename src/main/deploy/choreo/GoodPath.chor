@@ -1,5 +1,5 @@
 {
- "name":"JamesHarden",
+ "name":"GoodPath",
  "version":1,
  "type":"Swerve",
  "variables":{
@@ -36,8 +36,8 @@
    "val":9.2687
   },
   "gearing":{
-   "exp":"6.12",
-   "val":6.12
+   "exp":"6.5",
+   "val":6.5
   },
   "radius":{
    "exp":"2 in",

@@ -10,6 +10,8 @@ import choreo.auto.AutoTrajectory;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -24,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.LandmarkPose;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
@@ -100,7 +103,7 @@ public class RobotContainer {
             driveTrain
                 ::followTrajectory, // The drive subsystem trajectory follower
             // controller
-            true, // If alliance flipping should be enabled
+            false, // If alliance flipping should be enabled
             driveTrain);
 
     autoChooser.setDefaultOption("cr7", 0);
@@ -489,9 +492,9 @@ public class RobotContainer {
     // int autoValue = autoChooser.getSelected();
     // Creates a new routine with the name "exampleRoutine"
 
-    AutoRoutine routine = autoFactory.newRoutine("CR7");
+    AutoRoutine routine = autoFactory.newRoutine("GoodPath.chor");
     // Load the routine's trajectories
-    AutoTrajectory moveForward = routine.trajectory("MoveForward");
+    AutoTrajectory moveForward = routine.trajectory("MoveForward.traj");
 
     // When the routine begins, reset odometry and start the first trajectory (1)
     routine
@@ -505,7 +508,8 @@ public class RobotContainer {
                     () -> DogLog.log("Auto/resetOdometry", "completed reset odometry")),
                 moveForward.cmd(),
                 new InstantCommand(
-                    () -> DogLog.log("Auto/run entire command", "completed reset odometry"))));
+                    () -> DogLog.log("Auto/run entire command", "completed reset odometry")),
+                new JamesHardenScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, Constants.ElevatorConstants.ElevatorPositions.L4, Constants.RedLandmarkPose.R0)));
 
     return routine.cmd();
   }
