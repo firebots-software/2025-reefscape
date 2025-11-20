@@ -10,8 +10,6 @@ import choreo.auto.AutoTrajectory;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -26,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.LandmarkPose;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
@@ -100,8 +97,7 @@ public class RobotContainer {
             driveTrain::getPose, // A function that returns the current robot pose
             driveTrain
                 ::resetPose, // A function that resets the current robot pose to the provided Pose2d
-            driveTrain
-                ::followTrajectory, // The drive subsystem trajectory follower
+            driveTrain::followTrajectory, // The drive subsystem trajectory follower
             // controller
             false, // If alliance flipping should be enabled
             driveTrain);
@@ -494,7 +490,7 @@ public class RobotContainer {
 
     AutoRoutine routine = autoFactory.newRoutine("GoodPath.chor");
     // Load the routine's trajectories
-    AutoTrajectory moveForward = routine.trajectory("MoveForward.traj");
+    AutoTrajectory moveForward = routine.trajectory("Path8.traj");
 
     // When the routine begins, reset odometry and start the first trajectory (1)
     routine
@@ -509,7 +505,12 @@ public class RobotContainer {
                 moveForward.cmd(),
                 new InstantCommand(
                     () -> DogLog.log("Auto/run entire command", "completed reset odometry")),
-                new JamesHardenScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, Constants.ElevatorConstants.ElevatorPositions.L4, Constants.RedLandmarkPose.R0)));
+                new JamesHardenScore(
+                    elevatorSubsystem,
+                    tootsieSlideSubsystem,
+                    driveTrain,
+                    Constants.ElevatorConstants.ElevatorPositions.L3,
+                    Constants.RedLandmarkPose.L4)));
 
     return routine.cmd();
   }

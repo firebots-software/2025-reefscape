@@ -931,11 +931,11 @@ public final class Constants {
     public static final double STATOR_CURRENT_LIMIT = 50.0; // TODO: change for actual match
     public static final double SUPPLY_CURRENT_LIMIT = 30.0; // TODO: change for actual match
 
-    public static double S0C_KP = 0.502; // 1.0 before (okay)
+    public static double S0C_KP = 0.936; // 1.0 before (okay)
     public static double S0C_KI = 0.00;
     public static double S0C_KD = 0.005;
 
-    public static double S1C_KP = 0.175;
+    public static double S1C_KP = 0.315;
     public static double S1C_KI = 0.0;
     public static double S1C_KD = 0.0;
 

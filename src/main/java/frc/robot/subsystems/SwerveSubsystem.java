@@ -47,7 +47,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   private ProfiledPIDController xProfiledPIDController,
       yProfiledPIDController,
       headingProfiledPIDController;
-
   private PIDController xPidController, yPidController;
 
   private SwerveDriveState currentState;
@@ -97,8 +96,16 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             new TrapezoidProfile.Constraints(
                 Constants.HardenConstants.QCRUISE, Constants.HardenConstants.QACCEL));
 
-    xPidController = new PIDController(Constants.HardenConstants.KP, Constants.HardenConstants.KI,Constants.HardenConstants.KD);
-    yPidController = new PIDController(Constants.HardenConstants.KP, Constants.HardenConstants.KI,Constants.HardenConstants.KD);
+    xPidController =
+        new PIDController(
+            Constants.HardenConstants.KP,
+            Constants.HardenConstants.KI,
+            Constants.HardenConstants.KD);
+    yPidController =
+        new PIDController(
+            Constants.HardenConstants.KP,
+            Constants.HardenConstants.KI,
+            Constants.HardenConstants.KD);
 
     headingProfiledPIDController =
         new ProfiledPIDController(
@@ -125,7 +132,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     xPidController.setIZone(Constants.HardenConstants.QIZONE);
     yPidController.setIZone(Constants.HardenConstants.QIZONE);
 
-
     headingProfiledPIDController.setIZone(Constants.HardenConstants.HIZONE);
 
     // qProfiledPIDController.setIntegratorRange(
@@ -134,8 +140,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
     yProfiledPIDController.setIntegratorRange(
         Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
-    xPidController.setIntegratorRange(Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
-    yPidController.setIntegratorRange(Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
+    xPidController.setIntegratorRange(
+        Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
+    yPidController.setIntegratorRange(
+        Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
 
     headingProfiledPIDController.setIntegratorRange(
         Constants.HardenConstants.HIRANGE_LOWER,
@@ -369,9 +377,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       Pose2d targetPose, double completePathDistance) {
     Pose2d currPose2d = currentState.Pose;
 
-    double xSpeed = (xPidController.calculate(currPose2d.getX(), targetPose.getX())); //changed from profiled to not for x and y 
+    double xSpeed =
+        (xPidController.calculate(
+            currPose2d.getX(), targetPose.getX())); // changed from profiled to not for x and y
     double ySpeed = (yPidController.calculate(currPose2d.getY(), targetPose.getY()));
-
 
     Rotation2d travelAngle = travelAngleTo(targetPose);
     double qSpeed = xSpeed * travelAngle.getCos() + ySpeed * travelAngle.getSin();
@@ -441,7 +450,9 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // Generate the next speeds for the robot
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            sample.vx + xPidController.calculate(pose.getX(), sample.x), //changed from profiled to not for x and y vel
+            sample.vx
+                + xPidController.calculate(
+                    pose.getX(), sample.x), // changed from profiled to not for x and y vel
             sample.vy + yPidController.calculate(pose.getY(), sample.y),
             sample.omega
                 + headingProfiledPIDController.calculate(
