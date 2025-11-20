@@ -4,13 +4,9 @@
 
 package frc.robot;
 
-import choreo.Choreo;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-import choreo.trajectory.SwerveSample;
-import choreo.trajectory.Trajectory;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -28,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.AutoRoutines.AutoProducer;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
@@ -97,21 +92,18 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
-    autoFactory = new AutoFactory(
-      driveTrain::getPose, // A function that returns the current robot pose
-      driveTrain::resetPose, // A function that resets the current robot pose to the provided Pose2d
-      driveTrain::followTrajectory, // The drive subsystem trajectory follower  // TODO: change PID controller
-      true, // If alliance flipping should be enabled 
-      driveTrain);
+    autoFactory =
+        new AutoFactory(
+            driveTrain::getPose, // A function that returns the current robot pose
+            driveTrain
+                ::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            driveTrain
+                ::followTrajectory, // The drive subsystem trajectory follower
+            // controller
+            true, // If alliance flipping should be enabled
+            driveTrain);
 
-    autoChooser.setDefaultOption("Nothing", 0);
-    autoChooser.addOption("Processor 3", 1);
-    autoChooser.addOption("Processor 2", 2);
-    autoChooser.addOption("Processor 1", 3);
-    autoChooser.addOption("Clear 3", 4);
-    autoChooser.addOption("Clear 2", 5);
-    autoChooser.addOption("Clear 1", 6);
-    autoChooser.addOption("Mid 1", 7);
+    autoChooser.setDefaultOption("cr7", 0);
     SmartDashboard.putData("Auto Side Choices", autoChooser);
     configureBindings();
   }
@@ -502,16 +494,19 @@ public class RobotContainer {
     AutoTrajectory moveForward = routine.trajectory("MoveForward");
 
     // When the routine begins, reset odometry and start the first trajectory (1)
-    routine.active().onTrue(
-        Commands.sequence(
-            new InstantCommand(() -> DogLog.log("Auto/resetOdometry", "completed reset odometry first")),
-            moveForward.resetOdometry(),
-            new InstantCommand(() -> DogLog.log("Auto/resetOdometry", "completed reset odometry")),
-            moveForward.cmd(),
-            new InstantCommand(() -> DogLog.log("Auto/run entire command", "completed reset odometry"))
-        )
-    );
-  
+    routine
+        .active()
+        .onTrue(
+            Commands.sequence(
+                new InstantCommand(
+                    () -> DogLog.log("Auto/resetOdometry", "completed reset odometry first")),
+                moveForward.resetOdometry(),
+                new InstantCommand(
+                    () -> DogLog.log("Auto/resetOdometry", "completed reset odometry")),
+                moveForward.cmd(),
+                new InstantCommand(
+                    () -> DogLog.log("Auto/run entire command", "completed reset odometry"))));
+
     return routine.cmd();
   }
   //   /* Run the path selected from the auto chooser */

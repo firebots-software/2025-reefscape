@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import choreo.trajectory.SwerveSample;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -12,10 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
-import choreo.trajectory.SwerveSample;
 import dev.doglog.DogLog;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -44,8 +42,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     implements Subsystem {
   private static SwerveSubsystem instance;
 
-//   private ProfiledPIDController qProfiledPIDController, headingProfiledPIDController;
-  private ProfiledPIDController xProfiledPIDController, yProfiledPIDController, headingProfiledPIDController;
+  //   private ProfiledPIDController qProfiledPIDController, headingProfiledPIDController;
+  private ProfiledPIDController xProfiledPIDController,
+      yProfiledPIDController,
+      headingProfiledPIDController;
 
   private SwerveDriveState currentState;
 
@@ -84,8 +84,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             Constants.HardenConstants.KI, // 345
             Constants.HardenConstants.KD, // 0.0015
             new TrapezoidProfile.Constraints(
-                Constants.HardenConstants.QCRUISE,
-                Constants.HardenConstants.QACCEL));
+                Constants.HardenConstants.QCRUISE, Constants.HardenConstants.QACCEL));
 
     yProfiledPIDController =
         new ProfiledPIDController(
@@ -93,8 +92,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             Constants.HardenConstants.KI, // 345
             Constants.HardenConstants.KD, // 0.0015
             new TrapezoidProfile.Constraints(
-                Constants.HardenConstants.QCRUISE,
-                Constants.HardenConstants.QACCEL));
+                Constants.HardenConstants.QCRUISE, Constants.HardenConstants.QACCEL));
 
     headingProfiledPIDController =
         new ProfiledPIDController(
@@ -241,8 +239,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // qProfiledPIDController.reset(0, getDirectionalChassisSpeeds(qDirection));
     xProfiledPIDController.reset(0, getDirectionalChassisSpeeds(qDirection));
     yProfiledPIDController.reset(0, getDirectionalChassisSpeeds(qDirection));
-
-}
+  }
 
   /* Swerve requests to apply during SysId characterization */
   private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization =
@@ -358,21 +355,19 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
       Pose2d targetPose, double completePathDistance) {
     Pose2d currPose2d = currentState.Pose;
 
-    double xSpeed =
-    (xProfiledPIDController.calculate(currPose2d.getX(), targetPose.getX()));
-    double ySpeed =
-    (yProfiledPIDController.calculate(currPose2d.getY(), targetPose.getY()));
-    
-    Rotation2d travelAngle = travelAngleTo(targetPose);
-    double qSpeed = xSpeed* travelAngle.getCos() + ySpeed*travelAngle.getSin();
+    double xSpeed = (xProfiledPIDController.calculate(currPose2d.getX(), targetPose.getX()));
+    double ySpeed = (yProfiledPIDController.calculate(currPose2d.getY(), targetPose.getY()));
 
+    Rotation2d travelAngle = travelAngleTo(targetPose);
+    double qSpeed = xSpeed * travelAngle.getCos() + ySpeed * travelAngle.getSin();
 
     // double distanceToTarget =
     //     getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation());
     // double ffScaler =
     //     MathUtil.clamp(
     //         (distanceToTarget - Constants.HardenConstants.ffMinRadius)
-    //             / (Constants.HardenConstants.ffMaxRadius - Constants.HardenConstants.ffMinRadius),
+    //             / (Constants.HardenConstants.ffMaxRadius -
+    // Constants.HardenConstants.ffMinRadius),
     //         0.0,
     //         1.0);
 
@@ -386,13 +381,12 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         headingProfiledPIDController.calculate(
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-
     // DogLog.log(
     //     "Commands/JamesHarden/Edward/qPositionMeasurement",
     //     completePathDistance - distanceToTarget);
     // DogLog.log(
-        // "Commands/JamesHarden/Edward/qPositionSetpoint",
-        // qProfiledPIDController.getSetpoint().position);
+    // "Commands/JamesHarden/Edward/qPositionSetpoint",
+    // qProfiledPIDController.getSetpoint().position);
     DogLog.log(
         "Commands/JamesHarden/Edward/qVelocityMeasurement",
         getDirectionalChassisSpeeds(travelAngle));
@@ -423,12 +417,8 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         "Commands/JamesHarden/Rotational/VelocityError",
         headingProfiledPIDController.getVelocityError());
 
-    return new ChassisSpeeds(
-        qSpeed*travelAngle.getCos(),
-        qSpeed *travelAngle.getSin(),
-        omega);
+    return new ChassisSpeeds(qSpeed * travelAngle.getCos(), qSpeed * travelAngle.getSin(), omega);
   }
-
 
   public void followTrajectory(SwerveSample sample) {
     // Get the current pose of the robot
