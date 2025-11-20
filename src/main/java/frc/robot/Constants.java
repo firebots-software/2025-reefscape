@@ -49,6 +49,11 @@ public final class Constants {
     public static final double QKP = 3.4;
     public static final double QKI = 0.45;
     public static final double QKD = 0.0005;
+
+    public static final double KP = 5;
+    public static final double KI = 0;
+    public static final double KD = 0;
+
     public static final double QCRUISE = 4.368;
     public static final double QACCEL = 8.0;
     public static final double QIZONE = 0.35;
