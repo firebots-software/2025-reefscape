@@ -34,6 +34,7 @@ import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
+import frc.robot.commands.ElevatorCommands.ZeroElevator;
 import frc.robot.commands.FunnelCommands.RunFunnelInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelUntilDetectionSafe;
@@ -518,34 +519,34 @@ public class RobotContainer {
 
     BinaryPathNode head = 
 
-    new BinaryPathNode("top", new WaitCommand(0)).withChildren(() -> (startPosChooser.getSelected().equals("top")), 
+    //new BinaryPathNode("top", autoRoutineUtils.getRoutine().trajectory("BSTART-2L").resetOdometry()).withChildren(() -> (startPosChooser.getSelected().equals("top")), 
 
-        new BinaryPathNode("top1", subCommandHolder.subCommand("BSTART-2L", autoRoutineUtils.getRoutine())).withChildren(
+        //new BinaryPathNode("moveelevstart", new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1).andThen(new WaitCommand(2))).withChildren(
 
-            new BinaryPathNode("checkinput", new WaitCommand(0)).withChildren(joystick.x(), 
+            new BinaryPathNode("checkinput", new WaitCommand(1)).withChildren(joystick.x(), 
                 
-                new BinaryPathNode("score", new JamesHardenScore(elevatorSubsystem, tootsieSlideSubsystem, driveTrain, null, redside, coralInElevator)),
+                new BinaryPathNode("moveelev2", new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2)),
                 
-                new BinaryPathNode("stop", new InstantCommand(() -> driveTrain.setFieldSpeeds(new ChassisSpeeds(0,0, 0))))
+                new BinaryPathNode("moveelev3", new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3))
                 
-            )
+            );
 
-        ), 
+        //);
 
-        new BinaryPathNode("middle", new WaitCommand(0)).withChildren(() -> (startPosChooser.getSelected().equals("middle")), 
+    //     new BinaryPathNode("middle", new WaitCommand(0)).withChildren(() -> (startPosChooser.getSelected().equals("middle")), 
             
-            null, 
+    //         null, 
 
-            new BinaryPathNode("bottom", new WaitCommand(0)).withChildren(
-                null
+    //         new BinaryPathNode("bottom", new WaitCommand(0)).withChildren(
+    //             null
 
-            )
+    //         )
 
-        )
+    //     )
         
-    );
+    // );
 
-    return autoRoutineUtils.commandFromHead(() -> head);
+    return autoRoutineUtils.commandFromHead(head);
 
     //return autoRoutines.simpleTest().cmd();
     //return autoRoutines.autoRoutine(startPosChooser.getSelected()).cmd();

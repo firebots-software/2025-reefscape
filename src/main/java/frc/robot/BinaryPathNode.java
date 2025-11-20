@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.DebugCommands.DogLogCmd;
 
 public class BinaryPathNode {
     private String name;
@@ -14,7 +15,7 @@ public class BinaryPathNode {
 
     public BinaryPathNode(String name, Command command) {
         this.name = name;
-        this.command = command;
+        this.command = command.alongWith(new DogLogCmd("Auto/BinaryPathNodeRunning", name));
         
         trueChild = null;
         falseChild = null;
@@ -45,5 +46,17 @@ public class BinaryPathNode {
 
     public Command command() {
         return command;
+    }
+
+    public BooleanSupplier condition() {
+        return conditionToCheck;
+    }
+
+    public BinaryPathNode trueChild() {
+        return trueChild;
+    }
+
+    public BinaryPathNode falseChild() {
+        return falseChild;
     }
 }
