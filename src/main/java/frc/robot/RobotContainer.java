@@ -520,27 +520,17 @@ public class RobotContainer {
 
     BinaryPathNode head = 
 
-    new BinaryPathNode("top", autoRoutineUtils.getRoutine().trajectory("BSTART-2L").resetOdometry()).withChildren(() -> (startPosChooser.getSelected().equals("top")),
-
-        new BinaryPathNode("top1", subCommandHolder.subCommand("BSTART-2L", autoRoutineUtils.getRoutine(), elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, driveTrain, redside)).withChildren(
+    new BinaryPathNode("top1", subCommandHolder.subCommand("BSTART-2L", autoRoutineUtils.getRoutine(), elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, driveTrain, redside)).withChildren(
             
-            new BinaryPathNode("top2", new InstantCommand()).withChildren(
-                
-                new BinaryPathNode("top3", new InstantCommand())
+        new BinaryPathNode("top2", new InstantCommand(() -> driveTrain.setFieldSpeeds(new ChassisSpeeds(0,0,0)))).withChildren(
+            
+            new BinaryPathNode("top3", new InstantCommand())
 
-            )
+        )
 
-        ),
+    );  
 
-        new BinaryPathNode("uh oh", new DogLogCmd("Auto/BinStatus", "Incorrect Name"))
-
-    );
-
-        
-
-    
-
-    return autoRoutineUtils.commandFromHead(head).alongWith(new DogLogCmd("Auto/Condition", head.condition().getAsBoolean()));
+    return autoRoutineUtils.commandFromHead(head).alongWith();
 
     //return autoRoutines.simpleTest().cmd();
     //return autoRoutines.autoRoutine(startPosChooser.getSelected()).cmd();
