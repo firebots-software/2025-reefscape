@@ -520,7 +520,7 @@ public class RobotContainer {
 
     BinaryPathNode head = 
 
-    new BinaryPathNode("top1", subCommandHolder.subCommand("BSTART-2L", autoRoutineUtils.getRoutine(), elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, driveTrain, redside)).withChildren(
+    new BinaryPathNode("top1", subCommandHolder.subCommand("THPS-5L", autoRoutineUtils.getRoutine(), elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, driveTrain, redside)).withChildren(
             
         new BinaryPathNode("top2", new InstantCommand(() -> driveTrain.setFieldSpeeds(new ChassisSpeeds(0,0,0)))).withChildren(
             
