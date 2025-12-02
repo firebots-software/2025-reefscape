@@ -32,6 +32,7 @@ import frc.robot.commandGroups.JamesHardenElevator;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.DaleCommands.ZeroArm;
+import frc.robot.commands.DebugCommands.DogLogCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
 import frc.robot.commands.ElevatorCommands.ZeroElevator;
@@ -115,12 +116,12 @@ public class RobotContainer {
     startPosChooser.addOption("Middle (between blue and red barge zones)", "middle");
     startPosChooser.addOption("Bottom (next to red barge zone)", "bottom");
     startPosChooser.addOption("Test (next to red barge zone)", "test");
-    //SmartDashboard.putData(startPosChooser);
+    SmartDashboard.putData(startPosChooser);
 
     configureBindings();
   }
 
-  private void configureBindings() {
+  public void configureBindings() {
 
     // By default, Dale goes to 0 degrees (retracted)
     armSubsystem.setDefaultCommand(new ArmToAngleCmd(0.0, armSubsystem));
@@ -519,34 +520,27 @@ public class RobotContainer {
 
     BinaryPathNode head = 
 
-    //new BinaryPathNode("top", autoRoutineUtils.getRoutine().trajectory("BSTART-2L").resetOdometry()).withChildren(() -> (startPosChooser.getSelected().equals("top")), 
+    new BinaryPathNode("top", autoRoutineUtils.getRoutine().trajectory("BSTART-2L").resetOdometry()).withChildren(() -> (startPosChooser.getSelected().equals("top")),
 
-        //new BinaryPathNode("moveelevstart", new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1).andThen(new WaitCommand(2))).withChildren(
-
-            new BinaryPathNode("checkinput", new WaitCommand(1)).withChildren(joystick.x(), 
-                
-                new BinaryPathNode("moveelev2", new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2)),
-                
-                new BinaryPathNode("moveelev3", new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3))
-                
-            );
-
-        //);
-
-    //     new BinaryPathNode("middle", new WaitCommand(0)).withChildren(() -> (startPosChooser.getSelected().equals("middle")), 
+        new BinaryPathNode("top1", subCommandHolder.subCommand("BSTART-2L", autoRoutineUtils.getRoutine(), elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, driveTrain, redside)).withChildren(
             
-    //         null, 
+            new BinaryPathNode("top2", new InstantCommand()).withChildren(
+                
+                new BinaryPathNode("top3", new InstantCommand())
 
-    //         new BinaryPathNode("bottom", new WaitCommand(0)).withChildren(
-    //             null
+            )
 
-    //         )
+        ),
 
-    //     )
+        new BinaryPathNode("uh oh", new DogLogCmd("Auto/BinStatus", "Incorrect Name"))
+
+    );
+
         
-    // );
 
-    return autoRoutineUtils.commandFromHead(head);
+    
+
+    return autoRoutineUtils.commandFromHead(head).alongWith(new DogLogCmd("Auto/Condition", head.condition().getAsBoolean()));
 
     //return autoRoutines.simpleTest().cmd();
     //return autoRoutines.autoRoutine(startPosChooser.getSelected()).cmd();
@@ -554,6 +548,12 @@ public class RobotContainer {
     // return null;
     // autoroutineutils(headPathNode, autosubcommandholder);
   }
+
+  //test
+//   boolean switchNode = false;
+//   public void setAutonConditionalBool(boolean b) {
+//     switchNode = b;
+//   }
 
   //   public void testAutoCommands() {}
 }

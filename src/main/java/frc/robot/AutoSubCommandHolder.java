@@ -24,48 +24,47 @@ public class AutoSubCommandHolder {
         
     }
 
-    public Command subCommand(String trajName, AutoRoutine routine) {
-        AutoTrajectory trajectory = routine.trajectory(trajName);
-
-        //-------- your autosubcommand goes here --------
+    public Command subCommand(String trajName, AutoRoutine routine, ElevatorSubsystem elevatorSubsystem, FunnelSubsystem funnelSubsystem, TootsieSlideSubsystem tootsieSlideSubsystem, SwerveSubsystem driveTrain, BooleanSupplier redside) {
+                            AutoTrajectory trajectory = routine.trajectory(trajName);
+                    
+                            //-------- your autosubcommand goes here --------
+                            
+                            
+                            //example autosubcommand
+                            BooleanSupplier pathGoesToHPS =
+                                () -> !(trajName.contains("HPS-") || trajName.contains("START-"));
+                            BooleanSupplier startOrLeavingHPS = () -> !pathGoesToHPS.getAsBoolean();
+                            boolean goRightBranch = trajName.substring(trajName.length() - 1).equals("R");
+                    
+                            DogLog.log("Auto/trajName", trajName);
+                            DogLog.log("Auto/pathGoesToHPS", pathGoesToHPS.getAsBoolean());
+                            Command newStructure2 =
+                            Commands.sequence(
+                                new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem)
+                            .onlyIf(startOrLeavingHPS),
+                        new SetElevatorLevel(
+                            elevatorSubsystem,
+                            ElevatorPositions
+                                .safePosition), // using L1 as the Safe Position because not sure if the "pos"
+                        // value in
+                        // the Constants Enum should be 0 or 1
+                        trajectory
+                            .cmd()
+                            .alongWith(new DogLogCmd("Auto/CurrTrajRunning", trajName))
+                            .andThen(new DogLogCmd("Auto/CurrTrajRunning", "none")), // actual robot movement
+                        (pathGoesToHPS.getAsBoolean()
+                            ? new ParallelCommandGroup(
+                                new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
+                            new RunFunnelUntilCheckedIn(funnelSubsystem))
+                        : new JamesHardenScore(
+                            elevatorSubsystem,
+                            tootsieSlideSubsystem,
+                            driveTrain,
+                        ElevatorPositions.L4,
+                        redside,
+                    goRightBranch)));
         
-        
-        //example autosubcommand
-        // BooleanSupplier pathGoesToHPS =
-        //     () -> !(trajName.contains("HPS-") || trajName.contains("START-"));
-        // BooleanSupplier startOrLeavingHPS = () -> !pathGoesToHPS.getAsBoolean();
-        // boolean goRightBranch = trajName.substring(trajName.length() - 1).equals("R");
-
-        // DogLog.log("Auto/trajName", trajName);
-        // DogLog.log("Auto/pathGoesToHPS", pathGoesToHPS.getAsBoolean());
-        // Command newStructure2 =
-        // Commands.sequence(
-        //     new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem)
-        //         .onlyIf(startOrLeavingHPS),
-        //     new SetElevatorLevel(
-        //         elevatorSubsystem,
-        //         ElevatorPositions
-        //             .safePosition), // using L1 as the Safe Position because not sure if the "pos"
-        //     // value in
-        //     // the Constants Enum should be 0 or 1
-        //     trajectory
-        //         .cmd()
-        //         .alongWith(new DogLogCmd("Auto/CurrTrajRunning", trajName))
-        //         .andThen(new DogLogCmd("Auto/CurrTrajRunning", "none")), // actual robot movement
-        //     (pathGoesToHPS.getAsBoolean()
-        //         ? new ParallelCommandGroup(
-        //             new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake),
-        //             new RunFunnelUntilCheckedIn(funnelSubsystem))
-        //         : new JamesHardenScore(
-        //             elevatorSubsystem,
-        //             tootsieSlideSubsystem,
-        //             driveTrain,
-        //             ElevatorPositions.L4,
-        //             redside,
-        //             goRightBranch)));
-        
-        return trajectory
-        .cmd()
+        return newStructure2
         .alongWith(new DogLogCmd("Auto/CurrTrajRunning", trajName))
         .andThen(new DogLogCmd("Auto/CurrTrajRunning", "none"));
     }

@@ -73,6 +73,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    m_robotContainer.configureBindings();
     RobotContainer.setAlliance();
     DogLog.log("Auto/drivetrain-null", driveTrain == null);
     autoFactory =
@@ -102,15 +103,15 @@ public class Robot extends TimedRobot {
 
     DogLog.log("Auto/CommandIsNull", true);
     DogLog.log("Auto/CommandScheduled", false);
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand(); // UNCOMMENT
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand(); // UNCOMMENT
 
     // schedule the autonomous command (example) (UNCOMMENT)
-    // if (m_autonomousCommand != null) {
-    DogLog.log("Auto/CommandIsNull", false);
-    // m_autonomousCommand.schedule();
-    RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
-    DogLog.log("Auto/CommandScheduled", true);
-    // }
+    if (m_autonomousCommand != null) {
+      DogLog.log("Auto/CommandIsNull", false);
+      m_autonomousCommand.schedule();
+      RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+      DogLog.log("Auto/CommandScheduled", true);
+    }
   }
 
   /**
@@ -261,7 +262,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   // @Override
+  //int counter = 0; Test
   public void autonomousPeriodic() {
+    // counter++; Test
+    // if (counter > 10000) m_robotContainer.setAutonConditionalBool(true); Test
     DogLog.log("Auto/IsAutoRunning", AutoRoutines.getIsAutoRunning());
   }
 
