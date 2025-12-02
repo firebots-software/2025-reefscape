@@ -22,15 +22,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.commandGroups.Dealgaenate;
 import frc.robot.commandGroups.EjectCoralFR;
 import frc.robot.commandGroups.ElevatorL4;
+import frc.robot.commandGroups.Intake;
 import frc.robot.commandGroups.JamesHardenScore;
 import frc.robot.commandGroups.PutUpAndShoot;
-import frc.robot.commandGroups.RunFunnelUntilDetectionSafeSmooth;
 import frc.robot.commands.DaleCommands.ArmToAngleCmd;
 import frc.robot.commands.ElevatorCommands.DefaultElevator;
 import frc.robot.commands.ElevatorCommands.SetElevatorLevel;
@@ -39,9 +38,7 @@ import frc.robot.commands.FunnelCommands.RunFunnelAndTootsieInCommand;
 import frc.robot.commands.FunnelCommands.RunFunnelOutCommand;
 import frc.robot.commands.SwerveCommands.SwerveJoystickCommand;
 import frc.robot.commands.TootsieSlideCommands.ShootTootsieSlide;
-import frc.robot.commands.TransferPieceBetweenFunnelAndElevator;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
 import frc.robot.subsystems.LedSubsystem;
@@ -142,39 +139,39 @@ public class RobotContainer {
     //     .RightL1()
     //     .whileTrue(JamesHardenMovement.toProcessorHPS(driveTrain, redside, false));
 
-    customController
-        .LeftL2()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L2,
-                redside,
-                false,
-                leds));
-    customController
-        .LeftL3()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L3,
-                redside,
-                false,
-                leds));
-    customController
-        .LeftL4()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L4,
-                redside,
-                false,
-                leds));
+    // customController
+    //     .LeftL2()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L2,
+    //             redside,
+    //             false,
+    //             leds));
+    // customController
+    //     .LeftL3()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L3,
+    //             redside,
+    //             false,
+    //             leds));
+    // customController
+    //     .LeftL4()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L4,
+    //             redside,
+    //             false,
+    //             leds));
 
     // // Right Elevator Levels
     // customController
@@ -187,39 +184,39 @@ public class RobotContainer {
     //             ElevatorPositions.L1,
     //             redside,
     //             true));
-    customController
-        .RightL2()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L2,
-                redside,
-                true,
-                leds));
-    customController
-        .RightL3()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L3,
-                redside,
-                true,
-                leds));
-    customController
-        .RightL4()
-        .whileTrue(
-            new JamesHardenScore(
-                elevatorSubsystem,
-                tootsieSlideSubsystem,
-                driveTrain,
-                ElevatorPositions.L4,
-                redside,
-                true,
-                leds));
+    // customController
+    //     .RightL2()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L2,
+    //             redside,
+    //             true,
+    //             leds));
+    // customController
+    //     .RightL3()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L3,
+    //             redside,
+    //             true,
+    //             leds));
+    // customController
+    //     .RightL4()
+    //     .whileTrue(
+    //         new JamesHardenScore(
+    //             elevatorSubsystem,
+    //             tootsieSlideSubsystem,
+    //             driveTrain,
+    //             ElevatorPositions.L4,
+    //             redside,
+    //             true,
+    //             leds));
 
     // Bottom Three Buttons
     customController.Eject().onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
@@ -241,71 +238,74 @@ public class RobotContainer {
     // Joystick 1:
 
     // Dale
-    joystick
-        .rightBumper()
-        .whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L3DALE));
-    joystick
-        .leftBumper()
-        .whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
+    // joystick
+    //     .rightBumper()
+    //     .whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L3DALE));
+    // joystick
+    //     .leftBumper()
+    //     .whileTrue(new Dealgaenate(armSubsystem, elevatorSubsystem, ElevatorPositions.L2DALE));
 
     // Zero Rotations
-    joystick
-        .y()
-        .onTrue(
-            driveTrain.runOnce(
-                () ->
-                    driveTrain.resetPose(
-                        new Pose2d(driveTrain.getPose().getTranslation(), new Rotation2d(0)))));
+    // joystick
+    //     .y()
+    //     .onTrue(
+    //         driveTrain.runOnce(
+    //             () ->
+    //                 driveTrain.resetPose(
+    //                     new Pose2d(driveTrain.getPose().getTranslation(), new Rotation2d(0)))));
 
     // Joystick 2:
     // Elevator
-    joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false));
-    joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2, false));
-    joystick2.y().onTrue(new ElevatorL4(elevatorSubsystem, false));
-    joystick2.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3, false));
-    joystick2
-        .rightBumper()
-        .onTrue(
-            new SetElevatorLevel(
-                elevatorSubsystem, ElevatorPositions.safePosition, false)); // reset mode
+    // joystick2.x().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L1, false));
+    // joystick2.a().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L2, false));
+    // joystick2.y().onTrue(new ElevatorL4(elevatorSubsystem, false));
+    // joystick2.b().onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.L3, false));
+    // joystick2
+    //     .rightBumper()
+    //     .onTrue(
+    //         new SetElevatorLevel(
+    //             elevatorSubsystem, ElevatorPositions.safePosition, false)); // reset mode
 
     // Shoot Tootsie Slide
-    joystick2.rightTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
+    // joystick2.rightTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
 
     // Intake
-    joystick2.leftTrigger();
+    // joystick2.leftTrigger();
     //     .onTrue(new D2Intake(elevatorSubsystem, tootsieSlideSubsystem, funnelSubsystem));
 
     // Auto Intake and Eject
-    Trigger funnelCheckin =
-        new Trigger(
-                () -> funnelSubsystem.isCoralCheckedIn() && !CoralPosition.isCoralInTootsieSlide())
-            .and(RobotModeTriggers.teleop());
-    Trigger ejectTime =
-        new Trigger(
-                () -> (funnelSubsystem.isCoralCheckedIn() && CoralPosition.isCoralInTootsieSlide()))
-            .and(RobotModeTriggers.teleop());
-    ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
-    funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake, false));
-    funnelCheckin.onTrue(
-        new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
-    Trigger funnelCheckout =
-        new Trigger(
-                () ->
-                    CoralPosition.isCoralInFunnel()
-                        && elevatorSubsystem.atIntake()
-                        && elevatorSubsystem.isAtPosition())
-            .and(RobotModeTriggers.teleop());
+    // Trigger funnelCheckin =
+    //     new Trigger(
+    //             () -> funnelSubsystem.isCoralCheckedIn() &&
+    // !CoralPosition.isCoralInTootsieSlide())
+    //         .and(RobotModeTriggers.teleop());
+    // Trigger ejectTime =
+    //     new Trigger(
+    //             () -> (funnelSubsystem.isCoralCheckedIn() &&
+    // CoralPosition.isCoralInTootsieSlide()))
+    //         .and(RobotModeTriggers.teleop());
+    // ejectTime.onTrue(new EjectCoralFR(elevatorSubsystem, tootsieSlideSubsystem));
+    // funnelCheckin.onTrue(new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.Intake,
+    // false));
+    // funnelCheckin.onTrue(
+    //     new RunFunnelUntilDetectionSafeSmooth(elevatorSubsystem, funnelSubsystem, leds));
+    // Trigger funnelCheckout =
+    //     new Trigger(
+    //             () ->
+    //                 CoralPosition.isCoralInFunnel()
+    //                     && elevatorSubsystem.atIntake()
+    //                     && elevatorSubsystem.isAtPosition())
+    //         .and(RobotModeTriggers.teleop());
 
-    funnelCheckout
-        .and(joystick.rightTrigger().negate())
-        .onTrue(
-            new TransferPieceBetweenFunnelAndElevator(
-                elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
-    Trigger coralInElevator =
-        new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
-    coralInElevator.onTrue(
-        new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition, false));
+    // funnelCheckout
+    //     .and(joystick.rightTrigger().negate())
+    //     .onTrue(
+    //         new TransferPieceBetweenFunnelAndElevator(
+    //             elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem));
+    // Trigger coralInElevator =
+    //     new Trigger(() -> CoralPosition.isCoralInTootsieSlide()).and(RobotModeTriggers.teleop());
+    // coralInElevator.onTrue(
+    //     new SetElevatorLevel(elevatorSubsystem, ElevatorPositions.safePosition, false));
 
     // // Debugging
     // debugJoystick.leftTrigger().whileTrue(new ShootTootsieSlide(tootsieSlideSubsystem));
@@ -505,6 +505,7 @@ public class RobotContainer {
                 moveForward.cmd(),
                 new InstantCommand(
                     () -> DogLog.log("Auto/run entire command", "completed reset odometry")),
+                new Intake(elevatorSubsystem, funnelSubsystem, tootsieSlideSubsystem, leds),
                 new JamesHardenScore(
                     elevatorSubsystem,
                     tootsieSlideSubsystem,
