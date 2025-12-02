@@ -14,8 +14,8 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import dev.doglog.DogLog;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -43,7 +43,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     implements Subsystem {
   private static SwerveSubsystem instance;
 
-  private ProfiledPIDController qProfiledPIDController, headingProfiledPIDController;
+  //   private ProfiledPIDController qProfiledPIDController, headingProfiledPIDController;
+  private ProfiledPIDController xProfiledPIDController,
+      yProfiledPIDController,
+      headingProfiledPIDController;
+  private PIDController xPidController, yPidController;
 
   private SwerveDriveState currentState;
 
@@ -68,14 +72,40 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     currentState = getState(); // getCurrentState
     // 1.7, 0.345, 0.0015
-    qProfiledPIDController =
+    // qProfiledPIDController =
+    //     new ProfiledPIDController(
+    //         Constants.HardenConstants.QKP, // 3.4 not bad // [3.4 good for 0.2-1.2, 0.425 I]
+    //         Constants.HardenConstants.QKI, // 345
+    //         Constants.HardenConstants.QKD, // 0.0015
+    //         new TrapezoidProfile.Constraints(
+    //             Constants.HardenConstants.QCRUISE,
+    //             Constants.HardenConstants.QACCEL)); // 8.25 // 5 accel and 0.75 p was good
+    xProfiledPIDController =
         new ProfiledPIDController(
-            Constants.HardenConstants.QKP, // 3.4 not bad // [3.4 good for 0.2-1.2, 0.425 I]
-            Constants.HardenConstants.QKI, // 345
-            Constants.HardenConstants.QKD, // 0.0015
+            Constants.HardenConstants.KP, // 3.4 not bad // [3.4 good for 0.2-1.2, 0.425 I]
+            Constants.HardenConstants.KI, // 345
+            Constants.HardenConstants.KD, // 0.0015
             new TrapezoidProfile.Constraints(
-                Constants.HardenConstants.QCRUISE,
-                Constants.HardenConstants.QACCEL)); // 8.25 // 5 accel and 0.75 p was good
+                Constants.HardenConstants.QCRUISE, Constants.HardenConstants.QACCEL));
+
+    yProfiledPIDController =
+        new ProfiledPIDController(
+            Constants.HardenConstants.KP, // 3.4 not bad // [3.4 good for 0.2-1.2, 0.425 I]
+            Constants.HardenConstants.KI, // 345
+            Constants.HardenConstants.KD, // 0.0015
+            new TrapezoidProfile.Constraints(
+                Constants.HardenConstants.QCRUISE, Constants.HardenConstants.QACCEL));
+
+    xPidController =
+        new PIDController(
+            Constants.HardenConstants.KP,
+            Constants.HardenConstants.KI,
+            Constants.HardenConstants.KD);
+    yPidController =
+        new PIDController(
+            Constants.HardenConstants.KP,
+            Constants.HardenConstants.KI,
+            Constants.HardenConstants.KD);
 
     headingProfiledPIDController =
         new ProfiledPIDController(
@@ -95,11 +125,26 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     //             Constants.Swerve.TELE_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND
     //                 - 16)); // -13 was good
 
-    qProfiledPIDController.setIZone(Constants.HardenConstants.QIZONE);
+    // qProfiledPIDController.setIZone(Constants.HardenConstants.QIZONE);
+    xProfiledPIDController.setIZone(Constants.HardenConstants.QIZONE);
+    yProfiledPIDController.setIZone(Constants.HardenConstants.QIZONE);
+
+    xPidController.setIZone(Constants.HardenConstants.QIZONE);
+    yPidController.setIZone(Constants.HardenConstants.QIZONE);
+
     headingProfiledPIDController.setIZone(Constants.HardenConstants.HIZONE);
 
-    qProfiledPIDController.setIntegratorRange(
+    // qProfiledPIDController.setIntegratorRange(
+    //     Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
+    xProfiledPIDController.setIntegratorRange(
         Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
+    yProfiledPIDController.setIntegratorRange(
+        Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
+    xPidController.setIntegratorRange(
+        Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
+    yPidController.setIntegratorRange(
+        Constants.HardenConstants.QIRANGE_LOWER, Constants.HardenConstants.QIRANGE_UPPER);
+
     headingProfiledPIDController.setIntegratorRange(
         Constants.HardenConstants.HIRANGE_LOWER,
         Constants.HardenConstants.HIRANGE_UPPER); // 0.3 before
@@ -211,7 +256,11 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
   public void resetProfiledPIDs(Rotation2d qDirection) {
     headingProfiledPIDController.reset(
         currentState.Pose.getRotation().getRadians(), getFieldSpeeds().omegaRadiansPerSecond);
-    qProfiledPIDController.reset(0, getDirectionalChassisSpeeds(qDirection));
+    // qProfiledPIDController.reset(0, getDirectionalChassisSpeeds(qDirection));
+    xProfiledPIDController.reset(0, getDirectionalChassisSpeeds(qDirection));
+    yProfiledPIDController.reset(0, getDirectionalChassisSpeeds(qDirection));
+    xPidController.reset();
+    yPidController.reset();
   }
 
   /* Swerve requests to apply during SysId characterization */
@@ -326,42 +375,52 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
   public ChassisSpeeds calculateRequiredEdwardChassisSpeeds(
       Pose2d targetPose, double completePathDistance) {
-    double distanceToTarget =
-        getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation());
-    double ffScaler =
-        MathUtil.clamp(
-            (distanceToTarget - Constants.HardenConstants.ffMinRadius)
-                / (Constants.HardenConstants.ffMaxRadius - Constants.HardenConstants.ffMinRadius),
-            0.0,
-            1.0);
+    Pose2d currPose2d = currentState.Pose;
 
-    double qSpeed =
-        (qProfiledPIDController.getSetpoint().velocity * ffScaler)
-            + qProfiledPIDController.calculate(
-                completePathDistance - distanceToTarget, completePathDistance);
+    double xSpeed =
+        (xPidController.calculate(
+            currPose2d.getX(), targetPose.getX())); // changed from profiled to not for x and y
+    double ySpeed = (yPidController.calculate(currPose2d.getY(), targetPose.getY()));
+
+    Rotation2d travelAngle = travelAngleTo(targetPose);
+    double qSpeed = xSpeed * travelAngle.getCos() + ySpeed * travelAngle.getSin();
+
+    // double distanceToTarget =
+    //     getCurrentState().Pose.getTranslation().getDistance(targetPose.getTranslation());
+    // double ffScaler =
+    //     MathUtil.clamp(
+    //         (distanceToTarget - Constants.HardenConstants.ffMinRadius)
+    //             / (Constants.HardenConstants.ffMaxRadius -
+    // Constants.HardenConstants.ffMinRadius),
+    //         0.0,
+    //         1.0);
+
+    // double qSpeed =
+    //     (qProfiledPIDController.getSetpoint().velocity * ffScaler)
+    //         + qProfiledPIDController.calculate(
+    //             completePathDistance - distanceToTarget, completePathDistance);
+
     double omega =
         // headingProfiledPIDController.getSetpoint().velocity+
         headingProfiledPIDController.calculate(
             currentState.Pose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-    Rotation2d travelAngle = travelAngleTo(targetPose);
-
-    DogLog.log(
-        "Commands/JamesHarden/Edward/qPositionMeasurement",
-        completePathDistance - distanceToTarget);
-    DogLog.log(
-        "Commands/JamesHarden/Edward/qPositionSetpoint",
-        qProfiledPIDController.getSetpoint().position);
+    // DogLog.log(
+    //     "Commands/JamesHarden/Edward/qPositionMeasurement",
+    //     completePathDistance - distanceToTarget);
+    // DogLog.log(
+    // "Commands/JamesHarden/Edward/qPositionSetpoint",
+    // qProfiledPIDController.getSetpoint().position);
     DogLog.log(
         "Commands/JamesHarden/Edward/qVelocityMeasurement",
         getDirectionalChassisSpeeds(travelAngle));
-    DogLog.log(
-        "Commands/JamesHarden/Edward/qVelocitySetpoint",
-        qProfiledPIDController.getSetpoint().velocity);
-    DogLog.log(
-        "Commands/JamesHarden/Edward/qPositionError", qProfiledPIDController.getPositionError());
-    DogLog.log(
-        "Commands/JamesHarden/Edward/qVelocityError", qProfiledPIDController.getVelocityError());
+    // DogLog.log(
+    //     "Commands/JamesHarden/Edward/qVelocitySetpoint",
+    //     qProfiledPIDController.getSetpoint().velocity);
+    // DogLog.log(
+    //     "Commands/JamesHarden/Edward/qPositionError", qProfiledPIDController.getPositionError());
+    // DogLog.log(
+    //     "Commands/JamesHarden/Edward/qVelocityError", qProfiledPIDController.getVelocityError());
 
     DogLog.log(
         "Commands/JamesHarden/Rotational/PositionMeasurement",
@@ -382,12 +441,7 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         "Commands/JamesHarden/Rotational/VelocityError",
         headingProfiledPIDController.getVelocityError());
 
-    return new ChassisSpeeds(
-        qSpeed * Math.cos(travelAngle.getRadians())
-            + (0 * 0.075 * Math.cos(getCurrentState().Pose.getRotation().getRadians())),
-        qSpeed * Math.sin(travelAngle.getRadians())
-            + (0 * 0.075 * Math.sin(getCurrentState().Pose.getRotation().getRadians())),
-        omega);
+    return new ChassisSpeeds(qSpeed * travelAngle.getCos(), qSpeed * travelAngle.getSin(), omega);
   }
 
   public void followTrajectory(SwerveSample sample) {
@@ -396,8 +450,10 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     // Generate the next speeds for the robot
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            sample.vx + qProfiledPIDController.calculate(pose.getX(), sample.x),
-            sample.vy + qProfiledPIDController.calculate(pose.getY(), sample.y),
+            sample.vx
+                + xPidController.calculate(
+                    pose.getX(), sample.x), // changed from profiled to not for x and y vel
+            sample.vy + yPidController.calculate(pose.getY(), sample.y),
             sample.omega
                 + headingProfiledPIDController.calculate(
                     pose.getRotation().getRadians(), sample.heading));
