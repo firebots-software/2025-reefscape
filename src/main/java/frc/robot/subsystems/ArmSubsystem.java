@@ -159,7 +159,7 @@ public class ArmSubsystem extends SubsystemBase {
   private void runFlywheelAtRPS(double flywheelSpeed) {
     double motor_speed = flywheelSpeed / Constants.Flywheel.GEAR_RATIO;
     motor_speed = MathUtil.clamp(motor_speed, -100, 100);
-    DogLog.log("subsystems/Dale/Target Motor Speed", motor_speed);
+    DogLog.log("Subsystems/Dale/Target Motor Speed", motor_speed);
     flywheelMotor.setControl(controlRequestFlywheel.withVelocity(motor_speed));
   }
 
@@ -194,15 +194,15 @@ public class ArmSubsystem extends SubsystemBase {
     encoderDegrees =
         Constants.Arm.ROTATIONS_TO_DEGEREES(armMotor.getPosition(false).getValueAsDouble());
     // This method will be called once per scheduler run
-    DogLog.log("subsystems/Dale/Arm at target", atTarget(5));
-    DogLog.log("subsystems/Dale/Arm Degrees", encoderDegrees);
+    DogLog.log("Subsystems/Dale/Arm at target", atTarget(5));
+    DogLog.log("Subsystems/Dale/Arm Degrees", encoderDegrees);
     DogLog.log(
-        "subsystems/Dale/Arm Target Rotations", Constants.Arm.DEGREES_TO_ROTATIONS(targetDegrees));
-    DogLog.log("subsystems/Dale/Arm Target Degrees", targetDegrees);
+        "Subsystems/Dale/Arm Target Rotations", Constants.Arm.DEGREES_TO_ROTATIONS(targetDegrees));
+    DogLog.log("Subsystems/Dale/Arm Target Degrees", targetDegrees);
     // DogLog.log(
     //     "subsystems/Dale/Flywheel Speed", flywheelMotor.getVelocity(false).getValueAsDouble());
     DogLog.log(
-        "subsystems/Dale/command",
+        "Subsystems/Dale/command",
         this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 

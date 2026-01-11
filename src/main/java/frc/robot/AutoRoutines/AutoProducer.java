@@ -93,7 +93,7 @@ public class AutoProducer extends SequentialCommandGroup {
 
     JamesHardenMovement movementCommand, maintainCommand;
     if (!scorePosition.isBranch()) {
-      DogLog.log("JamesHardenScore/Errors", "called without real branch");
+      DogLog.log("Commands/JamesHardenScore/Errors", "Called without a real branch");
       return;
     }
     movementCommand = JamesHardenMovement.toSpecificBranch(driveTrain, () -> scorePosition, false);

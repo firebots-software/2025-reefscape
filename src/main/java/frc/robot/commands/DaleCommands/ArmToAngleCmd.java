@@ -21,7 +21,7 @@ public class ArmToAngleCmd extends Command {
 
   @Override
   public void execute() {
-    DogLog.log("Running to target angle: ", angle);
+    DogLog.log("Commands/ArmToAngleCmd/TargetAngle", angle);
     arm.setPosition(angle);
   }
 
