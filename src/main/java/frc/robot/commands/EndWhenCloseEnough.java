@@ -34,7 +34,7 @@ public class EndWhenCloseEnough extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    DogLog.log("END_WHEN_CLOSE_ENOUGH", true);
+    DogLog.log("Commands/CloseEnough", false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,7 +44,7 @@ public class EndWhenCloseEnough extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DogLog.log("END_WHEN_CLOSE_ENOUGH", false);
+    DogLog.log("Commands/CloseEnough", true);
   }
 
   // Returns true when the command should end.

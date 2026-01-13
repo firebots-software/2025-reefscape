@@ -15,6 +15,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -47,7 +48,7 @@ public class FunnelSubsystem extends SubsystemBase {
     checkOutSensor = new DigitalInput(Constants.FunnelConstants.CHECK_OUT_PORT);
     checkInSensor = new DigitalInput(Constants.FunnelConstants.CHECK_IN_PORT);
 
-    Follower invertedfollower = new Follower(FunnelConstants.RIGHT_MOTOR_PORT, true);
+    Follower invertedfollower = new Follower(FunnelConstants.RIGHT_MOTOR_PORT, MotorAlignmentValue.Opposed);
     leftMotor.setControl(invertedfollower);
 
     TalonFXConfigurator m1Config = rightMotor.getConfigurator();
@@ -195,13 +196,13 @@ public class FunnelSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    DogLog.log("subsystems/Funnel/CheckedInStatus", isCoralCheckedIn());
-    DogLog.log("subsystems/Funnel/CheckedOutStatus", isCoralCheckedOut());
-    DogLog.log("subsystems/Funnel/DrakeStatus", drakeTripped());
+    DogLog.log("Subsystems/Funnel/CheckedInStatus", isCoralCheckedIn());
+    DogLog.log("Subsystems/Funnel/CheckedOutStatus", isCoralCheckedOut());
+    DogLog.log("Subsystems/Funnel/DrakeStatus", drakeTripped());
     // DogLog.log("subsystems/Funnel/FunnelVelocity", rightMotor.getVelocity().getValueAsDouble());
-    DogLog.log("subsystems/Funnel/AbsPositionalError", getAbsolutePositionalError());
+    DogLog.log("Subsystems/Funnel/AbsPositionalError", getAbsolutePositionalError());
     DogLog.log(
-        "subsystems/Funnel/command",
+        "Subsystems/Funnel/command",
         this.getCurrentCommand() == null ? "NOTHING" : this.getCurrentCommand().getName());
   }
 
