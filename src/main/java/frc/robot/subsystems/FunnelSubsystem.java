@@ -48,7 +48,7 @@ public class FunnelSubsystem extends SubsystemBase {
     checkOutSensor = new DigitalInput(Constants.FunnelConstants.CHECK_OUT_PORT);
     checkInSensor = new DigitalInput(Constants.FunnelConstants.CHECK_IN_PORT);
 
-    Follower invertedfollower = new Follower(FunnelConstants.RIGHT_MOTOR_PORT, MotorAlignmentValue.Aligned);
+    Follower invertedfollower = new Follower(FunnelConstants.RIGHT_MOTOR_PORT, MotorAlignmentValue.Opposed);
     leftMotor.setControl(invertedfollower);
 
     TalonFXConfigurator m1Config = rightMotor.getConfigurator();

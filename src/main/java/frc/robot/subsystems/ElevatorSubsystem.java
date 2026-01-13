@@ -70,7 +70,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     currentLevel = ElevatorPositions.Intake; 
 
     // Set up motor followers and deal with inverted motors
-    Follower follower = new Follower(ElevatorConstants.MOTOR1_PORT, MotorAlignmentValue.Opposed);
+    Follower follower = new Follower(ElevatorConstants.MOTOR1_PORT, MotorAlignmentValue.Aligned);
     motor2.setControl(follower);
 
     Slot1Configs s1c =
