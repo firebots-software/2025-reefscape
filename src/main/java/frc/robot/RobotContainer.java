@@ -40,6 +40,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CoralPosition;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FunnelSubsystem;
+import frc.robot.subsystems.IntakeVisionDetection;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TootsieSlideSubsystem;
@@ -48,6 +49,9 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class RobotContainer {
+
+    public final IntakeVisionDetection intakeVisionDetection = new IntakeVisionDetection(Constants.IntakeVision.IntakeVisionCamera.INTAKE_CAMERA);
+
   private static Matrix<N3, N1> visionMatrix = VecBuilder.fill(0.01, 0.03d, 100d);
   private static Matrix<N3, N1> odometryMatrix = VecBuilder.fill(0.1, 0.1, 0.1);
 

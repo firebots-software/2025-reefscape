@@ -36,6 +36,40 @@ import java.util.List;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+   public static class IntakeVision {
+
+    public static final double INTAKE_X = Units.inchesToMeters(-3.454827);
+    public static final double INTAKE_Y = Units.inchesToMeters(-7.056897);
+    public static final double INTAKE_Z = Units.inchesToMeters(25.105416);
+    public static final double INTAKE_ROLL = Units.degreesToRadians(286.894287);
+    public static final double INTAKE_PITCH = Units.degreesToRadians(55.646896);
+    public static final double INTAKE_YAW = Units.degreesToRadians(23.957651);
+
+    public static enum IntakeVisionCamera {
+      INTAKE_CAMERA(
+          "intakeCam",
+          new Transform3d(
+              new Translation3d(INTAKE_X, INTAKE_Y, INTAKE_Z),
+              new Rotation3d(INTAKE_ROLL, INTAKE_PITCH, INTAKE_YAW)));
+
+      private String loggingName;
+      private Transform3d cameraTransform;
+
+      IntakeVisionCamera(String name, Transform3d transform) {
+        loggingName = name;
+        cameraTransform = transform;
+      }
+
+      public String getLoggingName() {
+        return loggingName;
+      }
+
+      public Transform3d getCameraTransform() {
+        return cameraTransform;
+      }
+    }
+  }
+
   public static class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
@@ -713,6 +747,16 @@ public final class Constants {
             .withCANBusName(CANBUS_NAME.getName())
             .withPigeon2Id(kPigeonId)
             .withPigeon2Configs(PIGEON2_CONFIGS);
+
+    public static class IntakeVision {
+
+    public static final double INTAKE_X = Units.inchesToMeters(-3.454827);
+    public static final double INTAKE_Y = Units.inchesToMeters(-7.056897);
+    public static final double INTAKE_Z = Units.inchesToMeters(25.105416);
+    public static final double INTAKE_ROLL = Units.degreesToRadians(286.894287);
+    public static final double INTAKE_PITCH = Units.degreesToRadians(55.646896);
+    public static final double INTAKE_YAW = Units.degreesToRadians(23.957651);
+  }
 
     // Uses SwerveModuleConstantsFactory to organize all the previously mentioned configurations
     // related to the Swerve Drive
