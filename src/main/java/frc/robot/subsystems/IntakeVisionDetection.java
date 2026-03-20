@@ -42,10 +42,11 @@ public class IntakeVisionDetection extends SubsystemBase {
 
     DogLog.log("Subsystems/IntakeVision/ResultExists", latestVisionResult != null);
 
-    return (latestVisionResult == null);
+    return (latestVisionResult != null);
   }
 
   private void updateVisionResult() {
+    DogLog.log("UpdateVisionResultRunning", true);
     Optional<PhotonTrackedTarget> target = getLargestTarget();
     target.ifPresentOrElse(
         t -> {
