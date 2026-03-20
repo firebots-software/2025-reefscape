@@ -31,7 +31,7 @@ public class IntakeVisionDetection extends SubsystemBase {
 
   private boolean cameraConnected() {
     boolean cameraConnected = photonCamera.isConnected();
-    DogLog.log("Subsystems/FuelGauge/CameraStatus", cameraConnected);
+    DogLog.log("Subsystems/IntakeVision/CameraStatus", cameraConnected);
     return cameraConnected;
   }
 
@@ -40,6 +40,8 @@ public class IntakeVisionDetection extends SubsystemBase {
 
     latestVisionResult = results.get(results.size() - 1);
 
+    DogLog.log("Subsystems/IntakeVision/ResultExists", latestVisionResult != null);
+
     return (latestVisionResult == null);
   }
 
@@ -47,15 +49,22 @@ public class IntakeVisionDetection extends SubsystemBase {
     Optional<PhotonTrackedTarget> target = getLargestTarget();
     target.ifPresentOrElse(
         t -> {
+          DogLog.log("Subsystems/IntakeVision/TargetPresent", true);
           latestRawArea = t.getArea();
           latestRawYaw = t.getYaw();
+          DogLog.log("Subsystems/IntakeVision/Area", latestRawArea);
+          DogLog.log("Subsystems/IntakeVision/Yaw", latestRawYaw);
+
         },
         () -> DogLog.log("Subsystems/IntakeVision/TargetPresent", false));
   }
 
   private Optional<PhotonTrackedTarget> getLargestTarget() {
     if (latestVisionResult == null) return Optional.empty();
+
     List<PhotonTrackedTarget> targets = latestVisionResult.getTargets();
+    DogLog.log("Subsystems/IntakeVision/TargetsLength", targets.size());
+    
     if (targets.isEmpty()) return Optional.empty();
 
     return targets.stream().max((a, b) -> Double.compare(a.getArea(), b.getArea()));
