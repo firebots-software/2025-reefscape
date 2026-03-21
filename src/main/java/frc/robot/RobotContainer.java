@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -635,7 +636,7 @@ public class RobotContainer {
 
   public void intakeVisionTargetPose() {
     Translation2d translate = new Translation2d(0, 0);
-    Rotation2d rotate = new Rotation2d(intakeVisionDetection.getYaw());
+    Rotation2d rotate = new Rotation2d(Units.degreesToRadians(-intakeVisionDetection.getYaw()));
     Transform2d poseManipulation = new Transform2d(translate, rotate);
     Pose2d targetPose = driveTrain.getPose().plus(poseManipulation);
     DogLog.log("Subsystems/IntakeVision/TargetPose", targetPose);
