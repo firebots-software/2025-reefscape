@@ -1,7 +1,11 @@
 package frc.robot.subsystems;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import java.util.List;
@@ -16,7 +20,6 @@ public class IntakeVisionDetection extends SubsystemBase {
   private PhotonPipelineResult latestVisionResult;
   private double latestRawArea;
   private double latestRawYaw;
-  private Transform3d poseEstTest;
 
   public IntakeVisionDetection(Constants.IntakeVision.IntakeVisionCamera cameraID) {
     photonCamera = new PhotonCamera(cameraID.toString());
@@ -56,8 +59,6 @@ public class IntakeVisionDetection extends SubsystemBase {
           latestRawYaw = t.getYaw();
           DogLog.log("Subsystems/IntakeVision/Area", latestRawArea);
           DogLog.log("Subsystems/IntakeVision/Yaw", latestRawYaw);
-          poseEstTest = t.getBestCameraToTarget();
-          DogLog.log("Subsystems/IntakeVision/PoseEstTestTransform", poseEstTest);
 
         },
         () -> DogLog.log("Subsystems/IntakeVision/TargetPresent", false));
@@ -73,4 +74,9 @@ public class IntakeVisionDetection extends SubsystemBase {
 
     return targets.stream().max((a, b) -> Double.compare(a.getArea(), b.getArea()));
   }
+
+  public double getYaw() { return latestRawYaw; }
+
+  public double getArea() { return latestRawArea; }
+
 }

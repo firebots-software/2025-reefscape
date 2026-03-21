@@ -69,6 +69,7 @@ public class Robot extends TimedRobot {
     LoggedTalonFX.periodic_static();
     CommandScheduler.getInstance().run();
     m_robotContainer.doTelemetry();
+    m_robotContainer.intakeVisionTargetPose();
 
     visionRight.addFilteredPose();
     visionLeft.addFilteredPose();
