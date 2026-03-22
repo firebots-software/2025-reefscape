@@ -635,8 +635,10 @@ public class RobotContainer {
   }
 
   public void intakeVisionTargetPose() {
-    Translation2d translate = new Translation2d(0, 0);
     Rotation2d rotate = new Rotation2d(Units.degreesToRadians(-intakeVisionDetection.getYaw()));
+    Rotation2d rotateFromX = driveTrain.getPose().getRotation().plus(rotate);
+    Translation2d translate = new Translation2d(5, rotateFromX);
+
     Transform2d poseManipulation = new Transform2d(translate, rotate);
     Pose2d targetPose = driveTrain.getPose().plus(poseManipulation);
     DogLog.log("Subsystems/IntakeVision/TargetPose", targetPose);
